@@ -6,8 +6,6 @@ while IFS='=' read -r key value; do
   fi
 done < version.properties
 
-JVM_VERSION=${versionProperties["jvm.version"]}
-
 #KOTLIN_VERSION=2.0.0-dev-17175
 
 #GSON_VERSION=${versionProperties["gson.version"]}
@@ -97,7 +95,7 @@ EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "1" ]; then
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
- javac --release $JVM_VERSION --enable-preview -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
+ javac --enable-preview -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
 fi
 
 java --enable-preview -cp $CLASSPATH_WITH_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal

@@ -12,15 +12,6 @@ done < version.properties
 
 DARKADDONS_VERSION=${versionProperties["darkaddons.version"]}
 
-cd darkaddons-site
-
-echo "$DARKADDONS_VERSION" > latest_mod_version.txt
-if [[ `git status --porcelain` ]]; then
- echo "RELEASE PENDING; do not forget to commit to darkaddons-site git repository at release time."
-fi
-
-cd ..
-
 SKYTILS_VERSION=${versionProperties["skytils.version"]}
 
 MOD_FILENAME=DarkAddons-v$DARKADDONS_VERSION-opt.jar
@@ -56,22 +47,29 @@ EXIT_CODE=-1
 
 echo Finished setting up environment
 
-ls darkaddons-site
-
 git submodule init
 git submodule update
+
+cd darkaddons-site || { echo "cd failed"; exit 1; }
+
+echo "$DARKADDONS_VERSION" > latest_mod_version.txt
+if [[ `git status --porcelain` ]]; then
+ echo "RELEASE PENDING; do not forget to commit to darkaddons-site git repository at release time."
+fi
+
+cd .. || { echo "cd failed"; exit 1; }
 
 chmod +x gradlew
 
 if [ "$1" != "--skip-build" ]; then
   if [ ! -d "$HOME/.m2/repository/gg/skytils/skytilsmod/$SKYTILS_VERSION" ]; then
     rm -rf SkytilsMod/build/libs/*
-    cd SkytilsMod
+    cd SkytilsMod || { echo "cd failed"; exit 1; }
     git submodule init
     git submodule update
     chmod +x gradlew
     ./gradlew -Porg.gradle.java.installations.auto-download=false build remapJar publishToMavenLocal --no-daemon
-    cd ..
+    cd .. || { echo "cd failed"; exit 1; }
   fi
 fi
 

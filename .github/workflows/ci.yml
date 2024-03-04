@@ -3,7 +3,7 @@ name: "CI"
 permissions:
  contents: read
 
-on: [ push, pull_request ]
+on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
  ci:
@@ -24,12 +24,17 @@ jobs:
   env:
    SEGMENT_DOWNLOAD_TIMEOUT_MINS: '1'
  
+  defaults:
+   run:
+    shell: bash
+ 
   steps:
    - name: Checkout Code
      uses: actions/checkout@v4.1.1
      with:
       persist-credentials: false
       fetch-depth: 0
+      submodules: true
 
    - name: Install Java
      uses: actions/setup-java@v4.1.0
