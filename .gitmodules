@@ -1,9 +1,6 @@
-[submodule "ASMHelper"]
-    path = ASMHelper
-    url = https://github.com/Skytils/ASMHelper
 [submodule "SkytilsMod"]
     path = SkytilsMod
     url = https://github.com/Skytils/SkytilsMod
 [submodule "darkaddons-site"]
-	path = darkaddons-site
-	url = https://github.com/TheDGOfficial/darkaddons-site.git
+    path = darkaddons-site
+    url = https://github.com/TheDGOfficial/darkaddons-site.git

@@ -41,7 +41,6 @@ fun loadVersionProperties(): Properties {
 private val defaultVersion = "unspecified"
 
 private val darkaddonsVersion = versionProperties["darkaddons.version"] ?: defaultVersion
-private val asmHelperVersion = versionProperties["asmhelper.version"] ?: defaultVersion
 private val skytilsVersion = versionProperties["skytils.version"] ?: defaultVersion
 
 private val gsonVersion = versionProperties["gson.version"] ?: defaultVersion
@@ -122,14 +121,6 @@ dependencies {
         exclude(module = "asm-commons")
         exclude(module = "asm-tree")
         exclude(module = "gson")
-    }
-
-    compileOnly("dev.falsehonesty.asmhelper:AsmHelper:$asmHelperVersion") { // TODO make it showMeMod
-        exclude(module = "kotlin-reflect")
-        exclude(module = "kotlin-stdlib-jdk8")
-        exclude(module = "kotlin-stdlib-jdk7")
-        exclude(module = "kotlin-stdlib")
-        exclude(module = "kotlinx-coroutines-core")
     }
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe

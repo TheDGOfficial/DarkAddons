@@ -21,7 +21,6 @@ fi
 
 cd ..
 
-ASMHELPER_VERSION=${versionProperties["asmhelper.version"]}
 SKYTILS_VERSION=${versionProperties["skytils.version"]}
 
 MOD_FILENAME=DarkAddons-v$DARKADDONS_VERSION-opt.jar
@@ -57,16 +56,12 @@ EXIT_CODE=-1
 
 echo Finished setting up environment
 
+ls darkaddons-site
+
 git submodule init
 git submodule update
 
-if [ "$1" != "--skip-build" ]; then
-  if [ ! -d "$HOME/.m2/repository/dev/falsehonesty/asmhelper/AsmHelper/$ASMHELPER_VERSION" ]; then
-    cd ASMHelper
-    ./gradlew -Porg.gradle.java.installations.auto-download=false build publishToMavenLocal --no-daemon
-    cd ..
-  fi
-fi
+chmod +x gradlew
 
 if [ "$1" != "--skip-build" ]; then
   if [ ! -d "$HOME/.m2/repository/gg/skytils/skytilsmod/$SKYTILS_VERSION" ]; then
@@ -74,6 +69,7 @@ if [ "$1" != "--skip-build" ]; then
     cd SkytilsMod
     git submodule init
     git submodule update
+    chmod +x gradlew
     ./gradlew -Porg.gradle.java.installations.auto-download=false build remapJar publishToMavenLocal --no-daemon
     cd ..
   fi

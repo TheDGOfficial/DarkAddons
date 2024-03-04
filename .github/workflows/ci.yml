@@ -21,6 +21,9 @@ jobs:
    matrix:
     language: [ java-kotlin ]
  
+  env:
+   SEGMENT_DOWNLOAD_TIMEOUT_MINS: '1'
+ 
   steps:
    - name: Checkout Code
      uses: actions/checkout@v4.1.1

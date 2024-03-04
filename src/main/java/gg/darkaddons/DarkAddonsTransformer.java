@@ -1,6 +1,6 @@
 package gg.darkaddons;
 
-import dev.falsehonesty.asmhelper.BaseClassTransformer;
+import net.minecraft.launchwrapper.IClassTransformer;
 import gg.darkaddons.transformers.ASMUtils;
 import gg.darkaddons.transformers.BlockPosTransformer;
 import gg.darkaddons.transformers.NullStreamTransformer;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  * Do not make it package-private.
  */
 @SuppressWarnings({"WeakerAccess", "ClassNamePrefixedWithPackageName"})
-public final class DarkAddonsTransformer extends BaseClassTransformer {
+public final class DarkAddonsTransformer implements IClassTransformer {
     private static final @NotNull ConcurrentLinkedQueue<Transformer> transformers = new ConcurrentLinkedQueue<>();
 
     static {
@@ -29,8 +29,6 @@ public final class DarkAddonsTransformer extends BaseClassTransformer {
         }
     }
 
-    //private static boolean shouldInject = true;
-
     /**
      * Called by forge {@link net.minecraftforge.fml.common.asm.ASMTransformerWrapper} via ASM,
      * do not make it package-private.
@@ -38,32 +36,6 @@ public final class DarkAddonsTransformer extends BaseClassTransformer {
     @SuppressWarnings("PublicConstructor")
     public DarkAddonsTransformer() {
         super();
-    }
-
-    /**
-     * Injects all ASM/Mixin/Reflection code to the game code.
-     * <p>
-     * This method should not be called multiple times and only
-     * during the start-up.
-     */
-    //private static final void injectAll() {
-    // nothing to inject yet, this for future
-    //}
-    private static final void makeTransformers0() {
-        /*if (DarkAddonsTransformer.shouldInject) {
-            DarkAddonsTransformer.shouldInject = false;
-            try {
-                DarkAddonsTransformer.injectAll();
-            } catch (final Throwable t) {
-                t.printStackTrace();
-            }
-        }*/
-    }
-
-    @SuppressWarnings("PublicMethodNotExposedInInterface")
-    @Override
-    public final void makeTransformers() {
-        DarkAddonsTransformer.makeTransformers0(); // Necessary to not trigger "static field set from instance context" warnings
     }
 
     private static final byte @NotNull [] transformCatching(final byte @NotNull [] defaultValue, @NotNull final Supplier<byte[]> transformer) {
