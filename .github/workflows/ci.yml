@@ -90,7 +90,7 @@ jobs:
      uses: advanced-security/filter-sarif@v1.0.1
      with:
       patterns: |
-       +**/*
+       **
        -./SkytilsMod/**
       input: sarif-results/${{ matrix.language }}.sarif
       output: sarif-results/${{ matrix.language }}.sarif
