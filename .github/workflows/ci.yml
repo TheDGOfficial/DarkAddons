@@ -68,7 +68,7 @@ jobs:
       #packs: Marcono1234/codeql-java-queries
 
    - name: Build with Gradle
-     ontinue-on-error: true
+     continue-on-error: true
      run:
       ./build.sh --info
 
