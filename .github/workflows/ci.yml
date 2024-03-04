@@ -59,7 +59,7 @@ jobs:
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
-      packs: Marcono1234/codeql-java-queries
+      #packs: Marcono1234/codeql-java-queries
 
    - name: Perform CodeQL Analysis
      uses: github/codeql-action/analyze@v3.24.6

@@ -137,7 +137,7 @@ fi
 if [ -f "$BUILD_OUTPUT_JAR_PATH" ] && [ "$EXIT_CODE" == "0" ]; then
   if [ -f "$TAILREC_OPTIMIZER_PATH" ]; then
     echo Optimizing JAR
-    java --enable-preview -jar $TAILREC_OPTIMIZER_PATH -overwrite $BUILD_OUTPUT_JAR_PATH
+    java -jar $TAILREC_OPTIMIZER_PATH -overwrite $BUILD_OUTPUT_JAR_PATH
   else
     echo Error: Can\'t find Optimizer JAR. Make sure file path is correct and the file exists!
   fi

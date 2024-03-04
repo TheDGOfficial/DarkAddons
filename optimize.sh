@@ -98,17 +98,18 @@ if [ "$EXIT_CODE" == "2" ]; then
 fi
 
 if [ "$EXIT_CODE" == "1" ]; then
+ echo Compiling MarkCompilerGeneratedMethodsFinal.java
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
- javac --enable-preview -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
+ javac -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
 fi
 
-java --enable-preview -cp $CLASSPATH_WITH_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal
+java -cp $CLASSPATH_WITH_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal
 
 EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "0" ]; then
-  java --enable-preview -cp $CLASSPATH_WITH_OPTIMIZED_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
+  java -cp $CLASSPATH_WITH_OPTIMIZED_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
 fi
 
-#java --enable-preview -jar $HOME/jvm-constexpr/build/saker.jar.create/sipka.jvm.constexpr-fat.jar -classpath $CLASSPATH_SEPERATED_BY_SEMICOLON -input $OUTPUT_JAR -overwrite
+#java -jar $HOME/jvm-constexpr/build/saker.jar.create/sipka.jvm.constexpr-fat.jar -classpath $CLASSPATH_SEPERATED_BY_SEMICOLON -input $OUTPUT_JAR -overwrite
 
