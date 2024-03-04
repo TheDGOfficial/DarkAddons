@@ -102,17 +102,22 @@ if [ "$EXIT_CODE" == "2" ]; then
  EXIT_CODE=1
 fi
 
+# Set exit code to 1 if class file doesn't exist, which will force compilation.
+if [ ! -f build/bin/gg/darkaddons/MarkCompilerGeneratedMethodsFinal.class ]; then
+ EXIT_CODE=1
+fi
+
 if [ "$EXIT_CODE" == "1" ]; then
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
  javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
 fi
 
-java -cp "$CLASSPATH_WITH_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal || echo "cmp exited with code $EXIT_CODE"
+java -cp "$CLASSPATH_WITH_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal || echo "Unable to run MarkCompilerGeneratedMethodsFinal.class"
 
 EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "0" ]; then
-  java -cp "$CLASSPATH_WITH_OPTIMIZED_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun || echo "cmp exited with code $EXIT_CODE"
+  java -cp "$CLASSPATH_WITH_OPTIMIZED_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun || echo "Unable to run MarkCompilerGeneratedMethodsFinal.class"
 fi
 
 #java -jar $HOME/jvm-constexpr/build/saker.jar.create/sipka.jvm.constexpr-fat.jar -classpath $CLASSPATH_SEPERATED_BY_SEMICOLON -input $OUTPUT_JAR -overwrite
