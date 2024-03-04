@@ -36,6 +36,7 @@ import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -565,27 +566,25 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
         for (final var file : files) {
             if (!file.isDirectory() && file.getPath().endsWith(".jar")) {
-                try {
-                    final var jarFile = new JarFile(file);
+                try (final var jarFile = new JarFile(file)) {
                     final var mcModInfo = jarFile.getEntry("mcmod.info");
                     if (null != mcModInfo) {
-                        final var inputStream = jarFile.getInputStream(mcModInfo);
-                        final var modID = DarkAddonsInstaller.getModIDFromInputStream(inputStream);
-                        if ("darkaddons".equals(modID)) {
-                            jarFile.close();
-                            try {
-                                Files.delete(file.toPath());
-                            } catch (final Exception ex) {
-                                PublicUtils.printStackTrace(ex);
-                                DarkAddonsInstaller.showErrorMessage("Was not able to delete the other DarkAddons files found in your mods folder!" + System.lineSeparator() +
+                        try (final var inputStream = jarFile.getInputStream(mcModInfo)) {
+                            final var modID = DarkAddonsInstaller.getModIDFromInputStream(inputStream);
+                            if ("darkaddons".equals(modID)) {
+                                try {
+                                    Files.delete(file.toPath());
+                                } catch (final Exception ex) {
+                                    PublicUtils.printStackTrace(ex);
+                                    DarkAddonsInstaller.showErrorMessage("Was not able to delete the other DarkAddons files found in your mods folder!" + System.lineSeparator() +
                                     "Please make sure that your minecraft is currently closed and try again, or feel" + System.lineSeparator() +
                                     "free to open your mods folder and delete those files manually.");
-                                return true;
+                                    return true;
+                                }
+                                continue;
                             }
-                            continue;
                         }
                     }
-                    jarFile.close();
                 } catch (final Exception ex) {
                     // Just don't check the file; I guess move on to the next...
                 }
@@ -690,9 +689,14 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
     @NotNull
     private static final String getStacktraceText(@NotNull final Throwable ex) {
-        final var stringWriter = new StringWriter();
-        ex.printStackTrace(new PrintWriter(stringWriter));
-        return stringWriter.toString().replace("\t", "  ");
+        try (final var stringWriter = new StringWriter()) {
+            try (final var printWriter = new PrintWriter(stringWriter)) {
+                ex.printStackTrace(printWriter);
+            }
+            return stringWriter.toString().replace("\t", "  ");
+        } catch (final IOException ioException) {
+            throw new UncheckedIOException(ioException);
+        }
     }
 
     private static final void showErrorPopup(@NotNull final Throwable ex) {
@@ -712,13 +716,14 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private final String getVersionFromMcmodInfo() {
         var version = "";
-        try {
-            final var bufferedReader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(this.getClass().
-                getClassLoader().getResourceAsStream("mcmod.info"), "mcmod.info not found."), StandardCharsets.UTF_8));
-            while (null != (version = bufferedReader.readLine())) {
-                if (version.contains("\"version\": \"")) {
-                    version = version.split(Pattern.quote("\"version\": \""))[1];
-                    return version.substring(0, version.length() - 2);
+        try (final var inputStreamReader = new InputStreamReader(Objects.requireNonNull(this.getClass().
+                getClassLoader().getResourceAsStream("mcmod.info"), "mcmod.info not found."), StandardCharsets.UTF_8)) {
+            try (final var bufferedReader = new BufferedReader(inputStreamReader)) {
+                while (null != (version = bufferedReader.readLine())) {
+                    if (version.contains("\"version\": \"")) {
+                        version = version.split(Pattern.quote("\"version\": \""))[1];
+                        return version.substring(0, version.length() - 2);
+                    }
                 }
             }
         } catch (final Exception ex) {
@@ -730,12 +735,13 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private static final String getModIDFromInputStream(@NotNull final InputStream inputStream) {
         var version = "";
-        try {
-            final var bufferedReader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
-            while (null != (version = bufferedReader.readLine())) {
-                if (version.contains("\"modid\": \"")) {
-                    version = version.split(Pattern.quote("\"modid\": \""))[1];
-                    return version.substring(0, version.length() - 2);
+        try (final var inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            try (final var bufferedReader = new BufferedReader(inputStreamReader)) {
+                while (null != (version = bufferedReader.readLine())) {
+                    if (version.contains("\"modid\": \"")) {
+                        version = version.split(Pattern.quote("\"modid\": \""))[1];
+                        return version.substring(0, version.length() - 2);
+                    }
                 }
             }
         } catch (final Exception ex) {

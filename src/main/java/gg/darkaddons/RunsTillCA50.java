@@ -510,9 +510,14 @@ final class RunsTillCA50 {
     }
 
     private static final double padStart(@NotNull final String number) {
-        final var parsed = Double.parseDouble(number);
+        try {
+            final var parsed = Double.parseDouble(number);
 
-        return 10.0D > parsed ? Double.parseDouble("0." + number) : parsed;
+            return 10.0D > parsed ? Double.parseDouble("0." + number) : parsed;
+        } catch (final NumberFormatException nfe) {
+            DarkAddons.modError(nfe);
+            return 0.0D;
+        }
     }
 
     private static final double xpToLevel(double xp) {

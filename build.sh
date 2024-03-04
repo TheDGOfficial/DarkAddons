@@ -1,11 +1,14 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
 echo Starting
 echo Setting up environment
 
 # Those generally should not be changed.
 declare -A versionProperties
 while IFS='=' read -r key value; do
-  if [ ! -z "$key" ]; then
+  if [ -n "$key" ]; then
     versionProperties["$key"]="$value"
   fi
 done < version.properties
@@ -19,7 +22,7 @@ MOD_FILENAME=DarkAddons-v$DARKADDONS_VERSION-opt.jar
 SCRIPT=$(realpath "$0")
 SCRIPTPATH=$(dirname "$SCRIPT")
 
-DESKTOPPATH=$(xdg-user-dir DESKTOP)
+#DESKTOPPATH=$(xdg-user-dir DESKTOP)
 
 BUILD_OUTPUT_JAR_PATH=$SCRIPTPATH/build/libs/$MOD_FILENAME
 
@@ -34,12 +37,12 @@ MOD_FILE_IN_MODS_FOLDER=$MOD_DIR/$MOD_FILENAME
 CRASH_REPORT_FOLDER=$MINECRAFT_FOLDER/crash-reports
 CRASH_REPORT_EXTENSION=txt
 
-CRASH_REPORTS_PATTERN=$CRASH_REPORT_FOLDER/*.$CRASH_REPORT_EXTENSION
+CRASH_REPORTS_PATTERN="$CRASH_REPORT_FOLDER/*.$CRASH_REPORT_EXTENSION"
 
-ARTIFACT_PATTERN=build/libs/*.jar
-SIGNATURE_PATTERN=build/libs/*.asc
+ARTIFACT_PATTERN="build/libs/*.jar"
+SIGNATURE_PATTERN="build/libs/*.asc"
 
-MODS_ARTIFACT_PATTERN=$MOD_DIR/DarkAddons-*.jar
+MODS_ARTIFACT_PATTERN="$MOD_DIR/DarkAddons-*.jar"
 
 LATEST_LOG_PATH=$MINECRAFT_FOLDER/logs/latest.log
 
@@ -53,7 +56,7 @@ git submodule update
 cd darkaddons-site || { echo "cd failed"; exit 1; }
 
 echo "$DARKADDONS_VERSION" > latest_mod_version.txt
-if [[ `git status --porcelain` ]]; then
+if [[ $(git status --porcelain) ]]; then
  echo "RELEASE PENDING; do not forget to commit to darkaddons-site git repository at release time."
 fi
 
@@ -61,11 +64,11 @@ cd .. || { echo "cd failed"; exit 1; }
 
 chmod +x gradlew
 
-if [ "$1" != "--skip-build" ]; then
+if [ "${1:-default}" != "--skip-build" ]; then
   if [ ! -d "$HOME/.m2/repository/gg/skytils/skytilsmod/$SKYTILS_VERSION" ]; then
     rm -rf SkytilsMod/build/libs/*
     cd SkytilsMod || { echo "cd failed"; exit 1; }
-    git checkout v$SKYTILS_VERSION &> /dev/null
+    git checkout v"$SKYTILS_VERSION" &> /dev/null
     git stash &> /dev/null
     git stash drop &> /dev/null
     git submodule init
@@ -82,13 +85,13 @@ if [ "$1" != "--skip-build" ]; then
   fi
 fi
 
-if [ "$1" == "--check-updates" ]; then
+if [ "${1:-default}" == "--check-updates" ]; then
   echo Checking Gradle dependency updates
   ./gradlew -Porg.gradle.java.installations.auto-download=false dependencyUpdates --no-daemon -Drevision=integration # available values: milestone (default), release, integration
   exit
 fi
 
-if [ "$1" == "--refresh-dependencies" ]; then
+if [ "${1:-default}" == "--refresh-dependencies" ]; then
   echo Force refreshing loom dependencies
   ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --refresh-dependencies
   exit
@@ -96,22 +99,24 @@ fi
 
 EXIT_CODE=1
 
-if [ "$1" != "--skip-build" ]; then
+if [ "${1:-default}" != "--skip-build" ]; then
   echo Building JAR
-  if compgen -G "$ARTIFACT_PATTERN" >/dev/null; then
-    rm $ARTIFACT_PATTERN
+  artifact_array=($ARTIFACT_PATTERN)
+  if compgen -G "${artifact_array[@]}" >/dev/null; then
+    rm "${artifact_array[@]}"
   fi
-  if compgen -G "$SIGNATURE_PATTERN" >/dev/null; then
-    rm $SIGNATURE_PATTERN
+  signature_array=($SIGNATURE_PATTERN)
+  if compgen -G "${signature_array[@]}" >/dev/null; then
+    rm "${signature_array[@]}"
   fi
   DEBUG_PARAMS=""
-  if [ "$1" == "--info" ]; then
+  if [ "${1:-default}" == "--info" ]; then
     DEBUG_PARAMS=" --info"
   fi
-  if [ "$1" != "--offline" ]; then
-    ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar$DEBUG_PARAMS
+  if [ "${1:-default}" != "--offline" ]; then
+    ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar"$DEBUG_PARAMS"
   else
-    ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --offline$DEBUG_PARAMS
+    ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --offline"$DEBUG_PARAMS"
   fi
   EXIT_CODE=$?
   if [ "$EXIT_CODE" == "0" ]; then
@@ -123,9 +128,9 @@ if [ "$1" != "--skip-build" ]; then
   fi
 fi
 
-if [ "$1" != "--skip-build" ]; then
+if [ "${1:-default}" != "--skip-build" ]; then
   for file in $ARTIFACT_PATTERN; do
-    mv $file ${file/DarkAddons-/DarkAddons-v} 2>/dev/null
+    mv "$file" "${file/DarkAddons-/DarkAddons-v}" 2>/dev/null
   done
 
   if [ "$EXIT_CODE" == "0" ]; then
@@ -137,41 +142,43 @@ fi
 if [ -f "$BUILD_OUTPUT_JAR_PATH" ] && [ "$EXIT_CODE" == "0" ]; then
   if [ -f "$TAILREC_OPTIMIZER_PATH" ]; then
     echo Optimizing JAR
-    java -jar $TAILREC_OPTIMIZER_PATH -overwrite $BUILD_OUTPUT_JAR_PATH
+    java -jar "$TAILREC_OPTIMIZER_PATH" -overwrite "$BUILD_OUTPUT_JAR_PATH"
   else
     echo Error: Can\'t find Optimizer JAR. Make sure file path is correct and the file exists!
   fi
 
   cp src/main/resources/pack.mcmeta pack.mcmeta
-  jar uf $BUILD_OUTPUT_JAR_PATH pack.mcmeta
+  jar uf "$BUILD_OUTPUT_JAR_PATH" pack.mcmeta
   rm pack.mcmeta
 
-  if [ "$1" != "--skip-install" ]; then
+  if [ "${1:-default}" != "--skip-install" ]; then
     echo Placing JAR in mod folder
-    if compgen -G "$MODS_ARTIFACT_PATTERN" >/dev/null; then
-      rm $MODS_ARTIFACT_PATTERN
+    mods_artifact_array=($MODS_ARTIFACT_PATTERN)
+    if compgen -G "${mods_artifact_array[@]}" >/dev/null; then
+      rm "${mods_artifact_array[@]}"
     fi
-    chmod +x $BUILD_OUTPUT_JAR_PATH
-    cp $BUILD_OUTPUT_JAR_PATH $MOD_FILE_IN_MODS_FOLDER
+    chmod +x "$BUILD_OUTPUT_JAR_PATH"
+    cp "$BUILD_OUTPUT_JAR_PATH" "$MOD_FILE_IN_MODS_FOLDER"
   fi
-elif [ "$1" != "--skip-build" ]; then
+elif [ "${1:-default}" != "--skip-build" ]; then
   echo Skipping optimizing and putting JAR in the mod folder, gradle build likely failed. See errors above.
 fi
 
 echo Cleaning up old crash reports and logs
 
-if compgen -G "$CRASH_REPORTS_PATTERN" >/dev/null; then
-  cleaned_crash_reports=$(rm -v $CRASH_REPORTS_PATTERN | wc -l)
+crash_reports_array=($CRASH_REPORTS_PATTERN)
+if compgen -G "${crash_reports_array[@]}" >/dev/null; then
+  cleaned_crash_reports=$(rm -v "${crash_reports_array[@]}" | wc -l)
   echo "Cleaned up $cleaned_crash_reports crash reports"
 fi
 
 if [ -d "$CRASH_REPORT_FOLDER" ]; then
-  rmdir $CRASH_REPORT_FOLDER
+  rmdir "$CRASH_REPORT_FOLDER"
 fi
 
-if [ "$1" != "--skip-install" ]; then
+if [ "${1:-default}" != "--skip-install" ]; then
   if [ -f "$LATEST_LOG_PATH" ]; then
-    rm $LATEST_LOG_PATH
+    rm "$LATEST_LOG_PATH"
     echo "Cleaned up 1 log file"
   fi
 fi

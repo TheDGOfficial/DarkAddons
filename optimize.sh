@@ -1,7 +1,10 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
 declare -A versionProperties
 while IFS='=' read -r key value; do
-  if [ ! -z "$key" ]; then
+  if [ -n "$key" ]; then
     versionProperties["$key"]="$value"
   fi
 done < version.properties
@@ -38,7 +41,7 @@ MIXIN_VERSION=${versionProperties["mixin.version"]}
 
 REPO=$HOME/.m2/repository
 
-GRADLE_REPO=$HOME/.gradle/caches
+#GRADLE_REPO=$HOME/.gradle/caches
 GRADLE_PROJECT_REPO=.gradle
 
 #CLASSPATH=$REPO/com/google/code/gson/gson/$GSON_VERSION/gson-$GSON_VERSION.jar
@@ -99,15 +102,15 @@ fi
 
 if [ "$EXIT_CODE" == "1" ]; then
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
- javac -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
+ javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
 fi
 
-java -cp $CLASSPATH_WITH_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal
+java -cp "$CLASSPATH_WITH_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal
 
 EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "0" ]; then
-  java -cp $CLASSPATH_WITH_OPTIMIZED_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
+  java -cp "$CLASSPATH_WITH_OPTIMIZED_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
 fi
 
 #java -jar $HOME/jvm-constexpr/build/saker.jar.create/sipka.jvm.constexpr-fat.jar -classpath $CLASSPATH_SEPERATED_BY_SEMICOLON -input $OUTPUT_JAR -overwrite
