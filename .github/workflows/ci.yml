@@ -17,7 +17,7 @@ jobs:
    actions: read
  
   strategy:
-   fail-fast: false
+   fail-fast: true
    matrix:
     language: [ java-kotlin ]
  
@@ -43,9 +43,16 @@ jobs:
       java-version: 21
       cache: gradle
 
+   - name: Initialize CodeQL
+     uses: github/codeql-action/init@v3.24.6
+     with:
+      languages: ${{ matrix.language }}
+      queries: +security-and-quality
+      #packs: Marcono1234/codeql-java-queries
+
    - name: Build with Gradle
      run:
-      ./build.sh --info
+      ./build.sh
 
    - name: Upload Artifact
      uses: actions/upload-artifact@v4.3.1
@@ -53,13 +60,6 @@ jobs:
       name: DarkAddons
       path: build/libs/*-opt.jar
       #if-no-files-found: error
-
-   - name: Initialize CodeQL
-     uses: github/codeql-action/init@v3.24.6
-     with:
-      languages: ${{ matrix.language }}
-      queries: +security-and-quality
-      #packs: Marcono1234/codeql-java-queries
 
    - name: Perform CodeQL Analysis
      uses: github/codeql-action/analyze@v3.24.6

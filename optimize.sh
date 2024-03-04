@@ -98,7 +98,6 @@ if [ "$EXIT_CODE" == "2" ]; then
 fi
 
 if [ "$EXIT_CODE" == "1" ]; then
- echo Compiling MarkCompilerGeneratedMethodsFinal.java
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
  javac -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
 fi
