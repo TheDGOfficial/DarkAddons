@@ -79,7 +79,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
     updateJSON = "", // TODO update checker
     customProperties = {}
 )
-@SuppressWarnings({"ClassNamePrefixedWithPackageName", "WeakerAccess", "DefaultAnnotationParam"})
+@SuppressWarnings({"ClassNamePrefixedWithPackageName", "DefaultAnnotationParam"})
 public final class DarkAddons {
     /**
      * Holds the name of the mod.
@@ -214,7 +214,7 @@ public final class DarkAddons {
         return Config.isDisablePeriodicConfigSaves();
     }
 
-    static final void sendOrQueue(@NotNull final String msg) {
+    private static final void sendOrQueue(@NotNull final String msg) {
         if (DarkAddons.canSendMessage()) {
             DarkAddons.sendMessage(msg);
         } else {
@@ -1198,13 +1198,13 @@ public final class DarkAddons {
         }
     }*/
 
-    private static final void checkElementaVersion() {
-        /*final ElementaVersion maxSupported = ElementaVersion.valueOf(Diagnostics.getLatestSupportedRuntimeElementaVersion());
+    /*private static final void checkElementaVersion() {
+        final ElementaVersion maxSupported = ElementaVersion.valueOf(Diagnostics.getLatestSupportedRuntimeElementaVersion());
 
         if (DarkAddons.ELEMENTA_VERSION != maxSupported) {
             DarkAddons.queueWarning("Elementa Version " + maxSupported.name() + " is available, but DarkAddons is still on " + DarkAddons.ELEMENTA_VERSION + ". This shouldn't cause any issues and is just a reminder for the developers. Ignore this if you are an end user of the mod.");
-        }*/
-    }
+        }
+    }*/
 
     /**
      * Runs when the mod is being initialized.
@@ -1247,7 +1247,7 @@ public final class DarkAddons {
             }
 
             DarkAddons.reducePatcherBackgroundThreads();
-            DarkAddons.checkElementaVersion();
+            //DarkAddons.checkElementaVersion();
 
             RunsTillCA50.init();
 

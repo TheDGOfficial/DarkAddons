@@ -24,19 +24,18 @@ public final class AccessibleObjectResource<T extends AccessibleObject> implemen
      *
      * @param accessibleObjectIn The {@link AccessibleObject} to create the wrapper for.
      */
-    @SuppressWarnings("PublicConstructor")
-    public AccessibleObjectResource(@NotNull final T accessibleObjectIn) {
+    /*public AccessibleObjectResource(@NotNull final T accessibleObjectIn) {
         super();
 
         this.accessibleObject = accessibleObjectIn;
-    }
+    }*/
 
     /**
      * Creates a new wrapper resource for the given {@link Field}.
      *
      * @param field The {@link Field} to create the wrapper for.
      */
-    @SuppressWarnings({"PublicConstructor", "unchecked"})
+    @SuppressWarnings("unchecked")
     public AccessibleObjectResource(@NotNull final Field field) {
         super();
 
