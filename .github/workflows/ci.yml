@@ -47,14 +47,14 @@ jobs:
       if-no-files-found: error
 
    - name: Initialize CodeQL
-     uses: github/codeql-action/init@v2.16.3
+     uses: github/codeql-action/init@v3.24.6
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
       packs: Marcono1234/codeql-java-queries
 
    - name: Perform CodeQL Analysis
-     uses: github/codeql-action/analyze@v2.16.3
+     uses: github/codeql-action/analyze@v3.24.6
      with:
       category: "/language:${{ matrix.language }}"
 
