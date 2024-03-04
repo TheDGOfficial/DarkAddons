@@ -16,9 +16,6 @@ jobs:
    security-events: write
    actions: read
  
-  env:
-   codeql_version: "v2.16.3"
- 
   strategy:
    fail-fast: true
    matrix:
@@ -50,14 +47,14 @@ jobs:
       if-no-files-found: error
 
    - name: Initialize CodeQL
-     uses: github/codeql-action/init@${{env.codeql_version}}
+     uses: github/codeql-action/init@v2.16.3
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
       packs: Marcono1234/codeql-java-queries
 
    - name: Perform CodeQL Analysis
-     uses: github/codeql-action/analyze@${{env.codeql_version}}
+     uses: github/codeql-action/analyze@v2.16.3
      with:
       category: "/language:${{ matrix.language }}"
 
