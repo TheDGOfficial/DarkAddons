@@ -88,7 +88,6 @@ EXIT_CODE=1
 
 mkdir -p build/bin
 
-cp -n MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
 cmp -s MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
 
 EXIT_CODE=$?

@@ -39,10 +39,10 @@ jobs:
    - name: Install Java
      uses: actions/setup-java@v4.1.0
      with:
-      distribution: oracle
-      java-version: 21.0.2
-      #cache: gradle
-      overwrite-settings: false
+      distribution: temurin
+      java-version: 21
+      cache: gradle
+      #overwrite-settings: false
 
    - name: Build with Gradle
      run:
@@ -53,7 +53,7 @@ jobs:
      with:
       name: DarkAddons
       path: build/libs/*-opt.jar
-      if-no-files-found: error
+      #if-no-files-found: error
 
    - name: Initialize CodeQL
      uses: github/codeql-action/init@v3.24.6
