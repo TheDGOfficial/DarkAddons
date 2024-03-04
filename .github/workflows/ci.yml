@@ -83,14 +83,15 @@ jobs:
      uses: github/codeql-action/analyze@v3.24.6
      with:
       category: "/language:${{ matrix.language }}"
-      upload: false
+      upload: failure-only
       output: sarif-results
 
    - name: Filter CodeQL Analysis Results
      uses: advanced-security/filter-sarif@v1.0.1
      with:
       patterns: |
-       -SkytilsMod/**
+       +**/*
+       -./SkytilsMod/**
       input: sarif-results/${{ matrix.language }}.sarif
       output: sarif-results/${{ matrix.language }}.sarif
 
