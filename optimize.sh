@@ -38,8 +38,6 @@ SKYTILS_VERSION=${versionProperties["skytils.version"]}
 
 MIXIN_VERSION=${versionProperties["mixin.version"]}
 
-MIMALLOC_SO_VERSION=${versionProperties["mimalloc.so.version"]}
-
 REPO=$HOME/.m2/repository
 
 GRADLE_REPO=$HOME/.gradle/caches
@@ -99,16 +97,16 @@ EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "1" ]; then
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
- LD_PRELOAD=/usr/local/lib/libmimalloc.so.$MIMALLOC_SO_VERSION jdk-21.0.2/bin/javac --release $JVM_VERSION --enable-preview -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
+ javac --release $JVM_VERSION --enable-preview -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
 fi
 
-LD_PRELOAD=/usr/local/lib/libmimalloc.so.$MIMALLOC_SO_VERSION jdk-21.0.2/bin/java --enable-preview -cp $CLASSPATH_WITH_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal
+java --enable-preview -cp $CLASSPATH_WITH_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal
 
 EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "0" ]; then
-  LD_PRELOAD=/usr/local/lib/libmimalloc.so.$MIMALLOC_SO_VERSION jdk-21.0.2/bin/java --enable-preview -cp $CLASSPATH_WITH_OPTIMIZED_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
+  java --enable-preview -cp $CLASSPATH_WITH_OPTIMIZED_MOD:build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
 fi
 
-#LD_PRELOAD=/usr/local/lib/libmimalloc.so.$MIMALLOC_SO_VERSION java --enable-preview -jar $HOME/jvm-constexpr/build/saker.jar.create/sipka.jvm.constexpr-fat.jar -classpath $CLASSPATH_SEPERATED_BY_SEMICOLON -input $OUTPUT_JAR -overwrite
+#java --enable-preview -jar $HOME/jvm-constexpr/build/saker.jar.create/sipka.jvm.constexpr-fat.jar -classpath $CLASSPATH_SEPERATED_BY_SEMICOLON -input $OUTPUT_JAR -overwrite
 
