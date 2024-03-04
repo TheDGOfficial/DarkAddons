@@ -73,18 +73,18 @@ jobs:
       upload: false
       output: sarif-results
 
-    - name: Filter CodeQL Analysis Results
-      uses: advanced-security/filter-sarif@v1.0.1
-      with:
-        patterns: |
-          -SkytilsMod/**
-        input: sarif-results/${{ matrix.language }}.sarif
-        output: sarif-results/${{ matrix.language }}.sarif
+   - name: Filter CodeQL Analysis Results
+     uses: advanced-security/filter-sarif@v1.0.1
+     with:
+      patterns: |
+       -SkytilsMod/**
+      input: sarif-results/${{ matrix.language }}.sarif
+      output: sarif-results/${{ matrix.language }}.sarif
 
-    - name: Upload CodeQL Analysis Results
-      uses: github/codeql-action/upload-sarif@v2.16.3
-      with:
-        sarif_file: sarif-results/${{ matrix.language }}.sarif
+   - name: Upload CodeQL Analysis Results
+     uses: github/codeql-action/upload-sarif@v2.16.3
+     with:
+      sarif_file: sarif-results/${{ matrix.language }}.sarif
 
    - name: Perform ShellCheck Analysis
      uses: ludeeus/action-shellcheck@2.0.0
