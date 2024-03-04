@@ -17,7 +17,7 @@ jobs:
    actions: read
  
   strategy:
-   fail-fast: true
+   fail-fast: false
    matrix:
     language: [ java-kotlin ]
  
@@ -45,7 +45,7 @@ jobs:
 
    - name: Build with Gradle
      run:
-      ./build.sh
+      ./build.sh --info
 
    - name: Upload Artifact
      uses: actions/upload-artifact@v4.3.1
