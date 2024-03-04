@@ -65,9 +65,18 @@ if [ "$1" != "--skip-build" ]; then
   if [ ! -d "$HOME/.m2/repository/gg/skytils/skytilsmod/$SKYTILS_VERSION" ]; then
     rm -rf SkytilsMod/build/libs/*
     cd SkytilsMod || { echo "cd failed"; exit 1; }
+    git checkout v$SKYTILS_VERSION &> /dev/null
+    git stash &> /dev/null
+    git stash drop &> /dev/null
     git submodule init
     git submodule update
     chmod +x gradlew
+    git apply ../SkytilsMod.patch &> /dev/null
+    cd hypixel-api || { echo "cd failed"; exit 1; }
+    git stash &> /dev/null
+    git stash drop &> /dev/null
+    git apply ../../hypixel-api.patch &> /dev/null
+    cd ..
     ./gradlew -Porg.gradle.java.installations.auto-download=false build remapJar publishToMavenLocal --no-daemon
     cd .. || { echo "cd failed"; exit 1; }
   fi

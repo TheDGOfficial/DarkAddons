@@ -1,0 +1,34 @@
+diff --git a/types/build.gradle.kts b/types/build.gradle.kts
+index 665e94e..75e2e4c 100644
+--- a/types/build.gradle.kts
++++ b/types/build.gradle.kts
+@@ -1,6 +1,9 @@
++import java.util.Locale
++
+ plugins {
+     kotlin("jvm") version "1.9.21"
+     kotlin("plugin.serialization") version "1.9.21"
++    `maven-publish`
+ }
+ 
+ group = "gg.skytils.hypixel.types"
+@@ -28,4 +31,17 @@ dependencies {
+ 
+ java {
+     toolchain.languageVersion = JavaLanguageVersion.of(8)
+-}
+\ No newline at end of file
++}
++
++publishing {
++    publications {
++        register("mavenJava", MavenPublication::class) {
++            groupId = project.group.toString()
++            artifactId = project.name.lowercase(Locale.ROOT)
++            version = project.version.toString()
++
++            from(components["java"])
++        }
++    }
++}
++
