@@ -2,6 +2,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+shopt -s extglob
+
 echo Starting
 echo Setting up environment
 
@@ -11,7 +13,7 @@ while IFS='=' read -r key value; do
   if [ -n "$key" ]; then
     versionProperties["$key"]="$value"
   fi
-done < version.properties
+done < versions.properties
 
 DARKADDONS_VERSION=${versionProperties["darkaddons.version"]}
 
@@ -70,18 +72,20 @@ if [ "${1:-default}" != "--skip-build" ]; then
     cd SkytilsMod || { echo "cd failed"; exit 1; }
     git checkout v"$SKYTILS_VERSION" &> /dev/null
     git stash &> /dev/null
-    git stash drop || true &> /dev/null
+    git stash drop &> /dev/null || true
     git submodule init
     git submodule update
     chmod +x gradlew
     git apply ../SkytilsMod.patch &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; }
     git stash &> /dev/null
-    git stash drop || true &> /dev/null
+    git stash drop &> /dev/null || true
     git apply ../../hypixel-api.patch &> /dev/null
     cd ..
     ./gradlew -Porg.gradle.java.installations.auto-download=false build remapJar publishToMavenLocal --no-daemon
     cd .. || { echo "cd failed"; exit 1; }
+  else
+    rm -rf "$HOME"/.m2/repository/gg/skytils/skytilsmod/!("$SKYTILS_VERSION"|maven-metadata-local.xml)/
   fi
 fi
 
@@ -101,10 +105,12 @@ EXIT_CODE=1
 
 if [ "${1:-default}" != "--skip-build" ]; then
   echo Building JAR
+  # shellcheck disable=SC2206
   artifact_array=($ARTIFACT_PATTERN)
   if compgen -G "${artifact_array[@]}" >/dev/null; then
     rm "${artifact_array[@]}"
   fi
+  # shellcheck disable=SC2206
   signature_array=($SIGNATURE_PATTERN)
   if compgen -G "${signature_array[@]}" >/dev/null; then
     rm "${signature_array[@]}"
@@ -153,6 +159,7 @@ if [ -f "$BUILD_OUTPUT_JAR_PATH" ] && [ "$EXIT_CODE" == "0" ]; then
 
   if [ "${1:-default}" != "--skip-install" ]; then
     echo Placing JAR in mod folder
+    # shellcheck disable=SC2206
     mods_artifact_array=($MODS_ARTIFACT_PATTERN)
     if compgen -G "${mods_artifact_array[@]}" >/dev/null; then
       rm "${mods_artifact_array[@]}"
@@ -166,6 +173,7 @@ fi
 
 echo Cleaning up old crash reports and logs
 
+# shellcheck disable=SC2206
 crash_reports_array=($CRASH_REPORTS_PATTERN)
 if compgen -G "${crash_reports_array[@]}" >/dev/null; then
   cleaned_crash_reports=$(rm -v "${crash_reports_array[@]}" | wc -l)

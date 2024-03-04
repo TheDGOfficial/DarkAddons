@@ -33,7 +33,7 @@ private val versionProperties = loadVersionProperties()
 
 fun loadVersionProperties(): Properties {
     val properties = Properties()
-    FileInputStream(File("version.properties")).use(properties::load)
+    FileInputStream(File("versions.properties")).use(properties::load)
 
     return properties
 }

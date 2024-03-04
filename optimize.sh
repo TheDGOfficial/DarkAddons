@@ -1,4 +1,4 @@
-#!/bin/bash -xv
+#!/bin/bash
 set -euo pipefail
 IFS=$'\n\t'
 
@@ -7,7 +7,7 @@ while IFS='=' read -r key value; do
   if [ -n "$key" ]; then
     versionProperties["$key"]="$value"
   fi
-done < version.properties
+done < versions.properties
 
 #KOTLIN_VERSION=2.0.0-dev-17175
 
@@ -91,7 +91,9 @@ EXIT_CODE=1
 
 mkdir -p build/bin
 
+set +e
 cmp -s MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
+set -e
 
 EXIT_CODE=$?
 
