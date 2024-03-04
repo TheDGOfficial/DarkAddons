@@ -1,0 +1,20 @@
+[
+{
+  "modid": "darkaddons",
+  "name": "DarkAddons",
+  "description": "${description}",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://github.com/TheDGOfficial/DarkAddons",
+  "updateUrl": "https://github.com/TheDGOfficial/DarkAddons/releases/latest",
+  "authorList": ["TheDark_Gamer", "Skytils Team & Contributors", "Mod Testers"],
+  "credits": "Thanks to Skytils Team (and its contributors) for a great open-source Hypixel Skyblock mod figure utilizing a modern Gradle toolchain and letting me getting into coding in the Forge platform, and thanks to Colven, KpopSimp, vyrelic and Birbgod25 for helping in testing and reporting issues.",
+  "logoFile": "assets/darkaddons/darkaddons.logo.png",
+  "screenshots": ["assets/darkaddons/darkaddons/screenshot_1.png", "assets/darkaddons/darkaddons/screenshot_2.png", "assets/darkaddons/darkaddons/screenshot_3.png", "assets/darkaddons/darkaddons/screenshot_4.png"],
+  "parent": "darkmod",
+  "useDependencyInformation": true,
+  "requiredMods": ["skytils"],
+  "dependencies": ["skytils"],
+  "dependants": ["darkutils"]
+}
+]

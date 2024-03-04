@@ -1,0 +1,222 @@
+package gg.darkaddons;
+
+import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
+import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.TimeUnit;
+
+final class CenturyRaffleTicketTimer extends GuiElement {
+    private static final long RAFFLE_READY_TIME_MS = TimeUnit.MINUTES.toMillis(20L);
+    private static final long DEMO_TIME = CenturyRaffleTicketTimer.RAFFLE_READY_TIME_MS;
+
+    private static long ptTicketExpireTime = -1L;
+    private static long activeTicketExpireTime = -1L;
+
+    private static boolean ptTicketWasNotInit;
+    private static boolean ptTicketWasNegative;
+
+    private static boolean activeTicketWasNotInit;
+    private static boolean activeTicketWasNegative;
+
+    private static final void updateTimer(@Nullable final String chatText) {
+        if (null != chatText) {
+            if ("PLAYTIME! You gained +1 Raffle Ticket!".equals(Utils.removeControlCodes(chatText))) {
+                CenturyRaffleTicketTimer.ptTicketExpireTime = System.currentTimeMillis() + CenturyRaffleTicketTimer.RAFFLE_READY_TIME_MS;
+
+                CenturyRaffleTicketTimer.ptTicketWasNotInit = false;
+                CenturyRaffleTicketTimer.ptTicketWasNegative = false;
+            } else if ("ACTIVE PLAYER! You gained +1 Raffle Ticket!".equals(Utils.removeControlCodes(chatText)) || "ACTIVE BONUS! You gained 10 Raffle Tickets! That's pretty rare!".equals(Utils.removeControlCodes(chatText))) {
+                CenturyRaffleTicketTimer.activeTicketExpireTime = System.currentTimeMillis() + CenturyRaffleTicketTimer.RAFFLE_READY_TIME_MS;
+
+                CenturyRaffleTicketTimer.activeTicketWasNotInit = false;
+                CenturyRaffleTicketTimer.activeTicketWasNegative = false;
+            }
+        }
+    }
+
+    private static final long getTimeLeftForPtTicketInMs() {
+        return CenturyRaffleTicketTimer.getTimeLeftForTicketInMs(true);
+    }
+
+    private static final long getTimeLeftForActiveTicketInMs() {
+        return CenturyRaffleTicketTimer.getTimeLeftForTicketInMs(false);
+    }
+
+    private static final long getTimeLeftForTicketInMs(final boolean pt) {
+        final var expireTime = pt ? CenturyRaffleTicketTimer.ptTicketExpireTime : CenturyRaffleTicketTimer.activeTicketExpireTime;
+
+        if (-1L == expireTime) {
+            CenturyRaffleTicketTimer.resetTimer(pt, true); // Not initialized, assume 20min. If this was wrong, the message will update it later to the correct value.
+
+            return CenturyRaffleTicketTimer.getTimeLeftForTicketInMs(pt);
+        }
+
+        final var timeLeftInMs = expireTime - System.currentTimeMillis();
+
+        if (0L > timeLeftInMs) {
+            CenturyRaffleTicketTimer.resetTimer(pt, false); // Negative value, reset to 20min. If this was wrong, the message will update it later to the correct value.
+
+            return CenturyRaffleTicketTimer.getTimeLeftForTicketInMs(pt);
+        }
+
+        return timeLeftInMs;
+    }
+
+    private static final void resetTimer(final boolean pt, final boolean notInit) {
+        final var resetTime = System.currentTimeMillis() + CenturyRaffleTicketTimer.RAFFLE_READY_TIME_MS;
+
+        if (pt) {
+            CenturyRaffleTicketTimer.ptTicketExpireTime = resetTime;
+        } else {
+            CenturyRaffleTicketTimer.activeTicketExpireTime = resetTime;
+        }
+
+        if (notInit) {
+            if (pt) {
+                CenturyRaffleTicketTimer.ptTicketWasNotInit = true;
+            } else {
+                CenturyRaffleTicketTimer.activeTicketWasNotInit = true;
+            }
+        } else {
+            if (pt) {
+                CenturyRaffleTicketTimer.ptTicketWasNegative = true;
+            } else {
+                CenturyRaffleTicketTimer.activeTicketWasNegative = true;
+            }
+        }
+    }
+
+    CenturyRaffleTicketTimer() {
+        super("Century Raffle Ticket Timer");
+    }
+
+    @NotNull
+    private static final String getDisplayTextForPtTicket(final long timeInMillis) {
+        return CenturyRaffleTicketTimer.getDisplayTextForTicket(true, timeInMillis);
+    }
+
+    @NotNull
+    private static final String getDisplayTextForActiveTicket(final long timeInMillis) {
+        return CenturyRaffleTicketTimer.getDisplayTextForTicket(false, timeInMillis);
+    }
+
+    private static final String getDisplayTextForTicket(final boolean pt, final long timeInMillis) {
+        final var totalSeconds = timeInMillis / 1_000L;
+
+        final var minutes = totalSeconds % 3_600L / 60L;
+        final var seconds = totalSeconds % 60L;
+
+        final var timeInfo = 1L <= minutes ? minutes + "m" : seconds + "s";
+        final var extraInfo = CenturyRaffleTicketTimer.getExtraInfo(pt);
+
+        return "§b" + (pt ? "Playtime" : "Active") + " Ticket§f: §" + CenturyRaffleTicketTimer.getColor(timeInMillis) + timeInfo + extraInfo;
+    }
+
+    @NotNull
+    private static final String getExtraInfo(final boolean pt) {
+        if (pt) {
+            if (CenturyRaffleTicketTimer.ptTicketWasNotInit) {
+                return " §9(Unknown)";
+            }
+            if (CenturyRaffleTicketTimer.ptTicketWasNegative) {
+                return " §a(Was Ready)";
+            }
+        } else {
+            if (CenturyRaffleTicketTimer.activeTicketWasNotInit) {
+                return " §9(Unknown)";
+            }
+            if (CenturyRaffleTicketTimer.activeTicketWasNegative) {
+                return " §a(Was Ready)";
+            }
+        }
+        return "";
+    }
+
+    private static final char getColor(final long timeInMillis) {
+        return 0L > timeInMillis ? 'a' : 'e';
+    }
+
+    @Override
+    final void render(final boolean demo) {
+        if (demo || this.isEnabled() && DarkAddons.isInSkyblock() && !DarkAddons.isInLocationEditingGui()) {
+            final var ptTimeLeftInMs = CenturyRaffleTicketTimer.getTimeLeftForPtTicketInMs();
+            final var activeTimeLeftInMs = CenturyRaffleTicketTimer.getTimeLeftForActiveTicketInMs();
+
+            final var leftAlign = this.shouldLeftAlign();
+
+            var changedPt = false;
+            var changedActive = false;
+
+            if (demo) {
+                if (!CenturyRaffleTicketTimer.ptTicketWasNegative) {
+                    CenturyRaffleTicketTimer.ptTicketWasNegative = true;
+                    changedPt = true;
+                }
+                if (!CenturyRaffleTicketTimer.activeTicketWasNegative) {
+                    CenturyRaffleTicketTimer.activeTicketWasNegative = true;
+                    changedActive = true;
+                }
+            }
+
+            GuiElement.drawString(
+                CenturyRaffleTicketTimer.getDisplayTextForPtTicket(demo ? CenturyRaffleTicketTimer.DEMO_TIME : ptTimeLeftInMs),
+                leftAlign ? 0.0F : this.getWidth(demo),
+                0.0F,
+                CommonColors.Companion.getWHITE(),
+                leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT,
+                SmartFontRenderer.TextShadow.NONE
+            );
+
+            GuiElement.drawString(
+                CenturyRaffleTicketTimer.getDisplayTextForActiveTicket(demo ? CenturyRaffleTicketTimer.DEMO_TIME : activeTimeLeftInMs),
+                leftAlign ? 0.0F : this.getWidth(demo),
+                GuiElement.getFontHeight(),
+                CommonColors.Companion.getWHITE(),
+                leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT,
+                SmartFontRenderer.TextShadow.NONE
+            );
+
+            if (changedPt) {
+                CenturyRaffleTicketTimer.ptTicketWasNegative = false;
+            }
+
+            if (changedActive) {
+                CenturyRaffleTicketTimer.activeTicketWasNegative = false;
+            }
+        }
+    }
+
+    @Override
+    final boolean isEnabled() {
+        return Config.isCenturyRaffleTicketTimer();
+    }
+
+    @Override
+    final int getHeight() {
+        return GuiElement.getFontHeight() << 1;
+    }
+
+    @Override
+    final int getWidth(final boolean demo) {
+        var text = CenturyRaffleTicketTimer.getDisplayTextForPtTicket(demo ? CenturyRaffleTicketTimer.DEMO_TIME : Math.max(CenturyRaffleTicketTimer.getTimeLeftForPtTicketInMs(), CenturyRaffleTicketTimer.getTimeLeftForActiveTicketInMs()));
+
+        if (!text.endsWith(" §a(Was Ready)")) {
+            text += " §a(Was Ready)";
+        }
+
+        return GuiElement.getTextWidth(text);
+    }
+
+    static final void doCheckMessage(@NotNull final ClientChatReceivedEvent event) {
+        McProfilerHelper.startSection("century_raffle_ticket_timer_check_message");
+
+        if (Config.isCenturyRaffleTicketTimer() && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type) && DarkAddons.isInSkyblock()) {
+            CenturyRaffleTicketTimer.updateTimer(event.message.getUnformattedText());
+        }
+
+        McProfilerHelper.endSection();
+    }
+}

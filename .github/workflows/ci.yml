@@ -1,0 +1,64 @@
+name: "CI"
+
+permissions:
+ contents: read
+
+on: [ push, pull_request ]
+
+jobs:
+ ci:
+  if: "! contains(toJSON(github.event.commits.*.message), '[ci skip]')"
+
+  name: CI
+  runs-on: ubuntu-22.04
+  permissions:
+   contents: read
+   security-events: write
+   actions: read
+ 
+  strategy:
+   fail-fast: true
+   matrix:
+    codeql_version: v2.16.3
+    language: [ java-kotlin ]
+ 
+  steps:
+   - name: Checkout Code
+     uses: actions/checkout@v4.1.1
+     with:
+      persist-credentials: false
+      fetch-depth: 0
+
+   - name: Install Java
+     uses: actions/setup-java@v4.1.0
+     with:
+      distribution: oracle
+      java-version: 21.0.2
+      cache: gradle
+
+   - name: Build with Gradle
+     run:
+      ./build.sh
+
+   - name: Upload Artifact
+     uses: actions/upload-artifact@v4.3.1
+     with:
+      name: DarkAddons
+      path: build/libs/*-opt.jar
+      if-no-files-found: error
+
+   - name: Initialize CodeQL
+     uses: github/codeql-action/init@${{ matrix.codeql_version }}
+     with:
+      languages: ${{ matrix.language }}
+      queries: +security-and-quality
+      packs: Marcono1234/codeql-java-queries
+
+   - name: Perform CodeQL Analysis
+     uses: github/codeql-action/analyze@${{ matrix.codeql_version }}
+     with:
+      category: "/language:${{ matrix.language }}"
+
+   - name: Perform ShellCheck Analysis
+     uses: ludeeus/action-shellcheck@2.0.0
+
