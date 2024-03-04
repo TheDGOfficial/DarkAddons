@@ -42,7 +42,6 @@ jobs:
       distribution: temurin
       java-version: 21
       cache: gradle
-      #overwrite-settings: false
 
    - name: Build with Gradle
      run:

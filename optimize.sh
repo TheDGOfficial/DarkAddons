@@ -92,6 +92,11 @@ cmp -s MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMet
 
 EXIT_CODE=$?
 
+if [ "$EXIT_CODE" == "2" ]; then
+ # Treat non-existent file as different.
+ EXIT_CODE=1
+fi
+
 if [ "$EXIT_CODE" == "1" ]; then
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
  javac --enable-preview -cp $CLASSPATH_WITH_MOD -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java
