@@ -628,19 +628,21 @@ final class MarkCompilerGeneratedMethodsFinal {
             try {
                 final var clazz = info.load();
                 try (final var is = Thread.currentThread().getContextClassLoader().getResourceAsStream(StringUtils.replace(clazz.getName(), ".", "/") + ".class")) {
-                    final var cf = new ClassFile(new DataInputStream(is));
-                    for (final MethodInfo mi : cf.getMethods()) {
-                        final CodeAttribute ca = mi.getCodeAttribute();
-                        if (null == ca) {
-                            continue; // abstract or native method
-                        }
-                        final int bLen = ca.getCode().length;
-                        if (8_000 < bLen) { // Default method size to be excluded from compilation if -XX:+DontCompileHugeMethods (which is on by default) - This a serious issue as it prevents both C1 and C2 compilation.
-                            notIdealMethods.put(new MarkCompilerGeneratedMethodsFinal.MethodInfoWithClass(mi, clazz), MarkCompilerGeneratedMethodsFinal.MethodFlawDetected.HUGE_METHOD);
-                        } else if (2_000 < bLen) { // Default value of -XX:+InlineSmallCode.
-                            notIdealMethods.put(new MarkCompilerGeneratedMethodsFinal.MethodInfoWithClass(mi, clazz), MarkCompilerGeneratedMethodsFinal.MethodFlawDetected.LARGE_METHOD);
-                        } else if (325 < bLen) { // Default value of -XX:+FreqInlineSize.
-                            notIdealMethods.put(new MarkCompilerGeneratedMethodsFinal.MethodInfoWithClass(mi, clazz), MarkCompilerGeneratedMethodsFinal.MethodFlawDetected.NONSMALL_METHOD);
+                    try (final var dataInputStream = new DataInputStream(is)) {
+                        final var cf = new ClassFile(dataInputStream);
+                        for (final MethodInfo mi : cf.getMethods()) {
+                            final CodeAttribute ca = mi.getCodeAttribute();
+                            if (null == ca) {
+                                continue; // abstract or native method
+                            }
+                            final int bLen = ca.getCode().length;
+                            if (8_000 < bLen) { // Default method size to be excluded from compilation if -XX:+DontCompileHugeMethods (which is on by default) - This a serious issue as it prevents both C1 and C2 compilation.
+                                notIdealMethods.put(new MarkCompilerGeneratedMethodsFinal.MethodInfoWithClass(mi, clazz), MarkCompilerGeneratedMethodsFinal.MethodFlawDetected.HUGE_METHOD);
+                            } else if (2_000 < bLen) { // Default value of -XX:+InlineSmallCode.
+                                notIdealMethods.put(new MarkCompilerGeneratedMethodsFinal.MethodInfoWithClass(mi, clazz), MarkCompilerGeneratedMethodsFinal.MethodFlawDetected.LARGE_METHOD);
+                            } else if (325 < bLen) { // Default value of -XX:+FreqInlineSize.
+                                notIdealMethods.put(new MarkCompilerGeneratedMethodsFinal.MethodInfoWithClass(mi, clazz), MarkCompilerGeneratedMethodsFinal.MethodFlawDetected.NONSMALL_METHOD);
+                            }
                         }
                     }
                 }
