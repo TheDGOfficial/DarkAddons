@@ -115,14 +115,18 @@ if [ "${1:-default}" != "--skip-build" ]; then
   if compgen -G "${signature_array[@]}" >/dev/null; then
     rm "${signature_array[@]}"
   fi
-  DEBUG_PARAMS=""
-  if [ "${1:-default}" == "--info" ]; then
-    DEBUG_PARAMS=" --info"
-  fi
   if [ "${1:-default}" != "--offline" ]; then
-    ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar"$DEBUG_PARAMS"
+    if [ "${1:-default}" == "--info" ]; then
+     ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --info
+    else
+     ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar
+    fi
   else
-    ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --offline"$DEBUG_PARAMS"
+    if [ "${2:-default}" == "--info" ]; then
+     ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --offline --info
+    else
+     ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar
+    fi
   fi
   EXIT_CODE=$?
   if [ "$EXIT_CODE" == "0" ]; then

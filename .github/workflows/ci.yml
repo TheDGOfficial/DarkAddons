@@ -39,13 +39,25 @@ jobs:
       distribution: temurin
       java-version: 21
 
-   - name: Cache Gradle & Maven packages
+   - name: Cache Gradle wrapper
      uses: actions/cache@v4.0.1
      with:
-      key: gradlemaven-${{ hashFiles('**/*.gradle*') }}-${{hashFiles('**/gradle-wrapper.properties') }}-${{hashFiles('**/buildSrc/**/*.kt') }}-${{hashFiles('gradle/*.versions.toml') }}-${{hashFiles('**/versions.properties') }}
+      key: gradle-wrapper-${{hashFiles('**/gradle-wrapper.properties') }}
+      path: |
+       ~/.gradle/wrapper
+
+   - name: Cache Gradle packages
+     uses: actions/cache@v4.0.1
+     with:
+      key: gradle-packages-${{ hashFiles('**/*.gradle*') }}-${{hashFiles('**/versions.properties') }}
       path: |
        ~/.gradle/caches
-       ~/.gradle/wrapper
+
+   - name: Cache Maven packages
+     uses: actions/cache@v4.0.1
+     with:
+      key: maven-packages
+      path: |
        ~/.m2
 
    - name: Initialize CodeQL
