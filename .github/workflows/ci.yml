@@ -57,7 +57,7 @@ jobs:
 
    - name: Build with Gradle
      run:
-      ./build.sh
+      ./build.sh --info
 
    - name: Upload Artifact
      uses: actions/upload-artifact@v4.3.1
@@ -70,6 +70,21 @@ jobs:
      uses: github/codeql-action/analyze@v3.24.6
      with:
       category: "/language:${{ matrix.language }}"
+      upload: false
+      output: sarif-results
+
+    - name: Filter CodeQL Analysis Results
+      uses: advanced-security/filter-sarif@v1.0.1
+      with:
+        patterns: |
+          -SkytilsMod/**
+        input: sarif-results/${{ matrix.language }}.sarif
+        output: sarif-results/${{ matrix.language }}.sarif
+
+    - name: Upload CodeQL Analysis Results
+      uses: github/codeql-action/upload-sarif@v2.16.3
+      with:
+        sarif_file: sarif-results/${{ matrix.language }}.sarif
 
    - name: Perform ShellCheck Analysis
      uses: ludeeus/action-shellcheck@2.0.0
