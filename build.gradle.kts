@@ -26,7 +26,7 @@ plugins {
     idea
     signing
     `maven-publish`
-    id("io.github.sgtsilvio.gradle.proguard") version "0.6.0"
+    id("io.github.sgtsilvio.gradle.proguard") version "0.7.0"
 }
 
 private val versionProperties = loadVersionProperties()
