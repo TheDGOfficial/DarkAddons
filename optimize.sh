@@ -92,10 +92,11 @@ EXIT_CODE=1
 mkdir -p build/bin
 
 set +e
-cmp -s MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
-set -e
 
+cmp -s MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
 EXIT_CODE=$?
+
+set -e
 
 if [ "$EXIT_CODE" == "2" ]; then
  # Treat non-existent file as different.

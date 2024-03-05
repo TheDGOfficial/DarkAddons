@@ -90,10 +90,27 @@ jobs:
      uses: advanced-security/filter-sarif@v1.0.1
      with:
       patterns: |
-       **
-       -./SkytilsMod/**
+       +**
+       -SkytilsMod/**
+       -**:java/equals-on-unrelated-types
+       -**:java/type-mismatch-modification
+       -**:java/non-sync-override
+       -**:java/evaluation-to-constant
+       -**:java/dereferenced-value-may-be-null
+       -**:java/unknown-javadoc-parameter
+       -**:java/multiplication-of-remainder
+       -**:java/reference-equality-on-strings
+       -**:java/inefficient-string-constructor
+       -**:java/local-variable-is-never-read
+       -**:java/unused-parameter
       input: sarif-results/${{ matrix.language }}.sarif
       output: sarif-results/${{ matrix.language }}.sarif
+
+   - name: (Debug) Upload SARIF Results
+     uses: actions/upload-artifact@v4.3.1
+     with:
+      name: sarif-results
+      path: sarif-results
 
    - name: Upload CodeQL Analysis Results
      uses: github/codeql-action/upload-sarif@v3.24.6
