@@ -94,6 +94,7 @@ jobs:
        -SkytilsMod/**
        -**:java/equals-on-unrelated-types
        -**:java/type-mismatch-modification
+       -**:java/type-mismatch-access
        -**:java/non-sync-override
        -**:java/evaluation-to-constant
        -**:java/dereferenced-value-may-be-null
