@@ -51,6 +51,7 @@ CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm/$ASM_VERSION/asm-$ASM_VERSION.jar
 CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm-tree/$ASM_VERSION/asm-tree-$ASM_VERSION.jar
 CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm-analysis/$ASM_VERSION/asm-analysis-$ASM_VERSION.jar
 CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm-util/$ASM_VERSION/asm-util-$ASM_VERSION.jar
+CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm-commons/$ASM_VERSION/asm-commons-$ASM_VERSION.jar
 
 CLASSPATH=$CLASSPATH:$REPO/org/apache/commons/commons-lang3/$COMMONS_LANG3_VERSION/commons-lang3-$COMMONS_LANG3_VERSION.jar
 CLASSPATH=$CLASSPATH:$REPO/org/jetbrains/annotations/$JETBRAINS_ANNOTATIONS_VERSION/annotations-$JETBRAINS_ANNOTATIONS_VERSION.jar
