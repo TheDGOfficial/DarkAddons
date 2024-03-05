@@ -196,3 +196,9 @@ if [ "${1:-default}" != "--skip-install" ]; then
 fi
 
 echo Done
+
+if [ "$EXIT_CODE" != "0" ]; then
+  echo "Unexpected exit code of $EXIT_CODE"
+  exit 1
+fi
+

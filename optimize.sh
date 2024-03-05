@@ -64,6 +64,8 @@ CLASSPATH=$CLASSPATH:$REPO/io/netty/netty-all/$NETTY_VERSION/netty-all-$NETTY_VE
 
 CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SKYTILS_VERSION.jar
 
+mkdir -p build/bin
+
 cp "$GRADLE_PROJECT_REPO/loom-cache/minecraftMaven/net/minecraft/forge-1.8.9-11.15.1.2318-1.8.9-minecraft-merged-project-root/1.8.9-de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-minecraft-merged-project-root-1.8.9-de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9.jar" "build/bin/mc.jar"
 
 zip -d -q build/bin/mc.jar META-INF/MANIFEST.MF
@@ -92,8 +94,6 @@ CLASSPATH_WITH_MOD=$CLASSPATH:build/libs/DarkAddons-v$DARKADDONS_VERSION-proguar
 CLASSPATH_WITH_OPTIMIZED_MOD=$CLASSPATH:$OUTPUT_JAR
 
 EXIT_CODE=1
-
-mkdir -p build/bin
 
 set +e
 
