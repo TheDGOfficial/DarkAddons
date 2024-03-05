@@ -91,6 +91,7 @@ jobs:
       patterns: |
        +**
        -SkytilsMod/**
+       -build/bin/**
        -**:java/equals-on-unrelated-types
        -**:java/type-mismatch-modification
        -**:java/type-mismatch-access

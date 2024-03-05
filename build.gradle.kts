@@ -116,7 +116,7 @@ dependencies {
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
 
     compileOnly("gg.essential:loader-launchwrapper:1.2.2") // TODO make it shadowMe
-    compileOnly("gg.essential:essential-1.8.9-forge:16346+gb711e84906") { // TODO make it back implementation
+    compileOnly("gg.essential:essential-1.8.9-forge:16418+g88e7b3a5e9") { // TODO make it back implementation
         exclude(module = "asm")
         exclude(module = "asm-commons")
         exclude(module = "asm-tree")
