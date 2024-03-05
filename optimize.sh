@@ -64,7 +64,11 @@ CLASSPATH=$CLASSPATH:$REPO/io/netty/netty-all/$NETTY_VERSION/netty-all-$NETTY_VE
 
 CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SKYTILS_VERSION.jar
 
-CLASSPATH=$CLASSPATH:$GRADLE_PROJECT_REPO/loom-cache/minecraftMaven/net/minecraft/forge-1.8.9-11.15.1.2318-1.8.9-minecraft-merged-project-root/1.8.9-de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-minecraft-merged-project-root-1.8.9-de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9.jar
+cp "$GRADLE_PROJECT_REPO/loom-cache/minecraftMaven/net/minecraft/forge-1.8.9-11.15.1.2318-1.8.9-minecraft-merged-project-root/1.8.9-de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-minecraft-merged-project-root-1.8.9-de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9.jar" "build/bin/mc.jar"
+
+zip -d -q build/bin/mc.jar META-INF/MANIFEST.MF
+
+CLASSPATH=$CLASSPATH:build/bin/mc.jar
 
 CLASSPATH=$CLASSPATH:$REPO/org/spongepowered/mixin/$MIXIN_VERSION/mixin-$MIXIN_VERSION.jar
 
@@ -110,7 +114,7 @@ fi
 
 if [ "$EXIT_CODE" == "1" ]; then
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
- javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/bin -g -parameters -Xlint:all,-path MarkCompilerGeneratedMethodsFinal.java || echo Unable to compile MarkCompilerGeneratedMethodsFinal.java
+ javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/bin -g -parameters -Xlint:all MarkCompilerGeneratedMethodsFinal.java || echo Unable to compile MarkCompilerGeneratedMethodsFinal.java
 fi
 
 java -cp "$CLASSPATH_WITH_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal || echo "Unable to run MarkCompilerGeneratedMethodsFinal.class"
