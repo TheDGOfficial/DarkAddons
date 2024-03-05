@@ -402,6 +402,8 @@ private val proguardJar: TaskProvider<ProguardTask> by tasks.registering(proguar
     jdkModules.add("java.base")
     jdkModules.add("java.desktop")
     jdkModules.add("java.management")
+    jdkModules.add("jdk.management")
+    jdkModules.add("jdk.httpserver")
     //mappingFile.set(base.libsDirectory.file("${project.name}-${project.version}-mapping.txt"))
 
     rulesFiles.from("DarkAddons.pro")
