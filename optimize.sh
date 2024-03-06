@@ -46,7 +46,7 @@ ensure_m2_artifact_exists() {
  ARTIFACT_PATH=$4
 
  if [ ! -f "$ARTIFACT_PATH" ]; then
-  ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.6.1:get -DremoteRepositories=https://repo.essential.gg/repository/maven-public/ -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+  ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.6.1:get -DremoteRepositories=https://repo.essential.gg/repository/maven-public/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
  fi
 }
 
