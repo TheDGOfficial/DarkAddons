@@ -33,6 +33,9 @@ jobs:
       fetch-depth: 0
       submodules: true
 
+   - name: Verify Gradle Wrapper
+     uses: gradle/wrapper-validation-action@v2.1.1
+
    - name: Install Java
      uses: actions/setup-java@v4.1.0
      with:
