@@ -51,6 +51,7 @@ ensure_m2_artifact_exists() {
 }
 
 CLASSPATH=""
+HASH=""
 
 add_m2_artifact_to_classpath() {
  GROUP_WITH_DOTS=$1
@@ -64,6 +65,7 @@ add_m2_artifact_to_classpath() {
  ensure_m2_artifact_exists "$GROUP_WITH_DOTS" "$ARTIFACT" "$VERSION" "$ARTIFACT_PATH"
 
  CLASSPATH=$CLASSPATH:$ARTIFACT_PATH
+ HASH=$HASH$VERSION
 }
 
 REPO=$HOME/.m2/repository
@@ -91,6 +93,8 @@ add_m2_artifact_to_classpath org.lwjgl.lwjgl lwjgl "$LWJGL_VERSION"
 
 add_m2_artifact_to_classpath org.apache.logging.log4j log4j-api "$LOG4J_VERSION"
 add_m2_artifact_to_classpath com.google.errorprone error_prone_annotations "$ERRORPRONE_VERSION"
+
+echo -n "$HASH" | sha256sum > .sha256sum
 
 CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SKYTILS_VERSION.jar
 

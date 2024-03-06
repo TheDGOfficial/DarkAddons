@@ -137,3 +137,6 @@ run/
 # Avoid ignoring required libs
 !libs/*
 
+# This file is generated each build
+.sha256sum
+
