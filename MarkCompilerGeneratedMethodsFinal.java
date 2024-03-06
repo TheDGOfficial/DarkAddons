@@ -264,11 +264,17 @@ final class MarkCompilerGeneratedMethodsFinal {
     }
 
     private static final void deleteAllFilesInDir(@NotNull final File dir) throws IOException {
-        for (final var file : dir.listFiles()) {
-            if (file.isDirectory()) {
-                MarkCompilerGeneratedMethodsFinal.deleteAllFilesInDir(file);
+        if (dir.exists()) {
+            if (!dir.isDirectory()) {
+                throw new IllegalArgumentException("argument is not a directory");
             }
-            Files.delete(file.toPath());
+
+            for (final var file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    MarkCompilerGeneratedMethodsFinal.deleteAllFilesInDir(file);
+                }
+                Files.delete(file.toPath());
+            }
         }
     }
 
@@ -454,11 +460,17 @@ final class MarkCompilerGeneratedMethodsFinal {
     @NotNull
     private static final ArrayList<File> getFilesInDirectoryRecursively(@NotNull final File dir) {
         final var files = new ArrayList<File>(100);
-        for (final var file : dir.listFiles()) {
-            if (file.isDirectory()) {
-                files.addAll(MarkCompilerGeneratedMethodsFinal.getFilesInDirectoryRecursively(file));
-            } else {
-                files.add(file);
+        if (dir.exists()) {
+            if (!dir.isDirectory()) {
+                throw new IllegalArgumentException("argument is not a directory");
+            }
+
+            for (final var file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    files.addAll(MarkCompilerGeneratedMethodsFinal.getFilesInDirectoryRecursively(file));
+                } else {
+                    files.add(file);
+                }
             }
         }
         return files;
