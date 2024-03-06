@@ -11,7 +11,6 @@ done < versions.properties
 
 #KOTLIN_VERSION=2.0.0-dev-17175
 
-#GSON_VERSION=${versionProperties["gson.version"]}
 GUAVA_VERSION=${versionProperties["guava.version"]}
 
 JETBRAINS_ANNOTATIONS_VERSION=${versionProperties["jetbrains.annotations.version"]}
@@ -26,7 +25,6 @@ LAUNCHWRAPPER_VERSION=1.12
 NETTY_VERSION=4.0.23.Final
 
 LWJGL_VERSION=2.9.4-nightly-20150209
-#VECMATH_VERSION=1.5.2
 
 LOG4J_VERSION=2.0-beta9
 
@@ -39,29 +37,60 @@ SKYTILS_VERSION=${versionProperties["skytils.version"]}
 
 MIXIN_VERSION=${versionProperties["mixin.version"]}
 
-REPO=$HOME/.m2/repository
+rm -rf "\${project.basedir}"
 
-#GRADLE_REPO=$HOME/.gradle/caches
+ensure_m2_artifact_exists() {
+ GROUP=$1
+ ARTIFACT=$2
+ VERSION=$3
+ ARTIFACT_PATH=$4
+
+ if [ ! -f "$ARTIFACT_PATH" ]; then
+  ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.6.1:get -DremoteRepositories=https://repo.essential.gg/repository/maven-public/ -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+ fi
+}
+
+CLASSPATH=""
+
+add_m2_artifact_to_classpath() {
+ GROUP_WITH_DOTS=$1
+
+ ARTIFACT=$2
+ VERSION=$3
+
+ GROUP=${GROUP_WITH_DOTS//./\/}
+
+ ARTIFACT_PATH=$REPO/$GROUP/$ARTIFACT/$VERSION/$ARTIFACT-$VERSION.jar
+ ensure_m2_artifact_exists "$GROUP_WITH_DOTS" "$ARTIFACT" "$VERSION" "$ARTIFACT_PATH"
+
+ CLASSPATH=$CLASSPATH:$ARTIFACT_PATH
+}
+
+REPO=$HOME/.m2/repository
 GRADLE_PROJECT_REPO=.gradle
 
-#CLASSPATH=$REPO/com/google/code/gson/gson/$GSON_VERSION/gson-$GSON_VERSION.jar
-CLASSPATH=$REPO/com/google/guava/guava/$GUAVA_VERSION/guava-$GUAVA_VERSION.jar
+add_m2_artifact_to_classpath com.google.guava guava "$GUAVA_VERSION"
 
-CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm/$ASM_VERSION/asm-$ASM_VERSION.jar
-CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm-tree/$ASM_VERSION/asm-tree-$ASM_VERSION.jar
-CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm-analysis/$ASM_VERSION/asm-analysis-$ASM_VERSION.jar
-CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm-util/$ASM_VERSION/asm-util-$ASM_VERSION.jar
-CLASSPATH=$CLASSPATH:$REPO/org/ow2/asm/asm-commons/$ASM_VERSION/asm-commons-$ASM_VERSION.jar
+add_m2_artifact_to_classpath org.ow2.asm asm "$ASM_VERSION"
+add_m2_artifact_to_classpath org.ow2.asm asm-tree "$ASM_VERSION"
+add_m2_artifact_to_classpath org.ow2.asm asm-analysis "$ASM_VERSION"
+add_m2_artifact_to_classpath org.ow2.asm asm-util "$ASM_VERSION"
+add_m2_artifact_to_classpath org.ow2.asm asm-commons "$ASM_VERSION"
 
-CLASSPATH=$CLASSPATH:$REPO/org/apache/commons/commons-lang3/$COMMONS_LANG3_VERSION/commons-lang3-$COMMONS_LANG3_VERSION.jar
-CLASSPATH=$CLASSPATH:$REPO/org/jetbrains/annotations/$JETBRAINS_ANNOTATIONS_VERSION/annotations-$JETBRAINS_ANNOTATIONS_VERSION.jar
-CLASSPATH=$CLASSPATH:$REPO/gg/essential/vigilance-1.8.9-forge/$VIGILANCE_VERSION/vigilance-1.8.9-forge-$VIGILANCE_VERSION.jar
-CLASSPATH=$CLASSPATH:$REPO/gg/essential/elementa-1.8.9-forge/$ELEMENTA_VERSION/elementa-1.8.9-forge-$ELEMENTA_VERSION.jar
-CLASSPATH=$CLASSPATH:$REPO/gg/essential/universalcraft-1.8.9-forge/$UNIVERSALCRAFT_VERSION/universalcraft-1.8.9-forge-$UNIVERSALCRAFT_VERSION.jar
+add_m2_artifact_to_classpath org.apache.commons commons-lang3 "$COMMONS_LANG3_VERSION"
+add_m2_artifact_to_classpath org.jetbrains annotations "$JETBRAINS_ANNOTATIONS_VERSION"
 
-CLASSPATH=$CLASSPATH:$REPO/net/minecraft/launchwrapper/$LAUNCHWRAPPER_VERSION/launchwrapper-$LAUNCHWRAPPER_VERSION.jar
+add_m2_artifact_to_classpath gg.essential vigilance-1.8.9-forge "$VIGILANCE_VERSION"
+add_m2_artifact_to_classpath gg.essential elementa-1.8.9-forge "$ELEMENTA_VERSION"
+add_m2_artifact_to_classpath gg.essential universalcraft-1.8.9-forge "$UNIVERSALCRAFT_VERSION"
 
-CLASSPATH=$CLASSPATH:$REPO/io/netty/netty-all/$NETTY_VERSION/netty-all-$NETTY_VERSION.jar
+add_m2_artifact_to_classpath net.minecraft launchwrapper "$LAUNCHWRAPPER_VERSION"
+add_m2_artifact_to_classpath io.netty netty-all "$NETTY_VERSION"
+add_m2_artifact_to_classpath org.spongepowered mixin "$MIXIN_VERSION"
+add_m2_artifact_to_classpath org.lwjgl.lwjgl lwjgl "$LWJGL_VERSION"
+
+add_m2_artifact_to_classpath org.apache.logging.log4j log4j-api "$LOG4J_VERSION"
+add_m2_artifact_to_classpath com.google.errorprone error_prone_annotations "$ERRORPRONE_VERSION"
 
 CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SKYTILS_VERSION.jar
 
@@ -72,24 +101,9 @@ cp "$GRADLE_PROJECT_REPO/loom-cache/minecraftMaven/net/minecraft/forge-1.8.9-11.
 zip -d -q build/bin/mc.jar META-INF/MANIFEST.MF
 
 CLASSPATH=$CLASSPATH:build/bin/mc.jar
-
-CLASSPATH=$CLASSPATH:$REPO/org/spongepowered/mixin/$MIXIN_VERSION/mixin-$MIXIN_VERSION.jar
-
-CLASSPATH=$CLASSPATH:$REPO/org/lwjgl/lwjgl/lwjgl/$LWJGL_VERSION/lwjgl-$LWJGL_VERSION.jar
-#CLASSPATH=$CLASSPATH:$REPO/org/lwjgl/lwjgl/lwjgl_util/$LWJGL_VERSION/lwjgl_util-$LWJGL_VERSION.jar
-
-#CLASSPATH=$CLASSPATH:$REPO/java3d/vecmath/$VECMATH_VERSION/vecmath-$VECMATH_VERSION.jar
-
-#CLASSPATH=$CLASSPATH:$GRADLE_REPO/essential-loom/1.8.9/de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9/minecraft-intermediary.jar
-
-CLASSPATH=$CLASSPATH:$REPO/org/apache/logging/log4j/log4j-api/$LOG4J_VERSION/log4j-api-$LOG4J_VERSION.jar
-
-CLASSPATH=$CLASSPATH:$REPO/com/google/errorprone/error_prone_annotations/$ERRORPRONE_VERSION/error_prone_annotations-$ERRORPRONE_VERSION.jar
-
 CLASSPATH=$CLASSPATH:libs/javassist.jar
 
 OUTPUT_JAR=build/libs/DarkAddons-v$DARKADDONS_VERSION-opt.jar
-#CLASSPATH_SEPERATED_BY_SEMICOLON=${CLASSPATH//://;}
 
 CLASSPATH_WITH_MOD=$CLASSPATH:build/libs/DarkAddons-v$DARKADDONS_VERSION-proguarded.jar
 CLASSPATH_WITH_OPTIMIZED_MOD=$CLASSPATH:$OUTPUT_JAR
@@ -115,16 +129,14 @@ fi
 
 if [ "$EXIT_CODE" == "1" ]; then
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
- javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/bin -g -parameters -Xlint:all MarkCompilerGeneratedMethodsFinal.java || echo Unable to compile MarkCompilerGeneratedMethodsFinal.java
+ javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/bin -g -parameters -Xlint:all MarkCompilerGeneratedMethodsFinal.java
 fi
 
-java -cp "$CLASSPATH_WITH_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal || echo "Unable to run MarkCompilerGeneratedMethodsFinal.class"
+java -cp "$CLASSPATH_WITH_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal
 
 EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "0" ]; then
-  java -cp "$CLASSPATH_WITH_OPTIMIZED_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun || echo "Unable to run MarkCompilerGeneratedMethodsFinal.class"
+  java -cp "$CLASSPATH_WITH_OPTIMIZED_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
 fi
-
-#java -jar $HOME/jvm-constexpr/build/saker.jar.create/sipka.jvm.constexpr-fat.jar -classpath $CLASSPATH_SEPERATED_BY_SEMICOLON -input $OUTPUT_JAR -overwrite
 

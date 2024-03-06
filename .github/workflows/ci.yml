@@ -76,7 +76,7 @@ jobs:
      with:
       name: DarkAddons
       path: build/libs/*-opt.jar
-      #if-no-files-found: error
+      if-no-files-found: error
 
    - name: Perform CodeQL Analysis
      uses: github/codeql-action/analyze@v3.24.6
