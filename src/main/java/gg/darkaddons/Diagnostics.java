@@ -580,7 +580,7 @@ final class Diagnostics {
 
             final var threadMXBean = (ThreadMXBean) ManagementFactory.getThreadMXBean();
 
-            // Make sure the JVM lets us cook
+            // Make sure the JVM supports the necessary features needed to proceed
             final var supported = Diagnostics.threadMXBeanIsWellSupported(threadMXBean);
 
             //noinspection IfCanBeAssertion
@@ -588,10 +588,10 @@ final class Diagnostics {
                 throw new UnsupportedOperationException("This JVM doesn't support the necessary features needed to proceed.");
             }
 
-            // Enable cooker.
+            // Enable to proceed
             Diagnostics.threadMXBeanToggle(threadMXBean, true);
 
-            // Cook
+            // Collect data
             final var deadlockedThreads = Diagnostics.getDeadlockedThreads(threadMXBean, threadsLength);
 
             final var ids = new ArrayList<Long>(threadsLength);
@@ -619,7 +619,7 @@ final class Diagnostics {
                 }
             }
 
-            // No more cooking
+            // Disable after done
             Diagnostics.threadMXBeanToggle(threadMXBean, false);
 
             // Group results if requested
