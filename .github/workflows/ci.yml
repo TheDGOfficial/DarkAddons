@@ -72,7 +72,7 @@ jobs:
 
    - name: Build with Gradle
      run:
-      ./build.sh
+      ./build.sh --info
 
    - name: Upload Artifact
      uses: actions/upload-artifact@v4.3.1
