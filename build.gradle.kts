@@ -405,6 +405,7 @@ private val proguardJar: TaskProvider<ProguardTask> by tasks.registering(proguar
     jdkModules.add("jdk.management")
     jdkModules.add("jdk.httpserver")
     addLibrary {
+        classpath.from("build/bin/mcSrg.jar")
         classpath.from(project.configurations.compileClasspath)
     }
     //mappingFile.set(base.libsDirectory.file("${project.name}-${project.version}-mapping.txt"))

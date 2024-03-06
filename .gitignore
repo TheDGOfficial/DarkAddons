@@ -136,4 +136,5 @@ run/
 
 # Avoid ignoring required libs
 !libs/*
+!build/bin/mcSrg.jar
 
