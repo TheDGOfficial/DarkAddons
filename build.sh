@@ -1,5 +1,6 @@
 #!/bin/bash
-set -euo pipefail
+set -eEuo pipefail
+trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
 IFS=$'\n\t'
 
 shopt -s extglob
@@ -29,7 +30,7 @@ SCRIPTPATH=$(dirname "$SCRIPT")
 BUILD_OUTPUT_JAR_PATH=$SCRIPTPATH/build/libs/$MOD_FILENAME
 
 # Make sure to place the JAR in the correct location.
-TAILREC_OPTIMIZER_PATH=$HOME/jvm-tail-recursion/build/saker.jar.create/sipka.jvm.tailrec.jar
+TAILREC_OPTIMIZER_PATH=libs/sipka.jvm.tailrec.jar
 
 MINECRAFT_FOLDER=$HOME/.minecraft
 MOD_DIR=$MINECRAFT_FOLDER/mods
@@ -169,7 +170,9 @@ if [ -f "$BUILD_OUTPUT_JAR_PATH" ] && [ "$EXIT_CODE" == "0" ]; then
       rm "${mods_artifact_array[@]}"
     fi
     chmod +x "$BUILD_OUTPUT_JAR_PATH"
-    cp "$BUILD_OUTPUT_JAR_PATH" "$MOD_FILE_IN_MODS_FOLDER"
+    if [ -d "$MOD_DIR" ]; then
+     cp "$BUILD_OUTPUT_JAR_PATH" "$MOD_FILE_IN_MODS_FOLDER"
+    fi
   fi
 elif [ "${1:-default}" != "--skip-build" ]; then
   echo Skipping optimizing and putting JAR in the mod folder, gradle build likely failed. See errors above.
@@ -196,9 +199,4 @@ if [ "${1:-default}" != "--skip-install" ]; then
 fi
 
 echo Done
-
-if [ "$EXIT_CODE" != "0" ]; then
-  echo "Unexpected exit code of $EXIT_CODE"
-  exit 1
-fi
 
