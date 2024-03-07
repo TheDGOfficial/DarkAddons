@@ -33,6 +33,7 @@ jobs:
       fetch-depth: 0
       submodules: true
 
+   # TODO: verify maven wrapper as well
    - name: Verify Gradle Wrapper
      uses: gradle/wrapper-validation-action@v2.1.1
 
@@ -68,7 +69,8 @@ jobs:
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
-      #packs: Marcono1234/codeql-java-queries
+      packs:
+       - Marcono1234/codeql-custom-queries-java@0.0.1
 
    - name: Build with Gradle
      run:
