@@ -69,8 +69,8 @@ jobs:
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
-      packs:
-       - Marcono1234/codeql-custom-queries-java@0.0.1
+      packs: |
+       Marcono1234/codeql-custom-queries-java@0.0.1
 
    - name: Build with Gradle
      run:
