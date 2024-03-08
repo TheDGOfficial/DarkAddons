@@ -205,6 +205,14 @@ final class MarkCompilerGeneratedMethodsFinal {
                             }
                         }
                     }
+                    if ("darkaddons.installer.DarkAddonsInstaller$OperatingSystem".equals(clazz.getName())) {
+                        for (final var method : clazz.getMethods()) {
+                            if (method.getName().startsWith("values$") && Modifier.isPublic(method.getModifiers())) {
+                                shouldProc = true;
+                                break;
+                            }
+                        }
+                    }
                     for (final var method : clazz.getDeclaredMethods()) {
                         final var mod = method.getModifiers();
                         final var name = method.getName();
@@ -322,6 +330,13 @@ final class MarkCompilerGeneratedMethodsFinal {
                 }
 
                 if (className.contains("Kt") && !"invoke".equals(methodName) && !methodName.contains("<")) {
+                    mn.access &= ~Opcodes.ACC_PUBLIC;
+                    if (checkRun) {
+                        throw new IllegalStateException("class " + className + " should've been on the list of classes to optimize, but it was not (method info: " + definition + ')');
+                    }
+                }
+
+                if (0 != (mn.access & Opcodes.ACC_PUBLIC) && "darkaddons/installer/DarkAddonsInstaller$OperatingSystem".equals(className) && mn.name.startsWith("values$")) {
                     mn.access &= ~Opcodes.ACC_PUBLIC;
                     if (checkRun) {
                         throw new IllegalStateException("class " + className + " should've been on the list of classes to optimize, but it was not (method info: " + definition + ')');
