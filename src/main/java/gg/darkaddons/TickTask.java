@@ -34,7 +34,7 @@ final class TickTask {
     }
 
     @NotNull
-    static final Object newManager() {
+    static final TickTaskManager newManager() {
         return new TickTask.TickTaskManager();
     }
 
