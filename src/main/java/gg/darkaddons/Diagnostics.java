@@ -9,6 +9,7 @@ import gg.essential.elementa.ElementaVersion;
 import kotlin.KotlinVersion;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.Sys;
@@ -25,7 +26,6 @@ import java.lang.management.MemoryUsage;
 import java.lang.management.ThreadInfo;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -384,7 +384,7 @@ final class Diagnostics {
     }
 
     @NotNull
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.ROOT);
+    private static final FastDateFormat DATE_FORMAT = FastDateFormat.getInstance("dd.MM.yyyy HH:mm:ss", Locale.ROOT);
 
     @Nullable
     private static NotificationListener notificationListener;
@@ -595,7 +595,7 @@ final class Diagnostics {
             final var deadlockedThreads = Diagnostics.getDeadlockedThreads(threadMXBean, threadsLength);
 
             final var ids = new ArrayList<Long>(threadsLength);
-            final var threadFromId = new HashMap<Long, Thread>(threadsLength);
+            final var threadFromId = new HashMap<Long, Thread>(Utils.calculateHashMapCapacity(threadsLength));
 
             for (final var thread : threads) {
                 if (null != thread) {

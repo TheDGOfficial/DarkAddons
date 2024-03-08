@@ -581,7 +581,6 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                                     "free to open your mods folder and delete those files manually.");
                                     return true;
                                 }
-                                continue;
                             }
                         }
                     }
@@ -611,7 +610,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
         //noinspection IfCanBeAssertion
         if (!modsFolder.exists() && !modsFolder.mkdirs()) {
-            throw new RuntimeException("The mods directory could not be created: " + modsFolder);
+            throw new UncheckedIOException(new IOException("The mods directory could not be created: " + modsFolder));
         }
         return modsFolder;
     }
@@ -762,18 +761,22 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
     @Override
     public final void mousePressed(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent e) {
+        // do nothing
     }
 
     @Override
     public final void mouseReleased(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent e) {
+        // do nothing
     }
 
     @Override
     public final void mouseEntered(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent e) {
+        // do nothing
     }
 
     @Override
     public final void mouseExited(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent e) {
+        // do nothing
     }
 
     @SuppressWarnings("MethodDoesntCallSuperMethod")

@@ -242,8 +242,7 @@ final class Utils {
      */
     @SuppressWarnings("EqualsReplaceableByObjectsCall")
     static final boolean areStringsEqual(@Nullable final String first, @Nullable final String second) {
-        //noinspection StringEquality
-        return first == second || null != first && first.equals(second);
+        return null != first && first.equals(second);
     }
 
     /**

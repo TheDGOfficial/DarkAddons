@@ -42,7 +42,7 @@ final class M7Features {
     }
 
     @NotNull
-    private static final HashMap<Integer, WitherKingDragons> dragonMap = new HashMap<>(WitherKingDragons.getValuesLength());
+    private static final HashMap<Integer, WitherKingDragons> dragonMap = new HashMap<>(Utils.calculateHashMapCapacity(WitherKingDragons.getValuesLength()));
 
     private static final int @NotNull [] reverseDragonMap = new int[WitherKingDragons.getValuesLength()];
 

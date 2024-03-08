@@ -24,6 +24,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.Locale;
 
 final class SubCommand {
     private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 16;
@@ -246,7 +247,7 @@ final class SubCommand {
             final var mem = data.getMem();
             final var mbs = data.getMem() / TimeUnit.MILLISECONDS.toSeconds(runtime);
 
-            final var memPerc = Math.round(mem * 100.0D / totalBytes);
+            final var memPerc = Math.round(mem * 100.0D / Math.max(1, totalBytes));
 
             builder.append(data.getName()).append(" - Priority: ").append(data.getPriority()).append(", Total CPU Time Spent: ").append(Utils.formatTime(TimeUnit.NANOSECONDS.toMillis(cpu), true)).append(" (").append(cpuPerc).append("%), Total Memory Allocated: ").append(Utils.bytesToString(mem)).append(" (").append(Utils.bytesToString(mbs)).append("/s) (").append(memPerc).append("%)").append(data.isDeadlocked() ? " DEADLOCKED" : "").append('\n');
         }
@@ -470,7 +471,7 @@ final class SubCommand {
         final double timeSpent = Objects.requireNonNull(result).timeSpent();
         final var percent = 100.0D - (runtime - timeSpent) / runtime * 100.0D;
 
-        builder.append(result.fullName()).append(" - ").append(Utils.formatTime(result.timeSpent(), true)).append(", %").append(String.format("%f", percent)).append(" of total in ").append(result.threadName()).append('\n');
+        builder.append(result.fullName()).append(" - ").append(Utils.formatTime(result.timeSpent(), true)).append(", %").append(String.format(Locale.ROOT, "%f", percent)).append(" of total in ").append(result.threadName()).append('\n');
 
         final var stack = result.fullStack();
         final var len = stack.length;

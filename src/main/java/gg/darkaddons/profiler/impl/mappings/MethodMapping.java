@@ -109,12 +109,13 @@ public final class MethodMapping {
                     throw new UnsupportedOperationException("unsupported side value " + parsedSide);
                 }
 
-                //noinspection IfCanBeAssertion
-                if (map.containsKey(columnObfName)) {
-                    throw new IllegalStateException("duplicate mappings for " + columnObfName);
-                }
+                map.compute(columnObfName, (@NotNull final String key, @NotNull final MethodMapping value) -> {
+                    if (null == value) {
+                        return new MethodMapping(Objects.requireNonNull(columnObfName), Objects.requireNonNull(columnDeobfName), convertedSide, Objects.requireNonNull(columnDesc));
+                    }
 
-                map.put(columnObfName, new MethodMapping(Objects.requireNonNull(columnObfName), Objects.requireNonNull(columnDeobfName), convertedSide, Objects.requireNonNull(columnDesc)));
+                    throw new IllegalStateException("duplicate mappings for " + key);
+                });
             }
         }
 

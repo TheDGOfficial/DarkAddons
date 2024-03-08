@@ -370,7 +370,7 @@ final class RunsTillCA50 {
             if (printWarnings) {
                 DarkAddons.queueWarning("Parsing issue from the result gathered from API; Hypixel API format changed? Updating Skytils or " + DarkAddons.MOD_NAME + " might fix this error. The full error will be printed to the logs for debugging purposes after this message, although you probably can't fix this error yourself.");
             }
-            t.printStackTrace();
+            Utils.printStackTrace(t);
         } else {
             DarkAddons.modError(t);
         }
@@ -425,7 +425,7 @@ final class RunsTillCA50 {
         DarkAddons.echoEmpty();
         final var totalExperiences = RunsTillCA50.getTotalExperiencesNoOverflow(originalXpMap);
         final var totalFinishExperiences = RunsTillCA50.getTotalExperiencesNoOverflow(xpMap);
-        DarkAddons.queueWarning(result.totalRuns + " Total " + (m7 ? "M7" : "M6") + " Runs." + (derpy ? " (With Derpy)" : "") + " | Overall Progress: %" + String.format(Locale.ROOT, "%.2f", totalExperiences / totalFinishExperiences * 100.0D));
+        DarkAddons.queueWarning(result.totalRuns + " Total " + (m7 ? "M7" : "M6") + " Runs." + (derpy ? " (With Derpy)" : "") + " | Overall Progress: %" + String.format(Locale.ROOT, "%.2f", totalExperiences / Math.max(1, totalFinishExperiences) * 100.0D));
         DarkAddons.echoEmpty();
         DarkAddons.queueWarning("Class | Runs to CA50 | Level Before Swap Class | Level After CA50");
         DarkAddons.echoEmpty();
@@ -531,7 +531,7 @@ final class RunsTillCA50 {
             }
 
             try {
-                @SuppressWarnings("StringConcatenationMissingWhitespace") final var toParse = 50 + overflowLevel + "." + StringUtils.replace(Double.toString(RunsTillCA50.padStart(String.format("%.0f", xp * 100.0D / RunsTillCA50.XP_TO_LVL_UP_OVERFLOW_LEVEL))), ".", "");
+                @SuppressWarnings("StringConcatenationMissingWhitespace") final var toParse = 50 + overflowLevel + "." + StringUtils.replace(Double.toString(RunsTillCA50.padStart(String.format(Locale.ROOT, "%.0f", xp * 100.0D / RunsTillCA50.XP_TO_LVL_UP_OVERFLOW_LEVEL))), ".", "");
                 return Double.parseDouble(toParse);
             } catch (final NumberFormatException nfe) {
                 DarkAddons.modError(nfe);
@@ -552,7 +552,7 @@ final class RunsTillCA50 {
                 final double xpNeededForNextLevel = RunsTillCA50.DungeonLeveling.dungeonLevels.getOrDefault(level.level, RunsTillCA50.DungeonLeveling.dungeonLevels.get(1));
 
                 try {
-                    final var toParse = (int) levelWithProgress + "." + StringUtils.replace(Double.toString(RunsTillCA50.padStart(String.format("%.0f", xpEarnedTowardsNextLevel * 100.0D / xpNeededForNextLevel))), ".", "");
+                    final var toParse = (int) levelWithProgress + "." + StringUtils.replace(Double.toString(RunsTillCA50.padStart(String.format(Locale.ROOT, "%.0f", xpEarnedTowardsNextLevel * 100.0D / xpNeededForNextLevel))), ".", "");
                     return Double.parseDouble(toParse);
                 } catch (final NumberFormatException nfe) {
                     DarkAddons.modError(nfe);
@@ -592,7 +592,10 @@ final class RunsTillCA50 {
         }
 
         private static final void init() {
+            RunsTillCA50.DungeonLeveling.initDungeonLevelsMap();
+            RunsTillCA50.DungeonLeveling.initCumulativeXpMap();
 
+            RunsTillCA50.DungeonLeveling.initLevels();
         }
 
         private static final void initDungeonLevelsMap() {
@@ -673,13 +676,6 @@ final class RunsTillCA50 {
         private static final void initLevels() {
             //noinspection StreamToLoop
             RunsTillCA50.DungeonLeveling.cumulativeXpMap.forEach((@NotNull final Integer key, @NotNull final Integer value) -> RunsTillCA50.DungeonLeveling.levels.add(new RunsTillCA50.DungeonLeveling.DungeonLevel(key, value)));
-        }
-
-        static {
-            RunsTillCA50.DungeonLeveling.initDungeonLevelsMap();
-            RunsTillCA50.DungeonLeveling.initCumulativeXpMap();
-
-            RunsTillCA50.DungeonLeveling.initLevels();
         }
 
         private static final void level(final int level, final int xpRequired) {
