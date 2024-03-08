@@ -67,11 +67,8 @@ final class Diagnostics {
         throw new IllegalStateException("not allowed to run static initializer from thread " + Thread.currentThread().getName() + " which is not the client thread");
     }
 
-    @NotNull
-    private static final Thread watchdogThread = Utils.newThread(Diagnostics::watchdogLoop, "DarkAddons Watchdog Thread");
-
     static {
-        Diagnostics.watchdogThread.start();
+        Utils.newThread(Diagnostics::watchdogLoop, "DarkAddons Watchdog Thread").start();
     }
 
     private static final void diag(@NotNull final String name, @NotNull final String value) {
