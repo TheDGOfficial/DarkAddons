@@ -22,7 +22,7 @@
 -assumenosideeffects class kotlin.jvm.internal.Intrinsics { static void checkParameterIsNotNull(java.lang.Object, java.lang.String); }
 
 # Disable optimization that break our stuff.
--optimizations !method/inlining/*,!method/removal/parameter,!method/marking/static,!method/marking/private,!method/propagation/parameter,!method/propagation/returnvalue,!field/marking/private,!field/propagation/value,!field/removal/writeonly,!class/unboxing/enum,!field/specialization/type,!method/specialization/parametertype,!method/specialization/returntype
+-optimizations !method/inlining/short,!method/inlining/unique,!method/removal/parameter,!method/marking/static,!method/marking/private,!method/propagation/parameter,!method/propagation/returnvalue,!field/marking/private,!field/propagation/value,!field/removal/writeonly,!class/unboxing/enum,!field/specialization/type,!method/specialization/parametertype,!method/specialization/returntype
 
 # Do enough passes for a good optimization.
 -optimizationpasses 10
