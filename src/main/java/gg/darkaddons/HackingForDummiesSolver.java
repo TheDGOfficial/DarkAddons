@@ -41,15 +41,15 @@ final class HackingForDummiesSolver {
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void onPlayerTick(@NotNull final TickEvent.PlayerTickEvent event) {
-        McProfilerHelper.startSection("hacking_for_dummies_solver_tick");
-
         if (Config.isHackingForDummiesSolver() && event.side.isClient() && TickEvent.Phase.START == event.phase) {
+            McProfilerHelper.startSection("hacking_for_dummies_solver_tick");
+
             final var inventory = Minecraft.getMinecraft().thePlayer.openContainer;
             HackingForDummiesSolver.currentChest = inventory instanceof ContainerChest ? ((ContainerChest) inventory).getLowerChestInventory() : null;
             HackingForDummiesSolver.isInHackingGui = null != HackingForDummiesSolver.currentChest && ("Hacking".equals(HackingForDummiesSolver.currentChest.getName()) || "Hacking (As seen on CSI)".equals(HackingForDummiesSolver.currentChest.getName())) && 54 == HackingForDummiesSolver.currentChest.getSizeInventory() && HackingForDummiesSolver.currentGui instanceof GuiChest;
-        }
 
-        McProfilerHelper.endSection();
+            McProfilerHelper.endSection();
+        }
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
