@@ -28,51 +28,20 @@ final class CheckRender {
         CheckRender.forwardCheckRender(entity, cir);
     }
 
-    private static final boolean isHideWitherSkeletonsModeEnabled(final int mode) {
+    private static final boolean isHideWitherSkeletonsModeEnabled() {
+        final var mode = Config.getHideWitherSkeletonsOnMaxor();
         return 1 == mode || 2 == mode;
     }
 
     private static final void forwardCheckRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        McProfilerHelper.startSection("darkaddons_check_render");
-
-        //noinspection ChainOfInstanceofChecks
         if (Config.isArmorStandOptimizer() && entity instanceof EntityArmorStand) {
-            McProfilerHelper.startSection("armor_stand_optimizer_check_render");
-
             ArmorStandOptimizer.checkRender(entity, cir);
-
-            McProfilerHelper.endSection();
-        } else if (CheckRender.isHideWitherSkeletonsModeEnabled(Config.getHideWitherSkeletonsOnMaxor()) && entity instanceof EntitySkeleton) {
-            McProfilerHelper.startSection("hide_wither_skeletons_check_render");
-
+        } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntitySkeleton) {
             HideWitherSkeletons.checkRender((EntitySkeleton) entity, cir);
-
-            McProfilerHelper.endSection();
-        } else if (CheckRender.isHideWitherSkeletonsModeEnabled(Config.getHideWitherSkeletonsOnMaxor()) && entity instanceof EntityWitherSkull) {
-            McProfilerHelper.startSection("hide_wither_skeletons_check_render_skull");
-
+        } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntityWitherSkull) {
             HideWitherSkeletons.checkRenderSkull((EntityWitherSkull) entity, cir);
-
-            McProfilerHelper.endSection();
         } else if (Config.isHideFallingBlocks() && entity instanceof EntityFallingBlock) {
-            McProfilerHelper.startSection("hide_falling_blocks_check_render");
-
             HideFallingBlocks.checkRender(entity, cir);
-
-            McProfilerHelper.endSection();
-        }/* else if (1 >= Config.getHideWitherKing() && AdditionalM7Features.phase5Started && entity instanceof EntityWither) {
-            cir.setReturnValue(false);
-
-            if (2 >= Config.getHideWitherKing()) {
-                Minecraft.getMinecraft().theWorld.removeEntityFromWorld(entity.getEntityId());
-            }
-        } else if (1 >= Config.getHideXPOrbs() && DarkAddons.isInDungeons() && entity instanceof EntityXPOrb) {
-            cir.setReturnValue(false);
-
-            if (2 >= Config.getHideXPOrbs()) {
-                Minecraft.getMinecraft().theWorld.removeEntityFromWorld(entity.getEntityId());
-            }
-        }*/
-        McProfilerHelper.endSection();
+        }
     }
 }
