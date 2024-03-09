@@ -96,9 +96,10 @@ final class ArmorStandOptimizer {
     }
 
     static final boolean checkRemoveArmorStand(@NotNull final EntityArmorStand entityArmorStand) {
-        final var bossEntryTime = DungeonTimer.INSTANCE.getBossEntryTime();
+        final var dungeonTimerInstance = DungeonTimer.INSTANCE;
+        final var bossEntryTime = dungeonTimerInstance.getBossEntryTime();
         final var name = entityArmorStand.getCustomNameTag();
-        return AdditionalM7Features.canHideArmorstands(bossEntryTime) && (ArmorStandOptimizer.isInM7P5() || AdditionalM7Features.isInM6OrF6Boss(bossEntryTime) && ArmorStandOptimizer.isNotOnSadanWhitelist(name, true));
+        return AdditionalM7Features.canHideArmorstands(dungeonTimerInstance, bossEntryTime) && (ArmorStandOptimizer.isInM7P5() || AdditionalM7Features.isInM6OrF6Boss(bossEntryTime) && ArmorStandOptimizer.isNotOnSadanWhitelist(name, true));
     }
 
     // This method will be called very frequently unless updateInterval is raised a lot,
