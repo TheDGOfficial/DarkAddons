@@ -18,7 +18,7 @@ final class HideFallingBlocks {
     }
 
     static final void checkRender(@NotNull final Entity entity, @SuppressWarnings("BoundedWildcard") @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(false);
         entity.setDead();
+        cir.setReturnValue(false);
     }
 }

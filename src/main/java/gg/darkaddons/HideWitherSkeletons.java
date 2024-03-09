@@ -46,11 +46,11 @@ final class HideWitherSkeletons {
 
     static final void checkRender(@NotNull final EntitySkeleton entity, @SuppressWarnings("BoundedWildcard") @NotNull final CallbackInfoReturnable<Boolean> cir) {
         if (HideWitherSkeletons.isAtPhase1() && HideWitherSkeletons.isWitherSkeleton(entity)) {
-            cir.setReturnValue(false);
-
             if (HideWitherSkeletons.shouldRemove(Config.getHideWitherSkeletonsOnMaxor())) {
                 Minecraft.getMinecraft().theWorld.removeEntityFromWorld(entity.getEntityId());
             }
+
+            cir.setReturnValue(false);
         }
     }
 
