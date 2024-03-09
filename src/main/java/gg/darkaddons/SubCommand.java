@@ -428,7 +428,7 @@ final class SubCommand {
                 Objects.requireNonNull(os).write(responseBytes);
             }
 
-            DarkAddons.runOnceInNextTick("stop_httpserver", () -> server.stop(5));
+            server.stop(0);
         });
 
         server.setExecutor(null); // TODO set thread name

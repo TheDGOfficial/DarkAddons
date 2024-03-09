@@ -406,19 +406,11 @@ final class MarkCompilerGeneratedMethodsFinal {
 
                 if (0 == (classNode.access & Opcodes.ACC_PUBLIC)) {
                     var modified = false;
-                    if (0 != (classNode.access & Opcodes.ACC_PRIVATE)) {
-                        if (0 != (fd.access & Opcodes.ACC_PROTECTED)) {
-                            fd.access &= ~Opcodes.ACC_PROTECTED;
-                            fd.access |= Opcodes.ACC_PRIVATE;
+                    if (0 != (fd.access & Opcodes.ACC_PROTECTED)) {
+                        fd.access &= ~Opcodes.ACC_PROTECTED;
 
-                            modified = true;
-                        } else if (0 == (fd.access & Opcodes.ACC_PUBLIC) && 0 == (fd.access & Opcodes.ACC_PRIVATE)) {
-                            fd.access |= Opcodes.ACC_PRIVATE;
-
-                            modified = true;
-                        }
-                    }
-                    if (0 != (fd.access & Opcodes.ACC_PUBLIC)) {
+                        modified = true;
+                    } else if (0 != (fd.access & Opcodes.ACC_PUBLIC)) {
                         fd.access &= ~Opcodes.ACC_PUBLIC;
 
                         modified = true;
