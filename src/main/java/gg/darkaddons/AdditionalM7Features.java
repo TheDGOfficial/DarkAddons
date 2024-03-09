@@ -57,11 +57,12 @@ final class AdditionalM7Features {
     }
 
     static final boolean canHideArmorstands() {
-        return AdditionalM7Features.canHideArmorstands(DungeonTimer.INSTANCE.getBossEntryTime());
+        final var dungeonTimerInstance = DungeonTimer.INSTANCE;
+        return AdditionalM7Features.canHideArmorstands(dungeonTimerInstance, dungeonTimerInstance.getBossEntryTime());
     }
 
-    static final boolean canHideArmorstands(final long bossEntryTime) {
-        return (AdditionalM7Features.phase5NotStarted && -1L == DungeonTimer.INSTANCE.getPhase3ClearTime() && -1L == DungeonTimer.INSTANCE.getPhase4ClearTime() || AdditionalM7Features.phase5Started) && AdditionalM7Features.notSaidFinalDialogue && -1L == DungeonTimer.INSTANCE.getBossClearTime() && (AdditionalM7Features.firstGolemWoken || -1L == bossEntryTime || !AdditionalM7Features.isInM6OrF6Boss(bossEntryTime)) && !DarkAddons.isPlayerInGarden();
+    static final boolean canHideArmorstands(@NotNull final DungeonTimer dungeonTimerInstance, final long bossEntryTime) {
+        return (AdditionalM7Features.phase5NotStarted && -1L == dungeonTimerInstance.getPhase3ClearTime() && -1L == dungeonTimerInstance.getPhase4ClearTime() || AdditionalM7Features.phase5Started) && AdditionalM7Features.notSaidFinalDialogue && -1L == dungeonTimerInstance.getBossClearTime() && (AdditionalM7Features.firstGolemWoken || -1L == bossEntryTime || !AdditionalM7Features.isInM6OrF6Boss(bossEntryTime)) && !DarkAddons.isPlayerInGarden();
     }
 
     static final boolean canRemoveBlankArmorStands() {
