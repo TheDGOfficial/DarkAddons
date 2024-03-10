@@ -347,7 +347,7 @@ final class MarkCompilerGeneratedMethodsFinal {
                 if (null != annotationNodeList && MarkCompilerGeneratedMethodsFinal.ANNOTATIONS_PRESENT) {
                     for (final var it = mn.visibleAnnotations.iterator(); it.hasNext();) {
                         final var annotationNode = it.next();
-                        final var reflectionRepresentationOfFullyQualifiedName = StringUtils.replace(StringUtils.removeEnd(StringUtils.removeStart(annotationNode.desc, "L"), ";"), "/", ".");
+                        final var reflectionRepresentationOfFullyQualifiedName = StringUtils.replaceChars(StringUtils.removeEnd(StringUtils.removeStart(annotationNode.desc, "L"), ";"), '/', '.');
                         var modified = false;
                         if (MarkCompilerGeneratedMethodsFinal.bridgeAnnotation.getName().equals(reflectionRepresentationOfFullyQualifiedName)) {
                             if (0 == (mn.access & Opcodes.ACC_BRIDGE)) {
@@ -646,7 +646,7 @@ final class MarkCompilerGeneratedMethodsFinal {
 
             try {
                 final var clazz = info.load();
-                try (final var is = Thread.currentThread().getContextClassLoader().getResourceAsStream(StringUtils.replace(clazz.getName(), ".", "/") + ".class")) {
+                try (final var is = Thread.currentThread().getContextClassLoader().getResourceAsStream(StringUtils.replaceChars(clazz.getName(), '.', '/') + ".class")) {
                     try (final var dataInputStream = new DataInputStream(is)) {
                         final var cf = new ClassFile(dataInputStream);
                         for (final MethodInfo mi : cf.getMethods()) {

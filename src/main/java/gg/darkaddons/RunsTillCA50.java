@@ -531,7 +531,7 @@ final class RunsTillCA50 {
             }
 
             try {
-                @SuppressWarnings("StringConcatenationMissingWhitespace") final var toParse = 50 + overflowLevel + "." + StringUtils.replace(Double.toString(RunsTillCA50.padStart(String.format(Locale.ROOT, "%.0f", xp * 100.0D / RunsTillCA50.XP_TO_LVL_UP_OVERFLOW_LEVEL))), ".", "");
+                @SuppressWarnings("StringConcatenationMissingWhitespace") final var toParse = 50 + overflowLevel + "." + StringUtils.remove(Double.toString(RunsTillCA50.padStart(String.format(Locale.ROOT, "%.0f", xp * 100.0D / RunsTillCA50.XP_TO_LVL_UP_OVERFLOW_LEVEL))), '.');
                 return Double.parseDouble(toParse);
             } catch (final NumberFormatException nfe) {
                 DarkAddons.modError(nfe);
@@ -552,7 +552,7 @@ final class RunsTillCA50 {
                 final double xpNeededForNextLevel = RunsTillCA50.DungeonLeveling.dungeonLevels.getOrDefault(level.level, RunsTillCA50.DungeonLeveling.dungeonLevels.get(1));
 
                 try {
-                    final var toParse = (int) levelWithProgress + "." + StringUtils.replace(Double.toString(RunsTillCA50.padStart(String.format(Locale.ROOT, "%.0f", xpEarnedTowardsNextLevel * 100.0D / xpNeededForNextLevel))), ".", "");
+                    final var toParse = (int) levelWithProgress + "." + StringUtils.remove(Double.toString(RunsTillCA50.padStart(String.format(Locale.ROOT, "%.0f", xpEarnedTowardsNextLevel * 100.0D / xpNeededForNextLevel))), '.');
                     return Double.parseDouble(toParse);
                 } catch (final NumberFormatException nfe) {
                     DarkAddons.modError(nfe);

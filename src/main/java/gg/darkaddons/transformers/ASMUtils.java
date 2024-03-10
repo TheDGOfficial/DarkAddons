@@ -19,7 +19,7 @@ public final class ASMUtils {
 
     /*@NotNull
     public static final String remapToInternalClassName(@NotNull final String unobfuscatedClassName) {
-        return FMLDeobfuscatingRemapper.INSTANCE.isRemappedClass(unobfuscatedClassName) ? FMLDeobfuscatingRemapper.INSTANCE.unmap(StringUtils.replace(unobfuscatedClassName, ".", "/")) : unobfuscatedClassName;
+        return FMLDeobfuscatingRemapper.INSTANCE.isRemappedClass(unobfuscatedClassName) ? FMLDeobfuscatingRemapper.INSTANCE.unmap(StringUtils.replaceChars(unobfuscatedClassName, '.', '/')) : unobfuscatedClassName;
     }*/
 
     @NotNull
@@ -32,7 +32,7 @@ public final class ASMUtils {
     /*@NotNull
     public static final ClassNode readClass(@NotNull final Class<?> clazz) {
         final ClassReader classReader;
-        final String clsPath = '/' + StringUtils.replace(ASMUtils.remapToInternalClassName(clazz.getName()), ".", "/") + ".class";
+        final String clsPath = '/' + StringUtils.replaceChars(ASMUtils.remapToInternalClassName(clazz.getName()), '.', '/') + ".class";
 
         try (final InputStream classStream = clazz.getClassLoader().getResourceAsStream(clsPath)) {
             if (null == classStream) {
@@ -69,7 +69,7 @@ public final class ASMUtils {
 
         final byte[] contents = ASMUtils.writeClass(classNode);
 
-        final File file = new File(new File(new File("config", "darkaddons"), "classdumps"), StringUtils.replace(classNode.name, ".", "/") + suffix + ".class");
+        final File file = new File(new File(new File("config", "darkaddons"), "classdumps"), StringUtils.replaceChars(classNode.name, '.', '/') + suffix + ".class");
 
         file.getParentFile().mkdirs();
 

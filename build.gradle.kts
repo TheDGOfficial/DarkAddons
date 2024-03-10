@@ -425,7 +425,7 @@ tasks.build {
 
     eachFile {
         val parts: List<String> = path.split("/")
-        path = listOf(parts[0].replace(".","/"), parts[1], parts[2], parts[4]).joinToString("/")
+        path = listOf(StringUtils.replaceChars(parts[0], '.', '/'), parts[1], parts[2], parts[4]).joinToString("/")
     }
 
     includeEmptyDirs = false

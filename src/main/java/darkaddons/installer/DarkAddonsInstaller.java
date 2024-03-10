@@ -692,7 +692,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
             try (final var printWriter = new PrintWriter(stringWriter)) {
                 ex.printStackTrace(printWriter);
             }
-            return stringWriter.toString().replace("\t", "  ");
+            return stringWriter.toString().replace("\t", "  "); // TODO Can't use StringUtils#replace here, maybe use a static final Pattern.compile field
         } catch (final IOException ioException) {
             throw new UncheckedIOException(ioException);
         }

@@ -47,7 +47,7 @@ public final class PublicUtils {
      * <p>
      * Note that unlike other methods this doesn't utilize a
      * {@link java.util.regex.Pattern} or {@link java.util.regex.Matcher} and
-     * just uses simple {@link String#replace(CharSequence, CharSequence)}
+     * just uses simple {@link StringUtils#replace(String, String, String)}
      * against all known codes (0-9 a-f color codes plus formatting codes (k-r)
      * and z for chroma).
      *
