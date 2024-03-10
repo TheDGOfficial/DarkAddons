@@ -372,7 +372,7 @@ final class Utils {
 
     @NotNull
     private static final JsonElement parseJsonFromString(@NotNull final String json) {
-        return JsonParser.parseString(json);
+        return Utils.GsonHolder.jsonParser.parse(json);
     }
 
     @NotNull
@@ -393,8 +393,11 @@ final class Utils {
             throw Utils.staticClassException();
         }
 
-        @Nullable
+        @NotNull
         private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        @NotNull
+        private static final JsonParser jsonParser = new JsonParser();
     }
 
     @NotNull

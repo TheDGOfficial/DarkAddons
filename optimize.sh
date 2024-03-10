@@ -28,6 +28,8 @@ LWJGL_VERSION=2.9.4-nightly-20150209
 
 LOG4J_VERSION=2.0-beta9
 
+GSON_VERSION=2.2.4
+
 ASM_VERSION=9.6
 
 ERRORPRONE_VERSION=2.25.0
@@ -72,6 +74,7 @@ REPO=$HOME/.m2/repository
 GRADLE_PROJECT_REPO=.gradle
 
 add_m2_artifact_to_classpath com.google.guava guava "$GUAVA_VERSION"
+add_m2_artifact_to_classpath com.google.code.gson gson "$GSON_VERSION"
 
 add_m2_artifact_to_classpath org.ow2.asm asm "$ASM_VERSION"
 add_m2_artifact_to_classpath org.ow2.asm asm-tree "$ASM_VERSION"

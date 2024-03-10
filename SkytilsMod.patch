@@ -1,5 +1,5 @@
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 4d904449..5649644c 100644
+index bc855e9e..f914f91a 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -18,6 +18,7 @@
@@ -17,8 +17,8 @@ index 4d904449..5649644c 100644
 +    `maven-publish`
  }
  
- version = "1.8.2"
-@@ -281,6 +283,18 @@ signing {
+ version = "1.9.0-pre1"
+@@ -278,6 +280,18 @@ signing {
      }
  }
  
@@ -37,8 +37,15 @@ index 4d904449..5649644c 100644
  /**
   * Builds the dependency notation for the named Ktor [module] at the given [version].
   *
+@@ -289,4 +303,4 @@ fun DependencyHandler.ktor(module: String, version: String? = null, addSuffix: B
+ 
+ fun DependencyHandler.ktorClient(module: String, version: String? = null) = ktor("client-${module}", version)
+ 
+-fun DependencyHandler.ktorServer(module: String, version: String? = null) = ktor("server-${module}", version)
+\ No newline at end of file
++fun DependencyHandler.ktorServer(module: String, version: String? = null) = ktor("server-${module}", version)
 diff --git a/events/build.gradle.kts b/events/build.gradle.kts
-index 14031355..2ce18d16 100644
+index 9e967282..64f45149 100644
 --- a/events/build.gradle.kts
 +++ b/events/build.gradle.kts
 @@ -16,11 +16,13 @@
@@ -48,14 +55,14 @@ index 14031355..2ce18d16 100644
 +import java.util.Locale
  
  plugins {
-     kotlin("jvm") version "1.9.21"
+     kotlin("jvm") version "1.9.22"
      id("gg.essential.loom") version "1.3.12"
      id("gg.essential.defaults") version "0.3.0"
 +    `maven-publish`
  }
  
  dependencies {
-@@ -47,4 +49,17 @@ tasks.processResources {
+@@ -47,4 +49,16 @@ tasks.processResources {
  tasks.withType<AbstractArchiveTask> {
      isPreserveFileTimestamps = false
      isReproducibleFileOrder = true
@@ -74,10 +81,9 @@ index 14031355..2ce18d16 100644
 +        }
 +    }
 +}
-+
 diff --git a/hypixel-api b/hypixel-api
 --- a/hypixel-api
 +++ b/hypixel-api
 @@ -1 +1 @@
--Subproject commit 4b145de74370872320854bd0899fa91be90c6bb7
-+Subproject commit 4b145de74370872320854bd0899fa91be90c6bb7-dirty
+-Subproject commit e6b69f867bad9904a88531c000f1333a9eb79849
++Subproject commit e6b69f867bad9904a88531c000f1333a9eb79849-dirty

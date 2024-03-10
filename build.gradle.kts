@@ -43,7 +43,6 @@ private val defaultVersion = "unspecified"
 private val darkaddonsVersion = versionProperties["darkaddons.version"] ?: defaultVersion
 private val skytilsVersion = versionProperties["skytils.version"] ?: defaultVersion
 
-private val gsonVersion = versionProperties["gson.version"] ?: defaultVersion
 private val guavaVersion = versionProperties["guava.version"] ?: defaultVersion
 private val jetbrainsAnnotationsVersion = versionProperties["jetbrains.annotations.version"] ?: defaultVersion
 private val commonsLang3Version = versionProperties["commons.lang3.version"] ?: defaultVersion
@@ -128,7 +127,6 @@ dependencies {
     compileOnly("org.spongepowered:mixin:$mixinVersion")
     annotationProcessor("org.spongepowered:mixin:$mixinVersion:processor")
 
-    compileOnly("com.google.code.gson:gson:$gsonVersion") // TODO make it back shadowMe
     compileOnly("com.google.guava:guava:$guavaVersion") // TODO make it back shadowMe
 
     compileOnly("org.apache.commons:commons-lang3:$commonsLang3Version") // TODO make it back shadowMe
@@ -153,7 +151,7 @@ dependencies {
 
 sourceSets {
     main {
-        //output.resourcesDir = file("${buildDir}/classes/kotlin/main")
+        //output.resourcesDir = kotlin.classesDirectory
     }
 }
 
@@ -218,7 +216,6 @@ tasks {
         // TODO make it darkaddons
         relocate("dev.falsehonesty.asmhelper", "gg.skytils.asmhelper")
         relocate("com.llamalad7.mixinextras", "gg.skytils.mixinextras")
-        relocate("com.google.gson", "gg.skytils.gson")
         relocate("kotlinx.coroutines", "gg.skytils.ktx-coroutines")
 
         exclude(
