@@ -682,7 +682,9 @@ public final class DarkAddons {
             new RogueSwordTimer(),
             new CenturyRaffleTicketTimer(),
             new ClassAverage50Display(),
-            new SlayerRNGDisplay()
+            new SlayerRNGDisplay(),
+            new RejoinCooldownDisplay(),
+            new FPSLimitDisplay()
         );
 
         GuiManager.init();
@@ -919,6 +921,8 @@ public final class DarkAddons {
 
         ClassAverage50Display.doCheckMessage(event);
         SlayerRNGDisplay.onReceiveChatMessage(event);
+
+        RejoinCooldownDisplay.onMessage(event);
     }
 
     /**

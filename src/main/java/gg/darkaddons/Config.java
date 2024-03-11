@@ -162,6 +162,20 @@ final class Config extends Vigilant {
     )
     private static boolean hideRogueSwordTimerOnceZero;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "SB Rejoin Cooldown After Kick Display",
+        description = "Shows time left before you can rejoin SkyBlock after you get kicked in your screen.",
+        category = "Misc", subcategory = "HUD"
+    )
+    private static boolean sbRejoinCooldownAfterKickDisplay;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "FPS Limit Display",
+        description = "Shows your FPS limit on the screen, unless it is set to unlimited. This is useful when you limit your FPS to save power when you are AFK but then you forget to set it to unlimited back when you return and you wonder why you are lagging and have 30 FPS. With this you will know since it will display it in your screen.",
+        category = "Misc", subcategory = "HUD"
+    )
+    private static boolean fpsLimitDisplay;
+
     /*@Property(
         type = PropertyType.SWITCH, name = "Dimensional Slash Alert",
         description = "Creates a title when you are in range of dimensional slash.",
@@ -919,6 +933,18 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.hideRogueSwordTimerOnceZero;
+    }
+
+    static final boolean isSbRejoinCooldownAfterKickDisplay() {
+        Config.checkUninit();
+
+        return Config.sbRejoinCooldownAfterKickDisplay;
+    }
+
+    static final boolean isFpsLimitDisplay() {
+        Config.checkUninit();
+
+        return Config.fpsLimitDisplay;
     }
 
     static final boolean isSharperDragonBoundingBox() {

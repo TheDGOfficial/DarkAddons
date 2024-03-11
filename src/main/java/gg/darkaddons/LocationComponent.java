@@ -27,6 +27,7 @@ final class LocationComponent extends UIComponent {
         super();
 
         this.element = guiElement;
+        this.element.preRender(true);
 
         this.getConstraints().setX(new RelativeConstraint(guiElement.getX()));
         this.getConstraints().setY(new RelativeConstraint(guiElement.getY()));
@@ -76,6 +77,8 @@ final class LocationComponent extends UIComponent {
 
     @Override
     public final void draw(@NotNull final UMatrixStack matrixStack) {
+        this.element.preRender(true);
+
         this.beforeDraw(matrixStack);
         super.draw(matrixStack);
 
@@ -86,6 +89,8 @@ final class LocationComponent extends UIComponent {
         matrixStack.scale(scale, scale, 1.0F);
         matrixStack.runWithGlobalState(() -> this.element.render(true));
         matrixStack.pop();
+
+        this.element.postRender(true);
     }
 
     @Override

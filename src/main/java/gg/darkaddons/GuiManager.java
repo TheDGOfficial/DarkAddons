@@ -28,7 +28,7 @@ final class GuiManager {
     }
 
     @NotNull
-    private static final HashMap<String, GuiElement> guiElements = new HashMap<>(Utils.calculateHashMapCapacity(7));
+    private static final HashMap<String, GuiElement> guiElements = new HashMap<>(Utils.calculateHashMapCapacity(9));
 
     @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"})
     @NotNull
@@ -118,6 +118,7 @@ final class GuiManager {
 
         for (final var element : GuiManager.guiElements.values()) {
             McProfilerHelper.startSection(element.getName());
+            element.preRender(false);
 
             GlStateManager.pushMatrix();
             GlStateManager.translate(element.getScaleX(), element.getScaleY(), 0.0F);
@@ -132,6 +133,7 @@ final class GuiManager {
                 }
             }
             GlStateManager.popMatrix();
+            element.postRender(false);
 
             McProfilerHelper.endSection();
         }

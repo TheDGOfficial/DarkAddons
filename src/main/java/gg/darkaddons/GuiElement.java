@@ -72,6 +72,14 @@ abstract class GuiElement {
         return yCoord / (float) UResolution.getScaledHeight();
     }
 
+    void preRender(final boolean demo) {
+        // do nothing, subclasses can implement custom behaviour
+    }
+
+    void postRender(final boolean demo) {
+        // do nothing, subclasses can implement custom behaviour
+    }
+
     abstract void render(final boolean demo);
 
     static final int getFontHeight() {
