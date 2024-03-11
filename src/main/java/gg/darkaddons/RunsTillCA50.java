@@ -427,7 +427,7 @@ final class RunsTillCA50 {
         final var totalFinishExperiences = RunsTillCA50.getTotalExperiencesNoOverflow(xpMap);
         DarkAddons.queueWarning(result.totalRuns + " Total " + (m7 ? "M7" : "M6") + " Runs." + (derpy ? " (With Derpy)" : "") + " | Overall Progress: %" + String.format(Locale.ROOT, "%.2f", totalExperiences / Math.max(1, totalFinishExperiences) * 100.0D));
         DarkAddons.echoEmpty();
-        DarkAddons.queueWarning("Class | Runs to CA50 | Level Before Swap Class | Level After CA50");
+        DarkAddons.queueWarning("Class | Runs to CA50 | Level Before Swap Class | Level After CA50 | Overflow Runs Done");
         DarkAddons.echoEmpty();
     }
 
@@ -447,7 +447,10 @@ final class RunsTillCA50 {
         RunsTillCA50.outputResultsHeader(formattedRankAndName, result, m7, derpy, mode, originalXpMap, xpMap);
 
         for (final var dungeonClass : RunsTillCA50.DungeonClass.values()) {
-            DarkAddons.queueWarning(dungeonClass.name().charAt(0) + dungeonClass.name().toLowerCase(Locale.ROOT).substring(1, dungeonClass.name().length()) + " | " + Objects.toString(result.runsAsClass.get(dungeonClass), "0") + " Runs." + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.Mode.EARLY == mode ? Math.max(50.0D, RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) : RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.xpToLevel(xpMap.get(dungeonClass))));
+            final var endXp = xpMap.get(dungeonClass);
+            final var overflowRunsDone = (int) ((endXp - RunsTillCA50.MAX_LEVEL_XP) / RunsTillCA50.xpGained(true, m7, derpy));
+
+            DarkAddons.queueWarning(dungeonClass.name().charAt(0) + dungeonClass.name().toLowerCase(Locale.ROOT).substring(1, dungeonClass.name().length()) + " | " + Objects.toString(result.runsAsClass.get(dungeonClass), "0") + " Runs." + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.Mode.EARLY == mode ? Math.max(50.0D, RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) : RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.xpToLevel(endXp)) + " | " + overflowRunsDone + " Runs.");
         }
 
         RunsTillCA50.outputResultsFooter(result, m7, currentCompletions, derpy);
