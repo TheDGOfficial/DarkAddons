@@ -124,25 +124,15 @@ final class OptionsScreen extends WindowScreen {
         }
     }
 
-    @FunctionalInterface
-    private interface FloatSupplier {
-        /**
-         * Supplies a float.
-         *
-         * @return A float value.
-         */
-        float getFloat();
-    }
-
     private static final class LambdaHeightConstraint extends BasicConstraint<Float> implements HeightConstraint {
         @NotNull
-        private final OptionsScreen.FloatSupplier floatSupplier;
+        private final FloatSupplier floatSupplier;
 
-        private final float getFloat() {
-            return this.floatSupplier.getFloat();
+        private final float getAsFloat() {
+            return this.floatSupplier.getAsFloat();
         }
 
-        private LambdaHeightConstraint(@NotNull final OptionsScreen.FloatSupplier lambda) {
+        private LambdaHeightConstraint(@NotNull final FloatSupplier lambda) {
             super(0.0F);
 
             this.floatSupplier = lambda;
@@ -150,7 +140,7 @@ final class OptionsScreen extends WindowScreen {
 
         @Override
         public final float getHeightImpl(@NotNull final UIComponent uiComponent) {
-            return this.floatSupplier.getFloat();
+            return this.floatSupplier.getAsFloat();
         }
 
         @Override
@@ -167,7 +157,7 @@ final class OptionsScreen extends WindowScreen {
     public final String toString() {
         return "OptionsScreen{" +
             "title=" + this.title.getText() +
-            ", titleScale=" + this.titleScale.getFloat() +
+            ", titleScale=" + this.titleScale.getAsFloat() +
             '}';
     }
 }
