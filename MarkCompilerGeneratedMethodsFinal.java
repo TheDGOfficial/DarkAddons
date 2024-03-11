@@ -226,7 +226,7 @@ final class MarkCompilerGeneratedMethodsFinal {
                             MarkCompilerGeneratedMethodsFinal.err("Non-final private method: " + methodDefinition + " in class " + clazz.getName());
                         }
 
-                        if ((MarkCompilerGeneratedMethodsFinal.shouldMakeFinal(methodDefinition) && !"invoke".equals(method.getName()) || (MarkCompilerGeneratedMethodsFinal.VALUES.equals(name) || MarkCompilerGeneratedMethodsFinal.VALUE_OF.equals(name)) && !Modifier.isFinal(mod)) && !clazz.isInterface()) { // Interfaces cant have final methods
+                        if ((MarkCompilerGeneratedMethodsFinal.shouldMakeFinal(methodDefinition) && !"invoke".equals(method.getName()) || (MarkCompilerGeneratedMethodsFinal.VALUES.equals(name) || MarkCompilerGeneratedMethodsFinal.VALUE_OF.equals(name)) && !Modifier.isFinal(mod)) && !clazz.isInterface() && !Modifier.isAbstract(mod)) { // Interfaces cant have final methods and abstract methods cant be final
                             if (verbose) {
                                 MarkCompilerGeneratedMethodsFinal.info("verbose: Optimizing method: " + methodDefinition);
                             }
@@ -318,7 +318,7 @@ final class MarkCompilerGeneratedMethodsFinal {
                 final var methodName = mn.name;
                 final Supplier<String> getDefinition = () -> MarkCompilerGeneratedMethodsFinal.getMethodDefinition(methodName, mn.access);
                 final var definition = getDefinition.get();
-                if (0 == (classNode.access & Opcodes.ACC_INTERFACE) && !definition.contains(MarkCompilerGeneratedMethodsFinal.FINAL) && (MarkCompilerGeneratedMethodsFinal.shouldMakeFinal(definition) || MarkCompilerGeneratedMethodsFinal.VALUES.equals(methodName) || MarkCompilerGeneratedMethodsFinal.VALUE_OF.equals(methodName))) { // Interfaces can't have final methods
+                if (0 == (classNode.access & Opcodes.ACC_INTERFACE) && 0 == (mn.access & Opcodes.ACC_ABSTRACT) && !definition.contains(MarkCompilerGeneratedMethodsFinal.FINAL) && (MarkCompilerGeneratedMethodsFinal.shouldMakeFinal(definition) || MarkCompilerGeneratedMethodsFinal.VALUES.equals(methodName) || MarkCompilerGeneratedMethodsFinal.VALUE_OF.equals(methodName))) { // Interfaces can't have final methods and abstract methods can't be final
                     //System.out.println("Old signature: " + definition);
                     mn.access |= Opcodes.ACC_FINAL;
                     if (checkRun) {
