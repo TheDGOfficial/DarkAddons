@@ -379,7 +379,14 @@ final class MarkCompilerGeneratedMethodsFinal {
                                 modified = true;
                             }
                         } else if (MarkCompilerGeneratedMethodsFinal.nameAnnotation.getName().equals(reflectionRepresentationOfFullyQualifiedName)) {
-                            final var newName = (String) annotationNode.values.get(1);
+                            final var values = annotationNode.values;
+
+                            if (null == values) {
+                                continue;
+                            }
+
+                            final var newName = (String) values.get(1);
+
                             if (!mn.name.equals(newName)) {
                                 mn.name = newName;
                                 it.remove();
