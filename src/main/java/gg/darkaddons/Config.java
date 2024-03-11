@@ -496,7 +496,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Chroma Skyblock in Scoreboard",
-        description = "Changes Skyblock text in scoreboard to be chroma color (Requires SkyblockAddons)" + Utils.UNIX_NEW_LINE + "NOTE: May break Cowlection, turn on work outside skyblock in cowlection settings.",
+        description = "Changes Skyblock text in scoreboard to be chroma color (Requires SkyblockAddons)",
         category = "Misc", subcategory = "Chroma"
     )
     private static boolean chromaSkyblock;

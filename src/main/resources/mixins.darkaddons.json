@@ -55,7 +55,8 @@
         "MixinChunkRenderDispatcher",
         "MixinDSMSkillTracker",
         "MixinCommandThread",
-        "MixinStreamThread"
+        "MixinStreamThread",
+        "MixinPlayerListenerInner"
     ],
     "server": [
     ],
