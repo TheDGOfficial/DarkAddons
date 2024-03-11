@@ -360,7 +360,7 @@ final class M7Features {
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public final void onWorldLoad(@NotNull final WorldEvent.Load event) {
+    public final void onWorldLoad(@NotNull final WorldEvent.Unload event) {
         if (DarkAddons.checkClientEvent()) {
             return;
         }

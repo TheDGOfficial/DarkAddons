@@ -1,5 +1,5 @@
 diff --git a/build.gradle.kts b/build.gradle.kts
-index bc855e9e..f914f91a 100644
+index de1f81c6..e6bf4f9e 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -18,6 +18,7 @@
@@ -17,8 +17,8 @@ index bc855e9e..f914f91a 100644
 +    `maven-publish`
  }
  
- version = "1.9.0-pre1"
-@@ -278,6 +280,18 @@ signing {
+ version = "1.9.0-pre2"
+@@ -279,6 +281,18 @@ signing {
      }
  }
  
@@ -37,7 +37,7 @@ index bc855e9e..f914f91a 100644
  /**
   * Builds the dependency notation for the named Ktor [module] at the given [version].
   *
-@@ -289,4 +303,4 @@ fun DependencyHandler.ktor(module: String, version: String? = null, addSuffix: B
+@@ -290,4 +304,4 @@ fun DependencyHandler.ktor(module: String, version: String? = null, addSuffix: B
  
  fun DependencyHandler.ktorClient(module: String, version: String? = null) = ktor("client-${module}", version)
  
@@ -81,9 +81,3 @@ index 9e967282..64f45149 100644
 +        }
 +    }
 +}
-diff --git a/hypixel-api b/hypixel-api
---- a/hypixel-api
-+++ b/hypixel-api
-@@ -1 +1 @@
--Subproject commit e6b69f867bad9904a88531c000f1333a9eb79849
-+Subproject commit e6b69f867bad9904a88531c000f1333a9eb79849-dirty
