@@ -1,5 +1,6 @@
 package gg.darkaddons;
 
+import gg.darkaddons.mixins.IMixinGuiPlayerTabOverlay;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import net.minecraft.client.Minecraft;
@@ -26,7 +27,7 @@ final class BlessingDisplay extends GuiElement {
             return;
         }
 
-        final var footer = Minecraft.getMinecraft().ingameGUI.getTabList().footer;
+        final var footer = ((IMixinGuiPlayerTabOverlay) Minecraft.getMinecraft().ingameGUI.getTabList()).getFooter();
         if (null == footer) {
             return;
         }
