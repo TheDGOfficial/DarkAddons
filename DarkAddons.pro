@@ -31,7 +31,7 @@
 -optimizeaggressively
 
 # Enable interface merging
--mergeinterfacesaggressively
+#-mergeinterfacesaggressively
 
 # Optimize StringBuilder method calls
 -assumenoexternalsideeffects class java.lang.StringBuilder {
