@@ -166,21 +166,16 @@ final class AdditionalM7Features {
 
         final var entity = event.entityLiving;
         if (entity instanceof EntityDragon) {
-            //noinspection InstanceofIncompatibleInterface
-            if (entity instanceof ExtensionEntityLivingBase) {
-                final var type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
-                if (null == type) {
-                    if (Config.isDebugMode()) {
-                        DarkAddons.debug(() -> "Can't find last killed dragon type for entity with name " + entity.getName() + "§r§e at x=" + entity.posX + ",y=" + entity.posY + ",z=" + entity.posZ);
-                    }
-                } else {
-                    AdditionalM7Features.lastKilledDragon = type;
-                    if (Config.isDebugMode()) {
-                        DarkAddons.debug(() -> "Set last killed dragon type to " + type.getEnumName());
-                    }
+            final var type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
+            if (null == type) {
+                if (Config.isDebugMode()) {
+                    DarkAddons.debug(() -> "Can't find last killed dragon type for entity with name " + entity.getName() + "§r§e at x=" + entity.posX + ",y=" + entity.posY + ",z=" + entity.posZ);
                 }
             } else {
-                DarkAddons.mixinError(MixinEntityLivingBase.class);
+                AdditionalM7Features.lastKilledDragon = type;
+                if (Config.isDebugMode()) {
+                    DarkAddons.debug(() -> "Set last killed dragon type to " + type.getEnumName());
+                }
             }
         }
     }

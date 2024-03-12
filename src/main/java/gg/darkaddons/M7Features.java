@@ -144,13 +144,9 @@ final class M7Features {
                 @Nullable final Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(entityId);
 
                 if (entity instanceof EntityDragon) {
-                    if (entity instanceof ExtensionEntityLivingBase) {
-                        final WitherKingDragons type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
-                        if (Config.isDebugMode()) {
-                            DarkAddons.debug(() -> "Alive dragon: " + (null == type ? "UNKNOWN" : type.getEnumName()));
-                        }
-                    } else {
-                        DarkAddons.mixinError(MixinEntityLivingBase.class);
+                    final WitherKingDragons type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
+                    if (Config.isDebugMode()) {
+                        DarkAddons.debug(() -> "Alive dragon: " + (null == type ? "UNKNOWN" : type.getEnumName()));
                     }
                 } else {
                     M7Features.debugLogEntity(entityId, entity);
@@ -261,15 +257,10 @@ final class M7Features {
                     return;
                 }
 
-                if (entity instanceof final ExtensionEntityLivingBase ext) {
+                final var ext = (ExtensionEntityLivingBase) entity;
 
-                    ext.getSkytilsHook().setColorMultiplier(type.getColor());
-                    ext.getSkytilsHook().setMasterDragonType(type.toSkytilsDragonType());
-                } else {
-                    DarkAddons.mixinError(MixinEntityLivingBase.class);
-
-                    return;
-                }
+                ext.getSkytilsHook().setColorMultiplier(type.getColor());
+                ext.getSkytilsHook().setMasterDragonType(type.toSkytilsDragonType());
             }
 
             M7Features.dragonMap.put(id, type);
@@ -298,24 +289,19 @@ final class M7Features {
         final var entity = event.entity;
 
         if (entity instanceof EntityDragon) {
-            if (entity instanceof final ExtensionEntityLivingBase ext) {
+            final var type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
 
-                final var type = WitherKingDragons.from(ext.getSkytilsHook().getMasterDragonType());
+            if (null == type) {
+                return;
+            }
 
-                if (null == type) {
-                    return;
-                }
+            M7Features.killedDragons.add(type);
+            M7Features.spawningDragons.remove(type);
+            M7Features.dragonMap.remove(entity.getEntityId());
+            M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
 
-                M7Features.killedDragons.add(type);
-                M7Features.spawningDragons.remove(type);
-                M7Features.dragonMap.remove(entity.getEntityId());
-                M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
-
-                if (Config.isDebugMode()) {
-                    DarkAddons.debug(() -> "Removed dying dragon from the dragonMap");
-                }
-            } else {
-                DarkAddons.mixinError(MixinEntityLivingBase.class);
+            if (Config.isDebugMode()) {
+                DarkAddons.debug(() -> "Removed dying dragon from the dragonMap");
             }
         }
     }
@@ -374,25 +360,15 @@ final class M7Features {
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void handleRender(@NotNull final EntityLivingBase e) {
-        McProfilerHelper.startSection("m7features_handle_render");
-
         //final boolean showDragonHP = Config.isShowDragonHP();
         final var showStatueBox = Config.isShowStatueBox();
         if ((/*showDragonHP || */showStatueBox || Config.isKillNotification()) && -1L != DungeonTimer.INSTANCE.getPhase4ClearTime() && e instanceof EntityDragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
-            //noinspection InstanceofIncompatibleInterface
-            if (e instanceof final ExtensionEntityLivingBase entity) {
+            final var drag = WitherKingDragons.from(((ExtensionEntityLivingBase) e).getSkytilsHook().getMasterDragonType());
 
-                final var drag = WitherKingDragons.from(entity.getSkytilsHook().getMasterDragonType());
-
-                if (null != drag) {
-                    M7Features.renderDragonInfo(e, drag/*, showDragonHP, showStatueBox*/);
-                }
-            } else {
-                DarkAddons.mixinError(MixinEntityLivingBase.class);
+            if (null != drag) {
+                M7Features.renderDragonInfo(e, drag/*, showDragonHP, showStatueBox*/);
             }
         }
-
-        McProfilerHelper.endSection();
     }
 
     private static final void renderDragonInfo(@NotNull final EntityLivingBase e, @NotNull final WitherKingDragons drag/*, final boolean showDragonHP, final boolean showStatueBox*/) {
@@ -510,32 +486,19 @@ final class M7Features {
             return value;
         }
 
-        //noinspection InstanceofIncompatibleInterface
-        if (lastDrag instanceof ExtensionEntityLivingBase) {
-            final ExtensionEntityLivingBase lastDragon = (ExtensionEntityLivingBase) lastDrag;
+        final ExtensionEntityLivingBase lastDragon = (ExtensionEntityLivingBase) lastDrag;
 
-            if (null == lastDragon.getSkytilsHook().getColorMultiplier()) {
-                return value;
-            }
-
-            final ModelBase mod = renderDragon.getMainModel();
-
-            //noinspection InstanceofIncompatibleInterface
-            if (mod instanceof AccessorModelDragon) {
-                final AccessorModelDragon model = (AccessorModelDragon) mod;
-
-                model.getBody().isHidden = true;
-                model.getWing().isHidden = true;
-
-                return 0.03F;
-            }
-
-            DarkAddons.mixinError(AccessorModelDragon.class);
+        if (null == lastDragon.getSkytilsHook().getColorMultiplier()) {
             return value;
         }
 
-        DarkAddons.mixinError(MixinEntityLivingBase.class);
-        return value;
+        final ModelBase mod = renderDragon.getMainModel();
+        final AccessorModelDragon model = (AccessorModelDragon) mod;
+
+        model.getBody().isHidden = true;
+        model.getWing().isHidden = true;
+
+        return 0.03F;
     }
 
     static final void getEntityTexture(final EntityDragon entity, final CallbackInfoReturnable<? super ResourceLocation> cir) {
@@ -543,35 +506,25 @@ final class M7Features {
             return;
         }
 
-        //noinspection InstanceofIncompatibleInterface
-        if (entity instanceof ExtensionEntityLivingBase) {
-            final WitherKingDragons type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
+        final WitherKingDragons type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
 
-            if (null == type) {
-                return;
-            }
-
-            if (type.isDestroyed() && Config.isSkipRetexturingIrrelevantDrags()) {
-                return;
-            }
-
-            cir.setReturnValue(type.getTexture());
-        } else {
-            DarkAddons.mixinError(MixinEntityLivingBase.class);
+        if (null == type) {
+            return;
         }
+
+        if (type.isDestroyed() && Config.isSkipRetexturingIrrelevantDrags()) {
+            return;
+        }
+
+        cir.setReturnValue(type.getTexture());
     }
 
     static final void afterRenderHurtFrame(final RenderDragon renderDragon) {
         final ModelBase mod = renderDragon.getMainModel();
-        //noinspection InstanceofIncompatibleInterface
-        if (mod instanceof AccessorModelDragon) {
-            final AccessorModelDragon model = (AccessorModelDragon) mod;
+        final AccessorModelDragon model = (AccessorModelDragon) mod;
 
-            model.getBody().isHidden = false;
-            model.getWing().isHidden = false;
-        } else {
-            DarkAddons.mixinError(AccessorModelDragon.class);
-        }
+        model.getBody().isHidden = false;
+        model.getWing().isHidden = false;
     }
 
     static final boolean shouldHideDragonDeath() {

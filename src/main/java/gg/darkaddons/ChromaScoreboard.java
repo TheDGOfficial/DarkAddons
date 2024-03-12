@@ -25,11 +25,7 @@ final class ChromaScoreboard {
         if (Config.isChromaToggle() && Config.isChromaSkyblock() && DarkAddons.isUsingSBA() && packet instanceof S3BPacketScoreboardObjective) {
             final var currentObjective = ScoreboardUtil.cleanSB(Utils.removeControlCodes(((S3BPacketScoreboardObjective) packet).func_149337_d()));
             if (currentObjective.contains("SKYBLOCK") || currentObjective.contains("SKIBLOCK")) {
-                if (packet instanceof AccessorS3BPacketScoreboardObjective) {
-                    ((AccessorS3BPacketScoreboardObjective) packet).setObjectiveValue("§z§lSKYBLOCK");
-                } else if (!Config.isUnsafeMode()) {
-                    DarkAddons.mixinError(AccessorS3BPacketScoreboardObjective.class);
-                }
+                ((AccessorS3BPacketScoreboardObjective) packet).setObjectiveValue("§z§lSKYBLOCK");
             }
         }
     }

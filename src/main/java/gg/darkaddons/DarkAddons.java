@@ -317,13 +317,13 @@ public final class DarkAddons {
         DarkAddons.sendMessageWithPrefix(message, true);
     }
 
-    static final void mixinError(@NotNull final Class<?> mixinClass) {
+    /*static final void mixinError(@NotNull final Class<?> mixinClass) {
         if (!mixinClass.isInterface() && !Modifier.isAbstract(mixinClass.getModifiers())) {
             DarkAddons.notifyError("A mixin failure occurred and the given source is not an interface or abstract class. Source class: " + mixinClass.getName());
         }
 
         DarkAddons.notifyError("Mixin error: Mixin " + mixinClass.getName() + " likely failed to apply");
-    }
+    }*/
 
     @NotNull
     private static final Throwable getRootError(@NotNull Throwable error, final Predicate<Throwable> predicate) {

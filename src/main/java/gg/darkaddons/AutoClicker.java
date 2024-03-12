@@ -237,15 +237,7 @@ final class AutoClicker {
 
     private static final boolean gonnaDoVanillaCpsInThisTick() {
         final var mc = Minecraft.getMinecraft();
-
-        //noinspection InstanceofIncompatibleInterface
-        if (mc instanceof final IMixinMinecraft mm) {
-
-            return mc.gameSettings.keyBindUseItem.isKeyDown() && 0 == mm.getRightClickDelayTimer() && !mc.thePlayer.isUsingItem();
-        }
-
-        DarkAddons.mixinError(IMixinMinecraft.class);
-        throw new IllegalStateException("mixin failure");
+        return mc.gameSettings.keyBindUseItem.isKeyDown() && 0 == ((IMixinMinecraft) mc).getRightClickDelayTimer() && !mc.thePlayer.isUsingItem();
     }
 
     private static final boolean handleRightClick(@NotNull final Runnable rightClick, @NotNull final KeyBinding right, @NotNull final Minecraft mc) {
@@ -285,24 +277,17 @@ final class AutoClicker {
 
     /*static final void emulateACTick(final boolean left) {
         final Minecraft mc = Minecraft.getMinecraft();
-        //noinspection InstanceofIncompatibleInterface
-        if (mc instanceof IMixinMinecraft) {
-            final IMixinMinecraft mm = (IMixinMinecraft) mc;
+        final IMixinMinecraft mm = (IMixinMinecraft) mc;
 
-            final Runnable lc = mm::callClickMouse;
-            final Runnable rc = mm::callRightClickMouse;
+        final Runnable lc = mm::callClickMouse;
+        final Runnable rc = mm::callRightClickMouse;
 
-            if (left) {
-                if (AutoClicker.isPressedStatic(mc.gameSettings.keyBindAttack, lc, rc) && !mc.thePlayer.isUsingItem()) {
-                    lc.run();
-                }
-            } else {
-                if (AutoClicker.isPressedStatic(mc.gameSettings.keyBindUseItem, lc, rc) && !mc.thePlayer.isUsingItem()) {
-                    rc.run();
-                }
+        if (left) {
+            if (AutoClicker.isPressedStatic(mc.gameSettings.keyBindAttack, lc, rc) && !mc.thePlayer.isUsingItem()) {
+                lc.run();
             }
-        } else {
-            DarkAddons.mixinError(IMixinMinecraft.class);
+        } else if (AutoClicker.isPressedStatic(mc.gameSettings.keyBindUseItem, lc, rc) && !mc.thePlayer.isUsingItem()) {
+            rc.run();
         }
     }*/
 }

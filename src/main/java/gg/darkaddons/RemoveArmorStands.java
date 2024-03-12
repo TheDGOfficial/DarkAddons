@@ -18,13 +18,11 @@ final class RemoveArmorStands {
     }
 
     static final void onRenderEntityPre(@NotNull final Entity entity) {
-        McProfilerHelper.startSection("darkaddons_remove_armor_stands");
         if (Config.isRemoveArmorStandsOnWitherKingAndSadanFight() && !entity.isDead && entity instanceof EntityArmorStand && ArmorStandOptimizer.checkRemoveArmorStand((EntityArmorStand) entity)) {
             entity.setDead();
             /*if (Config.isDebugMode()) {
                 DarkAddons.debug(() -> "Killing armor stand with name " + entity.getName() + "§r§e at x=" + entity.posX + ",y=" + entity.posY + ",z=" + entity.posZ);
             }*/
         }
-        McProfilerHelper.endSection();
     }
 }

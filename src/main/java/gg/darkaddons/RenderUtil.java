@@ -30,15 +30,7 @@ final class RenderUtil {
     }
 
     static final float getPartialTicks() {
-        final var mc = Minecraft.getMinecraft();
-
-        //noinspection InstanceofIncompatibleInterface
-        if (mc instanceof AccessorMinecraft) {
-            return ((AccessorMinecraft) mc).getTimer().renderPartialTicks;
-        }
-
-        DarkAddons.mixinError(AccessorMinecraft.class);
-        throw new IllegalStateException("mixin error " + mc.getClass().getName() + " is not instanceof " + AccessorMinecraft.class.getName());
+        return ((AccessorMinecraft) Minecraft.getMinecraft()).getTimer().renderPartialTicks;
     }
 
     private static final double interpolate(final double currentValue, final double lastValue, final float multiplier) {
