@@ -190,6 +190,10 @@ final class RunsTillCA50 {
             this.tankXp = tankXpIn;
         }
 
+        PlayerDataHolder(final double healerXpIn, final double mageXpIn, final double berserkerXpIn, final double archerXpIn, final double tankXpIn) {
+            this(null, null, 0L, healerXpIn, mageXpIn, berserkerXpIn, archerXpIn, tankXpIn);
+        }
+
         @Override
         public final String toString() {
             return "PlayerDataHolder{" +

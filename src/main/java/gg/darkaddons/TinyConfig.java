@@ -71,6 +71,16 @@ final class TinyConfig {
         }
     }
 
+    static final Boolean getBoolean(@NotNull final String key) {
+        final var value = TinyConfig.tinyConfigSettings.getProperty(key);
+
+        if (null == value) {
+            return null;
+        }
+
+        return TinyConfig.parseBoolean(value);
+    }
+
     static final boolean getBoolean(@NotNull final String key, final boolean defaultValue) {
         return TinyConfig.parseBoolean(TinyConfig.tinyConfigSettings.getProperty(key, Boolean.toString(defaultValue)));
     }
@@ -82,5 +92,32 @@ final class TinyConfig {
 
     private static final boolean parseBoolean(@Nullable final String value) {
         return "true".equals(value);
+    }
+
+    static final Double getDouble(@NotNull final String key) {
+        final var value = TinyConfig.tinyConfigSettings.getProperty(key);
+
+        if (null == value) {
+            return null;
+        }
+
+        return TinyConfig.parseDouble(value);
+    }
+
+    static final double getDouble(@NotNull final String key, final double defaultValue) {
+        return TinyConfig.parseDouble(TinyConfig.tinyConfigSettings.getProperty(key, Double.toString(defaultValue)));
+    }
+
+    static final void setDouble(@NotNull final String key, final double value) {
+        TinyConfig.tinyConfigSettings.setProperty(key, Double.toString(value));
+        TinyConfig.save();
+    }
+
+    private static final double parseDouble(@NotNull final String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (final NumberFormatException numberFormatException) {
+            throw new RuntimeException("Unable to parse \"" + value + "\" as double", numberFormatException);
+        }
     }
 }

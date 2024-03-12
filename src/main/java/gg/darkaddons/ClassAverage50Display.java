@@ -152,6 +152,29 @@ final class ClassAverage50Display extends GuiElement {
         };
     }
 
+    private static final void syncToDisk() {
+        TinyConfig.setDouble("healerExperience", ClassAverage50Display.healerExperience);
+        TinyConfig.setDouble("mageExperience", ClassAverage50Display.mageExperience);
+        TinyConfig.setDouble("berserkerExperience", ClassAverage50Display.berserkerExperience);
+        TinyConfig.setDouble("archerExperience", ClassAverage50Display.archerExperience);
+        TinyConfig.setDouble("tankExperience", ClassAverage50Display.tankExperience);
+    }
+
+    @Nullable
+    private static final RunsTillCA50.PlayerDataHolder syncFromDisk() {
+        final var healerXp = TinyConfig.getDouble("healerExperience");
+        final var mageXp = TinyConfig.getDouble("mageExperience");
+        final var berserkerXp = TinyConfig.getDouble("berserkerExperience");
+        final var archerXp = TinyConfig.getDouble("archerExperience");
+        final var tankXp = TinyConfig.getDouble("tankExperience");
+
+        if (null == healerXp || null == mageXp || null == berserkerXp || null == archerXp || null == tankXp) {
+            return null;
+        }
+
+        return new RunsTillCA50.PlayerDataHolder(healerXp, mageXp, berserkerXp, archerXp, tankXp);
+    }
+
     static final void syncClassXP() {
         // When the method is called from FMLLoadCompleteEvent, Minecraft.getMinecraft().thePlayer returns null, so we need to await it being not null here.
         Utils.awaitCondition(() -> null != Minecraft.getMinecraft().thePlayer, () -> RunsTillCA50.apiFetcher.execute(() -> {
@@ -160,22 +183,32 @@ final class ClassAverage50Display extends GuiElement {
 
             RunsTillCA50.lastData = null;
 
-            if (null == playerData) {
-                DarkAddons.queueWarning("Could not sync Class Experiences; Class Average 50 Display HUD will show the runs needed from zero class experiences. If you see this after game start-up or after enabling the Config option; run /darkaddon rtca to see the root cause, as the automatic sync only prints this warning and can't know the root cause.");
-
-                ClassAverage50Display.fastSyncClassXP();
-                return;
-            }
-
             // We will get thread-safety issues if we continue on the api fetcher thread; this runs the following on the next tick in client thread to avoid any issues.
             DarkAddons.runOnceInNextTick("class_average_L_display_sync_class_xp", () -> {
-                ClassAverage50Display.healerExperience = playerData.healerXp;
-                ClassAverage50Display.mageExperience = playerData.mageXp;
-                ClassAverage50Display.berserkerExperience = playerData.berserkerXp;
-                ClassAverage50Display.archerExperience = playerData.archerXp;
-                ClassAverage50Display.tankExperience = playerData.tankXp;
+                var mutablePlayerData = playerData;
+
+                if (null == mutablePlayerData) {
+                    mutablePlayerData = ClassAverage50Display.syncFromDisk();
+
+                    if (null == mutablePlayerData) {
+                        DarkAddons.queueWarning("Could not sync Class Experiences; Class Average 50 Display HUD will show the runs needed from zero class experiences. If you see this after game start-up or after enabling the Config option; run /darkaddon rtca to see the root cause, as the automatic sync only prints this warning and can't know the root cause.");
+
+                        ClassAverage50Display.fastSyncClassXP();
+                        return;
+                    } else {
+                        DarkAddons.queueWarning("Could not sync Class Experiences; using fallback data fetched earlier. If anything is wrong, type /darkaddon rtca to try fetching again.");
+                    }
+                }
+
+                ClassAverage50Display.healerExperience = mutablePlayerData.healerXp;
+                ClassAverage50Display.mageExperience = mutablePlayerData.mageXp;
+                ClassAverage50Display.berserkerExperience = mutablePlayerData.berserkerXp;
+                ClassAverage50Display.archerExperience = mutablePlayerData.archerXp;
+                ClassAverage50Display.tankExperience = mutablePlayerData.tankXp;
 
                 ClassAverage50Display.fastSyncClassXP();
+
+                ClassAverage50Display.syncToDisk();
             });
         }));
     }
@@ -329,6 +362,8 @@ final class ClassAverage50Display extends GuiElement {
 
     ClassAverage50Display() {
         super("Class Average 50 Display");
+
+        DarkAddons.addShutdownTask(ClassAverage50Display::syncToDisk);
     }
 
     private static final boolean shouldRenderWithVisibility(final int visibility) {
