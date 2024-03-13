@@ -20,14 +20,15 @@ index fed6ddee..f2168a19 100644
 +}
 +
 diff --git a/events/build.gradle.kts b/events/build.gradle.kts
-index 9e967282..498a4899 100644
+index 9e967282..64f45149 100644
 --- a/events/build.gradle.kts
 +++ b/events/build.gradle.kts
 @@ -18,0 +19 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 +import java.util.Locale
 @@ -23,0 +25 @@ plugins {
 +    `maven-publish`
-@@ -50,0 +53,11 @@ tasks.withType<AbstractArchiveTask> {
+@@ -50,0 +53,12 @@ tasks.withType<AbstractArchiveTask> {
++
 +publishing {
 +    publications {
 +        register("mavenJava", MavenPublication::class) {
@@ -39,10 +40,3 @@ index 9e967282..498a4899 100644
 +        }
 +    }
 +}
-diff --git a/hypixel-api b/hypixel-api
-index e6b69f86..de830785 160000
---- a/hypixel-api
-+++ b/hypixel-api
-@@ -1 +1 @@
--Subproject commit e6b69f867bad9904a88531c000f1333a9eb79849
-+Subproject commit de830785183f6ddd34cd06611165b15857fa59a5

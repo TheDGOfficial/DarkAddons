@@ -42,14 +42,14 @@ git checkout "$release_commit" &> /dev/null
 git stash pop &> /dev/null || true 
 git stash drop &> /dev/null || true 
 
-git diff --unified=0 --ignore-all-space > ../SkytilsMod.patch
+git diff --unified=0 --ignore-space-at-eol > ../SkytilsMod.patch
 
 cd hypixel-api || { echo "cd failed"; exit 1; } 
 
 git stash pop &> /dev/null || true 
 git stash drop &> /dev/null || true 
 
-git diff --unified=0 --ignore-all-space > ../../hypixel-api.patch
+git diff --unified=0 --ignore-space-at-eol > ../../hypixel-api.patch
 
 cd .. || { echo "cd failed"; exit 1; } 
 cd .. || { echo "cd failed"; exit 1; } 
