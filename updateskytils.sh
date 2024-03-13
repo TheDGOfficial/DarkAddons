@@ -32,10 +32,10 @@ cd .. || { echo "cd failed"; exit 1; }
 git submodule init
 git submodule update
 
-git fetch --all --tags &> /dev/null
+git fetch --all --tags --force &> /dev/null
 
 git checkout dev &> /dev/null
-git pull &> /dev/null
+git pull -X theirs &> /dev/null
 release_commit=$(git log --grep "version: $SKYTILS_VERSION" -1 --pretty=format:"%h")
 git checkout "$release_commit" &> /dev/null
 

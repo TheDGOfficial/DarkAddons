@@ -76,11 +76,11 @@ if [ "${1:-default}" != "--skip-build" ]; then
   if [ ! -d "$HOME/.m2/repository/gg/skytils/skytilsmod/$SKYTILS_VERSION" ]; then
     rm -rf SkytilsMod/build/libs/*
     cd SkytilsMod || { echo "cd failed"; exit 1; }
-    git fetch --all --tags &> /dev/null
+    git fetch --all --tags --force &> /dev/null
     git stash &> /dev/null
     git stash drop &> /dev/null || true 
     git checkout dev &> /dev/null
-    git pull &> /dev/null
+    git pull -X theirs &> /dev/null
     release_commit=$(git log --grep "version: $SKYTILS_VERSION" -1 --pretty=format:"%h")
     git checkout "$release_commit" &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; } 

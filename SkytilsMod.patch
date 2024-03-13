@@ -1,5 +1,5 @@
 diff --git a/build.gradle.kts b/build.gradle.kts
-index fed6ddee..f2168a19 100644
+index 8e4468d1..c8ec105f 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -18,6 +18,7 @@
@@ -17,7 +17,7 @@ index fed6ddee..f2168a19 100644
 +    `maven-publish`
  }
  
- version = "1.9.0-pre3"
+ version = "1.9.0-pre4"
 @@ -279,6 +281,18 @@ signing {
      }
  }
@@ -37,6 +37,13 @@ index fed6ddee..f2168a19 100644
  /**
   * Builds the dependency notation for the named Ktor [module] at the given [version].
   *
+@@ -290,4 +304,4 @@ fun DependencyHandler.ktor(module: String, version: String? = null, addSuffix: B
+ 
+ fun DependencyHandler.ktorClient(module: String, version: String? = null) = ktor("client-${module}", version)
+ 
+-fun DependencyHandler.ktorServer(module: String, version: String? = null) = ktor("server-${module}", version)
+\ No newline at end of file
++fun DependencyHandler.ktorServer(module: String, version: String? = null) = ktor("server-${module}", version)
 diff --git a/events/build.gradle.kts b/events/build.gradle.kts
 index 9e967282..64f45149 100644
 --- a/events/build.gradle.kts
