@@ -34,7 +34,10 @@ git submodule update
 
 git fetch --all --tags &> /dev/null
 
-git checkout v"$SKYTILS_VERSION" &> /dev/null
+git checkout dev &> /dev/null
+git pull &> /dev/null
+release_commit=$(git log --grep "version: $SKYTILS_VERSION" -1 --pretty=format:"%h")
+git checkout "$release_commit" &> /dev/null
 
 git stash pop &> /dev/null || true 
 git stash drop &> /dev/null || true 

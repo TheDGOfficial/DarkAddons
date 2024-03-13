@@ -1,5 +1,5 @@
 diff --git a/types/build.gradle.kts b/types/build.gradle.kts
-index 665e94e..37bdfae 100644
+index 665e94e..aea8af9 100644
 --- a/types/build.gradle.kts
 +++ b/types/build.gradle.kts
 @@ -0,0 +1,2 @@
@@ -7,8 +7,7 @@ index 665e94e..37bdfae 100644
 +
 @@ -3,0 +6 @@ plugins {
 +    `maven-publish`
-@@ -31,0 +35,12 @@ java {
-+
+@@ -31,0 +35,11 @@ java {
 +publishing {
 +    publications {
 +        register("mavenJava", MavenPublication::class) {
