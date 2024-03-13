@@ -1,27 +1,13 @@
 diff --git a/types/build.gradle.kts b/types/build.gradle.kts
-index 7d4ed6e..7c56148 100644
+index 665e94e..37bdfae 100644
 --- a/types/build.gradle.kts
 +++ b/types/build.gradle.kts
-@@ -16,9 +16,12 @@
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  */
- 
+@@ -0,0 +1,2 @@
 +import java.util.Locale
 +
- plugins {
-     kotlin("jvm") version "1.9.22"
-     kotlin("plugin.serialization") version "1.9.22"
+@@ -3,0 +6 @@ plugins {
 +    `maven-publish`
- }
- 
- group = "gg.skytils.hypixel.types"
-@@ -46,4 +49,16 @@ dependencies {
- 
- java {
-     toolchain.languageVersion = JavaLanguageVersion.of(8)
--}
-\ No newline at end of file
-+}
+@@ -31,0 +35,12 @@ java {
 +
 +publishing {
 +    publications {

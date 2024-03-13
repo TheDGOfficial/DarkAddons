@@ -1,27 +1,12 @@
 diff --git a/build.gradle.kts b/build.gradle.kts
-index de1f81c6..e6bf4f9e 100644
+index 1165c0f1..570466e1 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -18,6 +18,7 @@
- import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
- import net.fabricmc.loom.task.RemapJarTask
- import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+@@ -20,0 +21 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 +import java.util.Locale
- import java.security.MessageDigest
- 
- plugins {
-@@ -32,6 +33,7 @@ plugins {
-     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.7"
- 
-     signing
+@@ -34,0 +36 @@ plugins {
 +    `maven-publish`
- }
- 
- version = "1.9.0-pre2"
-@@ -279,6 +281,18 @@ signing {
-     }
- }
- 
+@@ -283,0 +286,12 @@ signing {
 +publishing {
 +    publications {
 +        register("mavenJava", MavenPublication::class) {
@@ -34,41 +19,15 @@ index de1f81c6..e6bf4f9e 100644
 +    }
 +}
 +
- /**
-  * Builds the dependency notation for the named Ktor [module] at the given [version].
-  *
-@@ -290,4 +304,4 @@ fun DependencyHandler.ktor(module: String, version: String? = null, addSuffix: B
- 
- fun DependencyHandler.ktorClient(module: String, version: String? = null) = ktor("client-${module}", version)
- 
--fun DependencyHandler.ktorServer(module: String, version: String? = null) = ktor("server-${module}", version)
-\ No newline at end of file
-+fun DependencyHandler.ktorServer(module: String, version: String? = null) = ktor("server-${module}", version)
 diff --git a/events/build.gradle.kts b/events/build.gradle.kts
-index 9e967282..64f45149 100644
+index 14031355..5c05d177 100644
 --- a/events/build.gradle.kts
 +++ b/events/build.gradle.kts
-@@ -16,11 +16,13 @@
-  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
-  */
- import org.apache.tools.ant.filters.FixCrLfFilter
+@@ -18,0 +19 @@ import org.apache.tools.ant.filters.FixCrLfFilter
 +import java.util.Locale
- 
- plugins {
-     kotlin("jvm") version "1.9.22"
-     id("gg.essential.loom") version "1.3.12"
-     id("gg.essential.defaults") version "0.3.0"
+@@ -23,0 +25 @@ plugins {
 +    `maven-publish`
- }
- 
- dependencies {
-@@ -47,4 +49,16 @@ tasks.processResources {
- tasks.withType<AbstractArchiveTask> {
-     isPreserveFileTimestamps = false
-     isReproducibleFileOrder = true
--}
-\ No newline at end of file
-+}
+@@ -50,0 +53,12 @@ tasks.withType<AbstractArchiveTask> {
 +
 +publishing {
 +    publications {

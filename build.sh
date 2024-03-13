@@ -87,9 +87,9 @@ if [ "${1:-default}" != "--skip-build" ]; then
     git submodule init
     git submodule update
     chmod +x gradlew
-    git apply ../SkytilsMod.patch &> /dev/null
+    git apply --unidiff-zero ../SkytilsMod.patch &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; }
-    git apply ../../hypixel-api.patch &> /dev/null
+    git apply --unidiff-zero ../../hypixel-api.patch &> /dev/null
     cd .. || { echo "cd failed"; exit 1; } 
     ./gradlew -Porg.gradle.java.installations.auto-download=false build remapJar publishToMavenLocal --no-daemon
     cd .. || { echo "cd failed"; exit 1; }
