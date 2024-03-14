@@ -81,7 +81,7 @@ if [ "${1:-default}" != "--skip-build" ]; then
     git stash drop &> /dev/null || true 
     git checkout dev &> /dev/null
     git pull -X theirs &> /dev/null
-    release_commit=$(git log --grep "version: $SKYTILS_VERSION" -1 --pretty=format:"%h")
+    release_commit=$(git log --grep "^version:\ $SKYTILS_VERSION\$" -1 --pretty=format:"%h")
     git checkout "$release_commit" &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; } 
     git stash &> /dev/null
