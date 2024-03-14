@@ -48,7 +48,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SELECTOR, name = "Class Average 50 Display Floor",
-        description = "Select the floor used for the runs needed calculations; usually and by default M7, or you can change it to M6 if you are insane and plan to get Class Average 50 from M6 instead. There is also an adaptive mode where it automatically changes to the one you did last, or defaulting to M7 if unknown. The last done floor is only stored on the RAM so it will default to M7 every time you restart your game.",
+        description = "Select the floor used for the runs needed calculations; usually and by default M7, or you can change it to M6 if you are insane and plan to get Class Average 50 from M6 instead. There is also an adaptive mode where it automatically changes to the one you did last, or defaulting to M7 if unknown. The last done floor is stored on the RAM but saved to disk when you close the game via Quit Game from Main Menu and so will persist accross restarts if possible.",
         category = "Dungeons", subcategory = "HUD", triggerActionOnInitialization = false,
         options = {"M7", "M6", "Adaptive"}
     )

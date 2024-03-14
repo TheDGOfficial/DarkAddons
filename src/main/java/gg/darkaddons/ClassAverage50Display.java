@@ -158,6 +158,11 @@ final class ClassAverage50Display extends GuiElement {
         TinyConfig.setDouble("berserkerExperience", ClassAverage50Display.berserkerExperience);
         TinyConfig.setDouble("archerExperience", ClassAverage50Display.archerExperience);
         TinyConfig.setDouble("tankExperience", ClassAverage50Display.tankExperience);
+
+        final var lastDoneFloorLocal = ClassAverage50Display.lastDoneFloor;
+        if (null != lastDoneFloorLocal) {
+            TinyConfig.setString("lastDoneFloor", lastDoneFloorLocal.name());
+        }
     }
 
     @Nullable
@@ -179,6 +184,13 @@ final class ClassAverage50Display extends GuiElement {
         // When the method is called from FMLLoadCompleteEvent, Minecraft.getMinecraft().thePlayer returns null, so we need to await it being not null here.
         Utils.awaitCondition(() -> null != Minecraft.getMinecraft().thePlayer, () -> RunsTillCA50.apiFetcher.execute(() -> {
             final var cachedData = RunsTillCA50.lastData;
+
+            final var lastDoneFloorFromDisk = TinyConfig.getString("lastDoneFloor");
+
+            if (null != lastDoneFloorFromDisk && null == ClassAverage50Display.lastDoneFloor) {
+                ClassAverage50Display.lastDoneFloor = ClassAverage50Display.DungeonFloor.valueOf(lastDoneFloorFromDisk);
+            }
+
             final var playerData = null == cachedData ? RunsTillCA50.extractDataFor(Minecraft.getMinecraft().thePlayer.getUniqueID(), ClassAverage50Display.DungeonFloor.M7 == ClassAverage50Display.getDungeonFloor(), false) : cachedData;
 
             RunsTillCA50.lastData = null;

@@ -81,6 +81,21 @@ final class TinyConfig {
         return TinyConfig.parseBoolean(value);
     }
 
+    @Nullable
+    static final String getString(@NotNull final String key) {
+        return TinyConfig.tinyConfigSettings.getProperty(key);
+    }
+
+    @NotNull
+    static final String getString(@NotNull final String key, @NotNull final String defaultValue) {
+        return TinyConfig.tinyConfigSettings.getProperty(key, defaultValue);
+    }
+
+    static final void setString(@NotNull final String key, @NotNull final String value) {
+        TinyConfig.tinyConfigSettings.setProperty(key, value);
+        TinyConfig.save();
+    }
+
     static final boolean getBoolean(@NotNull final String key, final boolean defaultValue) {
         return TinyConfig.parseBoolean(TinyConfig.tinyConfigSettings.getProperty(key, Boolean.toString(defaultValue)));
     }
