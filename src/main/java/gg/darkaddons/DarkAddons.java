@@ -1065,9 +1065,9 @@ public final class DarkAddons {
      *
      * @return True if Catchup AutoClicker is enabled in config, false otherwise.
      */
-    /*public static final boolean isCatchupAutoClicker() {
+    public static final boolean isCatchupAutoClicker() {
         return Config.isCatchupAutoClicker();
-    }*/
+    }
 
     /**
      * Emulates auto clicker tick.
@@ -1077,9 +1077,9 @@ public final class DarkAddons {
      *
      * @param left If the emulation is done for the left click auto clicker or not.
      */
-    /*public static final void emulateACTick(final boolean left) {
+    public static final void emulateACTick(final boolean left) {
         AutoClicker.emulateACTick(left);
-    }*/
+    }
 
     /**
      * Returns true if Profiler Mode is enabled in config, false otherwise.

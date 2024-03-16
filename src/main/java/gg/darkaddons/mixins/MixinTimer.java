@@ -29,35 +29,19 @@ final class MixinTimer {
 
     @Inject(method = "updateTimer", at = @At(value = "FIELD", target = "Lnet/minecraft/util/Timer;elapsedTicks:I", opcode = Opcodes.GETFIELD, ordinal = 1), cancellable = true)
     private final void updateTimerCap$darkaddons(@NotNull final CallbackInfo ci) {
-        final var limit = DarkAddons.isSmoothenFrames() ? 1 : 10;
+        final var smoothenFrames = DarkAddons.isSmoothenFrames();
+        final var limit = smoothenFrames ? 1 : 10;
 
         if (this.elapsedTicks > limit) {
-            //final int skippedTicks = this.elapsedTicks - limit;
-            /*if (1 < skippedTicks && DarkAddons.isCatchupAutoClicker()) {
-                final int lcHardCap = Math.min(15, DarkAddons.getCpsLimit(true));
-                final int lcLimit = Math.min(lcHardCap, skippedTicks);
+            final int skippedTicks = Math.min(10, this.elapsedTicks - limit);
+            if (1 < skippedTicks && smoothenFrames && DarkAddons.isCatchupAutoClicker()) {
+                DarkAddons.resetShouldClick();
 
-                final int rcHardCap = Math.min(45, DarkAddons.getCpsLimit(false));
-                final int rcLimit = Math.min(rcHardCap, skippedTicks);
-
-                final boolean emulate = 1 < lcLimit || 1 < rcLimit;
-
-                if (emulate) {
-                    DarkAddons.resetShouldClick();
+                for (int i = 0; i < skippedTicks; ++i) {
+                    DarkAddons.emulateACTick(true);
+                    DarkAddons.emulateACTick(false);
                 }
-
-                if (1 < lcLimit) {
-                    for (int i = 0; i < lcLimit; ++i) {
-                        DarkAddons.emulateACTick(true);
-                    }
-                }
-
-                if (1 < rcLimit) {
-                    for (int i = 0; i < rcLimit; ++i) {
-                        DarkAddons.emulateACTick(false);
-                    }
-                }
-            }*/
+            }
 
             this.elapsedTicks = limit;
         }
