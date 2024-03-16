@@ -56,7 +56,6 @@
         "MixinDSMSkillTracker",
         "MixinCommandThread",
         "MixinStreamThread",
-        "MixinPlayerListenerInner",
         "IMixinGuiPlayerTabOverlay"
     ],
     "server": [

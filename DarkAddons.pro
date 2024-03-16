@@ -321,10 +321,12 @@
     public static java.lang.String getProperty(java.lang.String,java.lang.String);
 }
 
+# Optimize more System method calls
 -assumenoescapingparameters public class java.lang.System {
     public static void arrayCopy(java.lang.Object,int,java.lang.Object,int,int);
 }
 
+# Optimize ProcessBuilder method calls
 -assumenoexternalreturnvalues public class java.lang.ProcessBuilder {
     public java.lang.Process start();
 }

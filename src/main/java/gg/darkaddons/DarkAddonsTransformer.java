@@ -42,7 +42,8 @@ public final class DarkAddonsTransformer implements IClassTransformer {
         try {
             return transformer.get();
         } catch (final Throwable t) {
-            PublicUtils.printStackTrace(t);
+            // Do not use PublicUtils#printStackTrace since that loads some MC classes and that crashes the game since we are in transforming phase
+            t.printStackTrace();
             return defaultValue;
         }
     }

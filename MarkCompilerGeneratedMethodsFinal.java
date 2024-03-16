@@ -12,6 +12,8 @@ import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.util.CheckClassAdapter;
 
 import java.io.BufferedOutputStream;
@@ -28,6 +30,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -340,6 +343,16 @@ final class MarkCompilerGeneratedMethodsFinal {
                     mn.access &= ~Opcodes.ACC_PUBLIC;
                     if (checkRun) {
                         throw new IllegalStateException("class " + className + " should've been on the list of classes to optimize, but it was not (method info: " + definition + ')');
+                    }
+                }
+
+                if ("gg/darkaddons/Utils".equals(className) && mn.name.equals("getHeldItemStack")) {
+                    for (final Iterator<AbstractInsnNode> insnNodeIterator = mn.instructions.iterator(); insnNodeIterator.hasNext();) {
+                        final var insnNode = insnNodeIterator.next();
+
+                        if (insnNode instanceof final MethodInsnNode methodInsnNode) {
+                            methodInsnNode.owner = StringUtils.replace(methodInsnNode.owner, "net/minecraft/entity/EntityLivingBase", "net/minecraft/client/entity/EntityPlayerSP");
+                        }
                     }
                 }
 
