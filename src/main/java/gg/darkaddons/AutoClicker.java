@@ -275,7 +275,7 @@ final class AutoClicker {
         return false;
     }
 
-    static final void emulateACTick(final boolean left) {
+    /*static final void emulateACTick(final boolean left) {
         final Minecraft mc = Minecraft.getMinecraft();
         final IMixinMinecraft mm = (IMixinMinecraft) mc;
 
@@ -289,5 +289,5 @@ final class AutoClicker {
         } else if (AutoClicker.isPressedStatic(mc.gameSettings.keyBindUseItem, lc, rc) && !mc.thePlayer.isUsingItem()) {
             rc.run();
         }
-    }
+    }*/
 }

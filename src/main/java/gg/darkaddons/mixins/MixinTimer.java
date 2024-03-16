@@ -33,7 +33,7 @@ final class MixinTimer {
         final var limit = smoothenFrames ? 1 : 10;
 
         if (this.elapsedTicks > limit) {
-            final int skippedTicks = Math.min(10, this.elapsedTicks - limit);
+            /*final int skippedTicks = Math.min(10, this.elapsedTicks - limit);
             if (1 < skippedTicks && smoothenFrames && DarkAddons.isCatchupAutoClicker()) {
                 DarkAddons.resetShouldClick();
 
@@ -41,7 +41,7 @@ final class MixinTimer {
                     DarkAddons.emulateACTick(true);
                     DarkAddons.emulateACTick(false);
                 }
-            }
+            }*/
 
             this.elapsedTicks = limit;
         }

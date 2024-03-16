@@ -611,12 +611,12 @@ final class Config extends Vigilant {
     )
     private static int rightClickCpsLimit = 3;
 
-    @Property(
+    /*@Property(
         type = PropertyType.SWITCH, name = "Catchup AutoClicker",
         description = "Tries to keep the CPS up to the limit even in low TPS conditions by emulating AutoClicker ticks for the dropped ticks. Recommended to enable if you have enabled \"Smoothen Frames\" option.",
         category = "QOL", subcategory = "General"
     )
-    private static boolean catchupAutoClicker;
+    private static boolean catchupAutoClicker;*/
 
     @Property(
         type = PropertyType.SWITCH, name = "Auto Regular Ability",
@@ -1235,11 +1235,11 @@ final class Config extends Vigilant {
         return Config.rightClickCpsLimit;
     }
 
-    static final boolean isCatchupAutoClicker() {
+    /*static final boolean isCatchupAutoClicker() {
         Config.checkUninit();
 
         return Config.catchupAutoClicker;
-    }
+    }*/
 
     static final boolean isAutoRegularAbility() {
         Config.checkUninit();
