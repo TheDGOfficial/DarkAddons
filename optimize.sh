@@ -118,12 +118,14 @@ CLASSPATH_WITH_OPTIMIZED_MOD=$CLASSPATH:$OUTPUT_JAR
 
 EXIT_CODE=1
 
-set +e
+set +eE
+trap - ERR
 
 cmp -s MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
 EXIT_CODE=$?
 
-set -e
+set -eE
+trap 'CODE=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $CODE' ERR
 
 if [ "$EXIT_CODE" == "2" ]; then
  # Treat non-existent file as different.
