@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 final class AdditionalM7Features {
-    private static final int MAX_RETRY_TICKS_WAITING_FOR_DEATH_EVENT = 200;
+    private static final int MAX_RETRY_TICKS_WAITING_FOR_DEATH_EVENT = 60;
     private static final int TITLE_TICKS = 60;
 
     private static boolean firstLaserNotDone = true;
