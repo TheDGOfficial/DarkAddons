@@ -286,6 +286,13 @@ final class Config extends Vigilant {
     private static boolean delayChunkUpdates;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Hide Particles",
+        description = "Hides particles (except important ones) while in the Wither King fight, to get more FPS. Important particles are the ones that are cruicial, such as the ones that appear when a dragon is spawning, which is used by mods to display timers and notifications.",
+        category = "Performance", subcategory = "Experimental"
+    )
+    private static boolean hideParticles;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Hide Falling Blocks",
         description = "Hides falling blocks for better performance. Might make you not see some animations made via falling blocks.",
         category = "Performance", subcategory = "Tweaks"
@@ -510,7 +517,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Chroma Skyblock in Scoreboard",
-        description = "Changes Skyblock text in scoreboard to be chroma color (Requires SkyblockAddons)",
+        description = "Changes Skyblock text in scoreboard to be chroma color (Requires SkyblockAddons)" + Utils.UNIX_NEW_LINE + "NOTE: May break Cowlection, turn on work outside skyblock in cowlection settings.",
         category = "Misc", subcategory = "Chroma"
     )
     private static boolean chromaSkyblock;
@@ -981,6 +988,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.delayChunkUpdates;
+    }
+
+    static final boolean isHideParticles() {
+        Config.checkUninit();
+
+        return Config.hideParticles;
     }
 
     static final boolean isHideFallingBlocks() {

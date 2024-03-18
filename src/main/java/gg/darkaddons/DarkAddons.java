@@ -847,10 +847,15 @@ public final class DarkAddons {
      *
      * @param packet The packet.
      */
-    public static final void onClientPacketReceive(@NotNull final Packet<?> packet) {
-        M7Features.handlePacket(packet);
+    public static final boolean onClientPacketReceive(@NotNull final Packet<?> packet) {
+        if (!HideParticles.handlePacket(packet)) {
+            return false;
+        }
 
+        M7Features.handlePacket(packet);
         ChromaScoreboard.handlePacket(packet);
+
+        return true;
     }
 
     /**

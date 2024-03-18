@@ -30,10 +30,12 @@ final class MixinNetworkManager {
         throw MixinUtils.shadowFail();
     }
 
-    @Inject(method = "channelRead0", at = @At("HEAD"))
+    @Inject(method = "channelRead0", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/Packet;processPacket(Lnet/minecraft/network/INetHandler;)V"), cancellable = true)
     private final void onReceivePacket$darkaddons(@NotNull final ChannelHandlerContext context, @NotNull final Packet<?> packet, @NotNull final CallbackInfo ci) {
         if (EnumPacketDirection.CLIENTBOUND == this.getDirection() && !this.isLocalChannel()) {
-            DarkAddons.onClientPacketReceive(packet);
+            if (!DarkAddons.onClientPacketReceive(packet)) {
+                ci.cancel();
+            }
         }
     }
 }
