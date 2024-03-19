@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -31,10 +32,12 @@ final class MixinMinecraft {
         DarkAddons.handleGameLoopPost();
     }
 
+    @Unique
     private static final void start$darkaddons() {
         MixinUtils.setElapsedTicksStart(System.currentTimeMillis());
     }
 
+    @Unique
     private static final void end$darkaddons() {
         MixinUtils.setElapsedTicksEnd(System.currentTimeMillis());
     }
@@ -54,6 +57,7 @@ final class MixinMinecraft {
         MixinMinecraft.runGameLoopYieldStatic$darkaddons();
     }
 
+    @Unique
     private static final void runGameLoopYieldStatic$darkaddons() {
         if (!DarkAddons.isDisableYield()) {
             final var shouldProfile = DarkAddons.isProfilerMode() && DarkAddons.shouldProfile();
@@ -83,6 +87,7 @@ final class MixinMinecraft {
         DarkAddons.resetShouldClick();
     }
 
+    @Unique
     private static final boolean isKeyDownStatic$darkaddons(@NotNull final KeyBinding keyBinding) {
         final var mc = Minecraft.getMinecraft();
         final var settings = mc.gameSettings;
@@ -93,6 +98,7 @@ final class MixinMinecraft {
         return (settings.keyBindUseItem != keyBinding || !DarkAddons.isRightClickAutoClicker() || !DarkAddons.isHoldingTerm(mc)) && (settings.keyBindAttack != keyBinding || !DarkAddons.isLeftClickAutoClicker() || !DarkAddons.isHoldingASword(mc)) && actual;
     }
 
+    @Unique
     private static final boolean isKeyDownWithHooks$darkaddons(@NotNull final KeyBinding keyBinding) {
         return MixinMinecraft.isKeyDownStatic$darkaddons(keyBinding) && DarkAddons.isKeyDownHook(keyBinding);
     }
@@ -112,6 +118,7 @@ final class MixinMinecraft {
         throw MixinUtils.shadowFail();
     }
 
+    @Unique
     private final boolean isPressed0$darkaddons(@NotNull final KeyBinding keyBinding) {
         return DarkAddons.isPressedStatic(keyBinding, this::clickMouse, this::rightClickMouse);
     }

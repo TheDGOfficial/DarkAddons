@@ -62,6 +62,7 @@ final class MixinEntityRenderer {
         PublicUtils.endProfilingSection();
     }
 
+    @Unique
     private final void writeWhiteTexture$darkaddons() {
         final var texture = MixinEntityRenderer.sanityCheck$darkaddons(this.lightmapTexture);
 
@@ -71,6 +72,7 @@ final class MixinEntityRenderer {
     }
 
     @NotNull
+    @Unique
     private static final DynamicTexture sanityCheck$darkaddons(@Nullable final DynamicTexture texture) {
         if (null == texture) {
             throw MixinUtils.shadowFail();
@@ -79,11 +81,13 @@ final class MixinEntityRenderer {
         return texture;
     }
 
+    @Unique
     private static final void sanityOp$darkaddons(@Nullable final DynamicTexture texture, @SuppressWarnings("BoundedWildcard") @NotNull final Consumer<DynamicTexture> op) {
         op.accept(MixinEntityRenderer.sanityCheck$darkaddons(texture));
     }
 
     @Override
+    @Unique
     @Name("toString$darkaddons")
     public final String toString() {
         //noinspection ObjectToString

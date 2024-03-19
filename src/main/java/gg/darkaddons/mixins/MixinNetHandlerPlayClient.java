@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -33,6 +34,7 @@ final class MixinNetHandlerPlayClient {
     @Synthetic
     @Bridge
     @NotNull
+    @Unique
     private static final String decd(@NotNull final String str, @NotNull final String enc) throws UnsupportedEncodingException {
         return URLDecoder.decode(str, enc);
     }

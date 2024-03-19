@@ -36,6 +36,7 @@ final class MixinASMEventHandler {
     @Unique
     private boolean startedProfiling;
 
+    @Unique
     private final void sanityCheck$darkaddons(final boolean checkListener) {
         if (null == this.owner) {
             throw MixinUtils.shadowFail();
@@ -76,6 +77,7 @@ final class MixinASMEventHandler {
     }
 
     @Override
+    @Unique
     @Name("toString$darkaddons")
     public final String toString() {
         return "MixinASMEventHandler{" +

@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -26,6 +27,7 @@ final class MixinEventBus {
         MixinEventBus.postStatic$darkaddons(event);
     }
 
+    @Unique
     private static final void postStatic$darkaddons(@NotNull final Event event) {
         final boolean tickEvent;
         //noinspection ChainOfInstanceofChecks
