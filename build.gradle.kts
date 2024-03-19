@@ -115,7 +115,7 @@ dependencies {
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
 
     compileOnly("gg.essential:loader-launchwrapper:1.2.2") // TODO make it shadowMe
-    compileOnly("gg.essential:essential-1.8.9-forge:16460+gcb90448da5") { // TODO make it back implementation
+    compileOnly("gg.essential:essential-1.8.9-forge:16535+g5006ee2174") { // TODO make it back implementation
         exclude(module = "asm")
         exclude(module = "asm-commons")
         exclude(module = "asm-tree")
@@ -143,7 +143,7 @@ dependencies {
     }
     proguardClasspath("com.guardsquare:proguard-core:9.1.1")
 
-    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1-Beta")
 
     annotationProcessor("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
     compileOnly("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
