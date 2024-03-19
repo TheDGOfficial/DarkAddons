@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 @IFMLLoadingPlugin.Name("DarkAddons")
 @IFMLLoadingPlugin.DependsOn("Skytils On Top")
 @IFMLLoadingPlugin.SortingIndex(68)
-@IFMLLoadingPlugin.TransformerExclusions({"gg.darkaddons.coremod.DarkAddonsLoadingPlugin", "gg.darkaddons.DarkAddonsTransformer", "gg.skytils.skytilsmod.utils.ModChecker", "org.objenesis", "kotlin"})
+@IFMLLoadingPlugin.TransformerExclusions({"gg.darkaddons.coremod.DarkAddonsLoadingPlugin", "gg.darkaddons.DarkAddonsTransformer", "gg.darkaddons.transformers", "gg.darkaddons.PublicUtils", "gg.darkaddons.Utils", "gg.skytils.skytilsmod.utils.ModChecker", "org.objenesis", "dev.falsehonesty.asmhelper", "kotlin"})
 public final class DarkAddonsLoadingPlugin implements IFMLLoadingPlugin {
     @NotNull
     private static final Supplier<String[]> transformerClasses = () -> new String[]{DarkAddonsTransformer.class.getName()};

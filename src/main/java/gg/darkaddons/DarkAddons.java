@@ -1134,7 +1134,7 @@ public final class DarkAddons {
         DarkAddons.usingSBA = Loader.isModLoaded("skyblockaddons");
     }
 
-    private static final void preloadMixinClasses() {
+    /*private static final void preloadMixinClasses() {
         DarkAddons.blackholeConsume(
             Chunk.class,
             EntityPlayerSP.class,
@@ -1165,7 +1165,7 @@ public final class DarkAddons {
             "gg.essential.util.Multithreading",
             "gg.skytils.skytilsmod.Skytils"
         );
-    }
+    }*/
 
     @SuppressWarnings("EmptyMethod")
     private static final void blackholeConsume(@NotNull final Class<?>... ignoredClasses) {
@@ -1251,9 +1251,9 @@ public final class DarkAddons {
             ThreadPriorityTweaker.init();
 
             DarkAddons.checkForSBA();
-            if (Config.isDebugMode() && !Config.isUnsafeMode()) {
+            /*if (Config.isDebugMode() && !Config.isUnsafeMode()) {
                 DarkAddons.preloadMixinClasses();
-            }
+            }*/
 
             DarkAddons.reducePatcherBackgroundThreads();
             //DarkAddons.checkElementaVersion();
