@@ -60,8 +60,8 @@ public final class MethodMapping {
                 throw new UncheckedIOException(e);
             }
 
-            // Initial size hint that matches 1.8.9 mapping size (with new mappings appended from 1.9.4 mappings, because some classes like JsonToNBT lack mappings in 1.8.9)
-            final var mappingSize = 9_119;
+            // Initial size hint that matches 1.8.9 mapping size (with new mappings appended from 1.9.4 mappings, because some classes like JsonToNBT lack mappings in 1.8.9 + plus some yarn mappings for remaining missing mappings)
+            final var mappingSize = 9_123;
 
             final var map = new HashMap<String, MethodMapping>((int) Math.ceil(mappingSize / 0.75D)); // Inlined short version of Utils#calculateHashMapCapacity
 

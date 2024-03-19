@@ -9118,3 +9118,7 @@ func_154327_a,buttonsAdd,0,
 func_175795_b,isInsideStructure,2,
 func_187238_b,removeProperty,1,
 func_188364_a,renderEnchantedGlint,0,
+func_176304_i,isConnectedInner,0,
+func_176306_h,canConnectInner,0,
+func_176307_f,getOuterConnectDirection,0
+func_176305_g,getInnerConnectDirection,0
