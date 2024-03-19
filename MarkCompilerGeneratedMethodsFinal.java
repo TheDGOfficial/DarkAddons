@@ -216,6 +216,14 @@ final class MarkCompilerGeneratedMethodsFinal {
                             }
                         }
                     }
+                    if ("gg.darkaddons.mixins.MixinItemModelGenerator".equals(clazz.getName())) {
+                        for (final var method : clazz.getDeclaredMethods()) {
+                            if (method.getName().startsWith("func_178397_a$")) {
+                                shouldProc = true;
+                                break;
+                            }
+                        }
+                    }
                     for (final var method : clazz.getDeclaredMethods()) {
                         final var mod = method.getModifiers();
                         final var name = method.getName();
@@ -354,6 +362,11 @@ final class MarkCompilerGeneratedMethodsFinal {
                             methodInsnNode.owner = StringUtils.replace(methodInsnNode.owner, "net/minecraft/entity/EntityLivingBase", "net/minecraft/client/entity/EntityPlayerSP");
                         }
                     }
+                }
+
+                if ("gg/darkaddons/mixins/MixinItemModelGenerator".equals(className) && mn.name.startsWith("func_178397_a$")) {
+                    mn.name = StringUtils.substringBefore(mn.name, "$");
+                    mn.desc = StringUtils.replace(mn.desc, "ArrayList", "List");
                 }
 
                 final var annotationNodeList = mn.visibleAnnotations;
