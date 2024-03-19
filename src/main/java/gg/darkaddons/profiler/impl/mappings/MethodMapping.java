@@ -45,7 +45,7 @@ public final class MethodMapping {
          */
         @NotNull
         private static final HashMap<String, MethodMapping> loadMappings() {
-            final var mappingsFile = new File(new File(new File("config"), "darkaddons"), "methods.csv");
+            final var mappingsFile = new File(new File(new File("config"), "darkaddons"), "methods.v2.csv");
 
             try {
                 //if (mappingsFile.exists()) {
@@ -60,8 +60,8 @@ public final class MethodMapping {
                 throw new UncheckedIOException(e);
             }
 
-            // Initial size hint that matches 1.8.9 mapping size
-            final var mappingSize = 6_730;
+            // Initial size hint that matches 1.8.9 mapping size (with new mappings appended from 1.9.4 mappings, because some classes like JsonToNBT lack mappings in 1.8.9)
+            final var mappingSize = 9_119;
 
             final var map = new HashMap<String, MethodMapping>((int) Math.ceil(mappingSize / 0.75D)); // Inlined short version of Utils#calculateHashMapCapacity
 
@@ -109,7 +109,7 @@ public final class MethodMapping {
                     throw new UnsupportedOperationException("unsupported side value " + parsedSide);
                 }
 
-                map.compute(columnObfName, (@NotNull final String key, @NotNull final MethodMapping value) -> {
+                map.compute(columnObfName, (@NotNull final String key, @Nullable final MethodMapping value) -> {
                     if (null == value) {
                         return new MethodMapping(Objects.requireNonNull(columnObfName), Objects.requireNonNull(columnDeobfName), convertedSide, Objects.requireNonNull(columnDesc));
                     }
