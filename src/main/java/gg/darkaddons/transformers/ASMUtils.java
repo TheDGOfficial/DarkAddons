@@ -23,8 +23,13 @@ public final class ASMUtils {
     }*/
 
     @NotNull
+    private static final String getSRGMethodName(@NotNull final ClassNode owner, @NotNull final MethodNode method) {
+        return FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(owner.name, method.name, method.desc);
+    }
+
+    @NotNull
     static final String getUnobfuscatedMethodName(@NotNull final ClassNode owner, @NotNull final MethodNode method) {
-        final var mapping = MethodMapping.MethodMappingsHolder.lookup(FMLDeobfuscatingRemapper.INSTANCE.mapMethodName(owner.name, method.name, method.desc));
+        final var mapping = MethodMapping.MethodMappingsHolder.lookup(ASMUtils.getSRGMethodName(owner, method));
 
         return null == mapping ? method.name : mapping.getDeobfName();
     }
