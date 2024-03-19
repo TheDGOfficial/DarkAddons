@@ -65,7 +65,7 @@ repositories {
 }
 
 vineflower {
-    toolVersion.set("1.9.3")
+    toolVersion = "1.9.3"
 }
 
 loom {
@@ -92,12 +92,12 @@ loom {
         remove(getByName("server"))
     }
     forge {
-        pack200Provider.set(Pack200Adapter())
+        pack200Provider = Pack200Adapter()
         mixinConfig("mixins.darkaddons.json")
         accessTransformer("src/main/resources/META-INF/darkaddons_at.cfg")
     }
     mixin {
-        defaultRefmapName.set("mixins.darkaddons.refmap.json")
+        defaultRefmapName = "mixins.darkaddons.refmap.json"
     }
 }
 
@@ -198,8 +198,8 @@ tasks {
         enabled = false
     }
     named<RemapJarTask>("remapJar") {
-        archiveBaseName.set("DarkAddons")
-        inputFile.set(shadowJar.get().archiveFile)
+        archiveBaseName = "DarkAddons"
+        inputFile = shadowJar.get().archiveFile
         /*doLast {
             MessageDigest.getInstance("SHA-256").digest(archiveFile.get().asFile.readBytes())
                 .let {
@@ -208,8 +208,8 @@ tasks {
         }*/
     }
     named<ShadowJar>("shadowJar") {
-        archiveBaseName.set("DarkAddons")
-        archiveClassifier.set("dev")
+        archiveBaseName = "DarkAddons"
+        archiveClassifier = "dev"
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         configurations = listOf(shadowMe, shadowMeMod)
 
@@ -271,8 +271,8 @@ tasks {
 
         options.setIncremental(true)
 
-        //options.deprecation.set(true)
-        options.release.set(8)
+        //options.deprecation = true
+        options.release = 8
         sourceCompatibility = "21"
 
         options.compilerArgs.add("-g")
@@ -283,8 +283,8 @@ tasks {
     }
     /*withType<KotlinCompilationTask<KotlinJvmCompilerOptions>> {
         compilerOptions {
-            javaParameters.set(true)
-            jvmTarget.set(JvmTarget.JVM_1_8)
+            javaParameters = true
+            jvmTarget = JvmTarget.JVM_1_8
 
             val args = mutableListOf<String>()
             args.addAll(freeCompilerArgs.get())
@@ -314,9 +314,9 @@ tasks {
                 )
             )
 
-            freeCompilerArgs.set(args)
+            freeCompilerArgs = args
 
-            languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
+            languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
         }
     }
     withType<CompileUsingKotlinDaemon> {
@@ -334,7 +334,7 @@ tasks {
             )
         )
 
-        kotlinDaemonJvmArguments.set(args)
+        kotlinDaemonJvmArguments = args
     }*/
     withType<AbstractArchiveTask>().configureEach {
         //isPreserveFileTimestamps = false
@@ -394,7 +394,7 @@ private val proguardJar: TaskProvider<ProguardTask> by tasks.registering(proguar
         classpath.from(tasks.remapJar)
     }
     addOutput {
-        archiveFile.set(base.libsDirectory.file("${project.name}-${project.version}-proguarded.jar"))
+        archiveFile = base.libsDirectory.file("${project.name}-${project.version}-proguarded.jar")
     }
     jdkModules.add("java.base")
     jdkModules.add("java.desktop")
@@ -405,7 +405,7 @@ private val proguardJar: TaskProvider<ProguardTask> by tasks.registering(proguar
         classpath.from("libs/mcSrg.jar")
         classpath.from(project.configurations.compileClasspath)
     }
-    //mappingFile.set(base.libsDirectory.file("${project.name}-${project.version}-mapping.txt"))
+    //mappingFile = base.libsDirectory.file("${project.name}-${project.version}-mapping.txt")
 
     rulesFiles.from("DarkAddons.pro")
 
