@@ -700,6 +700,7 @@
     <inspection_tool class="JavaLangImport" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JavaStylePropertiesInvocation" enabled="true" level="WEAK WARNING" enabled_by_default="true" editorAttributes="INFO_ATTRIBUTES" />
     <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ADDITIONAL_TAGS" value="reason" />
       <option name="IGNORE_THROWS_DUPLICATE" value="false" />
       <option name="IGNORE_PERIOD_PROBLEM" value="false" />
     </inspection_tool>
