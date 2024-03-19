@@ -130,7 +130,7 @@ final class AdditionalM7Features {
             if (AdditionalM7Features.MAX_RETRY_TICKS_WAITING_FOR_DEATH_EVENT > ticks) {
                 DarkAddons.runOnceInNextTick("process_statue_message_recheck", () -> AdditionalM7Features.processStatueMessage(destroy, ticks + 1));
                 if (Config.isDebugMode() && 1 == ticks) {
-                    DarkAddons.debug(() -> "Scheduled re-check of determining last killed dragon to show statue " + (destroy ? "destroyed" : "missed") + " notification to the next tick. Will keep rescheduling till we find it or give up after 300 ticks.");
+                    DarkAddons.debug(() -> "Scheduled re-check of determining last killed dragon to show statue " + (destroy ? "destroyed" : "missed") + " notification to the next tick. Will keep rescheduling till we find it or give up after " + AdditionalM7Features.MAX_RETRY_TICKS_WAITING_FOR_DEATH_EVENT + " ticks.");
                 }
             } else if (Config.isDebugMode()) {
                 DarkAddons.debug(() -> "Gave up trying to find last killed dragon to show statue " + (destroy ? "destroyed" : "missed") + " notification");
