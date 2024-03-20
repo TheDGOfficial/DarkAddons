@@ -396,6 +396,13 @@ final class Config extends Vigilant {
     private static int hideWitherSkeletonsOnMaxor;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Item Model Transparency Fix",
+        description = "Fixes transparency issues in item models by completely overwriting the necessary vanilla methods. This option should work with most mods but if you got some exotic mods it might cause a conflict. Often also speeds up the game opening because of our code being more optimized, even if that wasn't the main intent.",
+        category = "Performance", subcategory = "Patches"
+    )
+    private static boolean itemModelTransparencyFix;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Patch Memory Leaks",
         description = "Patches Memory Leaks, usually in Crimson Isle. Also removes a unused 10MB allocation created by vanilla Minecraft and stored forever, freeing memory. Every MB counts, W (Note: This of course doesn't fix all memory leaks.)",
         category = "Performance", subcategory = "Patches", triggerActionOnInitialization = false
@@ -752,6 +759,10 @@ final class Config extends Vigilant {
         TinyConfig.setBoolean("nullStreamOptimizer", state);
     }
 
+    private static final void updateItemModelTransparencyFix(final boolean state) {
+        TinyConfig.setBoolean("itemModelTransparencyFix", state);
+    }
+
     private final void addDependencies() {
         this.addDependency("sharperDragonBoundingBox", Config.SHOW_STATUE_BOX);
         this.addDependency("dragonBoundingBoxWidth", Config.SHOW_STATUE_BOX);
@@ -813,6 +824,8 @@ final class Config extends Vigilant {
         this.registerListener("burgersDone", Config::updateBurgersDone);
         this.registerListener("blockPosOptimizer", Config::updateBlockPosOptimizer);
         this.registerListener("nullStreamOptimizer", Config::updateNullStreamOptimizer);
+
+        this.registerListener("itemModelTransparencyFix", Config::updateItemModelTransparencyFix);
     }
 
     private final void addDependencyAndListeners() {

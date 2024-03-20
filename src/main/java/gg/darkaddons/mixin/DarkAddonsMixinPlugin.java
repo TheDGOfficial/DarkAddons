@@ -1,5 +1,7 @@
 package gg.darkaddons.mixin;
 
+import gg.darkaddons.DarkAddons;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.tree.ClassNode;
@@ -36,6 +38,9 @@ public final class DarkAddonsMixinPlugin implements IMixinConfigPlugin {
     @SuppressWarnings("NullableProblems")
     @Override
     public final boolean shouldApplyMixin(@NotNull final String targetClassName, @NotNull final String mixinClassName) {
+        if (mixinClassName.endsWith("MixinItemModelGenerator")) {
+            return DarkAddons.getTinyConfigBoolean("itemModelTransparencyFix", false);
+        }
         return true;
     }
 
