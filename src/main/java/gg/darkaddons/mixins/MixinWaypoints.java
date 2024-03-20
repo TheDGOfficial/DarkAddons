@@ -1,7 +1,6 @@
 package gg.darkaddons.mixins;
 
 import gg.darkaddons.PublicUtils;
-import gg.skytils.skytilsmod.features.impl.handlers.Waypoints;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
@@ -11,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Pseudo
-@Mixin(value = Waypoints.class, remap = false)
+@Mixin(targets = "gg.skytils.skytilsmod.features.impl.handlers.Waypoints", remap = false)
 final class MixinWaypoints {
     private MixinWaypoints() {
         super();
