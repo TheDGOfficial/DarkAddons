@@ -15,7 +15,7 @@ final class MixinDSMSkillTracker {
         super();
     }
 
-    @Inject(method = "onChat", remap = false, at = @At("HEAD"), require = 0, cancellable = true)
+    @Inject(method = "onChat", remap = false, at = @At("HEAD"), cancellable = true)
     private final void onChat$darkaddons(@NotNull final CallbackInfo ci) {
         ci.cancel();
     }

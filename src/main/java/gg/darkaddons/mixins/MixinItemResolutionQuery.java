@@ -13,7 +13,7 @@ final class MixinItemResolutionQuery {
         super();
     }
 
-    @Redirect(method = "resolveInternalName", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/String;intern()Ljava/lang/String;", remap = false), require = 0)
+    @Redirect(method = "resolveInternalName", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/String;intern()Ljava/lang/String;", remap = false))
     @NotNull
     private final String intern$darkaddons(@NotNull final String originalString) {
         return originalString;

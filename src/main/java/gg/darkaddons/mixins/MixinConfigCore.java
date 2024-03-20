@@ -20,7 +20,7 @@ final class MixinConfigCore {
         super();
     }
 
-    @Redirect(method = "<clinit>", remap = false, at = @At(value = "INVOKE", target = "Ljava/util/concurrent/ScheduledExecutorService;scheduleAtFixedRate(Ljava/lang/Runnable;JJLjava/util/concurrent/TimeUnit;)Ljava/util/concurrent/ScheduledFuture;", remap = false), require = 0)
+    @Redirect(method = "<clinit>", remap = false, at = @At(value = "INVOKE", target = "Ljava/util/concurrent/ScheduledExecutorService;scheduleAtFixedRate(Ljava/lang/Runnable;JJLjava/util/concurrent/TimeUnit;)Ljava/util/concurrent/ScheduledFuture;", remap = false))
     @Nullable
     private static final ScheduledFuture<?> scheduleAtFixedRate$darkaddons(@NotNull final ScheduledExecutorService executor, @NotNull final Runnable task, final long initialDelay, final long runInterval, @NotNull final TimeUnit timeUnit) {
         // Save before cleanly exiting the game via "Quit Game" in the main menu in case periodic save didn't kick in after changing settings in time (or disabled)

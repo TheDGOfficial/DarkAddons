@@ -12,7 +12,7 @@ final class MixinApiUtil {
         super();
     }
 
-    @ModifyConstant(method = "<clinit>", constant = @Constant(intValue = 3), require = 0)
+    @ModifyConstant(method = "<clinit>", constant = @Constant(intValue = 3))
     private static final int getExecutorSize$darkaddons(final int originalExecutorSize) {
         return Math.min(3, Runtime.getRuntime().availableProcessors());
     }

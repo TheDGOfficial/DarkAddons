@@ -15,7 +15,7 @@ final class MixinNEUEventListener {
         super();
     }
 
-    @Redirect(method = "onWorldLoad", remap = false, at = @At(value = "INVOKE", target = "Lio/github/moulberry/notenoughupdates/NotEnoughUpdates;saveConfig()V", remap = false), require = 0)
+    @Redirect(method = "onWorldLoad", remap = false, at = @At(value = "INVOKE", target = "Lio/github/moulberry/notenoughupdates/NotEnoughUpdates;saveConfig()V", remap = false))
     private final void saveConfig$darkaddons(@NotNull @Coerce final Object neuInstance) {
         // Do nothing
     }
