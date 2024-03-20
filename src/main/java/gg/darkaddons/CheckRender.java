@@ -40,8 +40,6 @@ final class CheckRender {
             HideWitherSkeletons.checkRender((EntitySkeleton) entity, cir);
         } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntityWitherSkull) {
             HideWitherSkeletons.checkRenderSkull((EntityWitherSkull) entity, cir);
-        } else if (Config.isHideFallingBlocks() && entity instanceof EntityFallingBlock) {
-            HideFallingBlocks.checkRender(entity, cir);
         }
     }
 }

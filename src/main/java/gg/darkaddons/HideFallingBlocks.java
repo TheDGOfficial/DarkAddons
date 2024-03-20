@@ -1,8 +1,9 @@
 package gg.darkaddons;
 
-import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S0EPacketSpawnObject;
 
 final class HideFallingBlocks {
     /**
@@ -17,8 +18,11 @@ final class HideFallingBlocks {
         throw Utils.staticClassException();
     }
 
-    static final void checkRender(@NotNull final Entity entity, @SuppressWarnings("BoundedWildcard") @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        entity.setDead();
-        cir.setReturnValue(false);
+    static final boolean handlePacket(@NotNull final Packet<?> packet) {
+        if (Config.isHideFallingBlocks() && packet instanceof final S0EPacketSpawnObject packetSpawnObject && 70 == packetSpawnObject.getType()) {
+            return false;
+        }
+
+        return true;
     }
 }

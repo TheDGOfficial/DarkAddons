@@ -848,7 +848,7 @@ public final class DarkAddons {
      * @param packet The packet.
      */
     public static final boolean onClientPacketReceive(@NotNull final Packet<?> packet) {
-        if (!HideParticles.handlePacket(packet)) {
+        if (!HideFallingBlocks.handlePacket(packet) || !HideParticles.handlePacket(packet)) {
             return false;
         }
 
