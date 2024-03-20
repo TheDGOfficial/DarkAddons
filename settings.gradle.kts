@@ -6,8 +6,12 @@ pluginManagement {
         maven("https://maven.fabricmc.net")
         maven("https://maven.minecraftforge.net/")
         maven("https://repo.sk1er.club/repository/maven-releases/")
+        maven("https://jitpack.io") {
+            mavenContent {
+                includeGroupAndSubgroups("com.github")
+            }
+        }
         //maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
-        maven("https://jitpack.io")
         mavenCentral()
         mavenLocal()
     }
