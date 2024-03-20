@@ -684,7 +684,8 @@ public final class DarkAddons {
             new ClassAverage50Display(),
             new SlayerRNGDisplay(),
             new RejoinCooldownDisplay(),
-            new FPSLimitDisplay()
+            new FPSLimitDisplay(),
+            new RemoveBlankArmorStands()
         );
 
         GuiManager.init();
