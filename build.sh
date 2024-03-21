@@ -157,7 +157,9 @@ if [ "${1:-default}" != "--skip-build" ]; then
 
   if [ "$EXIT_CODE" == "0" ]; then
     echo Generating optimized JAR
+    SECONDS=0
     ./optimize.sh
+    echo Optimizing took "$SECONDS"s.
   fi
 fi
 
