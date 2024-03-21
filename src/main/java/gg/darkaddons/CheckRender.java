@@ -1,11 +1,7 @@
 package gg.darkaddons;
 
-//import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-//import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.item.EntityFallingBlock;
-//import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.projectile.EntityWitherSkull;
 import org.jetbrains.annotations.NotNull;
