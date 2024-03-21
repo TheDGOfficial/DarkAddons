@@ -76,7 +76,11 @@ public final class ASMUtils {
 
         final File file = new File(new File(new File("config", "darkaddons"), "classdumps"), StringUtils.replaceChars(classNode.name, '.', '/') + suffix + ".class");
 
-        file.getParentFile().mkdirs();
+        final var parentFile = file.getParentFile();
+
+        if (null != parentFile) {
+            parentFile.mkdirs();
+        }
 
         try {
             if (file.exists()) {

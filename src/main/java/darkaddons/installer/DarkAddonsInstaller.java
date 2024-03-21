@@ -520,8 +520,9 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 }
             }
             if (inSubFolder) { // We are in the 1.8.9 folder, delete in the parent folder as well.
-                if (modsFolder.getParentFile().isDirectory()) {
-                    final var failed = DarkAddonsInstaller.findDarkAddonsAndDelete(modsFolder.getParentFile().listFiles());
+                final var parentFile = modsFolder.getParentFile();
+                if (null != parentFile && parentFile.isDirectory()) {
+                    final var failed = DarkAddonsInstaller.findDarkAddonsAndDelete(parentFile.listFiles());
                     if (failed) {
                         deletingFailure = true;
                     }
