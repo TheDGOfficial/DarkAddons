@@ -193,37 +193,6 @@ final class MarkCompilerGeneratedMethodsFinal {
                     final var classMod = clazz.getModifiers();
                     final var synthetic = clazz.isSynthetic();
                     var shouldProc = false;
-                    if ((synthetic || clazz.getName().contains("Kt")) && (synthetic && !verbose || Modifier.isPublic(classMod))) {
-                        if (verbose) {
-                            MarkCompilerGeneratedMethodsFinal.info("verbose: Optimizing class: " + Modifier.toString(classMod) + ' ' + clazz.getName());
-                        }
-                        shouldProc = true;
-                    }
-                    if (clazz.getName().contains("Kt")) {
-                        for (final var field : clazz.getFields()) {
-                            if (Modifier.isPublic(field.getModifiers())) {
-                                //System.out.println(clazz.getName() + ": " + Modifier.toString(field.getModifiers()) + " " + field.getName());
-                                shouldProc = true;
-                                break;
-                            }
-                        }
-                    }
-                    if ("darkaddons.installer.DarkAddonsInstaller$OperatingSystem".equals(clazz.getName())) {
-                        for (final var method : clazz.getMethods()) {
-                            if (method.getName().startsWith("values$") && Modifier.isPublic(method.getModifiers())) {
-                                shouldProc = true;
-                                break;
-                            }
-                        }
-                    }
-                    if ("gg.darkaddons.mixins.MixinItemModelGenerator".equals(clazz.getName())) {
-                        for (final var method : clazz.getDeclaredMethods()) {
-                            if (method.getName().startsWith("func_178397_a$")) {
-                                shouldProc = true;
-                                break;
-                            }
-                        }
-                    }
                     for (final var method : clazz.getDeclaredMethods()) {
                         final var mod = method.getModifiers();
                         final var name = method.getName();
@@ -252,6 +221,31 @@ final class MarkCompilerGeneratedMethodsFinal {
                             }
                             shouldProc = true;
                             break;
+                        }
+
+                        if ("darkaddons.installer.DarkAddonsInstaller$OperatingSystem".equals(clazz.getName()) && method.getName().startsWith("values$") && Modifier.isPublic(method.getModifiers())) {
+                            shouldProc = true;
+                            break;
+                        }
+
+                        if ("gg.darkaddons.mixins.MixinItemModelGenerator".equals(clazz.getName()) && method.getName().startsWith("func_178397_a$")) {
+                            shouldProc = true;
+                            break;
+                        }
+                    }
+                    if ((synthetic || clazz.getName().contains("Kt")) && (synthetic && !verbose || Modifier.isPublic(classMod))) {
+                        if (verbose) {
+                            MarkCompilerGeneratedMethodsFinal.info("verbose: Optimizing class: " + Modifier.toString(classMod) + ' ' + clazz.getName());
+                        }
+                        shouldProc = true;
+                    }
+                    if (clazz.getName().contains("Kt")) {
+                        for (final var field : clazz.getFields()) {
+                            if (Modifier.isPublic(field.getModifiers())) {
+                                //System.out.println(clazz.getName() + ": " + Modifier.toString(field.getModifiers()) + " " + field.getName());
+                                shouldProc = true;
+                                break;
+                            }
                         }
                     }
                     if (shouldProc) {
