@@ -612,10 +612,6 @@ public final class DarkAddons {
         DarkAddons.config.init();
     }
 
-    public static final boolean getTinyConfigBoolean(@NotNull final String key, final boolean defaultValue) {
-        return TinyConfig.getBoolean(key, defaultValue);
-    }
-
     @SuppressWarnings("ArrayCreationWithoutNewKeyword")
     @NotNull
     private static final String[] WELCOME_MESSAGE = {
