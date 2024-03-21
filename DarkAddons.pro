@@ -11,9 +11,8 @@
 -keepparameternames
 -keepattributes **
 
-# Don't allow obfuscation or shrinking.
+# Don't allow obfuscation.
 -dontobfuscate
--dontshrink
 
 # Process non public library classes, to i.e inline more constants.
 -dontskipnonpubliclibraryclasses
