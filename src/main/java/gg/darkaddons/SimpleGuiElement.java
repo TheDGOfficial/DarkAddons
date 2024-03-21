@@ -97,33 +97,31 @@ abstract class SimpleGuiElement extends GuiElement {
 
     @Override
     final void render(final boolean demo) {
-        if (demo || this.isEnabled() && !DarkAddons.isInLocationEditingGui()) {
-            if (demo || this.renderPreconditions.getAsBoolean()) {
-                final var leftAlign = this.shouldLeftAlign();
-                final var alignment = leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT;
-                final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
+        if (demo || this.isEnabled() && !DarkAddons.isInLocationEditingGui() && this.renderPreconditions.getAsBoolean()) {
+            final var leftAlign = this.shouldLeftAlign();
+            final var alignment = leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT;
+            final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
-                final var shadow = switch (this.shadowSelection.getAsInt()) {
-                    case 1 -> SmartFontRenderer.TextShadow.NORMAL;
-                    case 2 -> SmartFontRenderer.TextShadow.OUTLINE;
-                    default -> SmartFontRenderer.TextShadow.NONE;
-                };
+            final var shadow = switch (this.shadowSelection.getAsInt()) {
+                case 1 -> SmartFontRenderer.TextShadow.NORMAL;
+                case 2 -> SmartFontRenderer.TextShadow.OUTLINE;
+                default -> SmartFontRenderer.TextShadow.NONE;
+            };
 
-                final var fontHeight = GuiElement.getFontHeight();
-                final var color = CommonColors.Companion.getWHITE();
+            final var fontHeight = GuiElement.getFontHeight();
+            final var color = CommonColors.Companion.getWHITE();
 
-                final var length = this.linesToRenderSize;
+            final var length = this.linesToRenderSize;
 
-                for (var i = 0; i < length; ++i) {
-                    GuiElement.drawString(
+            for (var i = 0; i < length; ++i) {
+                GuiElement.drawString(
                         this.linesToRender.get(i),
                         xPos,
                         i * fontHeight,
                         color,
                         alignment,
                         shadow
-                    );
-                }
+                );
             }
         }
     }

@@ -1166,7 +1166,7 @@ public final class DarkAddons {
             "gg.essential.util.Multithreading",
             "gg.skytils.skytilsmod.Skytils"
         );
-    }*/
+    }
 
     @SuppressWarnings("EmptyMethod")
     private static final void blackholeConsume(@NotNull final Class<?>... ignoredClasses) {
@@ -1183,7 +1183,7 @@ public final class DarkAddons {
                 }
             }
         }
-    }
+    }*/
 
     private static final void reducePatcherBackgroundThreads() {
         if (DarkAddons.isReduceBackgroundThreads()) {

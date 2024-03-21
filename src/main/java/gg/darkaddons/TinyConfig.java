@@ -71,6 +71,7 @@ final class TinyConfig {
         }
     }
 
+    @Nullable
     static final Boolean getBoolean(@NotNull final String key) {
         final var value = TinyConfig.tinyConfigSettings.getProperty(key);
 

@@ -19,10 +19,6 @@ final class HideFallingBlocks {
     }
 
     static final boolean handlePacket(@NotNull final Packet<?> packet) {
-        if (Config.isHideFallingBlocks() && packet instanceof final S0EPacketSpawnObject packetSpawnObject && 70 == packetSpawnObject.getType()) {
-            return false;
-        }
-
-        return true;
+        return !Config.isHideFallingBlocks() || !(packet instanceof final S0EPacketSpawnObject packetSpawnObject) || 70 != packetSpawnObject.getType();
     }
 }

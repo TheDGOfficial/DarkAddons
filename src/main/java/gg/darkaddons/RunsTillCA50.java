@@ -306,6 +306,7 @@ final class RunsTillCA50 {
         return RunsTillCA50.calculateDirect(RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.TANK), 0.0D), catacombs.getExperience(), m7, currentCompletions, formattedRankAndName, derpy, mode);
     }
 
+    @NotNull
     private static final Map<String, Double> extractCompletionsCatching(final DungeonModeData dungeon) {
         try {
             return dungeon.getTier_completions();

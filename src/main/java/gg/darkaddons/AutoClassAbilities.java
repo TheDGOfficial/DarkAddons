@@ -237,6 +237,7 @@ final class AutoClassAbilities {
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE;
                     }
                     case EMPTY -> {
+                        // the dungeon probably did not start yet
                     }
                 }
                 break;
