@@ -56,6 +56,8 @@ ensure_m2_artifact_exists() {
 CLASSPATH=""
 HASH=""
 
+REPO=$HOME/.m2/repository
+
 add_m2_artifact_to_classpath() {
  GROUP_WITH_DOTS=$1
 
@@ -71,7 +73,6 @@ add_m2_artifact_to_classpath() {
  HASH=$HASH$VERSION
 }
 
-REPO=$HOME/.m2/repository
 GRADLE_PROJECT_REPO=.gradle
 
 add_m2_artifact_to_classpath com.google.guava guava "$GUAVA_VERSION"
