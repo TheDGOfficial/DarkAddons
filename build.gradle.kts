@@ -370,6 +370,10 @@ tasks {
         }
     }
     configurations.testImplementation.get().extendsFrom(configurations.compileOnly.get())
+    withType<Test>().configureEach {
+        reports.html.required = false
+        reports.junitXml.required = false
+    }
 }
 
 signing {
