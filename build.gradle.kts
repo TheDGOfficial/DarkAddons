@@ -277,7 +277,7 @@ tasks {
 
         //options.deprecation = true
         options.release = 8
-        sourceCompatibility = "21"
+        sourceCompatibility = "22"
 
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
@@ -398,6 +398,9 @@ publishing {
 }
 
 private val proguardJar: TaskProvider<ProguardTask> by tasks.registering(proguard.taskClass) {
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(21) // TODO change when proguard 9.1.2 with Java 22 support gets released
+    }
     addInput {
         classpath.from(tasks.remapJar)
     }

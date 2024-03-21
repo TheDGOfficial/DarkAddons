@@ -94,7 +94,7 @@ if [ "${1:-default}" != "--skip-build" ]; then
     cd hypixel-api || { echo "cd failed"; exit 1; }
     git apply ../../hypixel-api.patch &> /dev/null
     cd .. || { echo "cd failed"; exit 1; } 
-    ./gradlew -Porg.gradle.java.installations.auto-download=false build remapJar publishToMavenLocal --no-daemon
+    ./gradlew build remapJar publishToMavenLocal --no-daemon
     cd .. || { echo "cd failed"; exit 1; }
   else
     rm -rf "$HOME"/.m2/repository/gg/skytils/skytilsmod/!("$SKYTILS_VERSION"|maven-metadata-local.xml)/
@@ -103,13 +103,13 @@ fi
 
 if [ "${1:-default}" == "--check-updates" ]; then
   echo Checking Gradle dependency updates
-  ./gradlew -Porg.gradle.java.installations.auto-download=false dependencyUpdates --no-daemon -Drevision=integration # available values: milestone (default), release, integration
+  ./gradlew dependencyUpdates --no-daemon -Drevision=integration # available values: milestone (default), release, integration
   exit
 fi
 
 if [ "${1:-default}" == "--refresh-dependencies" ]; then
   echo Force refreshing loom dependencies
-  ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --refresh-dependencies
+  ./gradlew build test remapJar --refresh-dependencies
   exit
 fi
 
@@ -129,21 +129,21 @@ if [ "${1:-default}" != "--skip-build" ]; then
   fi
   if [ "${1:-default}" != "--offline" ]; then
     if [ "${1:-default}" == "--info" ]; then
-     ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --info
+     ./gradlew build test remapJar --info
     else
-     ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar
+     ./gradlew build test remapJar
     fi
   else
     if [ "${2:-default}" == "--info" ]; then
-     ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar --offline --info
+     ./gradlew build test remapJar --offline --info
     else
-     ./gradlew -Porg.gradle.java.installations.auto-download=false build test remapJar
+     ./gradlew build test remapJar
     fi
   fi
   EXIT_CODE=$?
   if [ "$EXIT_CODE" == "0" ]; then
     echo "Stopping Gradle daemons..."
-    ./gradlew -Porg.gradle.java.installations.auto-download=false --stop
+    ./gradlew --stop
     echo "Stopped Gradle daemons since Gradle build succeeded."
   else
     echo "Skipping stopping Gradle daemons since build failed."
