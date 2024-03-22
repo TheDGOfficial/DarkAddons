@@ -134,6 +134,18 @@ final class Diagnostics {
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
+    static final void dumpEntityTypes(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
+        final var nonDuplicateTypes = new ArrayList<String>(10);
+        for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+            final var type = entity.getClass().getSimpleName();
+            if (!nonDuplicateTypes.contains(type)) {
+                nonDuplicateTypes.add(type);
+                outputConsumer.accept(type);
+            }
+        }
+    }
+
+    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void dumpPlayerEntities(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
         for (final var playerEntity : Minecraft.getMinecraft().theWorld.playerEntities) {
             outputConsumer.accept(playerEntity.getClass().getSimpleName() + " with name " + playerEntity.getName() + "§r§e");

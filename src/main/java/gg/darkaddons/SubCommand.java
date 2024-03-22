@@ -121,6 +121,8 @@ final class SubCommand {
 
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpEntities(DarkAddons::queueWarning), "dumpentities"));
 
+        SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpEntityTypes(DarkAddons::queueWarning), "dumpentitytypes"));
+
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpPlayerEntities(DarkAddons::queueWarning), "dumpplayerentities"));
     }
 
