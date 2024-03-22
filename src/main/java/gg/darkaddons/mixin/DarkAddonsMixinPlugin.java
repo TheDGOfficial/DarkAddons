@@ -38,10 +38,7 @@ public final class DarkAddonsMixinPlugin implements IMixinConfigPlugin {
     @SuppressWarnings("NullableProblems")
     @Override
     public final boolean shouldApplyMixin(@NotNull final String targetClassName, @NotNull final String mixinClassName) {
-        if (mixinClassName.endsWith("MixinItemModelGenerator")) {
-            return TinyConfigAccessor.getBoolean("itemModelTransparencyFix", false);
-        }
-        return true;
+        return !mixinClassName.endsWith("MixinItemModelGenerator") || TinyConfigAccessor.getBoolean("itemModelTransparencyFix", false);
     }
 
     @SuppressWarnings("NullableProblems")

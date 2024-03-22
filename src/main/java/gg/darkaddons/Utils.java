@@ -534,8 +534,6 @@ final class Utils {
                     factor *= 10;
                 }
                 yield answer;
-
-                //noinspection CharUsedInArithmeticContext
             }
         }; // fast-path for easy-case
 

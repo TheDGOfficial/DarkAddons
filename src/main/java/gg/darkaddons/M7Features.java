@@ -2,7 +2,6 @@ package gg.darkaddons;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.mixins.extensions.ExtensionEntityLivingBase;
-import gg.skytils.skytilsmod.mixins.transformers.entity.MixinEntityLivingBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;

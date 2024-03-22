@@ -89,7 +89,7 @@ final class AutoClicker {
             case 3 -> 20;
             case 4 ->
                 // TODO actually add a more robust option of random CPS in a range, i.e., 30-36
-                    AutoClicker.SECURE_RANDOM.nextBoolean() ? 20 : 10;
+                AutoClicker.SECURE_RANDOM.nextBoolean() ? 20 : 10;
             case 5 -> 15;
             case 6 -> 10;
             case 7 -> 5;

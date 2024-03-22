@@ -28,7 +28,7 @@ abstract class SimpleGuiElement extends GuiElement {
 
     private boolean demoRenderBypass;
 
-    SimpleGuiElement(@NotNull final String elementName, @NotNull final BooleanSupplier isEnabledCheckerIn, @NotNull BooleanSupplier renderPreconditionsIn, @NotNull IntSupplier shadowSelectionIn) {
+    SimpleGuiElement(@NotNull final String elementName, @NotNull final BooleanSupplier isEnabledCheckerIn, @NotNull final BooleanSupplier renderPreconditionsIn, @NotNull final IntSupplier shadowSelectionIn) {
         super(elementName);
 
         this.isEnabledChecker = isEnabledCheckerIn;
@@ -81,6 +81,8 @@ abstract class SimpleGuiElement extends GuiElement {
 
     @Override
     final void preRender(final boolean demo) {
+        super.preRender(demo);
+
         if (demo && 0 == this.linesToRenderSize) {
             this.demoRenderBypass = true;
             this.update();
@@ -89,6 +91,8 @@ abstract class SimpleGuiElement extends GuiElement {
 
     @Override
     final void postRender(final boolean demo) {
+        super.postRender(demo);
+
         if (demo && this.demoRenderBypass) {
             this.demoRenderBypass = false;
             this.clear();
@@ -115,12 +119,12 @@ abstract class SimpleGuiElement extends GuiElement {
 
             for (var i = 0; i < length; ++i) {
                 GuiElement.drawString(
-                        this.linesToRender.get(i),
-                        xPos,
-                        i * fontHeight,
-                        color,
-                        alignment,
-                        shadow
+                    this.linesToRender.get(i),
+                    xPos,
+                    i * fontHeight,
+                    color,
+                    alignment,
+                    shadow
                 );
             }
         }

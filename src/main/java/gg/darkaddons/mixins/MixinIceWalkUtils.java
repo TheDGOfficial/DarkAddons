@@ -1,7 +1,5 @@
 package gg.darkaddons.mixins;
 
-import gg.darkaddons.DarkAddons;
-
 import org.jetbrains.annotations.NotNull;
 
 import org.spongepowered.asm.mixin.Mixin;

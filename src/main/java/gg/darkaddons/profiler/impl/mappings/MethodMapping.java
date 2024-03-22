@@ -81,7 +81,7 @@ public final class MethodMapping {
             return map;
         }
 
-        private static final void parseCSVLineIntoMap(@NotNull final String line, @NotNull @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "BoundedWildcard", "TypeMayBeWeakened"}) final HashMap<String, MethodMapping> map) {
+        private static final void parseCSVLineIntoMap(@NotNull final String line, @NotNull @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"}) final HashMap<String, MethodMapping> map) {
             final var quotedDesc = line.contains("\"") ? StringUtils.remove(StringUtils.substringBeforeLast(line, "\""), StringUtils.remove(line, StringUtils.substringAfter(line, "\""))) : "";
             final var hasNoQuotedDesc = quotedDesc.isEmpty();
 

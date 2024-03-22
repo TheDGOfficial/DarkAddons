@@ -20,7 +20,7 @@ public final class DarkAddonsTransformer implements IClassTransformer {
     private static final @NotNull ConcurrentLinkedQueue<Transformer> transformers = new ConcurrentLinkedQueue<>();
 
     static {
-        // This can't be a Config option because transformers are ran before Minecraft classes are loaded, and Config class depends on GuiScreen because of it's Vigilant#gui method, it will give NoClassDefFoundError otherwise.
+        // This can't be a Config option because transformers are run before Minecraft classes are loaded, and Config class depends on GuiScreen because of its Vigilant#gui method; it will give NoClassDefFoundError otherwise.
         if (TinyConfig.getBoolean("blockPosOptimizer", false)) {
             DarkAddonsTransformer.transformers.add(new BlockPosTransformer());
         }
@@ -48,7 +48,6 @@ public final class DarkAddonsTransformer implements IClassTransformer {
         }
     }
 
-    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public final byte @Nullable [] transform(@Nullable final String name, @Nullable final String transformedName, final byte @Nullable [] basicClass) {
         return null == basicClass ? null : DarkAddonsTransformer.transformCatching(basicClass, () -> {

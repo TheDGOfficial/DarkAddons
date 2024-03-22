@@ -1,6 +1,5 @@
 package gg.darkaddons.mixins;
 
-import gg.darkaddons.PublicUtils;
 import net.minecraft.client.renderer.block.model.BlockFaceUV;
 import net.minecraft.client.renderer.block.model.BlockPart;
 import net.minecraft.client.renderer.block.model.BlockPartFace;

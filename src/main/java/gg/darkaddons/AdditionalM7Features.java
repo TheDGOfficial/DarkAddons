@@ -4,7 +4,6 @@ import gg.essential.universal.UChat;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.mixins.extensions.ExtensionEntityLivingBase;
-import gg.skytils.skytilsmod.mixins.transformers.entity.MixinEntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -279,7 +278,7 @@ final class AdditionalM7Features {
                 }
             }
             case "[BOSS] Wither King: Oh, this one hurts!", "[BOSS] Wither King: I have more of those.", "[BOSS] Wither King: My soul is disposable." ->
-                    AdditionalM7Features.processStatueMessage(true);
+                AdditionalM7Features.processStatueMessage(true);
             default -> AdditionalM7Features.handleMessage4(message);
         }
     }
@@ -287,13 +286,13 @@ final class AdditionalM7Features {
     private static final void handleMessage4(@NotNull final String message) {
         switch (message) {
             case "[BOSS] Wither King: Futile.", "[BOSS] Wither King: You just made a terrible mistake!", "[BOSS] Wither King: I am not impressed.", "[BOSS] Wither King: Your skills have faded humans." ->
-                    AdditionalM7Features.processStatueMessage(false);
+                AdditionalM7Features.processStatueMessage(false);
             case "[BOSS] Wither King: Incredible. You did what I couldn't do myself.", "[BOSS] Wither King: Thank you for coming all the way here." -> {
                 AdditionalM7Features.notSaidFinalDialogue = false;
                 AdditionalM7Features.destroyAllStatues();
             }
             case "[BOSS] Livid: I respect you for making it to here, but I'll be your undoing." ->
-                    AdditionalM7Features.lividsSpawned = true;
+                AdditionalM7Features.lividsSpawned = true;
             default -> AdditionalM7Features.handleMessage5(message);
         }
     }
@@ -302,13 +301,13 @@ final class AdditionalM7Features {
         switch (message) {
             case "[BOSS] Sadan: My giants! Unleashed!" -> AdditionalM7Features.giantsFalling = true;
             case "[BOSS] Sadan: I'm sorry, but I need to concentrate. I wish it didn't have to come to this." ->
-                    AdditionalM7Features.notSaidFinalDialogue = false;
+                AdditionalM7Features.notSaidFinalDialogue = false;
             case "Your Tank stats are doubled because you are the only player using this class!" ->
-                    AdditionalM7Features.playingTank = true;
+                AdditionalM7Features.playingTank = true;
             case "[STATUE] Oruo the Omniscient: I am Oruo the Omniscient. I have lived many lives. I have learned all there is to know." ->
-                    AdditionalM7Features.canRemoveBlankArmorStands = false;
+                AdditionalM7Features.canRemoveBlankArmorStands = false;
             case "[STATUE] Oruo the Omniscient: I bestow upon you all the power of a hundred years!" ->
-                    AdditionalM7Features.canRemoveBlankArmorStands = true;
+                AdditionalM7Features.canRemoveBlankArmorStands = true;
             default -> {
                 if (message.contains("[BOSS] Sadan: Interesting strategy, waking up my Golems. Or was that unintentional, ") || message.contains("[BOSS] Sadan: You weren't supposed to wake up that Golem, ") || message.contains("[BOSS] Sadan: My Terracotta Army wasn't enough? You had to awaken a Golem on top, ") || message.contains("[BOSS] Sadan: Those Golems will be your undoing, ")) {
                     AdditionalM7Features.firstGolemWoken = true;

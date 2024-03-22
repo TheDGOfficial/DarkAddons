@@ -1,6 +1,7 @@
 package gg.darkaddons.mixins;
 
 import net.minecraft.client.gui.GuiPlayerTabOverlay;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import net.minecraft.util.IChatComponent;
@@ -8,6 +9,7 @@ import net.minecraft.util.IChatComponent;
 /**
  * Accessor mixin to allow getting a private field in {@link GuiPlayerTabOverlay} class.
  */
+@FunctionalInterface
 @Mixin(value = GuiPlayerTabOverlay.class, priority = 999)
 public interface IMixinGuiPlayerTabOverlay {
     /**
@@ -16,5 +18,6 @@ public interface IMixinGuiPlayerTabOverlay {
      * @return The value of the footer, a private field in {@link GuiPlayerTabOverlay} class.
      */
     @Accessor
+    @Nullable
     IChatComponent getFooter();
 }

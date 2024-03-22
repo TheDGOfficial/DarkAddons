@@ -7,27 +7,14 @@ import gg.essential.universal.UChat;
 import gg.skytils.skytilsmod.utils.SBInfo;
 import gg.skytils.skytilsmod.utils.SkyblockIsland;
 import gg.skytils.skytilsmod.features.impl.handlers.MayorInfo;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.DefaultChannelConfig;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.network.OldServerPinger;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Timer;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -38,15 +25,12 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
-import net.minecraftforge.fml.common.eventhandler.EventBus;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.handshake.FMLHandshakeMessage;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.lang.reflect.Modifier;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -76,7 +60,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
     modLanguageAdapter = "",
     canBeDeactivated = true, // TODO handle disable event and disable features? (it doesn't automatically unregister commands/event listeners)
     guiFactory = "gg.darkaddons.ForgeConfigInterop",
-    updateJSON = "", // TODO update checker
+    updateJSON = "",
     customProperties = {}
 )
 @SuppressWarnings({"ClassNamePrefixedWithPackageName", "DefaultAnnotationParam"})

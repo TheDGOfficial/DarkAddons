@@ -73,11 +73,11 @@ abstract class GuiElement {
     }
 
     void preRender(final boolean demo) {
-        // do nothing, subclasses can implement custom behaviour
+        // do nothing, subclasses can implement custom behavior
     }
 
     void postRender(final boolean demo) {
-        // do nothing, subclasses can implement custom behaviour
+        // do nothing, subclasses can implement custom behavior
     }
 
     abstract void render(final boolean demo);

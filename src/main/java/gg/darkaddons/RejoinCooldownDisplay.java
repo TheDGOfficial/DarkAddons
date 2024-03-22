@@ -18,7 +18,7 @@ final class RejoinCooldownDisplay extends SimpleGuiElement {
     private static long lastTimeLeftSeconds;
 
     RejoinCooldownDisplay() {
-        super("Rejoin Cooldown Display", RejoinCooldownDisplay.isEnabled, () -> !DarkAddons.isInSkyblock() && 0 != RejoinCooldownDisplay.kickCooldownEnd, () -> 0);
+        super("Rejoin Cooldown Display", RejoinCooldownDisplay.isEnabled, () -> !DarkAddons.isInSkyblock() && 0L != RejoinCooldownDisplay.kickCooldownEnd, () -> 0);
 
         DarkAddons.registerTickTask("sb_rejoin_cooldown_after_kick_display_update", 20, true, this::update);
     }
@@ -60,16 +60,16 @@ final class RejoinCooldownDisplay extends SimpleGuiElement {
             return;
         }
 
-        final var demoRenderBypass = this.isDemoRenderBypass();
+        final var isDemoRenderBypass = this.isDemoRenderBypass();
 
-        if (!demoRenderBypass && DarkAddons.isInSkyblock()) {
+        if (!isDemoRenderBypass && DarkAddons.isInSkyblock()) {
             this.clear();
             return;
         }
 
         RejoinCooldownDisplay.timeLeftSeconds = Math.max(0L, TimeUnit.MILLISECONDS.toSeconds(RejoinCooldownDisplay.kickCooldownEnd - System.currentTimeMillis()));
 
-        if (demoRenderBypass || RejoinCooldownDisplay.lastTimeLeftSeconds != RejoinCooldownDisplay.timeLeftSeconds) {
+        if (isDemoRenderBypass || RejoinCooldownDisplay.lastTimeLeftSeconds != RejoinCooldownDisplay.timeLeftSeconds) {
             RejoinCooldownDisplay.lastTimeLeftSeconds = RejoinCooldownDisplay.timeLeftSeconds;
 
             super.update();

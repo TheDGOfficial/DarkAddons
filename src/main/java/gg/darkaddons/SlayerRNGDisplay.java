@@ -617,8 +617,8 @@ final class SlayerRNGDisplay extends GuiElement {
         final var slayer = SlayerRNGDisplay.currentSlayer;
 
         if (null != slayer) {
-            @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"}) final var drops = new ArrayList<SlayerRNGDisplay.SlayerDrop>(3);
-            @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"}) final var eligibleDrops = new ArrayList<SlayerRNGDisplay.SlayerDrop>(3);
+            @SuppressWarnings({"TypeMayBeWeakened"}) final var drops = new ArrayList<SlayerRNGDisplay.SlayerDrop>(3);
+            @SuppressWarnings({"TypeMayBeWeakened"}) final var eligibleDrops = new ArrayList<SlayerRNGDisplay.SlayerDrop>(3);
 
             for (final var drop : SlayerRNGDisplay.SlayerDrop.values) {
                 if (drop.slayer == slayer) {

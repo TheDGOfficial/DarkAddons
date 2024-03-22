@@ -188,7 +188,7 @@ public final class BlockPosTransformer implements Transformer {
             case 0, 3 -> BlockPosTransformer.regularFinalMethods(deobfName);
             case 1 ->
                 // index starts at 0, so this checks if it's the second value in the array returned by #getApplicableClasses
-                    BlockPosTransformer.mutableFinalMethods(deobfName);
+                BlockPosTransformer.mutableFinalMethods(deobfName);
             case 2 -> BlockPosTransformer.optifineMutableFinalMethods(deobfName);
             case 4, 8, 6 -> BlockPosTransformer.iteratorFinalMethods(deobfName);
             case 5, 7, 9 -> BlockPosTransformer.computeNextMethods(deobfName);

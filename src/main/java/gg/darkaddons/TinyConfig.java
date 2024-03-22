@@ -75,11 +75,7 @@ final class TinyConfig {
     static final Boolean getBoolean(@NotNull final String key) {
         final var value = TinyConfig.tinyConfigSettings.getProperty(key);
 
-        if (null == value) {
-            return null;
-        }
-
-        return TinyConfig.parseBoolean(value);
+        return null == value ? null : TinyConfig.parseBoolean(value);
     }
 
     @Nullable
@@ -113,11 +109,7 @@ final class TinyConfig {
     static final Double getDouble(@NotNull final String key) {
         final var value = TinyConfig.tinyConfigSettings.getProperty(key);
 
-        if (null == value) {
-            return null;
-        }
-
-        return TinyConfig.parseDouble(value);
+        return null == value ? null : TinyConfig.parseDouble(value);
     }
 
     static final double getDouble(@NotNull final String key, final double defaultValue) {

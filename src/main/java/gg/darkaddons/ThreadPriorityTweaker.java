@@ -42,7 +42,6 @@ final class ThreadPriorityTweaker {
         ThreadPriorityTweaker.tweakPriorities();
 
         // TODO use ScheduledExecutorService or something since this doesn't depend on being running on client thread at all
-        // TODO kinda insane to do (injecting into JDK code), but maybe just use Mixin to inject into constructor of Thread or the head of the Thread#start method to update priorities instead of checking periodically for new threads?
         DarkAddons.registerTickTask("tweak_priorities", 1_200, true, ThreadPriorityTweaker::tweakPriorities);
     }
 

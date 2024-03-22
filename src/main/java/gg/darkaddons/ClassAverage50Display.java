@@ -146,9 +146,10 @@ final class ClassAverage50Display extends GuiElement {
         return switch (floorSelection) {
             case 0 -> ClassAverage50Display.DungeonFloor.M7;
             case 1 -> ClassAverage50Display.DungeonFloor.M6;
-            case 2 -> ClassAverage50Display.defaultIfNull(ClassAverage50Display.lastDoneFloor, ClassAverage50Display.DungeonFloor.M7);
+            case 2 ->
+                ClassAverage50Display.defaultIfNull(ClassAverage50Display.lastDoneFloor, ClassAverage50Display.DungeonFloor.M7);
             default ->
-                    throw new UnsupportedOperationException("unsupported floor selection in config: " + floorSelection);
+                throw new UnsupportedOperationException("unsupported floor selection in config: " + floorSelection);
         };
     }
 
@@ -173,11 +174,7 @@ final class ClassAverage50Display extends GuiElement {
         final var archerXp = TinyConfig.getDouble("archerExperience");
         final var tankXp = TinyConfig.getDouble("tankExperience");
 
-        if (null == healerXp || null == mageXp || null == berserkerXp || null == archerXp || null == tankXp) {
-            return null;
-        }
-
-        return new RunsTillCA50.PlayerDataHolder(healerXp, mageXp, berserkerXp, archerXp, tankXp);
+        return null == healerXp || null == mageXp || null == berserkerXp || null == archerXp || null == tankXp ? null : new RunsTillCA50.PlayerDataHolder(healerXp, mageXp, berserkerXp, archerXp, tankXp);
     }
 
     static final void syncClassXP() {
@@ -207,9 +204,9 @@ final class ClassAverage50Display extends GuiElement {
 
                         ClassAverage50Display.fastSyncClassXP();
                         return;
-                    } else {
-                        DarkAddons.queueWarning("Could not sync Class Experiences; using fallback data fetched earlier. If anything is wrong, type /darkaddon rtca to try fetching again.");
                     }
+
+                    DarkAddons.queueWarning("Could not sync Class Experiences; using fallback data fetched earlier. If anything is wrong, type /darkaddon rtca to try fetching again.");
                 }
 
                 ClassAverage50Display.healerExperience = mutablePlayerData.healerXp;
@@ -383,12 +380,12 @@ final class ClassAverage50Display extends GuiElement {
             case 0 -> DarkAddons.isInDungeons();
             case 1 -> DarkAddons.isInDungeons() && -1L != DungeonTimer.INSTANCE.getBossClearTime();
             case 2 ->
-                    DarkAddons.isInDungeons() && -1L != DungeonTimer.INSTANCE.getBossClearTime() || DarkAddons.isPlayerInDungeonHub();
+                DarkAddons.isInDungeons() && -1L != DungeonTimer.INSTANCE.getBossClearTime() || DarkAddons.isPlayerInDungeonHub();
             case 3 -> DarkAddons.isInDungeons() || DarkAddons.isPlayerInDungeonHub();
             case 4 -> DarkAddons.isInSkyblock();
             case 5 -> true;
             default ->
-                    throw new UnsupportedOperationException("unsupported visibility selection in config: " + visibility);
+                throw new UnsupportedOperationException("unsupported visibility selection in config: " + visibility);
         };
     }
 

@@ -29,16 +29,16 @@ final class FPSLimitDisplay extends SimpleGuiElement {
             return;
         }
 
-        final var demoRenderBypass = this.isDemoRenderBypass();
+        final var isDemoRenderBypass = this.isDemoRenderBypass();
 
-        if (!demoRenderBypass && !Minecraft.getMinecraft().isFramerateLimitBelowMax()) {
+        if (!isDemoRenderBypass && !Minecraft.getMinecraft().isFramerateLimitBelowMax()) {
             this.clear();
             return;
         }
 
         FPSLimitDisplay.fpsLimit = Minecraft.getMinecraft().getLimitFramerate();
 
-        if (demoRenderBypass || FPSLimitDisplay.lastFpsLimit != FPSLimitDisplay.fpsLimit) {
+        if (isDemoRenderBypass || FPSLimitDisplay.lastFpsLimit != FPSLimitDisplay.fpsLimit) {
             FPSLimitDisplay.lastFpsLimit = FPSLimitDisplay.fpsLimit;
 
             super.update();

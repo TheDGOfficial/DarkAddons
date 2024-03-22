@@ -430,7 +430,7 @@ final class RunsTillCA50 {
         DarkAddons.echoEmpty();
         final var totalExperiences = RunsTillCA50.getTotalExperiencesNoOverflow(originalXpMap);
         final var totalFinishExperiences = RunsTillCA50.getTotalExperiencesNoOverflow(xpMap);
-        DarkAddons.queueWarning(result.totalRuns + " Total " + (m7 ? "M7" : "M6") + " Runs." + (derpy ? " (With Derpy)" : "") + " | Overall Progress: %" + String.format(Locale.ROOT, "%.2f", totalExperiences / Math.max(1, totalFinishExperiences) * 100.0D));
+        DarkAddons.queueWarning(result.totalRuns + " Total " + (m7 ? "M7" : "M6") + " Runs." + (derpy ? " (With Derpy)" : "") + " | Overall Progress: %" + String.format(Locale.ROOT, "%.2f", totalExperiences / Math.max(1.0D, totalFinishExperiences) * 100.0D));
         DarkAddons.echoEmpty();
         DarkAddons.queueWarning("Class | Runs to CA50 | Level Before Swap Class | Level After CA50 | Overflow Runs Done");
         DarkAddons.echoEmpty();
@@ -442,9 +442,9 @@ final class RunsTillCA50 {
         DarkAddons.queueWarning(modeInfo + switch (mode) {
             case OPTIMAL -> "This mode shows the runs needed with the best way to get Class Average 50.";
             case EARLY ->
-                    "This mode gets Level 50 in a class before switching to playing another class. You will get individual Level 50's earlier, but getting it all 50 will take a lot longer.";
+                "This mode gets Level 50 in a class before switching to playing another class. You will get individual Level 50's earlier, but getting it all 50 will take a lot longer.";
             case SKULL ->
-                    "This mode only plays the class you have highest XP on till you get Class Average 50 just from shared XP for the other classes.";
+                "This mode only plays the class you have highest XP on till you get Class Average 50 just from shared XP for the other classes.";
         });
     }
 
@@ -778,7 +778,7 @@ final class RunsTillCA50 {
             final var selectedClass = switch (mode) {
                 case OPTIMAL -> RunsTillCA50.findLowestXPClass(xpMap);
                 case EARLY ->
-                        xpMap.entrySet().parallelStream().filter((@NotNull final Map.Entry<RunsTillCA50.DungeonClass, Double> entry) -> RunsTillCA50.MAX_LEVEL_XP > entry.getValue()).max(Comparator.comparingDouble(Map.Entry::getValue)).orElseThrow(() -> new IllegalStateException("could not find a class that is not maxed and has the highest XP in a set of classes that are not maxed")).getKey();
+                    xpMap.entrySet().parallelStream().filter((@NotNull final Map.Entry<RunsTillCA50.DungeonClass, Double> entry) -> RunsTillCA50.MAX_LEVEL_XP > entry.getValue()).max(Comparator.comparingDouble(Map.Entry::getValue)).orElseThrow(() -> new IllegalStateException("could not find a class that is not maxed and has the highest XP in a set of classes that are not maxed")).getKey();
                 case SKULL -> Collections.max(xpMap.entrySet(), Map.Entry.comparingByValue()).getKey();
             };
 

@@ -75,7 +75,6 @@ final class RemoveBlankArmorStands {
             final var inventory = entity.getInventory();
             final var list = new ArrayList<ItemStack>(inventory.length);
             for (final var item : inventory) {
-                //noinspection VariableNotUsedInsideIf
                 if (null != item) {
                     list.add(item);
                 }

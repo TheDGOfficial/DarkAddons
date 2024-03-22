@@ -48,6 +48,7 @@ import java.nio.file.Files;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.jar.JarFile;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseListener {
@@ -688,12 +689,15 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     }
 
     @NotNull
+    private static final Matcher tabMatcher = Pattern.compile("\t", Pattern.LITERAL).matcher("");
+
+    @NotNull
     private static final String getStacktraceText(@NotNull final Throwable ex) {
         try (final var stringWriter = new StringWriter()) {
             try (final var printWriter = new PrintWriter(stringWriter)) {
                 ex.printStackTrace(printWriter);
             }
-            return stringWriter.toString().replace("\t", "  "); // TODO Can't use StringUtils#replace here, maybe use a static final Pattern.compile field
+            return DarkAddonsInstaller.tabMatcher.reset(stringWriter.toString()).replaceAll("  ");
         } catch (final IOException ioException) {
             throw new UncheckedIOException(ioException);
         }
