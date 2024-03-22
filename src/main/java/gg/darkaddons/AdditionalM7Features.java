@@ -309,7 +309,7 @@ final class AdditionalM7Features {
             case "[STATUE] Oruo the Omniscient: I bestow upon you all the power of a hundred years!" ->
                 AdditionalM7Features.canRemoveBlankArmorStands = true;
             default -> {
-                if (message.contains("[BOSS] Sadan: Interesting strategy, waking up my Golems. Or was that unintentional, ") || message.contains("[BOSS] Sadan: You weren't supposed to wake up that Golem, ") || message.contains("[BOSS] Sadan: My Terracotta Army wasn't enough? You had to awaken a Golem on top, ") || message.contains("[BOSS] Sadan: Those Golems will be your undoing, ")) {
+                if (message.startsWith("[BOSS] Sadan: Interesting strategy, waking up my Golems. Or was that unintentional, ") || message.startsWith("[BOSS] Sadan: You weren't supposed to wake up that Golem, ") || message.startsWith("[BOSS] Sadan: My Terracotta Army wasn't enough? You had to awaken a Golem on top, ") || message.startsWith("[BOSS] Sadan: Those Golems will be your undoing, ")) {
                     AdditionalM7Features.firstGolemWoken = true;
                 }
             }
