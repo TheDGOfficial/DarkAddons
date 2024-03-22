@@ -46,7 +46,7 @@ final class FPSLimitDisplay extends SimpleGuiElement {
     }
 
     @Override
-    void buildHudLines(final @NotNull Collection<String> lines) {
+    void buildHudLines(@NotNull final Collection<String> lines) {
         lines.add("§cFPS Limited to " + FPSLimitDisplay.fpsLimit);
     }
 }
