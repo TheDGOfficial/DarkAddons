@@ -371,15 +371,14 @@ final class Config extends Vigilant {
     )
     private static boolean removeArmorStandsOnWitherKingAndSadanFight;
 
-    /*@Property(
-        type = PropertyType.SELECTOR, name = "Hide XP Orbs",
-        description = "Hides XP Orbs while in Dungeons to improve FPS, with the specified mode. Hide just doesn't render it but keeps it as an entity in the world which will still tick it. Remove will completely remove it from the world as if it didn't exist at all, and disabled will not change anything.",
-        category = "Performance", subcategory = "Experimental",
-        options = {"Disabled", "Hide", "Remove"}
-    )
-    private static int hideXPOrbs;
-
     @Property(
+        type = PropertyType.SWITCH, name = "Hide XP Orbs",
+        description = "Hides XP Orbs to improve FPS. As obvious, this will make experience orbs, for example, from the Grand Experience Bottle and Titanic Experience Bottle, along with experience dropped from mobs invisible, to be more specific, non-existent, since it removes the whole entity instead of just not rendering it, resulting in it being not ticked anymore as well.",
+        category = "Performance", subcategory = "Experimental"
+    )
+    private static boolean hideExperienceOrbs;
+
+    /*@Property(
         type = PropertyType.SELECTOR, name = "Hide Wither King",
         description = "Hides Wither King during Phase 5 on Master Mode Floor 7 to improve FPS, with the specified mode. Hide just doesn't render it but keeps it as an entity in the world which will still tick it. Remove will completely remove it from the world as if it didn't exist at all, and disabled will not change anything.",
         category = "Performance", subcategory = "Experimental",
@@ -1075,13 +1074,13 @@ final class Config extends Vigilant {
         return Config.removeArmorStandsOnWitherKingAndSadanFight;
     }
 
-    /*static final int getHideXPOrbs() {
+    static final boolean isHideExperienceOrbs() {
         Config.checkUninit();
 
-        return Config.hideXPOrbs;
+        return Config.hideExperienceOrbs;
     }
 
-    static final int getHideWitherKing() {
+    /*static final int getHideWitherKing() {
         Config.checkUninit();
 
         return Config.hideWitherKing;
@@ -1403,7 +1402,13 @@ final class Config extends Vigilant {
                 DarkAddons.modError(e);
             }
 
-            this.initialize();
+            try {
+                this.initialize();
+            } catch (final IllegalArgumentException illegalArgumentException) {
+                DarkAddons.queueWarning("Error when initializing the config; type of a config property likely changed. The config will be partly reset or else will be in a suboptimal state, please reconfigure your settings and report this error: " + illegalArgumentException.getClass().getName() + ": " + illegalArgumentException.getMessage());
+                throw illegalArgumentException;
+            }
+
             this.markDirty();
         }
     }
