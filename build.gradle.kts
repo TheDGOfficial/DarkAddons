@@ -27,6 +27,11 @@ plugins {
     signing
     `maven-publish`
     id("io.github.sgtsilvio.gradle.proguard") version "0.7.0"
+    id("com.autonomousapps.dependency-analysis") version "1.30.0"
+}
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
 private val versionProperties = loadVersionProperties()
@@ -58,8 +63,8 @@ description =
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://repo.sk1er.club/repository/maven-public/")
-    maven("https://repo.sk1er.club/repository/maven-releases/")
+    maven("https://repo.essential.gg/repository/maven-public/")
+    maven("https://repo.essential.gg/repository/maven-releases/")
     maven("https://jitpack.io") {
         mavenContent {
             includeGroupAndSubgroups("com.github")
@@ -119,12 +124,21 @@ dependencies {
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
 
     compileOnly("gg.essential:loader-launchwrapper:1.2.2") // TODO make it shadowMe
-    compileOnly("gg.essential:essential-1.8.9-forge:16535+g5006ee2174") { // TODO make it back implementation
+    compileOnly("gg.essential:essential-1.8.9-forge:16551+g7ed10f42d2") { // TODO make it back implementation
         exclude(module = "asm")
         exclude(module = "asm-commons")
         exclude(module = "asm-tree")
         exclude(module = "gson")
+        exclude(module = "kotlin-stdlib")
+        exclude(module = "elementa-1.8.9-forge")
+        exclude(module = "universalcraft-1.8.9-forge")
+        exclude(module = "vigilance-1.8.9-forge")
     }
+
+    api("gg.essential:elementa-1.8.9-forge:636")
+    implementation("gg.essential:universalcraft-1.8.9-forge:323")
+    implementation("gg.essential:vigilance-1.8.9-forge:295")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
@@ -138,6 +152,8 @@ dependencies {
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.2") 
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.10.2")
 
     compileOnly("gg.skytils:skytilsmod:$skytilsVersion")
@@ -277,11 +293,12 @@ tasks {
 
         //options.deprecation = true
         options.release = 8
-        sourceCompatibility = "22"
+        sourceCompatibility = "21"
 
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
         options.forkOptions.jvmArgs!!.add("-Xmx2G")
+        options.forkOptions.jvmArgs!!.add("-XX:+EnableDynamicAgentLoading")
         options.compilerArgs.add("-parameters")
         options.compilerArgs.add("-Xlint:all,-options,-classfile,-processing,-overrides")
     }
@@ -398,9 +415,6 @@ publishing {
 }
 
 private val proguardJar: TaskProvider<ProguardTask> by tasks.registering(proguard.taskClass) {
-    javaLauncher = javaToolchains.launcherFor {
-        languageVersion = JavaLanguageVersion.of(21) // TODO change when proguard 9.1.2 with Java 22 support gets released
-    }
     addInput {
         classpath.from(tasks.remapJar)
     }

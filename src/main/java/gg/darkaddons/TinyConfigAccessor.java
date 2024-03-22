@@ -15,7 +15,7 @@ public final class TinyConfigAccessor {
         throw new UnsupportedOperationException();
     }
 
-    public static final boolean getTinyConfigBoolean(@NotNull final String key, final boolean defaultValue) {
+    public static final boolean getBoolean(@NotNull final String key, final boolean defaultValue) {
         return TinyConfig.getBoolean(key, defaultValue);
     }
 }

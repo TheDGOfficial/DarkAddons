@@ -107,6 +107,12 @@ if [ "${1:-default}" == "--check-updates" ]; then
   exit
 fi
 
+if [ "${1:-default}" == "--build-health" ]; then
+  echo Checking Gradle build health
+  ./gradlew buildHealth
+  exit
+fi
+
 if [ "${1:-default}" == "--refresh-dependencies" ]; then
   echo Force refreshing loom dependencies
   ./gradlew build test remapJar --refresh-dependencies
