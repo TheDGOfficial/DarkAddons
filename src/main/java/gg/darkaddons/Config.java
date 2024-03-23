@@ -396,7 +396,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Item Model Transparency Fix",
-        description = "Fixes transparency issues in item models by completely overwriting the necessary vanilla methods. This option should work with most mods but if you got some exotic mods it might cause a conflict. Often also speeds up the game opening because of our code being more optimized, even if that wasn't the main intent.",
+        description = "Fixes transparency issues in item models by completely overwriting the necessary vanilla methods. This option should work with most mods but if you got some exotic mods it might cause a conflict. Often also speeds up the game opening because of our code being more optimized, even if that wasn't the main intent. Requires restart to be effective.",
         category = "Performance", subcategory = "Patches"
     )
     private static boolean itemModelTransparencyFix;
