@@ -59,6 +59,16 @@ git stash drop &> /dev/null || true
 cd .. || { echo "cd failed"; exit 1; } 
 
 git submodule init
+
+cd darkaddons-site || { echo "cd failed"; exit 1; }
+git stash &> /dev/null
+git stash drop &> /dev/null
+git checkout main &> /dev/null
+git pull &> /dev/null
+cd .. || { echo "cd failed"; exit 1; }
+
+git add darkaddons-site &> /dev/null
+
 git submodule update
 
 cd darkaddons-site || { echo "cd failed"; exit 1; }
