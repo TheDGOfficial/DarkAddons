@@ -79,6 +79,13 @@ final class Config extends Vigilant {
     private static int classAverage50DisplayCompactness;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Unopened Chests Display",
+        description = "Shows a HUD element that shows unopened chests at Croesus, along with a warning when you are at the chest limit. Requires the necessary tab list widget (which is enabled by default) to be enabled.",
+        category = "Dungeons", subcategory = "HUD", triggerActionOnInitialization = false
+    )
+    private static boolean unopenedChestsDisplay;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Blessing on Screen",
         description = "Shows Blessing levels on screen with colors based on the level.",
         category = "Dungeons", subcategory = "HUD"
@@ -880,6 +887,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.classAverage50DisplayCompactness;
+    }
+
+    static final boolean isUnopenedChestsDisplay() {
+        Config.checkUninit();
+
+        return Config.unopenedChestsDisplay;
     }
 
     static final boolean isBlessingHud() {

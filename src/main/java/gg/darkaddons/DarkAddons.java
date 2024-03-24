@@ -670,7 +670,9 @@ public final class DarkAddons {
             new RejoinCooldownDisplay(),
             new FPSLimitDisplay(),
             new RemoveBlankArmorStands(),
-            new HideXPOrbs()
+            new HideXPOrbs(),
+            new TablistUtil(),
+            new UnopenedChestsDisplay()
         );
 
         GuiManager.init();
