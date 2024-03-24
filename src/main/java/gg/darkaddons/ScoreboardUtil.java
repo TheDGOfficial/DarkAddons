@@ -71,7 +71,7 @@ final class ScoreboardUtil {
                 final var playerName = score.getPlayerName();
 
                 if (null != playerName && !(!playerName.isEmpty() && '#' == playerName.charAt(0))) {
-                    lines.add(ScoreboardUtil.cleanSB(ScorePlayerTeam.formatPlayerName(scoreboard.getPlayersTeam(score.getPlayerName()), score.getPlayerName())));
+                    lines.add(ScoreboardUtil.cleanSB(ScorePlayerTeam.formatPlayerName(scoreboard.getPlayersTeam(playerName), playerName)));
                 }
             }
 
