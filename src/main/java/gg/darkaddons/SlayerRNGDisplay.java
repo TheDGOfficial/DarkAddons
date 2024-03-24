@@ -238,6 +238,10 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private static final void registerPriceUpdateTask() {
         SlayerRNGDisplay.scheduler.scheduleWithFixedDelay(() -> {
+            if (!Config.isSlayerRngDisplay() || DarkAddons.isInDungeons()) {
+                return;
+            }
+
             try {
                 final var lbResp = Utils.sendWebRequest("https://lb.tricked.pro/lowestbins", "application/json", false);
 
@@ -291,6 +295,10 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private static final void registerQuestDetectionTask() {
         DarkAddons.registerTickTask("update_slayer_quest_detection", 4, true, () -> {
+            if (!Config.isSlayerRngDisplay() || DarkAddons.isInDungeons()) {
+                return;
+            }
+
             var foundQuest = false;
 
             for (final var it = Arrays.asList(ScoreboardUtil.fetchScoreboardLines(12)).iterator(); it.hasNext();) {
