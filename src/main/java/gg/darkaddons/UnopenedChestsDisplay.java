@@ -48,6 +48,7 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
     @Override
     final void clear() {
         UnopenedChestsDisplay.unopenedChests = 0;
+        UnopenedChestsDisplay.lastUnopenedChests = 0;
 
         super.clear();
     }

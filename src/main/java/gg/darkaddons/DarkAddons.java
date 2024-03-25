@@ -474,6 +474,11 @@ public final class DarkAddons {
         return SkyblockIsland.TheGarden.getMode().equals(SBInfo.INSTANCE.getMode());
     }
 
+    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
+    static final boolean isPlayerInRift() {
+        return SkyblockIsland.TheRift.getMode().equals(SBInfo.INSTANCE.getMode());
+    }
+
     static final boolean isDerpy() {
         return "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor());
     }
