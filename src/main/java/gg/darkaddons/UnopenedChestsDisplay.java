@@ -17,7 +17,7 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
     private static final int CROESUS_CHEST_LIMIT = 60;
 
     private static int unopenedChests;
-    private static int lastUnopenedChests = -1;
+    private static int lastUnopenedChests;
 
     UnopenedChestsDisplay() {
         super("Unopened Chests Display", Config::isUnopenedChestsDisplay, DarkAddons::isPlayerInDungeonHub, () -> 0);
@@ -68,7 +68,7 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
 
         UnopenedChestsDisplay.unopenedChests = isDemoRenderBypass ? 0 : UnopenedChestsDisplay.fetchUnopenedChests();
 
-        if (isDemoRenderBypass || UnopenedChestsDisplay.lastUnopenedChests != UnopenedChestsDisplay.unopenedChests) {
+        if (isDemoRenderBypass || (UnopenedChestsDisplay.lastUnopenedChests != UnopenedChestsDisplay.unopenedChests || this.isEmpty())) {
             UnopenedChestsDisplay.lastUnopenedChests = UnopenedChestsDisplay.unopenedChests;
 
             super.update();

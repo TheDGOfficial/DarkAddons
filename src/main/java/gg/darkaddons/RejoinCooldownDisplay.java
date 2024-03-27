@@ -69,7 +69,7 @@ final class RejoinCooldownDisplay extends SimpleGuiElement {
 
         RejoinCooldownDisplay.timeLeftSeconds = Math.max(0L, TimeUnit.MILLISECONDS.toSeconds(RejoinCooldownDisplay.kickCooldownEnd - System.currentTimeMillis()));
 
-        if (isDemoRenderBypass || RejoinCooldownDisplay.lastTimeLeftSeconds != RejoinCooldownDisplay.timeLeftSeconds) {
+        if (isDemoRenderBypass || (RejoinCooldownDisplay.lastTimeLeftSeconds != RejoinCooldownDisplay.timeLeftSeconds || this.isEmpty())) {
             RejoinCooldownDisplay.lastTimeLeftSeconds = RejoinCooldownDisplay.timeLeftSeconds;
 
             super.update();

@@ -72,6 +72,10 @@ abstract class SimpleGuiElement extends GuiElement {
         return this.demoRenderBypass;
     }
 
+    final boolean isEmpty() {
+        return this.linesToRender.isEmpty();
+    }
+
     void update() {
         this.linesToRender.clear();
         this.buildHudLines(this.linesToRender);
