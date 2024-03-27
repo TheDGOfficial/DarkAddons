@@ -64,12 +64,16 @@ cd darkaddons-site || { echo "cd failed"; exit 1; }
 git stash &> /dev/null
 git stash drop &> /dev/null || true
 git checkout main &> /dev/null
-git pull &> /dev/null
+if [ "${1:-default}" != "--offline" ]; then
+  git pull &> /dev/null
+fi
 cd .. || { echo "cd failed"; exit 1; }
 
 git add darkaddons-site &> /dev/null
 
-git submodule update
+if [ "${1:-default}" != "--offline" ]; then
+  git submodule update
+fi
 
 cd darkaddons-site || { echo "cd failed"; exit 1; }
 
@@ -86,11 +90,15 @@ if [ "${1:-default}" != "--skip-build" ]; then
   if [ ! -d "$HOME/.m2/repository/gg/skytils/skytilsmod/$SKYTILS_VERSION" ]; then
     rm -rf SkytilsMod/build/libs/*
     cd SkytilsMod || { echo "cd failed"; exit 1; }
-    git fetch --all --tags --force &> /dev/null
+    if [ "${1:-default}" != "--offline" ]; then
+      git fetch --all --tags --force &> /dev/null
+    fi
     git stash &> /dev/null
     git stash drop &> /dev/null || true 
     git checkout dev &> /dev/null
-    git pull -X theirs &> /dev/null
+    if [ "${1:-default}" != "--offline" ]; then
+      git pull -X theirs &> /dev/null
+    fi
     release_commit=$(git log --grep "^version:\ $SKYTILS_VERSION\$" -1 --pretty=format:"%h")
     git checkout "$release_commit" &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; } 
@@ -98,13 +106,19 @@ if [ "${1:-default}" != "--skip-build" ]; then
     git stash drop &> /dev/null || true
     cd .. || { echo "cd failed"; exit 1; } 
     git submodule init
-    git submodule update
+    if [ "${1:-default}" != "--offline" ]; then
+      git submodule update
+    fi
     chmod +x gradlew
     git apply ../SkytilsMod.patch &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; }
     git apply ../../hypixel-api.patch &> /dev/null
-    cd .. || { echo "cd failed"; exit 1; } 
-    ./gradlew build remapJar publishToMavenLocal --no-daemon
+    cd .. || { echo "cd failed"; exit 1; }
+    if [ "${1:-default}" != "--offline" ]; then
+      ./gradlew build remapJar publishToMavenLocal --no-daemon
+    else
+      ./gradlew build remapJar publishToMavenLocal --no-daemon --offline
+    fi
     cd .. || { echo "cd failed"; exit 1; }
   else
     rm -rf "$HOME"/.m2/repository/gg/skytils/skytilsmod/!("$SKYTILS_VERSION"|maven-metadata-local.xml)/
@@ -153,7 +167,7 @@ if [ "${1:-default}" != "--skip-build" ]; then
     if [ "${2:-default}" == "--info" ]; then
      ./gradlew build test remapJar --offline --info
     else
-     ./gradlew build test remapJar
+     ./gradlew build test remapJar --offline
     fi
   fi
   EXIT_CODE=$?
