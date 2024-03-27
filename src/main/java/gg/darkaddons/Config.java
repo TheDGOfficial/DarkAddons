@@ -294,7 +294,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Hide Particles",
-        description = "Hides particles (except important ones) while in the Wither King fight, to get more FPS. Important particles are the ones that are cruicial, such as the ones that appear when a dragon is spawning, which is used by mods to display timers and notifications.",
+        description = "Hides Heart particles everywhere except in The Rift (since Splatters there steal your hearts and you need to pickup heart particles in the floor to regain your hearts), and all particles except important ones while in the Wither King fight, to get more FPS. Important particles are the ones that are cruicial, such as the ones that appear when a dragon is spawning, which is used by mods to display timers and notifications.",
         category = "Performance", subcategory = "Experimental"
     )
     private static boolean hideParticles;
