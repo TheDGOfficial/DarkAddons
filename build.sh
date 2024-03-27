@@ -62,7 +62,7 @@ git submodule init
 
 cd darkaddons-site || { echo "cd failed"; exit 1; }
 git stash &> /dev/null
-git stash drop &> /dev/null
+git stash drop
 git checkout main &> /dev/null
 git pull &> /dev/null
 cd .. || { echo "cd failed"; exit 1; }
