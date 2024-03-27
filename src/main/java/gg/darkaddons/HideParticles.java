@@ -27,7 +27,7 @@ final class HideParticles {
         if (Config.isHideParticles() && packet instanceof final S2APacketParticles particlePacket) {
             final var type = particlePacket.getParticleType();
 
-            return EnumParticleTypes.HEART == type && !DarkAddons.isPlayerInRift() || AdditionalM7Features.phase5Started && (EnumParticleTypes.ENCHANTMENT_TABLE == type || EnumParticleTypes.FLAME == type || EnumParticleTypes.FIREWORKS_SPARK == type);
+            return (EnumParticleTypes.HEART != type || DarkAddons.isPlayerInRift()) && (!AdditionalM7Features.phase5Started || EnumParticleTypes.ENCHANTMENT_TABLE == type || EnumParticleTypes.FLAME == type || EnumParticleTypes.FIREWORKS_SPARK == type);
         }
 
         return true;
