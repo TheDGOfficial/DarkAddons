@@ -508,18 +508,18 @@ final class Config extends Vigilant {
     private static boolean edragReminder = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Phase 5 Starting Notification",
-        description = "Shows a title message on screen when Phase 5 is starting.",
-        category = "Dungeons", subcategory = "Reminders"
-    )
-    private static boolean phase5StartingNotification = true;
-
-    @Property(
         type = PropertyType.SWITCH, name = "Phase 3 Starting Notification",
         description = "Shows a title message on screen when Phase 2 ends to remind you about Phase 3 starting.",
         category = "Dungeons", subcategory = "Reminders"
     )
     private static boolean phase3StartingNotification = true;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Phase 5 Starting Notification",
+        description = "Shows a title message on screen when Phase 5 is starting.",
+        category = "Dungeons", subcategory = "Reminders"
+    )
+    private static boolean phase5StartingNotification = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Chroma/Rainbow Toggle",
