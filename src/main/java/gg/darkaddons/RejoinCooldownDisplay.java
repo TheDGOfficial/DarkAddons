@@ -61,13 +61,17 @@ final class RejoinCooldownDisplay extends SimpleGuiElement {
         }
 
         final var isDemoRenderBypass = this.isDemoRenderBypass();
+        final var timeLeftSecondsLocal = Math.max(0L, TimeUnit.MILLISECONDS.toSeconds(RejoinCooldownDisplay.kickCooldownEnd - System.currentTimeMillis()));
 
         if (!isDemoRenderBypass && DarkAddons.isInSkyblock()) {
-            this.clear();
+            if (0 == timeLeftSecondsLocal) {
+                this.clear();
+            }
+
             return;
         }
 
-        RejoinCooldownDisplay.timeLeftSeconds = Math.max(0L, TimeUnit.MILLISECONDS.toSeconds(RejoinCooldownDisplay.kickCooldownEnd - System.currentTimeMillis()));
+        RejoinCooldownDisplay.timeLeftSeconds = timeLeftSecondsLocal;
 
         if (isDemoRenderBypass || (RejoinCooldownDisplay.lastTimeLeftSeconds != RejoinCooldownDisplay.timeLeftSeconds || this.isEmpty())) {
             RejoinCooldownDisplay.lastTimeLeftSeconds = RejoinCooldownDisplay.timeLeftSeconds;
