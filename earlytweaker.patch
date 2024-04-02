@@ -1,0 +1,35 @@
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 7a5d3a4..c785f6b 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -16,11 +16,14 @@
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  */
+ 
++import java.util.Locale
++
+ plugins {
+     id("net.kyori.blossom") version "2.1.0"
+     idea
+     id("org.jetbrains.gradle.plugin.idea-ext") version "1.1.7"
+     java
++    `maven-publish`
+ }
+ 
+ version = "0.2.2"
+@@ -80,3 +83,15 @@ tasks {
+         options.release.set(8)
+     }
+ }
++
++publishing {
++    publications {
++        register("mavenJava", MavenPublication::class) {
++            groupId = project.group.toString()
++            artifactId = project.name.lowercase(Locale.ROOT)
++            version = project.version.toString()
++
++            from(components["java"])
++        }
++    }
++}
