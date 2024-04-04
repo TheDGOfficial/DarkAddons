@@ -113,12 +113,71 @@ final class Utils {
         return map;
     }
 
-    /**
-     * Holds all the formatting codes, to not call the
-     * {@link EnumChatFormatting#values()} method each time.
-     */
-    @NotNull
-    private static final EnumChatFormatting[] ENUM_CHAT_FORMATTING_VALUES = EnumChatFormatting.values();
+    private static final class EnumChatFormattingHolder {
+        /**
+         * Private constructor since this class only contains static members.
+         * <p>
+         * Always throws {@link UnsupportedOperationException} (for when
+         * constructed via reflection).
+         */
+        private EnumChatFormattingHolder() {
+            super();
+
+            throw Utils.staticClassException();
+        }
+
+        /**
+         * Holds all the formatting codes, to not call the
+         * {@link EnumChatFormatting#values()} method each time.
+         */
+        @NotNull
+        private static final EnumChatFormatting[] ENUM_CHAT_FORMATTING_VALUES = EnumChatFormatting.values();
+
+        /**
+         * Removes Minecraft color and formatting codes from the given string.
+         * <p>
+         * Note that unlike other methods this doesn't utilize a
+         * {@link java.util.regex.Pattern} or {@link java.util.regex.Matcher} and
+         * just uses simple {@link StringUtils#replace(String, String, String)}
+         * against all known codes (0-9 a-f color codes plus formatting codes (k-r)
+         * and z for chroma).
+         *
+         * @param text The text to remove Minecraft control codes from.
+         * @return Empty string if the given text is null, or the given text
+         * without control codes otherwise.
+         */
+        @NotNull
+        private static final String removeControlCodes(@Nullable final String text) {
+            if (null == text) {
+                return "";
+            }
+
+            if (!text.contains(Utils.CONTROL_START)) {
+                return text;
+            }
+
+            var withoutControlCodes = text;
+
+            for (final var chatFormatting : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
+                final var code = chatFormatting.toString();
+                if (text.contains(code)) {
+                    withoutControlCodes = StringUtils.remove(withoutControlCodes, code);
+                }
+
+                final var uppercaseCode = chatFormatting.toString().toUpperCase(Locale.ROOT);
+                if (text.contains(uppercaseCode)) {
+                    withoutControlCodes = StringUtils.remove(withoutControlCodes, uppercaseCode);
+                }
+            }
+
+            // Chroma color is not on EnumChatFormatting, needs manual handling.
+            if (withoutControlCodes.contains(Utils.CONTROL_START + 'z')) {
+                withoutControlCodes = StringUtils.remove(withoutControlCodes, Utils.CONTROL_START + 'z');
+            }
+
+            return withoutControlCodes.contains(Utils.CONTROL_START + 'Z') ? StringUtils.remove(withoutControlCodes, Utils.CONTROL_START + 'Z') : withoutControlCodes;
+        }
+    }
 
     /**
      * The character used to signal the start of a formatting code.
@@ -158,34 +217,7 @@ final class Utils {
      */
     @NotNull
     static final String removeControlCodes(@Nullable final String text) {
-        if (null == text) {
-            return "";
-        }
-
-        if (!text.contains(Utils.CONTROL_START)) {
-            return text;
-        }
-
-        var withoutControlCodes = text;
-
-        for (final var chatFormatting : Utils.ENUM_CHAT_FORMATTING_VALUES) {
-            final var code = chatFormatting.toString();
-            if (text.contains(code)) {
-                withoutControlCodes = StringUtils.remove(withoutControlCodes, code);
-            }
-
-            final var uppercaseCode = chatFormatting.toString().toUpperCase(Locale.ROOT);
-            if (text.contains(uppercaseCode)) {
-                withoutControlCodes = StringUtils.remove(withoutControlCodes, uppercaseCode);
-            }
-        }
-
-        // Chroma color is not on EnumChatFormatting, needs manual handling.
-        if (withoutControlCodes.contains(Utils.CONTROL_START + 'z')) {
-            withoutControlCodes = StringUtils.remove(withoutControlCodes, Utils.CONTROL_START + 'z');
-        }
-
-        return withoutControlCodes.contains(Utils.CONTROL_START + 'Z') ? StringUtils.remove(withoutControlCodes, Utils.CONTROL_START + 'Z') : withoutControlCodes;
+        return Utils.EnumChatFormattingHolder.removeControlCodes(text);
     }
 
     /**
