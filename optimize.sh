@@ -105,6 +105,17 @@ CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SK
 
 mkdir -p build/bin
 
+echo gradle project repo:
+ls "$GRADLE_PROJECT_REPO"
+echo loom-cache:
+ls "$GRADLE_PROJECT_REPO/loom-cache"
+echo minecraftMaven:
+ls "$GRADLE_PROJECT_REPO/loom-cache/minecraftMaven"
+echo net:
+ls "$GRADLE_PROJECT_REPO/loom-cache/minecraftMaven/net"
+echo minecraft:
+ls "$GRADLE_PROJECT_REPO/loom-cache/minecraftMaven/net/minecraft"
+
 cp "$GRADLE_PROJECT_REPO/loom-cache/minecraftMaven/net/minecraft/forge-1.8.9-11.15.1.2318-1.8.9-minecraft-merged-5df746f1ba/1.8.9-de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9/forge-1.8.9-11.15.1.2318-1.8.9-minecraft-merged-5df746f1ba-1.8.9-de.oceanlabs.mcp.mcp_stable.1_8_9.22-1.8.9-forge-1.8.9-11.15.1.2318-1.8.9.jar" "build/bin/mc.jar"
 
 zip -d -q build/bin/mc.jar META-INF/MANIFEST.MF
