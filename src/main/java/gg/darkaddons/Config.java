@@ -183,6 +183,13 @@ final class Config extends Vigilant {
     )
     private static boolean fpsLimitDisplay;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "FPS Display",
+        description = "Shows your FPS on the screen, updating every second. Accurate to the millisecond precision. Shows in green if equal or above 60 FPS, yellow if equal or above 30 FPS, and red otherwise. Note: The displayed FPS will be different than what's shown on F3 because that takes average FPS, and this is the FPS according to time took to render last frame.",
+        category = "Misc", subcategory = "HUD"
+    )
+    private static boolean fpsDisplay;
+
     /*@Property(
         type = PropertyType.SWITCH, name = "Dimensional Slash Alert",
         description = "Creates a title when you are in range of dimensional slash.",
@@ -972,6 +979,18 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.hideRogueSwordTimerOnceZero;
+    }
+
+    static final boolean isSendMessageOn270Score() {
+        Config.checkUninit();
+
+        return Config.sendMessageOn270Score;
+    }
+
+    static final boolean isSendMessageOn300Score() {
+        Config.checkUninit();
+
+        return Config.sendMessageOn300Score;
     }
 
     static final boolean isSbRejoinCooldownAfterKickDisplay() {
