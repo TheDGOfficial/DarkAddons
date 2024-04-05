@@ -571,6 +571,13 @@ final class Config extends Vigilant {
     private static boolean aggressiveJump;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Create Ghost Block With Key",
+        description = "Creates ghost block at the block you are looking when you press the configured key, which is G by default. To change it go to standard Minecraft vanilla Controls menu in Settings. Warning: This might get you banned if staff spectates you while you do it, but otherwise should be safe, for extra safety you can hold a pickaxe while you press the key, although not required.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean createGhostBlockWithKey;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Hacking For Dummies Solver",
         description = "Solver for the hacking for dummies quest given by the Kloon in The Rift, in the area where normally the Guy is, in the overworld. This not a cheat, just a solver, you still need to click manually but it's very easy with the solver unlike melody, so I didn't felt the need to make it click automatically. NOTE: This only helps with knowing what buttons to click on the hacking GUI, for what color each term should be after hacking, figure it yourself or watch a guide.",
         category = "QOL", subcategory = "General"
@@ -1241,6 +1248,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.aggressiveJump;
+    }
+
+    static final boolean isCreateGhostBlockWithKey() {
+        Config.checkUninit();
+
+        return Config.createGhostBlockWithKey;
     }
 
     static final boolean isHackingForDummiesSolver() {

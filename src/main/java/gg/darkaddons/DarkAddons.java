@@ -660,6 +660,8 @@ public final class DarkAddons {
         MemoryLeakFix.registerPeriodicClean();
         RemoveBlankArmorStands.registerPeriodicRemoval();
 
+        GhostBlock.registerKeybindings();
+
         DarkAddons.register(
             TickTask.newManager(),
             new GuiManager(),
@@ -677,7 +679,8 @@ public final class DarkAddons {
             new RemoveBlankArmorStands(),
             new HideXPOrbs(),
             new TablistUtil(),
-            new UnopenedChestsDisplay()
+            new UnopenedChestsDisplay(),
+            new GhostBlock(),
         );
 
         GuiManager.init();
