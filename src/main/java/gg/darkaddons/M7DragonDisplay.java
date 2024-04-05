@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.essential.universal.wrappers.message.UTextComponent;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
@@ -46,7 +45,7 @@ final class M7DragonDisplay extends GuiElement {
     private static final void updateDragonHPsFromScoreboard() {
         for (final var line : ScoreboardUtil.fetchScoreboardLines(8)) {
             if (line.contains(M7DragonDisplay.SUFFIX)) {
-                final var lineWithoutColors = UTextComponent.Companion.stripFormatting(line);
+                final var lineWithoutColors = Utils.removeControlCodes(line);
 
                 for (final var dragon : WitherKingDragons.getValues()) {
                     final var prefix = dragon.getScoreboardPrefix();
