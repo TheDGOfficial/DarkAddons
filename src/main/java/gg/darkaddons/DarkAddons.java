@@ -681,7 +681,8 @@ public final class DarkAddons {
             new TablistUtil(),
             new UnopenedChestsDisplay(),
             new FPSDisplay(),
-            new GhostBlock()
+            new GhostBlock(),
+            new ScoreFromScoreboard()
         );
 
         GuiManager.init();

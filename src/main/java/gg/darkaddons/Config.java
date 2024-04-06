@@ -529,6 +529,20 @@ final class Config extends Vigilant {
     private static boolean phase5StartingNotification = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Send Message on 270 Score",
+        description = "Uses score from scoreboard to determine the real score and send the 270 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean sendMessageOn270Score;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Send Message on 300 Score",
+        description = "Uses score from scoreboard to determine the real score and send the 300 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean sendMessageOn300Score;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Chroma/Rainbow Toggle",
         description = "If enabled, will use chroma/rainbow color in various places. (Requires SkyblockAddons)",
         category = "Misc", subcategory = "Chroma"
