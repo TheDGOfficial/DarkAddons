@@ -1005,6 +1005,12 @@ final class Config extends Vigilant {
         return Config.fpsLimitDisplay;
     }
 
+    static final boolean isFpsDisplay() {
+        Config.checkUninit();
+
+        return Config.fpsDisplay;
+    }
+
     static final boolean isSharperDragonBoundingBox() {
         Config.checkUninit();
 
