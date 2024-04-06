@@ -99,9 +99,11 @@ add_m2_artifact_to_classpath org.lwjgl.lwjgl lwjgl "$LWJGL_VERSION"
 add_m2_artifact_to_classpath org.apache.logging.log4j log4j-api "$LOG4J_VERSION"
 add_m2_artifact_to_classpath com.google.errorprone error_prone_annotations "$ERRORPRONE_VERSION"
 
-echo -n "$HASH" | sha256sum > .sha256sum
-
 CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SKYTILS_VERSION.jar
+
+HASH=$HASH$SKYTILS_VERSION
+
+echo -n "$HASH" | sha256sum > .sha256sum
 
 mkdir -p build/bin
 
