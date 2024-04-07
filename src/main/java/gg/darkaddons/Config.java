@@ -599,6 +599,13 @@ final class Config extends Vigilant {
     private static boolean createGhostBlockWithKey;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Press Key to Requeue",
+        description = "Requeues into another instanced game when you press the configured key (by default R). Instanced in this context means Dungeons or Kuudra in the context of Skyblock, but any game that supports the /instancerequeue command will work.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean pressKeyToRequeue;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Hacking For Dummies Solver",
         description = "Solver for the hacking for dummies quest given by the Kloon in The Rift, in the area where normally the Guy is, in the overworld. This not a cheat, just a solver, you still need to click manually but it's very easy with the solver unlike melody, so I didn't felt the need to make it click automatically. NOTE: This only helps with knowing what buttons to click on the hacking GUI, for what color each term should be after hacking, figure it yourself or watch a guide.",
         category = "QOL", subcategory = "General"
@@ -1293,6 +1300,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.createGhostBlockWithKey;
+    }
+
+    static final boolean isPressKeyToRequeue() {
+        Config.checkUninit();
+
+        return Config.pressKeyToRequeue;
     }
 
     static final boolean isHackingForDummiesSolver() {

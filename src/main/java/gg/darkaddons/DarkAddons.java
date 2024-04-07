@@ -661,6 +661,7 @@ public final class DarkAddons {
         RemoveBlankArmorStands.registerPeriodicRemoval();
 
         GhostBlock.registerKeybindings();
+        RequeueKey.registerKeybindings();
 
         DarkAddons.register(
             TickTask.newManager(),
@@ -682,7 +683,8 @@ public final class DarkAddons {
             new UnopenedChestsDisplay(),
             new FPSDisplay(),
             new GhostBlock(),
-            new ScoreFromScoreboard()
+            new ScoreFromScoreboard(),
+            new RequeueKey()
         );
 
         GuiManager.init();
