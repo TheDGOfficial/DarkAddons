@@ -593,7 +593,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Create Ghost Block With Key",
-        description = "Creates ghost block at the block you are looking when you press the configured key, which is G by default. To change it go to standard Minecraft vanilla Controls menu in Settings. Warning: This might get you banned if staff spectates you while you do it, but otherwise should be safe, for extra safety you can hold a pickaxe while you press the key, although not required.",
+        description = "Creates ghost block at the block you are looking when you press the configured key, which is G by default. To change it go to standard Minecraft vanilla Controls menu in Settings.",
         category = "QOL", subcategory = "General"
     )
     private static boolean createGhostBlockWithKey;
