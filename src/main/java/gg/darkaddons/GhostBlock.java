@@ -25,7 +25,7 @@ final class GhostBlock {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
-        if (Config.isCreateGhostBlockWithKey() && GhostBlock.CREATE_GHOST_BLOCK_KEY.isPressed()) {
+        if (Config.isCreateGhostBlockWithKey() && (GhostBlock.CREATE_GHOST_BLOCK_KEY.isPressed() || Config.isKeepHoldingToCreateMoreGhostBlocks() && GhostBlock.CREATE_GHOST_BLOCK_KEY.isKeyDown())) {
             final var mc = Minecraft.getMinecraft();
             final var object = mc.thePlayer.rayTrace(mc.playerController.getBlockReachDistance(), 1.0F);
 

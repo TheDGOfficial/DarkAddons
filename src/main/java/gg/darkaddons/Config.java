@@ -599,6 +599,13 @@ final class Config extends Vigilant {
     private static boolean createGhostBlockWithKey;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Create More Ghost Blocks when Holding the Key",
+        description = "Makes it so you don't have to press the key 1 time per block and keeps creating ghost blocks while you are holding down the key. Might make it generate more ghost blocks than necessary even if you just press the key 1 time if enabled.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean keepHoldingToCreateMoreGhostBlocks;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Press Key to Requeue",
         description = "Requeues into another instanced game when you press the configured key (by default R, go to standard Minecraft vanilla Controls menu in Settings if you want to change it). Instanced in this context means Dungeons or Kuudra in the context of Skyblock, but any game that supports the /instancerequeue command will work.",
         category = "QOL", subcategory = "General"
@@ -1300,6 +1307,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.createGhostBlockWithKey;
+    }
+
+    static final boolean isKeepHoldingToCreateMoreGhostBlocks() {
+        Config.checkUninit();
+
+        return Config.keepHoldingToCreateMoreGhostBlocks;
     }
 
     static final boolean isPressKeyToRequeue() {
