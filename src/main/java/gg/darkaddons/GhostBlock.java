@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Blocks;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -24,8 +24,8 @@ final class GhostBlock {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public final void onRenderWorld(@NotNull final RenderWorldLastEvent event) {
-        if (Config.isCreateGhostBlockWithKey() && GhostBlock.CREATE_GHOST_BLOCK_KEY.isKeyDown()) {
+    public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
+        if (Config.isCreateGhostBlockWithKey() && GhostBlock.CREATE_GHOST_BLOCK_KEY.isPressed()) {
             final var mc = Minecraft.getMinecraft();
             final var object = mc.thePlayer.rayTrace(mc.playerController.getBlockReachDistance(), 1.0F);
 
@@ -36,7 +36,7 @@ final class GhostBlock {
                     final var world = mc.theWorld;
                     final var lookingAtblock = world.getBlockState(blockPos).getBlock();
 
-                    if (!GhostBlock.isInteractable(lookingAtblock) && Blocks.air != lookingAtblock) {
+                    if (!GhostBlock.isOnWhitelist(lookingAtblock) && Blocks.air != lookingAtblock) {
                         world.setBlockToAir(blockPos);
                     }
                 }
@@ -44,7 +44,7 @@ final class GhostBlock {
         }
     }
 
-    private static final boolean isInteractable(@NotNull final Block block) {
-        return Blocks.chest == block || Blocks.lever == block || Blocks.trapped_chest == block || Blocks.wooden_button == block || Blocks.stone_button == block || Blocks.skull == block;
+    private static final boolean isOnWhitelist(@NotNull final Block block) {
+        return Blocks.chest == block || Blocks.lever == block || Blocks.trapped_chest == block || Blocks.wooden_button == block || Blocks.stone_button == block || Blocks.skull == block || Blocks.bedrock == block;
     }
 }
