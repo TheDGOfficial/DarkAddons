@@ -600,7 +600,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Press Key to Requeue",
-        description = "Requeues into another instanced game when you press the configured key (by default R). Instanced in this context means Dungeons or Kuudra in the context of Skyblock, but any game that supports the /instancerequeue command will work.",
+        description = "Requeues into another instanced game when you press the configured key (by default R, go to standard Minecraft vanilla Controls menu in Settings if you want to change it). Instanced in this context means Dungeons or Kuudra in the context of Skyblock, but any game that supports the /instancerequeue command will work.",
         category = "QOL", subcategory = "General"
     )
     private static boolean pressKeyToRequeue;
