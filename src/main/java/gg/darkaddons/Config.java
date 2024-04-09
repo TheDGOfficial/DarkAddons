@@ -854,6 +854,7 @@ final class Config extends Vigilant {
         this.addDependency("classAverage50DisplayCompactness", "classAverage50Display");
 
         this.addDependency("burgersDone", "slayerRngDisplay");
+        this.addDependency("keepHoldingToCreateMoreGhostBlocks", "createGhostBlockWithKey");
     }
 
     private final void addListeners() {
