@@ -48,10 +48,15 @@ import java.nio.file.Files;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.jar.JarFile;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseListener {
+    @NotNull
+    private static final Logger LOGGER = Logger.getLogger(DarkAddonsInstaller.class.getName());
+
     private static final long serialVersionUID = 0L;
 
     @NotNull
@@ -136,7 +141,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 final var url = ClassLoader.getSystemResource("assets/darkaddons/darkaddons.icon.png");
                 frame.setIconImage(xToolkit.createImage(url));
             } catch (final Throwable tw) {
-                PublicUtils.printStackTrace(tw);
+                DarkAddonsInstaller.LOGGER.log(Level.SEVERE, tw, tw::getMessage);
                 // Continue using the default Java coffee icon, I guess...
             }
 
@@ -577,7 +582,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                                 try {
                                     Files.delete(file.toPath());
                                 } catch (final Exception ex) {
-                                    PublicUtils.printStackTrace(ex);
+                                    DarkAddonsInstaller.LOGGER.log(Level.SEVERE, ex, ex::getMessage);
                                     DarkAddonsInstaller.showErrorMessage("Was not able to delete the other DarkAddons files found in your mods folder!" + System.lineSeparator() +
                                     "Please make sure that your minecraft is currently closed and try again, or feel" + System.lineSeparator() +
                                     "free to open your mods folder and delete those files manually.");
@@ -704,7 +709,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     }
 
     private static final void showErrorPopup(@NotNull final Throwable ex) {
-        PublicUtils.printStackTrace(ex);
+        DarkAddonsInstaller.LOGGER.log(Level.SEVERE, ex, ex::getMessage);
 
         final var textArea = new JTextArea(DarkAddonsInstaller.getStacktraceText(ex));
         textArea.setEditable(false);
