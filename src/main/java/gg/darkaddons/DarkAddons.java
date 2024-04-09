@@ -92,6 +92,7 @@ public final class DarkAddons {
      */
     @NotNull
     private static final Config config = new Config();
+
     private static final class LoggerHolder {
         /**
          * Private constructor since this class only contains static members.
@@ -108,6 +109,7 @@ public final class DarkAddons {
         @NotNull
         private static final Logger LOGGER = LogManager.getLogger();
     }
+
     /**
      * Holds state about if we should register tasks.
      */

@@ -982,7 +982,7 @@ final class Utils {
             try {
                 //noinspection ObjectEquality
                 if (originalThreadClass != clazz.getMethod("getId").getDeclaringClass()) {
-                    Utils.LoggerHolder.LOGGER.warn("Thread " + thread.getName() + " derives its own thread class from " + originalThreadClass.getName() + " at " + clazz.getName() + ", which overrides the getId() method. This method is not meant to be overridden.");
+                    Utils.LoggerHolder.LOGGER.warn("Thread {} derives its own thread class from {} at {}, which overrides the getId() method. This method is not meant to be overridden.", thread.getName(), originalThreadClass.getName(), clazz.getName());
                 }
             } catch (final NoSuchMethodException noSuchMethodException) {
                 throw JavaUtils.sneakyThrow(noSuchMethodException); // Should never happen

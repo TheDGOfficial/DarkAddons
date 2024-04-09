@@ -346,7 +346,7 @@ final class Diagnostics {
                 final var freezeTime = currentTime - lastGameLoop;
 
                 //noinspection StringConcatenationMissingWhitespace
-                Diagnostics.LOGGER.warn("Client thread froze for " + freezeTime + "ms. Dumping thread...");
+                Diagnostics.LOGGER.warn("Client thread froze for {}ms. Dumping thread...", freezeTime);
                 Diagnostics.dumpThread0(ManagementFactory.getThreadMXBean().getThreadInfo(Diagnostics.MC_THREAD_ID, Integer.MAX_VALUE), Diagnostics.LOGGER::warn);
             }
         }

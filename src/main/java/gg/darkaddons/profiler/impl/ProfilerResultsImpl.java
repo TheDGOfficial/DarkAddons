@@ -1,6 +1,5 @@
 package gg.darkaddons.profiler.impl;
 
-import gg.darkaddons.PublicUtils;
 import gg.darkaddons.profiler.Profiler;
 import gg.darkaddons.profiler.ProfilerResult;
 import gg.darkaddons.profiler.ProfilerResults;
@@ -73,7 +72,7 @@ final class ProfilerResultsImpl implements ProfilerResults {
 
         final var remappedMethodName = null == methodMapping ? methodName : methodMapping.getDeobfName();
         if (remappedMethodName.startsWith("func_")) {
-            ProfilerResultsImpl.LOGGER.warn("[mappings] can't find mapping for method " + remappedMethodName + " (in class " + profilerResult.packageName() + '.' + profilerResult.className() + ')');
+            ProfilerResultsImpl.LOGGER.warn("[mappings] can't find mapping for method {} (in class {}.{})", remappedMethodName, profilerResult.packageName(), profilerResult.className());
         }
 
         final var remappedFullStack = profilerResult.fullStack();
@@ -87,7 +86,7 @@ final class ProfilerResultsImpl implements ProfilerResults {
 
             final var stackRemappedMethodName = null == stackMethodMapping ? stackMethodName : stackMethodMapping.getDeobfName();
             if (stackRemappedMethodName.startsWith("func_")) {
-                ProfilerResultsImpl.LOGGER.warn("[mappings] can't find mapping for method " + stackRemappedMethodName + " (in class " + elem.getClassName() + ')');
+                ProfilerResultsImpl.LOGGER.warn("[mappings] can't find mapping for method {} (in class {})", stackRemappedMethodName, elem.getClassName());
             }
 
             remappedFullStack[i] = new StackTraceElement(elem.getClassName(), stackRemappedMethodName, elem.getFileName(), elem.getLineNumber());

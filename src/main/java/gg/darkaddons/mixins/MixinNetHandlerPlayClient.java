@@ -3,7 +3,6 @@ package gg.darkaddons.mixins;
 import gg.darkaddons.annotations.bytecode.Bridge;
 import gg.darkaddons.annotations.bytecode.Synthetic;
 import gg.darkaddons.DarkAddons;
-import gg.darkaddons.PublicUtils;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.client.C19PacketResourcePackStatus;
@@ -59,7 +58,7 @@ final class MixinNetHandlerPlayClient {
             if (isNotLevelProtocol || !url.contains("..") && url.endsWith("/resources.zip")) {
                 return true;
             }
-            MixinNetHandlerPlayClient.LOGGER.error("Malicious server tried to access " + url);
+            MixinNetHandlerPlayClient.LOGGER.error("Malicious server tried to access {}", url);
             throw new URISyntaxException(url, "Invalid levelstorage resourcepack path");
         } catch (final URISyntaxException | UnsupportedEncodingException e) {
             MixinNetHandlerPlayClient.LOGGER.catching(e);

@@ -2,7 +2,6 @@ package gg.darkaddons;
 
 import gg.darkaddons.mixins.IMixinGuiPlayerTabOverlay;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -34,7 +33,7 @@ final class TablistUtil {
     }
 
     @NotNull
-    static final ArrayList<String> fetchTabEntries() {
+    private static final ArrayList<String> fetchTabEntries() {
         final var player = Minecraft.getMinecraft().thePlayer;
 
         if (null == player) {

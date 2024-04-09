@@ -30,9 +30,9 @@ final class FPSDisplay extends SimpleGuiElement {
 
         final var isDemoRenderBypass = this.isDemoRenderBypass();
 
-        FPSDisplay.fps = 1_000L / Math.max(1, Diagnostics.getLastGameLoopTime());
+        FPSDisplay.fps = 1_000L / Math.max(1L, Diagnostics.getLastGameLoopTime());
 
-        if (isDemoRenderBypass || (FPSDisplay.lastFps != FPSDisplay.fps || this.isEmpty())) {
+        if (isDemoRenderBypass || FPSDisplay.lastFps != FPSDisplay.fps || this.isEmpty()) {
             FPSDisplay.lastFps = FPSDisplay.fps;
 
             super.update();
@@ -40,10 +40,10 @@ final class FPSDisplay extends SimpleGuiElement {
     }
 
     @NotNull
-    private static final String getFpsWithColor(final long fps) {
-        final var color = 60 <= fps ? "a" : 30 <= fps ? "e" : "c";
+    private static final String getFpsWithColor(final long fpsToColor) {
+        final var color = 60L <= fpsToColor ? "a" : 30L <= fpsToColor ? "e" : "c";
 
-        return color + fps;
+        return color + fpsToColor;
     }
 
     @Override

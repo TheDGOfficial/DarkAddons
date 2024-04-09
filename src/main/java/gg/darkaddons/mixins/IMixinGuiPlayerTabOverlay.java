@@ -13,6 +13,7 @@ import net.minecraft.util.IChatComponent;
 /**
  * Accessor mixin to allow getting a private field in {@link GuiPlayerTabOverlay} class.
  */
+@FunctionalInterface
 @Mixin(value = GuiPlayerTabOverlay.class, priority = 999)
 public interface IMixinGuiPlayerTabOverlay {
     /**

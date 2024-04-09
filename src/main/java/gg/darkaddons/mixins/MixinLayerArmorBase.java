@@ -20,9 +20,9 @@ final class MixinLayerArmorBase {
         return switch (len) {
             case 1 -> StringUtils.replaceOnce(text, "%s", values[0].toString());
             case 4 ->
-                    StringUtils.replaceOnce(StringUtils.replaceOnce(StringUtils.replaceOnce(StringUtils.replaceOnce(text, "%s", values[0].toString()), "%s", values[1].toString()), "%d", values[2].toString()), "%s", values[3].toString());
+                StringUtils.replaceOnce(StringUtils.replaceOnce(StringUtils.replaceOnce(StringUtils.replaceOnce(text, "%s", values[0].toString()), "%s", values[1].toString()), "%d", values[2].toString()), "%s", values[3].toString());
             case 3 ->
-                    StringUtils.replaceOnce(StringUtils.replaceOnce(StringUtils.replaceOnce(text, "%s", values[0].toString()), "%d", values[1].toString()), "%s", values[2].toString());
+                StringUtils.replaceOnce(StringUtils.replaceOnce(StringUtils.replaceOnce(text, "%s", values[0].toString()), "%d", values[1].toString()), "%s", values[2].toString());
             default -> throw new IllegalStateException("unexpected len of " + len);
         };
     }

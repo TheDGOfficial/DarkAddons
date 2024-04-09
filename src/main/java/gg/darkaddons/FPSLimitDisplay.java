@@ -38,7 +38,7 @@ final class FPSLimitDisplay extends SimpleGuiElement {
 
         FPSLimitDisplay.fpsLimit = Minecraft.getMinecraft().getLimitFramerate();
 
-        if (isDemoRenderBypass || (FPSLimitDisplay.lastFpsLimit != FPSLimitDisplay.fpsLimit || this.isEmpty())) {
+        if (isDemoRenderBypass || FPSLimitDisplay.lastFpsLimit != FPSLimitDisplay.fpsLimit || this.isEmpty()) {
             FPSLimitDisplay.lastFpsLimit = FPSLimitDisplay.fpsLimit;
 
             super.update();

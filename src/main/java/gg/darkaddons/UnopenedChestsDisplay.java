@@ -73,7 +73,7 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
 
         UnopenedChestsDisplay.unopenedChests = isDemoRenderBypass ? 0 : UnopenedChestsDisplay.fetchUnopenedChests();
 
-        if (isDemoRenderBypass || (UnopenedChestsDisplay.lastUnopenedChests != UnopenedChestsDisplay.unopenedChests || this.isEmpty())) {
+        if (isDemoRenderBypass || UnopenedChestsDisplay.lastUnopenedChests != UnopenedChestsDisplay.unopenedChests || this.isEmpty()) {
             UnopenedChestsDisplay.lastUnopenedChests = UnopenedChestsDisplay.unopenedChests;
 
             super.update();

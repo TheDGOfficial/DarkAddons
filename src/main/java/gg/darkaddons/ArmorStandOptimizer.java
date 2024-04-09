@@ -272,7 +272,7 @@ final class ArmorStandOptimizer {
             final var startTime = System.currentTimeMillis();
 
             if (startTime >= ArmorStandOptimizer.nextUpdateDontRender) {
-                ArmorStandOptimizer.updateDontRender(mc.theWorld, player.posX, player.posY, player.posZ, startTime, new Object[ArmorStandOptimizer.STARTING_ENTITY_SIZE][]);
+                ArmorStandOptimizer.updateDontRender(mc.theWorld, player.posX, player.posY, player.posZ, startTime, ArmorStandOptimizer.allocEntityArray(ArmorStandOptimizer.STARTING_ENTITY_SIZE));
             }
         }
     }

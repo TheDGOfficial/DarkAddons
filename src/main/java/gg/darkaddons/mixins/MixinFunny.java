@@ -15,7 +15,7 @@ final class MixinFunny {
         super();
     }
 
-    @Inject(method = "joinedSkyblock", remap = false, at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "joinedSkyblock", remap = false, at = @At("HEAD"), cancellable = true)
     private final void joinedSkyblock$darkaddons(@NotNull final CallbackInfo ci) {
         ci.cancel();
     }

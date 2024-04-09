@@ -94,7 +94,7 @@ public final class MethodMapping {
 
             // Probably an invalid line or empty line at the end of file
             if (3 != columns.length && 4 != columns.length) {
-                MethodMapping.MethodMappingsHolder.LOGGER.error("[mappings] invalid column length " + columns.length + ", line: " + line + ", columns: " + Arrays.toString(columns) + ", quoted desc: " + quotedDesc + ", line without desc: " + StringUtils.remove(StringUtils.remove(line, quotedDesc), '"') + ", skipping...");
+                MethodMapping.MethodMappingsHolder.LOGGER.error("[mappings] invalid column length {}, line: {}, columns: {}, quoted desc: {}, line without desc: {}, skipping...", columns.length, line, Arrays.toString(columns), quotedDesc, StringUtils.remove(StringUtils.remove(line, quotedDesc), '"'));
                 return;
             }
 

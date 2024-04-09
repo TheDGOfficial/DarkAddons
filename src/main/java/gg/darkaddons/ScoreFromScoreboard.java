@@ -15,12 +15,14 @@ final class ScoreFromScoreboard {
     private static boolean blazeDoneReceived;
 
     ScoreFromScoreboard() {
+        super();
+
         DarkAddons.registerTickTask("update_score_from_scoreboard", 20, true, () -> {
-            if ((!Config.isSendMessageOn270Score() && !Config.isSendMessageOn300Score()) || !DarkAddons.isInDungeons()) {
+            if (!Config.isSendMessageOn270Score() && !Config.isSendMessageOn300Score() || !DarkAddons.isInDungeons()) {
                 return;
             }
 
-            for (final var line : ScoreboardUtil.fetchScoreboardLines(DungeonTimer.INSTANCE.getBossEntryTime() == -1L ? 9 : 8)) {
+            for (final var line : ScoreboardUtil.fetchScoreboardLines(-1L == DungeonTimer.INSTANCE.getBossEntryTime() ? 9 : 8)) {
                 final var withoutColor = Utils.removeControlCodes(line);
                 if (withoutColor.startsWith("Cleared: ")) {
                     final var score = Utils.safeParseIntFast(StringUtils.removeEnd(StringUtils.substringAfter(withoutColor, "% ("), ")"));
