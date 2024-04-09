@@ -684,7 +684,8 @@ public final class DarkAddons {
             new FPSDisplay(),
             new GhostBlock(),
             new ScoreFromScoreboard(),
-            new RequeueKey()
+            new RequeueKey(),
+            new AutoExtraStats()
         );
 
         GuiManager.init();

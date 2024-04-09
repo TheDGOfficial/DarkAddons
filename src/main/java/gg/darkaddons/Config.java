@@ -613,6 +613,13 @@ final class Config extends Vigilant {
     private static boolean pressKeyToRequeue;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Auto Extra Stats",
+        description = "Automatically sends the command required to view the extra stats after the end of a dungeon run, allowing you to see additional stats such as secrets found.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean autoExtraStats;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Auto Close Chests",
         description = "Automatically closes secret item chests instantaneously after opening while inside Dungeons, just like if you were holding a bow.",
         category = "QOL", subcategory = "General"
@@ -1327,6 +1334,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.pressKeyToRequeue;
+    }
+
+    static final boolean isAutoExtraStats() {
+        Config.checkUninit();
+
+        return Config.autoExtraStats;
     }
 
     static final boolean isAutoCloseChests() {
