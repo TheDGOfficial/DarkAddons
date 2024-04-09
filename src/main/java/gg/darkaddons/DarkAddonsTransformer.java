@@ -4,6 +4,8 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import gg.darkaddons.transformers.ASMUtils;
 import gg.darkaddons.transformers.BlockPosTransformer;
 import gg.darkaddons.transformers.NullStreamTransformer;
+import gg.darkaddons.transformers.MinecraftTransformer;
+import gg.darkaddons.transformers.EntityArmorStandTransformer;
 import gg.darkaddons.transformers.Transformer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +28,8 @@ public final class DarkAddonsTransformer implements IClassTransformer {
         }
         if (TinyConfig.getBoolean("nullStreamOptimizer", false)) {
             DarkAddonsTransformer.transformers.add(new NullStreamTransformer());
+            DarkAddonsTransformer.transformers.add(new MinecraftTransformer());
+            DarkAddonsTransformer.transformers.add(new EntityArmorStandTransformer());
         }
     }
 
