@@ -5,6 +5,8 @@ import gg.darkaddons.profiler.Profiler;
 import gg.darkaddons.profiler.ProfilerResult;
 import gg.darkaddons.profiler.ProfilerResults;
 import gg.darkaddons.profiler.impl.mappings.MethodMapping;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,6 +18,9 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 final class ProfilerResultsImpl implements ProfilerResults {
+    @NotNull
+    private static final Logger LOGGER = LogManager.getLogger();
+
     @NotNull
     private final Profiler profiler;
     @NotNull
@@ -68,7 +73,7 @@ final class ProfilerResultsImpl implements ProfilerResults {
 
         final var remappedMethodName = null == methodMapping ? methodName : methodMapping.getDeobfName();
         if (remappedMethodName.startsWith("func_")) {
-            PublicUtils.printErr("[mappings] can't find mapping for method " + remappedMethodName + " (in class " + profilerResult.packageName() + '.' + profilerResult.className() + ')');
+            ProfilerResultsImpl.LOGGER.warn("[mappings] can't find mapping for method " + remappedMethodName + " (in class " + profilerResult.packageName() + '.' + profilerResult.className() + ')');
         }
 
         final var remappedFullStack = profilerResult.fullStack();
@@ -82,7 +87,7 @@ final class ProfilerResultsImpl implements ProfilerResults {
 
             final var stackRemappedMethodName = null == stackMethodMapping ? stackMethodName : stackMethodMapping.getDeobfName();
             if (stackRemappedMethodName.startsWith("func_")) {
-                PublicUtils.printErr("[mappings] can't find mapping for method " + stackRemappedMethodName + " (in class " + elem.getClassName() + ')');
+                ProfilerResultsImpl.LOGGER.warn("[mappings] can't find mapping for method " + stackRemappedMethodName + " (in class " + elem.getClassName() + ')');
             }
 
             remappedFullStack[i] = new StackTraceElement(elem.getClassName(), stackRemappedMethodName, elem.getFileName(), elem.getLineNumber());

@@ -24,25 +24,6 @@ public final class PublicUtils {
     }
 
     /**
-     * Calls {@link Throwable#printStackTrace()} on the given {@link Throwable}.
-     *
-     * @param throwable The {@link Throwable}.
-     */
-    public static final void printStackTrace(@NotNull final Throwable throwable) {
-        Utils.printStackTrace(throwable);
-    }
-
-    /**
-     * Calls {@link java.io.PrintStream#println(String)} on the {@link System#err}
-     * with the given argument.
-     *
-     * @param err The error to print to the standard error stream.
-     */
-    public static final void printErr(@NotNull final String err) {
-        Utils.printErr(err);
-    }
-
-    /**
      * Removes Minecraft color and formatting codes from the given string.
      * <p>
      * Note that unlike other methods this doesn't utilize a

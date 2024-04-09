@@ -7,6 +7,8 @@ import gg.darkaddons.transformers.NullStreamTransformer;
 import gg.darkaddons.transformers.MinecraftTransformer;
 import gg.darkaddons.transformers.EntityArmorStandTransformer;
 import gg.darkaddons.transformers.Transformer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,6 +21,7 @@ import java.util.function.Supplier;
  */
 @SuppressWarnings({"WeakerAccess", "ClassNamePrefixedWithPackageName"})
 public final class DarkAddonsTransformer implements IClassTransformer {
+    private static final @NotNull Logger LOGGER = LogManager.getLogger();
     private static final @NotNull ConcurrentLinkedQueue<Transformer> transformers = new ConcurrentLinkedQueue<>();
 
     static {
@@ -46,8 +49,7 @@ public final class DarkAddonsTransformer implements IClassTransformer {
         try {
             return transformer.get();
         } catch (final Throwable t) {
-            // Do not use PublicUtils#printStackTrace since that loads some MC classes and that crashes the game since we are in transforming phase
-            t.printStackTrace();
+            DarkAddonsTransformer.LOGGER.catching(t);
             return defaultValue;
         }
     }

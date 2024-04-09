@@ -10,6 +10,8 @@ import net.minecraft.network.play.client.C19PacketResourcePackStatus;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.network.play.server.S48PacketResourcePackSend;
 import net.minecraft.tileentity.TileEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,6 +29,10 @@ import java.nio.charset.StandardCharsets;
 
 @Mixin(value = NetHandlerPlayClient.class, priority = 999)
 final class MixinNetHandlerPlayClient {
+    @NotNull
+    @Unique
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private MixinNetHandlerPlayClient() {
         super();
     }
@@ -53,10 +59,10 @@ final class MixinNetHandlerPlayClient {
             if (isNotLevelProtocol || !url.contains("..") && url.endsWith("/resources.zip")) {
                 return true;
             }
-            PublicUtils.printErr("Malicious server tried to access " + url);
+            MixinNetHandlerPlayClient.LOGGER.error("Malicious server tried to access " + url);
             throw new URISyntaxException(url, "Invalid levelstorage resourcepack path");
         } catch (final URISyntaxException | UnsupportedEncodingException e) {
-            PublicUtils.printStackTrace(e);
+            MixinNetHandlerPlayClient.LOGGER.catching(e);
             return false;
         }
     }

@@ -13,6 +13,8 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -471,42 +473,9 @@ final class Utils {
 
         //noinspection CallToThreadSetPriority
         thread.setPriority(Thread.MIN_PRIORITY);
-
-        thread.setUncaughtExceptionHandler((@NotNull final Thread t, @NotNull final Throwable e) -> {
-            // Default Exception Handler code, from JDK source
-            Utils.printErrRaw("Exception in thread \"" + t.getName() + "\" ");
-            Utils.printStackTrace(e);
-
-            // Additionally, report it as a chat message if we can.
-            DarkAddons.modError(e);
-        });
+        thread.setUncaughtExceptionHandler((@NotNull final Thread t, @NotNull final Throwable e) -> DarkAddons.modError(e));
 
         return thread;
-    }
-
-    private static final void printErrRaw(@NotNull final String err) {
-        Utils.print0(err, true, false);
-    }
-
-    static final void printText(@NotNull final String text) {
-        Utils.print0(text, false, true);
-    }
-
-    static final void printStackTrace(@NotNull final Throwable throwable) {
-        throwable.printStackTrace();
-    }
-
-    static final void printErr(@NotNull final String err) {
-        Utils.print0(err, true, true);
-    }
-
-    private static final void print0(@NotNull final String text, final boolean err, final boolean flush) {
-        final var stream = err ? System.err : System.out;
-        if (flush) {
-            stream.println(text);
-        } else {
-            stream.print(text);
-        }
     }
 
     @SuppressWarnings("varargs")
@@ -985,6 +954,23 @@ final class Utils {
         return threads;
     }
 
+    private static final class LoggerHolder {
+        /**
+         * Private constructor since this class only contains static members.
+         * <p>
+         * Always throws {@link UnsupportedOperationException} (for when
+         * constructed via reflection).
+         */
+        private LoggerHolder() {
+            super();
+
+            throw Utils.staticClassException();
+        }
+
+        @NotNull
+        private static final Logger LOGGER = LogManager.getLogger();
+    }
+
     static final long threadId(@NotNull final Thread thread) {
         final var id = thread.getId();
 
@@ -996,7 +982,7 @@ final class Utils {
             try {
                 //noinspection ObjectEquality
                 if (originalThreadClass != clazz.getMethod("getId").getDeclaringClass()) {
-                    Utils.printErr("Warning: Thread " + thread.getName() + " derives its own thread class from " + originalThreadClass.getName() + " at " + clazz.getName() + ", which overrides the getId() method. This method is not meant to be overridden.");
+                    Utils.LoggerHolder.LOGGER.warn("Thread " + thread.getName() + " derives its own thread class from " + originalThreadClass.getName() + " at " + clazz.getName() + ", which overrides the getId() method. This method is not meant to be overridden.");
                 }
             } catch (final NoSuchMethodException noSuchMethodException) {
                 throw JavaUtils.sneakyThrow(noSuchMethodException); // Should never happen

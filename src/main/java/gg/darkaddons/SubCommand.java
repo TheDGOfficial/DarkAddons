@@ -7,6 +7,8 @@ import gg.darkaddons.profiler.ProfilerResult;
 import gg.darkaddons.profiler.impl.ProfilerImpl;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +29,23 @@ import java.util.function.Function;
 import java.util.Locale;
 
 final class SubCommand {
+    private static final class LoggerHolder {
+        /**
+         * Private constructor since this class only contains static members.
+         * <p>
+         * Always throws {@link UnsupportedOperationException} (for when
+         * constructed via reflection).
+         */
+        private LoggerHolder() {
+            super();
+
+            throw Utils.staticClassException();
+        }
+
+        @NotNull
+        private static final Logger LOGGER = LogManager.getLogger();
+    }
+
     private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 16;
     @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"})
     @NotNull
@@ -291,12 +310,12 @@ final class SubCommand {
     private static final void registerDump() {
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
             DarkAddons.queueWarning("Dumping client thread to logs...");
-            Diagnostics.dumpThread(Thread.currentThread(), Utils::printErr);
+            Diagnostics.dumpThread(Thread.currentThread(), SubCommand.LoggerHolder.LOGGER::info);
         }, "dumpthread"));
 
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
             DarkAddons.queueWarning("Dumping all threads to logs...");
-            Diagnostics.dumpAllThreads(Utils::printErr);
+            Diagnostics.dumpAllThreads(SubCommand.LoggerHolder.LOGGER::info);
         }, "dumpthreads"));
 
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {

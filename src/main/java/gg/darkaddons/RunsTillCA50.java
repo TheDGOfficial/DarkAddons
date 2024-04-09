@@ -16,6 +16,8 @@ import kotlin.coroutines.Continuation;
 import kotlin.coroutines.CoroutineContext;
 import kotlin.coroutines.EmptyCoroutineContext;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
@@ -39,6 +41,9 @@ import gg.skytils.skytilsmod.utils.MojangUtil;
 import org.jetbrains.annotations.Nullable;
 
 final class RunsTillCA50 {
+    @NotNull
+    private static final Logger LOGGER = LogManager.getLogger();
+
     /**
      * Private constructor since this class only contains static members.
      * <p>
@@ -375,7 +380,7 @@ final class RunsTillCA50 {
             if (printWarnings) {
                 DarkAddons.queueWarning("Parsing issue from the result gathered from API; Hypixel API format changed? Updating Skytils or " + DarkAddons.MOD_NAME + " might fix this error. The full error will be printed to the logs for debugging purposes after this message, although you probably can't fix this error yourself.");
             }
-            Utils.printStackTrace(t);
+            RunsTillCA50.LOGGER.catching(t);
         } else {
             DarkAddons.modError(t);
         }

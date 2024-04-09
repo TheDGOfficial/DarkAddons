@@ -10,6 +10,8 @@ import kotlin.KotlinVersion;
 import net.minecraft.client.Minecraft;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.Sys;
@@ -38,6 +40,9 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 final class Diagnostics {
+    @NotNull
+    private static final Logger LOGGER = LogManager.getLogger();
+
     /**
      * Private constructor since this class only contains static members.
      * <p>
@@ -341,8 +346,8 @@ final class Diagnostics {
                 final var freezeTime = currentTime - lastGameLoop;
 
                 //noinspection StringConcatenationMissingWhitespace
-                Utils.printErr("Client thread froze for " + freezeTime + "ms. Dumping thread...");
-                Diagnostics.dumpThread0(ManagementFactory.getThreadMXBean().getThreadInfo(Diagnostics.MC_THREAD_ID, Integer.MAX_VALUE), Utils::printErr);
+                Diagnostics.LOGGER.warn("Client thread froze for " + freezeTime + "ms. Dumping thread...");
+                Diagnostics.dumpThread0(ManagementFactory.getThreadMXBean().getThreadInfo(Diagnostics.MC_THREAD_ID, Integer.MAX_VALUE), Diagnostics.LOGGER::warn);
             }
         }
     }

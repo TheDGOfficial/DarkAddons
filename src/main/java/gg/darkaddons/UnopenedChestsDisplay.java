@@ -1,6 +1,8 @@
 package gg.darkaddons;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -14,6 +16,9 @@ import java.util.Collection;
 // to a variable which is saved to disk at game close and loaded to that variable on game open, then show the time left
 // to expire as time left to 48 hours (time limit) being passed since that epoch.
 final class UnopenedChestsDisplay extends SimpleGuiElement {
+    @NotNull
+    private static final Logger LOGGER = LogManager.getLogger();
+
     private static final int CROESUS_CHEST_LIMIT = 60;
 
     private static int unopenedChests;
@@ -35,10 +40,10 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
             }
         }
 
-        Utils.printErr("[DarkAddons] Unable to fetch croesus unopened chests from tab! Tab list lines:");
+        UnopenedChestsDisplay.LOGGER.error("DarkAddons Croesus Unopened Chests Display failed to fetch croesus unopened chests from tab. Tab list lines:");
 
         for (final var entry : TablistUtil.getTabEntries()) {
-            Utils.printErr(entry);
+            UnopenedChestsDisplay.LOGGER.error(entry);
         }
 
         DarkAddons.queueWarning("Unable to fetch croesus unopened chests from tab! Please enable the necessary widgets, or the feature will think you have 0 unopened chests. If this is a false positive, please report this! The tab list lines are printed to your logs, please include that information in your bug report as well.");

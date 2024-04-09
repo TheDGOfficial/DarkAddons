@@ -27,6 +27,8 @@ import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -90,6 +92,22 @@ public final class DarkAddons {
      */
     @NotNull
     private static final Config config = new Config();
+    private static final class LoggerHolder {
+        /**
+         * Private constructor since this class only contains static members.
+         * <p>
+         * Always throws {@link UnsupportedOperationException} (for when
+         * constructed via reflection).
+         */
+        private LoggerHolder() {
+            super();
+
+            throw Utils.staticClassException();
+        }
+
+        @NotNull
+        private static final Logger LOGGER = LogManager.getLogger();
+    }
     /**
      * Holds state about if we should register tasks.
      */
@@ -239,9 +257,9 @@ public final class DarkAddons {
         //if (null == (mc = Minecraft.getMinecraft()) || null == mc.thePlayer) { // only log it if we cant send it as a chat message
         final var msg = "DarkAddons: " + Utils.removeControlCodes(message);
         if (error) {
-            Utils.printErr(msg);
+            DarkAddons.LoggerHolder.LOGGER.error(msg);
         } else {
-            Utils.printText(msg);
+            DarkAddons.LoggerHolder.LOGGER.info(msg);
         }
         //}
     }
@@ -296,11 +314,6 @@ public final class DarkAddons {
         }
     }
 
-    static final void notifyError(@NotNull final String message) {
-        DarkAddons.logMessageWithPrefix(message, true);
-        DarkAddons.sendMessageWithPrefix(message, true);
-    }
-
     /*static final void mixinError(@NotNull final Class<?> mixinClass) {
         if (!mixinClass.isInterface() && !Modifier.isAbstract(mixinClass.getModifiers())) {
             DarkAddons.notifyError("A mixin failure occurred and the given source is not an interface or abstract class. Source class: " + mixinClass.getName());
@@ -327,7 +340,7 @@ public final class DarkAddons {
     }
 
     static final void modError(@NotNull Throwable error) {
-        Utils.printStackTrace(error);
+        DarkAddons.LoggerHolder.LOGGER.catching(error);
 
         final Predicate<String> isOurModule = (@NotNull final String clsName) -> clsName.contains("darkaddons");
 
@@ -1245,9 +1258,9 @@ public final class DarkAddons {
             DarkAddons.registerCommands();
             DarkAddons.registerSubCommands();
 
-            Utils.printText("Preloading config, this might take some time...");
+            DarkAddons.LoggerHolder.LOGGER.info("Preloading config, this might take some time...");
             DarkAddons.preloadConfig(); // Preloads config & vigilant class and gui screen, otherwise it causes multiple second delay before first opening
-            Utils.printText("Done preloading config.");
+            DarkAddons.LoggerHolder.LOGGER.info("Done preloading config.");
 
             ThreadPriorityTweaker.init();
 

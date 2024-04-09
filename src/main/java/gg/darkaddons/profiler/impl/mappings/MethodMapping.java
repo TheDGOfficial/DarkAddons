@@ -3,6 +3,8 @@ package gg.darkaddons.profiler.impl.mappings;
 import gg.darkaddons.PublicUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,6 +23,9 @@ public final class MethodMapping {
      * Holds the actual method mappings in a hash map that is lazily loaded when this clas is first accessed.
      */
     public static final class MethodMappingsHolder {
+        @NotNull
+        private static final Logger LOGGER = LogManager.getLogger();
+
         /**
          * Private constructor to prevent instance initialization.
          */
@@ -89,7 +94,7 @@ public final class MethodMapping {
 
             // Probably an invalid line or empty line at the end of file
             if (3 != columns.length && 4 != columns.length) {
-                PublicUtils.printErr("[mappings] invalid column length " + columns.length + ", line: " + line + ", columns: " + Arrays.toString(columns) + ", quoted desc: " + quotedDesc + ", line without desc: " + StringUtils.remove(StringUtils.remove(line, quotedDesc), '"') + ", skipping...");
+                MethodMapping.MethodMappingsHolder.LOGGER.error("[mappings] invalid column length " + columns.length + ", line: " + line + ", columns: " + Arrays.toString(columns) + ", quoted desc: " + quotedDesc + ", line without desc: " + StringUtils.remove(StringUtils.remove(line, quotedDesc), '"') + ", skipping...");
                 return;
             }
 
