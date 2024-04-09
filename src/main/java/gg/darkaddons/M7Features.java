@@ -130,13 +130,6 @@ final class M7Features {
         return counter;
     }*/
 
-    static final void debugLogEntity(final int entityId, @Nullable final Entity entity) {
-        //DarkAddons.notifyError(null == entity ? "Got null result from getEntityByID for entity with ID " + entityId : "Entity with ID " + entityId + " is not EntityDragon, it's " + entity.getClass().getSimpleName());
-        if (null != entity) {
-            DarkAddons.notifyError("Entity with ID " + entityId + " is not EntityDragon, it's " + entity.getClass().getSimpleName());
-        }
-    }
-
     /*private static final void debugLogAliveDragons() {
         for (final int entityId : M7Features.reverseDragonMap) {
             if (-1 != entityId) {

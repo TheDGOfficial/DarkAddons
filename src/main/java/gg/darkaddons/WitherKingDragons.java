@@ -240,8 +240,6 @@ enum WitherKingDragons {
             if (entity instanceof EntityDragon) {
                 return (EntityDragon) entity;
             }
-
-            M7Features.debugLogEntity(entityId, entity);
         }
 
         return null;
