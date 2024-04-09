@@ -61,7 +61,8 @@
         "MixinIceFillSolver",
         "MixinIceWalkSolver",
         "MixinIceWalkUtils",
-        "MixinFunny"
+        "MixinFunny",
+        "MixinDSMCatacombsTracker"
     ],
     "server": [
     ],
