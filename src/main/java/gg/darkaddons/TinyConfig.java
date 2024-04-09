@@ -14,8 +14,8 @@ import java.io.OutputStreamWriter;
 import java.io.IOException;
 
 final class TinyConfig {
-    private static final File tinyConfigFile = new File(new File(new File("config"), "darkaddons"), "tinyconfig.properties");
-    private static final Properties tinyConfigSettings = new Properties();
+    private static final @NotNull File tinyConfigFile = new File(new File(new File("config"), "darkaddons"), "tinyconfig.properties");
+    private static final @NotNull Properties tinyConfigSettings = new Properties();
 
     /**
      * Private constructor since this class only contains static members.
