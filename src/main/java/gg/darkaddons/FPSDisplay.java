@@ -30,7 +30,7 @@ final class FPSDisplay extends SimpleGuiElement {
 
         final var isDemoRenderBypass = this.isDemoRenderBypass();
 
-        FPSDisplay.fps = 1_000L / Diagnostics.getLastGameLoopTime();
+        FPSDisplay.fps = 1_000L / Math.max(1, Diagnostics.getLastGameLoopTime());
 
         if (isDemoRenderBypass || (FPSDisplay.lastFps != FPSDisplay.fps || this.isEmpty())) {
             FPSDisplay.lastFps = FPSDisplay.fps;
