@@ -40,6 +40,20 @@ final class Config extends Vigilant {
     private static boolean updateChecker = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Mineshaft Notifier",
+        description = "Notifies you with a message on screen whenever you get a Mineshaft, optionally also notifying your party members.",
+        category = "Misc", subcategory = "General"
+    )
+    private static boolean mineshaftNotifier = true;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Notify Party",
+        description = "Sends a message on party chat letting others know that you got a Mineshaft.",
+        category = "Misc", subcategory = "General"
+    )
+    private static boolean mineshaftNotifierNotifyParty = true;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Class Average 50 Display",
         description = "Shows a HUD element with runs needed to get Class Average 50, along with other information. Updated live as you do runs.",
         category = "Dungeons", subcategory = "HUD", triggerActionOnInitialization = false
@@ -869,6 +883,7 @@ final class Config extends Vigilant {
 
         this.addDependency("burgersDone", "slayerRngDisplay");
         this.addDependency("keepHoldingToCreateMoreGhostBlocks", "createGhostBlockWithKey");
+        this.addDependency("mineshaftNotifierNotifyParty", "mineshaftNotifier");
     }
 
     private final void addListeners() {
@@ -914,6 +929,18 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.updateChecker;
+    }
+
+    static final boolean isMineshaftNotifier() {
+        Config.checkUninit();
+
+        return Config.mineshaftNotifier;
+    }
+
+    static final boolean isMineshaftNotifierNotifyParty() {
+        Config.checkUninit();
+
+        return Config.mineshaftNotifierNotifyParty;
     }
 
     static final boolean isClassAverage50Display() {
