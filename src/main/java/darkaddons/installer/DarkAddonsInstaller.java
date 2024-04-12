@@ -52,6 +52,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.function.Supplier;
 
 final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseListener {
     @NotNull
@@ -125,7 +126,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
             this.getButtonInstall().setEnabled(true);
             this.getButtonInstall().requestFocus();
         } catch (final Exception ex) {
-            DarkAddonsInstaller.showErrorPopup(ex);
+            DarkAddonsInstaller.showErrorPopup(ex, () -> "Unexpected error in main constructor");
         }
     }
 
@@ -141,13 +142,13 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 final var url = ClassLoader.getSystemResource("assets/darkaddons/darkaddons.icon.png");
                 frame.setIconImage(xToolkit.createImage(url));
             } catch (final Throwable tw) {
-                DarkAddonsInstaller.LOGGER.log(Level.SEVERE, tw, tw::getMessage);
+                DarkAddonsInstaller.LOGGER.log(Level.SEVERE, tw, () -> "Unable to set application icon");
                 // Continue using the default Java coffee icon, I guess...
             }
 
             frame.setVisible(true);
         } catch (final Exception ex) {
-            DarkAddonsInstaller.showErrorPopup(ex);
+            DarkAddonsInstaller.showErrorPopup(ex, () -> "Unexpected error in main method");
         }
     }
 
@@ -179,7 +180,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.totalContentPane.add(this.getPanelCenter(), "Center");
                 this.totalContentPane.add(this.getPanelBottom(), "South");
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the total content pane component");
             }
         }
         return this.totalContentPane;
@@ -199,7 +200,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.panelCenter.add(this.getFieldFolder(), this.getFieldFolder().getName());
                 this.panelCenter.add(this.getButtonFolder(), this.getButtonFolder().getName());
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to add components to the center panel");
             }
         }
         return this.panelCenter;
@@ -224,7 +225,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
                 this.yCoord += this.h;
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to load and put application logo in app container");
             }
         }
         return this.logo;
@@ -246,7 +247,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
                 this.yCoord += this.h;
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Version Info\" label");
             }
         }
         return this.versionInfo;
@@ -268,7 +269,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
                 this.yCoord += this.h;
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Installer Description\" text area");
             }
         }
         return this.descriptionText;
@@ -302,7 +303,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
                 this.yCoord += this.h;
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Forge Description\" text area");
             }
         }
         return this.forgeDescriptionText;
@@ -323,7 +324,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.labelFolder.setPreferredSize(new Dimension(this.w, this.h));
                 this.labelFolder.setText("Mods Folder");
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Mods Folder\" label");
             }
 
             this.xCoord += this.w;
@@ -344,7 +345,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.textFieldFolderLocation.setEditable(false);
                 this.textFieldFolderLocation.setPreferredSize(new Dimension(this.w, this.h));
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Mods Folder Location\" text field");
             }
 
             this.xCoord += this.w;
@@ -369,7 +370,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.buttonChooseFolder.setBounds(this.xCoord, this.yCoord, this.w, this.h);
                 this.buttonChooseFolder.setPreferredSize(new Dimension(this.w, this.h));
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Mods Folder Selector\" button");
             }
         }
         return this.buttonChooseFolder;
@@ -387,7 +388,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.panelBottom.add(this.getButtonOpenFolder(), this.getButtonOpenFolder().getName());
                 this.panelBottom.add(this.getButtonClose(), this.getButtonClose().getName());
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the panel");
             }
         }
         return this.panelBottom;
@@ -405,7 +406,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.buttonInstall.setPreferredSize(new Dimension(this.w, this.h));
                 this.buttonInstall.setText("Install");
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Install\" button");
             }
         }
         return this.buttonInstall;
@@ -423,7 +424,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.buttonOpenFolder.setPreferredSize(new Dimension(this.w, this.h));
                 this.buttonOpenFolder.setText("Open Mods Folder");
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Open Mods Folder\" button");
             }
         }
         return this.buttonOpenFolder;
@@ -440,7 +441,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.buttonClose.setPreferredSize(new Dimension(this.w, this.h));
                 this.buttonClose.setText("Cancel");
             } catch (final Throwable ivjExc) {
-                DarkAddonsInstaller.showErrorPopup(ivjExc);
+                DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Close\" button");
             }
         }
         return this.buttonClose;
@@ -484,7 +485,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
             try {
                 Desktop.getDesktop().browse(new URI("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.8.9.html"));
             } catch (final IOException | URISyntaxException ex) {
-                DarkAddonsInstaller.showErrorPopup(ex);
+                DarkAddonsInstaller.showErrorPopup(ex, () -> "Unable to open Forge download website via default browser with Desktop Environment");
             }
         }
     }
@@ -502,7 +503,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
             }
             this.tryInstall(modsFolder);
         } catch (final Exception e) {
-            DarkAddonsInstaller.showErrorPopup(e);
+            DarkAddonsInstaller.showErrorPopup(e, () -> "Unable to install DarkAddons");
         }
     }
 
@@ -555,7 +556,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
             try {
                 Files.copy(thisFile.toPath(), newFile.toPath());
             } catch (final Exception ex) {
-                DarkAddonsInstaller.showErrorPopup(ex);
+                DarkAddonsInstaller.showErrorPopup(ex, () -> "Unable to copy self jar to mods folder");
                 return;
             }
 
@@ -582,7 +583,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                                 try {
                                     Files.delete(file.toPath());
                                 } catch (final Exception ex) {
-                                    DarkAddonsInstaller.LOGGER.log(Level.SEVERE, ex, ex::getMessage);
+                                    DarkAddonsInstaller.LOGGER.log(Level.SEVERE, ex, () -> "Unable to delete (possibly) older DarkAddons versions from mods folder");
                                     DarkAddonsInstaller.showErrorMessage("Was not able to delete the other DarkAddons files found in your mods folder!" + System.lineSeparator() +
                                     "Please make sure that your minecraft is currently closed and try again, or feel" + System.lineSeparator() +
                                     "free to open your mods folder and delete those files manually.");
@@ -603,7 +604,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
         try {
             Desktop.getDesktop().open(DarkAddonsInstaller.getModsFolder());
         } catch (final Exception e) {
-            DarkAddonsInstaller.showErrorPopup(e);
+            DarkAddonsInstaller.showErrorPopup(e, () -> "Unable to open the users mods folder via Desktop Environment");
         }
     }
 
@@ -708,10 +709,10 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
         }
     }
 
-    private static final void showErrorPopup(@NotNull final Throwable ex) {
-        DarkAddonsInstaller.LOGGER.log(Level.SEVERE, ex, ex::getMessage);
+    private static final void showErrorPopup(@NotNull final Throwable ex, @NotNull final Supplier<String> desc) {
+        DarkAddonsInstaller.LOGGER.log(Level.SEVERE, ex, desc);
 
-        final var textArea = new JTextArea(DarkAddonsInstaller.getStacktraceText(ex));
+        final var textArea = new JTextArea(desc + ": " + DarkAddonsInstaller.getStacktraceText(ex));
         textArea.setEditable(false);
         final var currentFont = textArea.getFont();
         final var newFont = new Font(Font.MONOSPACED, currentFont.getStyle(), currentFont.getSize());
@@ -764,7 +765,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
         try {
             return new File(DarkAddonsInstaller.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         } catch (final URISyntaxException ex) {
-            DarkAddonsInstaller.showErrorPopup(ex);
+            DarkAddonsInstaller.showErrorPopup(ex, () -> "Unable to get File instance from self JAR file");
         }
         return null;
     }
