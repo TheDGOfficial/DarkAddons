@@ -110,6 +110,7 @@ jobs:
        -**:java/local-variable-is-never-read
        -**:java/unused-parameter
        -**:java/unused-reference-type
+       -**:java/deprecated-call
       input: sarif-results/${{ matrix.language }}.sarif
       output: sarif-results/${{ matrix.language }}.sarif
 

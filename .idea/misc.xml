@@ -13,6 +13,7 @@
     <pattern value="gg.darkaddons.DarkAddonsTransformer" method="DarkAddonsTransformer" />
     <writeAnnotations>
       <writeAnnotation name="gg.essential.vigilance.data.Property" />
+      <writeAnnotation name="org.spongepowered.asm.mixin.Shadow" />
     </writeAnnotations>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
