@@ -62,7 +62,8 @@
         "MixinIceWalkSolver",
         "MixinIceWalkUtils",
         "MixinFunny",
-        "MixinDSMCatacombsTracker"
+        "MixinDSMCatacombsTracker",
+        "MixinPlayerControllerMP"
     ],
     "server": [
     ],

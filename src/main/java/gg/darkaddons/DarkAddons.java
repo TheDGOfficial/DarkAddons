@@ -13,8 +13,10 @@ import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -882,6 +884,18 @@ public final class DarkAddons {
      */
     public static final void checkRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
         CheckRender.checkRender(entity, cir);
+    }
+
+    /**
+     * Hook from MixinPlayerControllerMP that overrides vanilla behavior if required.
+     *
+     * @param blockPos The block position.
+     * @param currentItemHittingBlock The current item that is hitting the block.
+     * @param currentBlock The current block's position.
+     * @return True or false
+     */
+    public static final boolean isHittingPosition(@NotNull final BlockPos blockPos, @Nullable final ItemStack currentItemHittingBlock, @NotNull final BlockPos currentBlock) {
+        return MiningPingFix.isHittingPosition(blockPos, currentItemHittingBlock, currentBlock);
     }
 
     /**
