@@ -30,7 +30,7 @@ plugins {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    toolchain.languageVersion = JavaLanguageVersion.of(22)
 }
 
 private val versionProperties = loadVersionProperties()
@@ -288,7 +288,7 @@ tasks {
 
         //options.deprecation = true
         options.release = 8
-        sourceCompatibility = "21"
+        sourceCompatibility = "22"
 
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
