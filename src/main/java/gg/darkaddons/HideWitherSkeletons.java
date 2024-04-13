@@ -22,18 +22,12 @@ final class HideWitherSkeletons {
         throw Utils.staticClassException();
     }
 
-    static final boolean isInF7OrM7() {
-        final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloorNumber();
-
-        return null != dungeonFloor && 7 == dungeonFloor;
-    }
-
     private static final boolean shouldRemove(final int mode) {
         return 2 == mode;
     }
 
     private static final boolean isAtPhase1() {
-        return -1L == DungeonTimer.INSTANCE.getPhase1ClearTime() && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && HideWitherSkeletons.isInF7OrM7();
+        return -1L == DungeonTimer.INSTANCE.getPhase1ClearTime() && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && AdditionalM7Features.isInM7OrF7();
     }
 
     private static final boolean isEntityWitherSkeleton(@NotNull final EntityLivingBase entity) {

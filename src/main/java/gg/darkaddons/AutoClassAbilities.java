@@ -125,14 +125,16 @@ final class AutoClassAbilities {
             public final boolean forceCooldown() {
                 final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloorNumber();
                 if (null != dungeonFloor && -1L != DungeonTimer.INSTANCE.getBossEntryTime()) {
-                    if (7 == dungeonFloor) {
-                        return -1L == DungeonTimer.INSTANCE.getPhase3ClearTime();
-                    }
-                    if (6 == dungeonFloor) {
-                        return !AdditionalM7Features.isGiantsFalling();
-                    }
-                    if (5 == dungeonFloor) {
-                        return !AdditionalM7Features.didLividsSpawn();
+                    switch (dungeonFloor) {
+                        case 7 -> {
+                            return -1L == DungeonTimer.INSTANCE.getPhase3ClearTime();
+                        }
+                        case 6 -> {
+                            return !AdditionalM7Features.isGiantsFalling();
+                        }
+                        case 5 -> {
+                            return !AdditionalM7Features.didLividsSpawn();
+                        }
                     }
                 }
                 return true;

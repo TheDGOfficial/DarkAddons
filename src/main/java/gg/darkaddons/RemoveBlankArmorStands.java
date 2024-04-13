@@ -25,7 +25,7 @@ final class RemoveBlankArmorStands {
 
     static final boolean removeIfBlankArmorStand(@NotNull final WorldClient world, @NotNull final Entity entity) {
         //noinspection ObjectEquality
-        if ((!HideWitherSkeletons.isInF7OrM7() || AdditionalM7Features.phase5Started) && AdditionalM7Features.canRemoveBlankArmorStands() && 0.0D == entity.motionX && 0.0D == entity.motionY && 0.0D == entity.motionZ && Minecraft.getMinecraft().thePlayer.ridingEntity != entity) {
+        if ((!AdditionalM7Features.isInM7OrF7() || AdditionalM7Features.phase5Started) && AdditionalM7Features.canRemoveBlankArmorStands() && 0.0D == entity.motionX && 0.0D == entity.motionY && 0.0D == entity.motionZ && Minecraft.getMinecraft().thePlayer.ridingEntity != entity) {
             final var nameTag = entity.getCustomNameTag();
             NameTagCache.setLastNameTag(nameTag);
 

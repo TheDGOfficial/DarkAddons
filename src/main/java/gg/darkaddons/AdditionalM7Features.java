@@ -277,17 +277,19 @@ final class AdditionalM7Features {
                     GuiManager.createTitle(msg, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
                 }
             }
-            case "[BOSS] Wither King: Oh, this one hurts!", "[BOSS] Wither King: I have more of those.", "[BOSS] Wither King: My soul is disposable." ->
-                AdditionalM7Features.processStatueMessage(true);
+            case "[BOSS] Wither King: Oh, this one hurts!", "[BOSS] Wither King: I have more of those.",
+                 "[BOSS] Wither King: My soul is disposable." -> AdditionalM7Features.processStatueMessage(true);
             default -> AdditionalM7Features.handleMessage4(message);
         }
     }
 
     private static final void handleMessage4(@NotNull final String message) {
         switch (message) {
-            case "[BOSS] Wither King: Futile.", "[BOSS] Wither King: You just made a terrible mistake!", "[BOSS] Wither King: I am not impressed.", "[BOSS] Wither King: Your skills have faded humans." ->
+            case "[BOSS] Wither King: Futile.", "[BOSS] Wither King: You just made a terrible mistake!",
+                 "[BOSS] Wither King: I am not impressed.", "[BOSS] Wither King: Your skills have faded humans." ->
                 AdditionalM7Features.processStatueMessage(false);
-            case "[BOSS] Wither King: Incredible. You did what I couldn't do myself.", "[BOSS] Wither King: Thank you for coming all the way here." -> {
+            case "[BOSS] Wither King: Incredible. You did what I couldn't do myself.",
+                 "[BOSS] Wither King: Thank you for coming all the way here." -> {
                 AdditionalM7Features.notSaidFinalDialogue = false;
                 AdditionalM7Features.destroyAllStatues();
             }
@@ -304,7 +306,8 @@ final class AdditionalM7Features {
                 AdditionalM7Features.notSaidFinalDialogue = false;
             case "Your Tank stats are doubled because you are the only player using this class!" ->
                 AdditionalM7Features.playingTank = true;
-            case "[STATUE] Oruo the Omniscient: I am Oruo the Omniscient. I have lived many lives. I have learned all there is to know." ->
+            case
+                "[STATUE] Oruo the Omniscient: I am Oruo the Omniscient. I have lived many lives. I have learned all there is to know." ->
                 AdditionalM7Features.canRemoveBlankArmorStands = false;
             case "[STATUE] Oruo the Omniscient: I bestow upon you all the power of a hundred years!" ->
                 AdditionalM7Features.canRemoveBlankArmorStands = true;
