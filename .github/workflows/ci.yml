@@ -35,7 +35,7 @@ jobs:
 
    # TODO: verify maven wrapper as well
    - name: Verify Gradle Wrapper
-     uses: gradle/wrapper-validation-action@v3.3.0
+     uses: gradle/actions/wrapper-validation@v3.3.0
 
    - name: Install Java
      uses: actions/setup-java@v4.2.1
