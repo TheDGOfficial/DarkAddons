@@ -496,6 +496,11 @@ public final class DarkAddons {
         return SkyblockIsland.TheRift.getMode().equals(SBInfo.INSTANCE.getMode());
     }
 
+    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
+    static final boolean isPlayerInMineshaft() {
+        return "mineshaft".equals(SBInfo.INSTANCE.getMode());
+    }
+
     static final boolean isDerpy() {
         return "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor());
     }
