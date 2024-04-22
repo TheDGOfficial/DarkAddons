@@ -77,20 +77,20 @@ final class Config extends Vigilant {
     private static int classAverage50DisplayVisibility;
 
     @Property(
-        type = PropertyType.SELECTOR, name = "Class Average 50 Display Shadow",
-        description = "Select shadow to use when rendering text in Class Average 50 Display.",
-        category = "Dungeons", subcategory = "HUD",
-        options = {"No Shadow", "Default Shadow", "Outline Shadow"}
-    )
-    private static int classAverage50DisplayShadow;
-
-    @Property(
         type = PropertyType.SELECTOR, name = "Class Average 50 Display Compactness",
         description = "Select compactness mode to use when rendering text in Class Average 50 Display. The last option that only shows 1 class, shows the class you are currently playing, last played (stored in RAM only), or if both unknown, the class requiring least amount of runs.",
         category = "Dungeons", subcategory = "HUD", triggerActionOnInitialization = false,
         options = {"Show Everything", "Hide Header & Footer", "Hide Header, Footer & Classes Done", "Hide Header, Footer & Only Show 1 Class"}
     )
     private static int classAverage50DisplayCompactness;
+
+    @Property(
+        type = PropertyType.SELECTOR, name = "Class Average 50 Display Shadow",
+        description = "Select shadow to use when rendering text in Class Average 50 Display.",
+        category = "Dungeons", subcategory = "HUD",
+        options = {"No Shadow", "Default Shadow", "Outline Shadow"}
+    )
+    private static int classAverage50DisplayShadow;
 
     @Property(
         type = PropertyType.SWITCH, name = "Unopened Chests Display",
@@ -544,14 +544,14 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message on 270 Score",
-        description = "Uses score from scoreboard to determine the real score and send the 270 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet.",
+        description = "Uses score from scoreboard to determine the real score and send the 270 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet. It is recommended to have both Skytils and DarkAddons score messages enabled for best results.",
         category = "Dungeons", subcategory = "Helpers"
     )
     private static boolean sendMessageOn270Score;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message on 300 Score",
-        description = "Uses score from scoreboard to determine the real score and send the 300 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet.",
+        description = "Uses score from scoreboard to determine the real score and send the 300 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet. It is recommended to have both Skytils and DarkAddons score messages enabled for best results.",
         category = "Dungeons", subcategory = "Helpers"
     )
     private static boolean sendMessageOn300Score;
@@ -759,7 +759,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Century Raffle Ticket Timer",
-        description = "Shows time till you can get a Raffle Ticket in the Century Raffle event. If unknown or negative value it will show as 20min. This depends on the chat messages to know when you get a ticket.",
+        description = "Shows time till you can get a Raffle Ticket in the Century Raffle event. If unknown or negative value it will show as 20min. This depends on the chat messages to know when you get a ticket. Note: This was a feature dedicated to Year 300 Raffle Event, unless another Raffle Event happens in SkyBlock you probably shouldn't enable this feature.",
         category = "Misc", subcategory = "Events"
     )
     private static boolean centuryRaffleTicketTimer;
