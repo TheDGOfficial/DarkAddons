@@ -245,6 +245,7 @@ final class AdditionalM7Features {
                     AdditionalM7Features.firstLaserNotDone = false;
                 }
             }
+            case "⚠ Maxor is enraged! ⚠" -> AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
             case "[BOSS] Storm: At least my son died by your hands." -> {
                 if (Config.isPhase3StartingNotification()) {
                     final var msg = Utils.chromaIfEnabledOrAqua() + "Phase 3 starting";
@@ -255,6 +256,7 @@ final class AdditionalM7Features {
             }
             case "[BOSS] Goldor: You have done it, you destroyed the factory…" -> {
                 AdditionalM7Features.phase5NotStarted = false; // Have to do it here instead of Necron final dialogue because that's too late
+                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
                 if (Config.isUltReminder()) {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Goldor fight starting. Use your ultimate ability!");
                     AdditionalM7Features.sendUseUltTitle();
@@ -297,15 +299,20 @@ final class AdditionalM7Features {
                 AdditionalM7Features.notSaidFinalDialogue = false;
                 AdditionalM7Features.destroyAllStatues();
             }
-            case "[BOSS] Livid: I respect you for making it to here, but I'll be your undoing." ->
+            case "[BOSS] Livid: I respect you for making it to here, but I'll be your undoing." -> {
                 AdditionalM7Features.lividsSpawned = true;
+                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
+            }
             default -> AdditionalM7Features.handleMessage5(message);
         }
     }
 
     private static final void handleMessage5(@NotNull final String message) {
         switch (message) {
-            case "[BOSS] Sadan: My giants! Unleashed!" -> AdditionalM7Features.giantsFalling = true;
+            case "[BOSS] Sadan: My giants! Unleashed!" -> {
+                AdditionalM7Features.giantsFalling = true;
+                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
+            }
             case "[BOSS] Sadan: I'm sorry, but I need to concentrate. I wish it didn't have to come to this." ->
                 AdditionalM7Features.notSaidFinalDialogue = false;
             case "Your Tank stats are doubled because you are the only player using this class!" ->

@@ -42,8 +42,12 @@ final class AutoClassAbilities {
             this.setNextUse(System.currentTimeMillis() + this.getCooldownInMs());
         }
 
+        default boolean isCooldownReallyGone() {
+            return System.currentTimeMillis() >= this.getNextUse();
+        }
+
         default boolean isCooldownGone() {
-            return System.currentTimeMillis() >= this.getNextUse() && !this.forceCooldown();
+            return this.isCooldownReallyGone() && !this.forceCooldown();
         }
     }
 
@@ -203,10 +207,14 @@ final class AutoClassAbilities {
         }
     }
 
+    private static final boolean checkPrePreconditions() {
+        return DarkAddons.isInDungeons() && -1L == DungeonTimer.INSTANCE.getBossClearTime() && -1L != DungeonTimer.INSTANCE.getDungeonStartTime();
+    }
+
     private static final boolean checkPreconditions() {
         final var mc = Minecraft.getMinecraft();
 
-        return DarkAddons.isInDungeons() && -1L == DungeonTimer.INSTANCE.getBossClearTime() && -1L != DungeonTimer.INSTANCE.getDungeonStartTime() && (mc.gameSettings.keyBindUseItem.isKeyDown() && AutoClicker.isHoldingTerm(mc) || mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreOrGS(mc));
+        return AutoClassAbilities.checkPrePreconditions() && (mc.gameSettings.keyBindUseItem.isKeyDown() && AutoClicker.isHoldingTerm(mc) || mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreOrGS(mc));
     }
 
     private static final void findClassAndAssignAbilities() {
@@ -279,6 +287,29 @@ final class AutoClassAbilities {
                     AutoClassAbilities.regularClassAbility.markUsed();
                     AutoClassAbilities.emulateDropKeyPress(true);
                 }
+            }
+        }
+    }
+
+    static final void ultReminderToAutoClassAbilitiesHook() {
+        if (Config.isAutoUltimateAbility() && AutoClassAbilities.checkPrePreconditions()) {
+            if (null == AutoClassAbilities.ultimateClassAbility) {
+                AutoClassAbilities.findClassAndAssignAbilities();
+            }
+
+            boolean shouldUse = false;
+
+            if (AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE == AutoClassAbilities.ultimateClassAbility) {
+                shouldUse = true;
+            }
+
+            if (AutoClassAbilities.UltimateClassAbility.WISH == AutoClassAbilities.ultimateClassAbility) {
+                shouldUse = 7 == DungeonFeatures.INSTANCE.getDungeonFloorNumber();
+            }
+
+            if (shouldUse && AutoClassAbilities.ultimateClassAbility.isCooldownReallyGone()) {
+                AutoClassAbilities.ultimateClassAbility.markUsed();
+                AutoClassAbilities.emulateDropKeyPress(false);
             }
         }
     }
