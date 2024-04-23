@@ -317,30 +317,37 @@ final class ClassAverage50Display extends GuiElement {
         ClassAverage50Display.classes0(healerRuns, mageRuns, berserkRuns, archerRuns, tankRuns, preferred, compactness, floorName);
     }
 
+    @NotNull
+    private static final String getDerpyText() {
+        return DarkAddons.isDerpy() ? "Derpy " : "";
+    }
+
     private static final void classes0(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns, @Nullable final DungeonClass preferred, final int compactness, @NotNull final String floorName) {
-        var derpyText = "";
-        if (DarkAddons.isDerpy()) {
-            derpyText = "Derpy ";
+        final var showZeroRuns = 1 >= compactness;
+        final var showNonPreferred = 2 >= compactness;
+
+        final var hud = ClassAverage50Display.linesToRender;
+
+        final var suffix = ' ' + ClassAverage50Display.getDerpyText() + floorName + " Runs";
+
+        if ((0 < healerRuns || showZeroRuns) && (showNonPreferred || DungeonClass.HEALER == preferred)) {
+            hud.add("§a❤ Healer: " + healerRuns + suffix);
         }
 
-        if ((0 < healerRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.HEALER == preferred)) {
-            ClassAverage50Display.linesToRender.add("§a❤ Healer: " + healerRuns + ' ' + derpyText + floorName + " Runs");
+        if ((0 < mageRuns || showZeroRuns) && (showNonPreferred || DungeonClass.MAGE == preferred)) {
+            hud.add("§b✎ Mage: " + mageRuns + suffix);
         }
 
-        if ((0 < mageRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.MAGE == preferred)) {
-            ClassAverage50Display.linesToRender.add("§b✎ Mage: " + mageRuns + ' ' + derpyText + floorName + " Runs");
+        if ((0 < berserkRuns || showZeroRuns) && (showNonPreferred || DungeonClass.BERSERK == preferred)) {
+            hud.add("§c⚔ Berserk: " + berserkRuns + suffix);
         }
 
-        if ((0 < berserkRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.BERSERK == preferred)) {
-            ClassAverage50Display.linesToRender.add("§c⚔ Berserk: " + berserkRuns + ' ' + derpyText + floorName + " Runs");
+        if ((0 < archerRuns || showZeroRuns) && (showNonPreferred || DungeonClass.ARCHER == preferred)) {
+            hud.add("§6➶ Archer: " + archerRuns + suffix);
         }
 
-        if ((0 < archerRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.ARCHER == preferred)) {
-            ClassAverage50Display.linesToRender.add("§6➶ Archer: " + archerRuns + ' ' + derpyText + floorName + " Runs");
-        }
-
-        if ((0 < tankRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.TANK == preferred)) {
-            ClassAverage50Display.linesToRender.add("§7❈ Tank: " + tankRuns + ' ' + derpyText + floorName + " Runs");
+        if ((0 < tankRuns || showZeroRuns) && (showNonPreferred || DungeonClass.TANK == preferred)) {
+            hud.add("§7❈ Tank: " + tankRuns + suffix);
         }
     }
 

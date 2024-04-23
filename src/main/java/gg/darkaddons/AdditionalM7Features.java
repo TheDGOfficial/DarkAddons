@@ -232,12 +232,16 @@ final class AdditionalM7Features {
         McProfilerHelper.endSection();
     }
 
+    private static final void sendUseUltTitle() {
+        GuiManager.createTitle("§bUse ult!", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
+    }
+
     private static final void handleMessage2(@NotNull final String message) {
         switch (message) {
             case "[BOSS] Maxor: THAT BEAM! IT HURTS! IT HURTS!!", "[BOSS] Maxor: YOU TRICKED ME!" -> {
                 if (Config.isUltReminder() && AdditionalM7Features.firstLaserNotDone) {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor is enraged. Use your ultimate ability!");
-                    GuiManager.createTitle("§bUse ult!", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
+                    AdditionalM7Features.sendUseUltTitle();
                     AdditionalM7Features.firstLaserNotDone = false;
                 }
             }
@@ -253,7 +257,7 @@ final class AdditionalM7Features {
                 AdditionalM7Features.phase5NotStarted = false; // Have to do it here instead of Necron final dialogue because that's too late
                 if (Config.isUltReminder()) {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Goldor fight starting. Use your ultimate ability!");
-                    GuiManager.createTitle("§bUse ult!", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
+                    AdditionalM7Features.sendUseUltTitle();
                 }
             }
             default -> AdditionalM7Features.handleMessage3(message);
