@@ -332,11 +332,11 @@ final class ClassAverage50Display extends GuiElement {
         }
 
         if ((0 < berserkRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.BERSERK == preferred)) {
-            ClassAverage50Display.linesToRender.add("§c⚔ Berserk: " + berserkRuns + ' ' derpyText + floorName + " Runs");
+            ClassAverage50Display.linesToRender.add("§c⚔ Berserk: " + berserkRuns + ' ' + derpyText + floorName + " Runs");
         }
 
         if ((0 < archerRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.ARCHER == preferred)) {
-            ClassAverage50Display.linesToRender.add("§6➶ Archer: " + archerRuns + ' ' derpyText + floorName + " Runs");
+            ClassAverage50Display.linesToRender.add("§6➶ Archer: " + archerRuns + ' ' + derpyText + floorName + " Runs");
         }
 
         if ((0 < tankRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.TANK == preferred)) {
