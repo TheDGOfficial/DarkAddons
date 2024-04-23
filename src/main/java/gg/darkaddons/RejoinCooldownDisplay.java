@@ -82,6 +82,10 @@ final class RejoinCooldownDisplay extends SimpleGuiElement {
 
     @Override
     final void buildHudLines(@NotNull final Collection<String> lines) {
-        lines.add("§cCan rejoin SkyBlock in " + RejoinCooldownDisplay.timeLeftSeconds + 's');
+        if (0L == RejoinCooldownDisplay.timeLeftSeconds) {
+            lines.add("§aTry rejoining SkyBlock now!");
+        } else {
+            lines.add("§cCan rejoin SkyBlock in " + RejoinCooldownDisplay.timeLeftSeconds + 's');
+        }
     }
 }
