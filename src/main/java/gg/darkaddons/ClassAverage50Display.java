@@ -318,24 +318,29 @@ final class ClassAverage50Display extends GuiElement {
     }
 
     private static final void classes0(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns, @Nullable final DungeonClass preferred, final int compactness, @NotNull final String floorName) {
+        var derpyText = "";
+        if (DarkAddons.isDerpy()) {
+            derpyText = "Derpy ";
+        }
+
         if ((0 < healerRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.HEALER == preferred)) {
-            ClassAverage50Display.linesToRender.add("§a❤ Healer: " + healerRuns + ' ' + floorName + " Runs");
+            ClassAverage50Display.linesToRender.add("§a❤ Healer: " + healerRuns + ' ' + derpyText + floorName + " Runs");
         }
 
         if ((0 < mageRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.MAGE == preferred)) {
-            ClassAverage50Display.linesToRender.add("§b✎ Mage: " + mageRuns + ' ' + floorName + " Runs");
+            ClassAverage50Display.linesToRender.add("§b✎ Mage: " + mageRuns + ' ' + derpyText + floorName + " Runs");
         }
 
         if ((0 < berserkRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.BERSERK == preferred)) {
-            ClassAverage50Display.linesToRender.add("§c⚔ Berserk: " + berserkRuns + ' ' + floorName + " Runs");
+            ClassAverage50Display.linesToRender.add("§c⚔ Berserk: " + berserkRuns + ' ' derpyText + floorName + " Runs");
         }
 
         if ((0 < archerRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.ARCHER == preferred)) {
-            ClassAverage50Display.linesToRender.add("§6➶ Archer: " + archerRuns + ' ' + floorName + " Runs");
+            ClassAverage50Display.linesToRender.add("§6➶ Archer: " + archerRuns + ' ' derpyText + floorName + " Runs");
         }
 
         if ((0 < tankRuns || 1 >= compactness) && (2 >= compactness || DungeonClass.TANK == preferred)) {
-            ClassAverage50Display.linesToRender.add("§7❈ Tank: " + tankRuns + ' ' + floorName + " Runs");
+            ClassAverage50Display.linesToRender.add("§7❈ Tank: " + tankRuns + ' ' + derpyText + floorName + " Runs");
         }
     }
 
