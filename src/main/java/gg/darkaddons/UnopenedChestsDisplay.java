@@ -24,6 +24,12 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
     private static int unopenedChests;
     private static int lastUnopenedChests;
 
+    private static boolean sentWarning;
+
+    static final void onWorldLoad() {
+        UnopenedChestsDisplay.sentWarning = false;
+    }
+
     UnopenedChestsDisplay() {
         super("Unopened Chests Display", Config::isUnopenedChestsDisplay, DarkAddons::isPlayerInDungeonHub, () -> 0);
 
@@ -40,13 +46,18 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
             }
         }
 
-        UnopenedChestsDisplay.LOGGER.error("DarkAddons Croesus Unopened Chests Display failed to fetch croesus unopened chests from tab. Tab list lines:");
+        if (!UnopenedChestsDisplay.sentWarning) {
+            UnopenedChestsDisplay.sentWarning = true;
 
-        for (final var entry : TablistUtil.getTabEntries()) {
-            UnopenedChestsDisplay.LOGGER.error(entry);
+            UnopenedChestsDisplay.LOGGER.error("DarkAddons Croesus Unopened Chests Display failed to fetch croesus unopened chests from tab. Tab list lines:");
+
+            for (final var entry : TablistUtil.getTabEntries()) {
+                UnopenedChestsDisplay.LOGGER.error(entry);
+            }
+
+            DarkAddons.queueWarning("Unable to fetch croesus unopened chests from tab! Please enable the necessary widgets, or the feature will think you have 0 unopened chests. If this is a false positive, please report this! The tab list lines are printed to your logs, please include that information in your bug report as well. Tip: Typing /locraw might fix this error if you just left the Dungeon Hub.");
         }
 
-        DarkAddons.queueWarning("Unable to fetch croesus unopened chests from tab! Please enable the necessary widgets, or the feature will think you have 0 unopened chests. If this is a false positive, please report this! The tab list lines are printed to your logs, please include that information in your bug report as well.");
         return 0;
     }
 
