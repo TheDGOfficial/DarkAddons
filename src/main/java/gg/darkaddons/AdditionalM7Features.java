@@ -238,14 +238,14 @@ final class AdditionalM7Features {
 
     private static final void handleMessage2(@NotNull final String message) {
         switch (message) {
-            case "[BOSS] Maxor: THAT BEAM! IT HURTS! IT HURTS!!", "[BOSS] Maxor: YOU TRICKED ME!" -> {
+            case "⚠ Maxor is enraged! ⚠" -> {
+                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
                 if (Config.isUltReminder() && AdditionalM7Features.firstLaserNotDone) {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor is enraged. Use your ultimate ability!");
                     AdditionalM7Features.sendUseUltTitle();
                     AdditionalM7Features.firstLaserNotDone = false;
                 }
             }
-            case "⚠ Maxor is enraged! ⚠" -> AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
             case "[BOSS] Storm: At least my son died by your hands." -> {
                 if (Config.isPhase3StartingNotification()) {
                     final var msg = Utils.chromaIfEnabledOrAqua() + "Phase 3 starting";
