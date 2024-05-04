@@ -130,7 +130,7 @@ dependencies {
         exclude(module = "vigilance-1.8.9-forge")
     }
 
-    api("gg.essential:elementa-1.8.9-forge:636")
+    api("gg.essential:elementa-1.8.9-forge:642")
     implementation("gg.essential:universalcraft-1.8.9-forge:325")
     implementation("gg.essential:vigilance-1.8.9-forge:295")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
