@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets
 import java.util.Properties
 
 plugins {
-    //kotlin("jvm") version "2.0.0-dev-17175"
+    //kotlin("jvm") version "2.0.20-dev-2972"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("gg.essential.loom") version "1.6.16"
     id("dev.architectury.architectury-pack200") version "0.1.3"
@@ -119,7 +119,7 @@ dependencies {
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
 
     compileOnly("gg.essential:loader-launchwrapper:1.2.2") // TODO make it shadowMe
-    compileOnly("gg.essential:essential-1.8.9-forge:16551+g7ed10f42d2") { // TODO make it back implementation
+    compileOnly("gg.essential:essential-1.8.9-forge:16901+gb6bc6abcb6") { // TODO make it back implementation
         exclude(module = "asm")
         exclude(module = "asm-commons")
         exclude(module = "asm-tree")
@@ -133,7 +133,7 @@ dependencies {
     api("gg.essential:elementa-1.8.9-forge:642")
     implementation("gg.essential:universalcraft-1.8.9-forge:337")
     implementation("gg.essential:vigilance-1.8.9-forge:297")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0-RC2")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
