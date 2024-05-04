@@ -132,7 +132,7 @@ dependencies {
 
     api("gg.essential:elementa-1.8.9-forge:642")
     implementation("gg.essential:universalcraft-1.8.9-forge:325")
-    implementation("gg.essential:vigilance-1.8.9-forge:295")
+    implementation("gg.essential:vigilance-1.8.9-forge:297")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.23")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
