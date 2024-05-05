@@ -31,6 +31,8 @@ plugins {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(22)
+
+    withSourcesJar()
 }
 
 private val versionProperties = loadVersionProperties()
