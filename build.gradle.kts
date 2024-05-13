@@ -160,7 +160,7 @@ dependencies {
     }
     proguardClasspath("com.guardsquare:proguard-core:9.1.3")
 
-    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1-Beta")
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
 
     annotationProcessor("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
     compileOnly("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
