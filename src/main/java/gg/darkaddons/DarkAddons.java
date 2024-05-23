@@ -963,8 +963,6 @@ public final class DarkAddons {
         SlayerRNGDisplay.onReceiveChatMessage(event);
 
         RejoinCooldownDisplay.onMessage(event);
-
-        MineshaftNotifier.doCheckMessage(event);
     }
 
     /**
