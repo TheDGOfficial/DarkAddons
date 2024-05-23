@@ -1018,7 +1018,6 @@ public final class DarkAddons {
      */
     public static final void handleWorldLoad() {
         AutoClassAbilities.worldLoad();
-        UnopenedChestsDisplay.onWorldLoad();
     }
 
     /**
