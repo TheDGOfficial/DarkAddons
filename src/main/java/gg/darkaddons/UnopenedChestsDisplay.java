@@ -21,14 +21,8 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
 
     private static final int CROESUS_CHEST_LIMIT = 60;
 
-    private static int unopenedChests;
-    private static int lastUnopenedChests;
-
-    private static boolean sentWarning;
-
-    static final void onWorldLoad() {
-        UnopenedChestsDisplay.sentWarning = false;
-    }
+    private static int unopenedChests = -1;
+    private static int lastUnopenedChests = -1;
 
     UnopenedChestsDisplay() {
         super("Unopened Chests Display", Config::isUnopenedChestsDisplay, DarkAddons::isPlayerInDungeonHub, () -> 0);
@@ -46,25 +40,13 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
             }
         }
 
-        if (!UnopenedChestsDisplay.sentWarning) {
-            UnopenedChestsDisplay.sentWarning = true;
-
-            UnopenedChestsDisplay.LOGGER.error("DarkAddons Croesus Unopened Chests Display failed to fetch croesus unopened chests from tab. Tab list lines:");
-
-            for (final var entry : TablistUtil.getTabEntries()) {
-                UnopenedChestsDisplay.LOGGER.error(entry);
-            }
-
-            DarkAddons.queueWarning("Unable to fetch croesus unopened chests from tab! Please enable the necessary widgets, or the feature will think you have 0 unopened chests. If this is a false positive, please report this! The tab list lines are printed to your logs, please include that information in your bug report as well. Tip: Typing /locraw might fix this error if you just left the Dungeon Hub.");
-        }
-
-        return 0;
+        return -1;
     }
 
     @Override
     final void clear() {
-        UnopenedChestsDisplay.unopenedChests = 0;
-        UnopenedChestsDisplay.lastUnopenedChests = 0;
+        UnopenedChestsDisplay.unopenedChests = -1;
+        UnopenedChestsDisplay.lastUnopenedChests = -1;
 
         super.clear();
     }
@@ -96,7 +78,7 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
         final var unopened = UnopenedChestsDisplay.unopenedChests;
         final var limit = UnopenedChestsDisplay.CROESUS_CHEST_LIMIT;
 
-        lines.add("§6Unopened chests: " + unopened + '/' + limit);
+        lines.add("§6Unopened chests: " + (unopened == -1 ? "Loading..." : unopened + '/' + limit));
 
         if (limit <= unopened) {
             lines.add("§cReached limit, new runs will remove the oldest chests!");
