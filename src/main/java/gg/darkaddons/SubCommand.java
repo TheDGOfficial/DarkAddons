@@ -361,7 +361,7 @@ final class SubCommand {
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
             if (self.hasArgument(1)) {
                 if (null == SubCommand.profiler) {
-                    SubCommand.profiler = Profiler.newSamplingProfiler(self.getArgument(1));
+                    final var localProfiler = Profiler.newSamplingProfiler(self.getArgument(1));
 
                     ProfilerImpl.setLineNumbers(!self.hasArgument(2) || self.<Boolean>getArgument(2));
                     if (self.hasArgument(3)) {
@@ -382,6 +382,8 @@ final class SubCommand {
 
                     SubCommand.profiler.startProfiling();
                     DarkAddons.queueWarning("Started profiling successfully. Type /darkaddons stopprofiling to get results at any time.");
+
+                    SubCommand.profiler = localProfiler;
                 } else {
                     DarkAddons.queueWarning("Profiler already started, please stop it first before starting another one.");
                 }
