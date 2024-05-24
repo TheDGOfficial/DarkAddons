@@ -78,7 +78,7 @@ final class UnopenedChestsDisplay extends SimpleGuiElement {
         final var unopened = UnopenedChestsDisplay.unopenedChests;
         final var limit = UnopenedChestsDisplay.CROESUS_CHEST_LIMIT;
 
-        lines.add("§6Unopened chests: " + (unopened == -1 ? "Loading..." : unopened + '/' + limit));
+        lines.add("§6Unopened chests: " + (unopened == -1 ? "Loading..." : unopened + "/" + limit));
 
         if (limit <= unopened) {
             lines.add("§cReached limit, new runs will remove the oldest chests!");
