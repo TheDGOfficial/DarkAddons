@@ -96,6 +96,8 @@ final class ThreadPriorityTweaker {
             ThreadPriorityTweaker.tweakPriority(thread, Thread.MAX_PRIORITY - 2); // 8
         } else if (name.startsWith("Server Pinger #") || name.startsWith("Chat#")) {
             ThreadPriorityTweaker.tweakPriority(thread, Thread.NORM_PRIORITY + 1); // 6
+        } else if (name.startsWith("DefaultDispatcher")) {
+            ThreadPriorityTweaker.tweakPriority(thread, Thread.MIN_PRIORITY); // 1
         } else if (5 < thread.getPriority()) {
             ThreadPriorityTweaker.tweakPriority(thread, Thread.NORM_PRIORITY); // 5
         }
