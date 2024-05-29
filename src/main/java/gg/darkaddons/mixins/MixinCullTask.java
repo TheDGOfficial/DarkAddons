@@ -16,6 +16,6 @@ final class MixinCullTask {
 
     @Redirect(method = "run", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/Thread;sleep(J)V", remap = false))
     private final void sleep$darkaddons(final long originalSleepTime) throws InterruptedException {
-        Thread.sleep(Math.max(150L, originalSleepTime) + (DarkAddons.isInitialized() ? DarkAddons.getLastGameLoopTime() : 0L));
+        Thread.sleep(Math.max(150L, originalSleepTime) + (DarkAddons.isInitialized() ? Math.min(500L, DarkAddons.getLastGameLoopTime()) : 0L));
     }
 }

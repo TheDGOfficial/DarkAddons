@@ -18,7 +18,7 @@ final class MixinChunkRenderDispatcher {
     @Inject(method = "getNextChunkUpdate", at = @At("HEAD"))
     private final void getNextChunkUpdate$darkaddons(@NotNull final CallbackInfoReturnable<ChunkCompileTaskGenerator> cir) throws InterruptedException {
         if (DarkAddons.isDelayChunkUpdates() && DarkAddons.isInitialized()) {
-            Thread.sleep(DarkAddons.getLastGameLoopTime());
+            Thread.sleep(Math.min(500L, DarkAddons.getLastGameLoopTime()));
         }
     }
 }
