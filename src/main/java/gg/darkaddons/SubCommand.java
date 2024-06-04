@@ -380,7 +380,7 @@ final class SubCommand {
                     ProfilerImpl.setUniquifyByStack(!self.hasArgument(6) || self.<Boolean>getArgument(6));
                     ProfilerImpl.setUniquifyByThreadId(!self.hasArgument(7) || self.<Boolean>getArgument(7));
 
-                    SubCommand.profiler.startProfiling();
+                    localProfiler.startProfiling();
                     DarkAddons.queueWarning("Started profiling successfully. Type /darkaddons stopprofiling to get results at any time.");
 
                     SubCommand.profiler = localProfiler;
