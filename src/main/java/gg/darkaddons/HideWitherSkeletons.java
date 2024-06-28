@@ -26,10 +26,6 @@ final class HideWitherSkeletons {
         return 2 == mode;
     }
 
-    private static final boolean isAtPhase1() {
-        return -1L == DungeonTimer.INSTANCE.getPhase1ClearTime() && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && AdditionalM7Features.isInM7OrF7();
-    }
-
     private static final boolean isEntityWitherSkeleton(@NotNull final EntityLivingBase entity) {
         return entity instanceof EntitySkeleton && HideWitherSkeletons.isWitherSkeleton((EntitySkeleton) entity);
     }
@@ -39,7 +35,7 @@ final class HideWitherSkeletons {
     }
 
     static final void checkRender(@NotNull final EntitySkeleton entity, @SuppressWarnings("BoundedWildcard") @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        if (HideWitherSkeletons.isAtPhase1() && HideWitherSkeletons.isWitherSkeleton(entity)) {
+        if (AdditionalM7Features.isAtPhase1() && HideWitherSkeletons.isWitherSkeleton(entity)) {
             if (HideWitherSkeletons.shouldRemove(Config.getHideWitherSkeletonsOnMaxor())) {
                 Minecraft.getMinecraft().theWorld.removeEntityFromWorld(entity.getEntityId());
             }
@@ -49,7 +45,7 @@ final class HideWitherSkeletons {
     }
 
     static final void checkRenderSkull(@NotNull final EntityWitherSkull entity, @SuppressWarnings("BoundedWildcard") @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        if (HideWitherSkeletons.isAtPhase1() && HideWitherSkeletons.isEntityWitherSkeleton(entity.shootingEntity)) {
+        if (AdditionalM7Features.isAtPhase1() && HideWitherSkeletons.isEntityWitherSkeleton(entity.shootingEntity)) {
             cir.setReturnValue(false);
 
             if (HideWitherSkeletons.shouldRemove(Config.getHideWitherSkeletonsOnMaxor())) {

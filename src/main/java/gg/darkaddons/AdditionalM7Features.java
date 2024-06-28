@@ -49,6 +49,10 @@ final class AdditionalM7Features {
         return null != dungeonFloor && 6 == dungeonFloor && -1L != bossEntryTime;
     }
 
+    static final boolean isAtPhase1() {
+        return -1L == DungeonTimer.INSTANCE.getPhase1ClearTime() && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && AdditionalM7Features.isInM7OrF7();
+    }
+
     static final boolean isInM7OrF7() {
         final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloorNumber();
 

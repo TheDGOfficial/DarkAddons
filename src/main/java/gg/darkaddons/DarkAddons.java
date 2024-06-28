@@ -707,7 +707,8 @@ public final class DarkAddons {
             new GhostBlock(),
             new ScoreFromScoreboard(),
             new RequeueKey(),
-            new AutoExtraStats()
+            new AutoExtraStats(),
+            new MaxorHPDisplay()
         );
 
         GuiManager.init();

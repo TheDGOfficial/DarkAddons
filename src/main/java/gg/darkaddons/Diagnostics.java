@@ -39,6 +39,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.IBossDisplayData;
+
 final class Diagnostics {
     @NotNull
     private static final Logger LOGGER = LogManager.getLogger();
@@ -134,7 +137,27 @@ final class Diagnostics {
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void dumpEntities(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
         for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-            outputConsumer.accept(entity.getClass().getSimpleName() + " with name " + entity.getName() + "§r§e");
+            var extra = "";
+
+            if (entity instanceof final EntityLivingBase living) {
+                final var hp = living.getHealth();
+                final var maxHp = living.getMaxHealth();
+
+                final var hpPerc = (hp / maxHp) * 100;
+
+                extra += " with HP " + hp + '/' + maxHp + " (%" + hpPerc + ')';
+            }
+
+            if (entity instanceof final IBossDisplayData boss) {
+                final var hp = boss.getHealth();
+                final var maxHp = boss.getMaxHealth();
+
+                final var hpPerc = (hp / maxHp) * 100;
+
+                extra += " and with boss HP " + hp + '/' + maxHp + " (%" + hpPerc + ')';
+            }
+
+            outputConsumer.accept(entity.getClass().getSimpleName() + " with name " + entity.getName() + "§r§e" + extra);
         }
     }
 

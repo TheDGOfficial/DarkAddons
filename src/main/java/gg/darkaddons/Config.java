@@ -86,6 +86,13 @@ final class Config extends Vigilant {
     private static boolean unopenedChestsDisplay;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Show Maxor Health Percentage",
+        description = "Shows a HUD element with Maxor's health percentage, which doesn't disappear at times unlike the Skytils showing Maxor's HP in the bossbar, which disappears at times and makes you fail enrage skip. It is also more up-to-date in health values compared to Skytils.",
+        category = "Dungeons", subcategory = "HUD"
+    )
+    private static boolean maxorHPDisplay;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Blessing on Screen",
         description = "Shows Blessing levels on screen with colors based on the level.",
         category = "Dungeons", subcategory = "HUD"
@@ -957,6 +964,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.unopenedChestsDisplay;
+    }
+
+    static final boolean isMaxorHPDisplay() {
+        Config.checkUninit();
+
+        return Config.maxorHPDisplay;
     }
 
     static final boolean isBlessingHud() {
