@@ -16,9 +16,9 @@ import java.nio.charset.StandardCharsets
 import java.util.Properties
 
 plugins {
-    //kotlin("jvm") version "2.0.20-dev-2972"
+    //kotlin("jvm") version "2.1.0-dev-598"
     id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("gg.essential.loom") version "1.6.16"
+    id("gg.essential.loom") version "1.6.17"
     id("dev.architectury.architectury-pack200") version "0.1.3"
     id("com.github.ben-manes.versions") version "0.51.0"
     java
@@ -26,7 +26,7 @@ plugins {
     signing
     `maven-publish`
     id("io.github.sgtsilvio.gradle.proguard") version "0.7.0"
-    id("com.autonomousapps.dependency-analysis") version "1.31.0"
+    id("com.autonomousapps.dependency-analysis") version "1.32.0"
 }
 
 java {
@@ -121,7 +121,7 @@ dependencies {
     forge("net.minecraftforge:forge:1.8.9-11.15.1.2318-1.8.9")
 
     compileOnly("gg.essential:loader-launchwrapper:1.2.2") // TODO make it shadowMe
-    compileOnly("gg.essential:essential-1.8.9-forge:16901+gb6bc6abcb6") { // TODO make it back implementation
+    compileOnly("gg.essential:essential-1.8.9-forge:17141+gd6f4cfd3a8") { // TODO make it back implementation
         exclude(module = "asm")
         exclude(module = "asm-commons")
         exclude(module = "asm-tree")
@@ -132,9 +132,9 @@ dependencies {
         exclude(module = "vigilance-1.8.9-forge")
     }
 
-    api("gg.essential:elementa-1.8.9-forge:647")
-    implementation("gg.essential:universalcraft-1.8.9-forge:337")
-    implementation("gg.essential:vigilance-1.8.9-forge:297")
+    api("gg.essential:elementa-1.8.9-forge:652")
+    implementation("gg.essential:universalcraft-1.8.9-forge:344")
+    implementation("gg.essential:vigilance-1.8.9-forge:299")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.20-Beta1")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
@@ -155,10 +155,10 @@ dependencies {
 
     compileOnly("gg.skytils:skytilsmod:$skytilsVersion")
 
-    proguardClasspath("com.guardsquare:proguard-base:7.4.2") {
+    proguardClasspath("com.guardsquare:proguard-base:7.5.0") {
         exclude(module = "proguard-core")
     }
-    proguardClasspath("com.guardsquare:proguard-core:9.1.3")
+    proguardClasspath("com.guardsquare:proguard-core:9.1.4")
 
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
 
@@ -295,7 +295,7 @@ tasks {
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
         options.forkOptions.jvmArgs!!.add("-Xmx2G")
-        options.forkOptions.jvmArgs!!.add("-XX:+EnableDynamicAgentLoading")
+        options.forkOptions.jvmArgs!!.add("-XX:+UnlockExperimentalVMOptions -XX:+IgnoreUnrecognizedVMOptions -XX:+EnableDynamicAgentLoading")
         options.compilerArgs.add("-parameters")
         options.compilerArgs.add("-Xlint:all,-options,-classfile,-processing,-overrides")
     }

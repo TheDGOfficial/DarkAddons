@@ -10,16 +10,16 @@ while IFS='=' read -r key value; do
   fi
 done < versions.properties
 
-#KOTLIN_VERSION=2.0.20-dev-2972
+#KOTLIN_VERSION=2.1.0-dev-598
 
 GUAVA_VERSION=${versionProperties["guava.version"]}
 
 JETBRAINS_ANNOTATIONS_VERSION=${versionProperties["jetbrains.annotations.version"]}
 COMMONS_LANG3_VERSION=${versionProperties["commons.lang3.version"]}
 
-VIGILANCE_VERSION=297
-ELEMENTA_VERSION=647
-UNIVERSALCRAFT_VERSION=337
+VIGILANCE_VERSION=299
+ELEMENTA_VERSION=652
+UNIVERSALCRAFT_VERSION=344
 
 LAUNCHWRAPPER_VERSION=1.12
 
@@ -33,7 +33,7 @@ GSON_VERSION=2.2.4
 
 ASM_VERSION=9.7
 
-ERRORPRONE_VERSION=2.27.1
+ERRORPRONE_VERSION=2.28.0
 
 DARKADDONS_VERSION=${versionProperties["darkaddons.version"]}
 SKYTILS_VERSION=${versionProperties["skytils.version"]}
