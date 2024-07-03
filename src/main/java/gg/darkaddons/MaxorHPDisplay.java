@@ -1,7 +1,9 @@
 package gg.darkaddons;
 
 import net.minecraft.client.Minecraft;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -10,7 +12,12 @@ import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.EntityLivingBase;
 
+import java.lang.ref.WeakReference;
+
 final class MaxorHPDisplay extends SimpleGuiElement {
+    // Safety: Uses WeakReference to not create a memory leak of the entity.
+    private static WeakReference<EntityWither> maxor;
+
     private static double maxorHp;
     private static double lastMaxorHp;
 
@@ -22,34 +29,49 @@ final class MaxorHPDisplay extends SimpleGuiElement {
         DarkAddons.registerTickTask("maxor_hp_display_update_maxor_hp", 1, true, this::update);
     }
 
-    private static final double findMaxorHp() {
+    @Nullable
+    private static final EntityWither findAndAssignMaxor() {
         for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-            if (entity instanceof EntityWither && entity.getName().contains("Maxor")) {
-                float hp = -1;
-                float maxHp = -1;
+            if (entity instanceof final EntityWither wither && entity.getName().contains("Maxor")) {
+                MaxorHPDisplay.maxor = new WeakReference<>(wither);
 
-                if (entity instanceof final IBossDisplayData boss) {
-                    hp = boss.getHealth();
-                    maxHp = boss.getMaxHealth();
-                }
-
-                if (entity instanceof final EntityLivingBase living) {
-                    hp = Math.min(hp, living.getHealth());
-                    maxHp = Math.min(maxHp, living.getMaxHealth());
-                }
-
-                if (hp == -1 || maxHp == -1) {
-                    return -1;
-                }
-
-                final var hpPerc = (hp / maxHp) * 100;
-                MaxorHPDisplay.maxorDead = hp <= 1;
-
-                return hpPerc;
+                return wither;
             }
+       }
+
+       // Caller should handle this.
+       return null;
+    }
+
+    @Nullable
+    private static final EntityWither getOrFindMaxor() {
+        if (null == maxor) {
+            // May return null; caller should handle it.
+            return MaxorHPDisplay.findAndAssignMaxor();
         }
 
-        return -1;
+        final var cached = maxor.get();
+
+        if (null == cached) {
+            // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case try to find and assign it again, otherwise will return null.
+            return MaxorHPDisplay.findAndAssignMaxor();
+        }
+
+        // Return existing entity.
+        return cached;
+    }
+
+    private static final double findMaxorHp() {
+        final var entity = MaxorHPDisplay.getOrFindMaxor();
+
+        if (null == entity) {
+            return -1;
+        }
+
+        final var hp = entity.getHealth();
+        MaxorHPDisplay.maxorDead = hp <= 1;
+
+        return (hp / Math.max(1, entity.getMaxHealth())) * 100;
     }
 
     @Override
