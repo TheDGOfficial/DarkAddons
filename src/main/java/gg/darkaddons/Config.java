@@ -600,7 +600,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Mining Ping Fix",
-        description = "Prevents lore updates on your mining tool (drill, gauntlet, pickaxes) from resetting your breaking progress, which reduces your money from mining the more ping you have. Without the fix, money from mining is less, because you lose an additional tick (50 milliseconds) per block broken. With maxed Mining Speed from maxed Mining Setup, you are able to mine 1 block in about 10-11 ticks, and losing 1 tick means -10% less profits, and this is gets higher the higher your ping is. Not to mention the need to also re-click LC and aim again; it's probably more than 10%.",
+        description = "Prevents lore updates on your mining tool (drill, gauntlet, pickaxes) from resetting your breaking progress, which reduces your money from mining the more ping you have. Without the fix, money from mining is less, because you lose an additional tick (50 milliseconds) per block broken. With maxed Mining Speed from maxed Mining Setup, you are able to mine 1 block in about 10-11 ticks, and losing 1 tick means -10%% less profits, and this is gets higher the higher your ping is. Not to mention the need to also re-click LC and aim again; it's probably more than 10%%.",
         category = "QOL", subcategory = "General"
     )
     private static boolean miningPingFix;
