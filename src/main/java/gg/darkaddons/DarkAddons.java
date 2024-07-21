@@ -690,6 +690,8 @@ public final class DarkAddons {
         GhostBlock.registerKeybindings();
         RequeueKey.registerKeybindings();
 
+        AutoFishingRod.registerTick();
+
         DarkAddons.register(
             TickTask.newManager(),
             new GuiManager(),
@@ -714,7 +716,8 @@ public final class DarkAddons {
             new RequeueKey(),
             new AutoExtraStats(),
             new MaxorHPDisplay(),
-            new GoldenFishTimer()
+            new GoldenFishTimer(),
+            new AutoFishingRod()
         );
 
         GuiManager.init();

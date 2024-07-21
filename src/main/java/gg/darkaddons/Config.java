@@ -599,6 +599,45 @@ final class Config extends Vigilant {
     private static boolean autoDance;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Auto Fishing Rod",
+        description = "While fishing, automatically pulls the rod when a catch is hooked and then re-throws it. You need to manually throw it the first time for it to start working. You need SkyBlock Menu -> Settings -> Personal -> Fishing Settings -> Fishing Status Holograms and Fishing Timer enabled for it to work. This does not automatically kill any sea creatures. Should work well for Trophy Fishing. The mod will move your head every 20 seconds to bypass anti-AFK system of Hypixel.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean autoFishingRod;
+
+    @Property(
+        type = PropertyType.NUMBER, name = "Auto Fishing Rod Starting Delay Ticks",
+        description = "Starting delay in ticks before hooking/re-throwing the rod. The actual delay will be random amount of ticks in the range of starting and maximum delay ticks. Note: Too high delay value will make you miss the catch.",
+        category = "QOL", subcategory = "General",
+        min = 0,
+        max = 10
+    )
+    private static int autoFishingRodStartingDelay = 4;
+
+    @Property(
+        type = PropertyType.NUMBER, name = "Auto Fishing Rod Maximum Delay Ticks",
+        description = "Maximum delay in ticks before hooking/re-throwing the rod. The actual delay will be random amount of ticks in the range of starting and maximum delay ticks. Note: Too high delay value will make you miss the catch.",
+        category = "QOL", subcategory = "General",
+        min = 0,
+        max = 10
+    )
+    private static int autoFishingRodMaximumDelay = 5;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Auto Fishing Rod Slugfish Mode",
+        description = "Only pulls the rod for a catch if the bobber was inside the lava for more than 10 seconds. You need a Level 100 Legendary Slug pet equipped to actually get the Slugfish since it doesn't support 20 seconds.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean autoFishingRodSlugfishMode;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Auto Fishing Rod Golden Fish Mode",
+        description = "Will attempt to automatically catch Golden Fish. You need to be fishing on a small lava pool (preferably with just 1 block of lava, but keep distance between you and your bobber so that when the Golden Fish spawns, right clicking will throw your rod instead of trying to right click to the Golden Fish entity) for the Golden Fish to not move away, otherwise the mod will not be able to auto catch the Golden Fish. Recommended fishing spot: Stand at -481 178 -501 and throw your rod to lava block at -485 176 -501. When this mode is enabled, if a catch takes more than 10 seconds and slug fish mode is not enabled, it will re-throw the rod. This because, while fishing at a 1 block lava spot, sometimes when you throw your rod it goes into a block instead of lava, re-throwing the rod fixes this. For this reason, if you are going to fish at that spot and use Golden Fish Mode, disable Slugfish Mode first.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean autoFishingRodGoldenFishMode;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Aggressive Jump",
         description = "Causes jumping in Auto Dance to be done more aggressively. May help if you are failing a lot with \"You weren't mid-air!\", but it might also make you get off of the glass block, because this makes the mod able to jump while you are not standing still, which causes your momentum to change.",
         category = "QOL", subcategory = "General"
@@ -890,6 +929,11 @@ final class Config extends Vigilant {
 
         this.addDependency("burgersDone", "slayerRngDisplay");
         this.addDependency("keepHoldingToCreateMoreGhostBlocks", "createGhostBlockWithKey");
+
+        this.addDependency("autoFishingRodStartingDelay", "autoFishingRod");
+        this.addDependency("autoFishingRodMaximumDelay", "autoFishingRod");
+        this.addDependency("autoFishingRodSlugfishMode", "autoFishingRod");
+        this.addDependency("autoFishingRodGoldenFishMode", "autoFishingRod");
     }
 
     private final void addListeners() {
@@ -1343,6 +1387,36 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.autoDance;
+    }
+
+    static final boolean isAutoFishingRod() {
+        Config.checkUninit();
+
+        return Config.autoFishingRod;
+    }
+
+    static final int getAutoFishingRodStartingDelay() {
+        Config.checkUninit();
+
+        return Config.autoFishingRodStartingDelay;
+    }
+
+    static final int getAutoFishingRodMaximumDelay() {
+        Config.checkUninit();
+
+        return Config.autoFishingRodMaximumDelay;
+    }
+
+    static final boolean isAutoFishingRodSlugfishMode() {
+        Config.checkUninit();
+
+        return Config.autoFishingRodSlugfishMode;
+    }
+
+    static final boolean isAutoFishingRodGoldenFishMode() {
+        Config.checkUninit();
+
+        return Config.autoFishingRodGoldenFishMode;
     }
 
     static final boolean isAggressiveJump() {
