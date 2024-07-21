@@ -136,7 +136,7 @@ final class AutoFishingRod {
                 DarkAddons.modError(other);
             }
         }
-        DarkAddons.queueWarning("No method found with given names");
+        throw new IllegalArgumentException("No method found with given names (" + String.join(", ", names) + ") in class " + clazz.getSimpleName());
     }
 
     private static final void hook() {
