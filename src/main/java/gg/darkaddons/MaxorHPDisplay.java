@@ -76,6 +76,10 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
     @Override
     final void clear() {
+        if (null != MaxorHPDisplay.maxor) {
+            maxor.clear();
+        }
+        MaxorHPDisplay.maxor = null;
         MaxorHPDisplay.maxorHp = 0;
         MaxorHPDisplay.lastMaxorHp = 0;
         MaxorHPDisplay.maxorDead = false;
