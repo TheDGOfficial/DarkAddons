@@ -177,6 +177,13 @@ final class Config extends Vigilant {
     private static boolean hideRogueSwordTimerOnceZero;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Golden Fish Timer",
+        description = "Shows a timer for Golden Fish along with how much time left to throw your rod before you miss the chance of catching one. Shows as Ready after 15 minutes and Ready (Guaranteed) at 20 minutes, according to information from the official wiki. There's also a despawn timer that counts down time for your spawned Golden Fish to despawn (it despawns 60 seconds after the last interaction with it).",
+        category = "Misc", subcategory = "HUD"
+    )
+    private static boolean goldenFishTimer;
+
+    @Property(
         type = PropertyType.SWITCH, name = "SB Rejoin Cooldown After Kick Display",
         description = "Shows time left before you can rejoin SkyBlock after you get kicked in your screen.",
         category = "Misc", subcategory = "HUD"
@@ -1042,6 +1049,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.hideRogueSwordTimerOnceZero;
+    }
+
+    static final boolean isGoldenFishTimer() {
+        Config.checkUninit();
+
+        return Config.goldenFishTimer;
     }
 
     static final boolean isSendMessageOn270Score() {

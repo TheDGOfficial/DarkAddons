@@ -497,6 +497,11 @@ public final class DarkAddons {
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
+    static final boolean isPlayerInCrimsonIsle() {
+        return SkyblockIsland.CrimsonIsle.getMode().equals(SBInfo.INSTANCE.getMode());
+    }
+
+    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final boolean isPlayerInMineshaft() {
         return "mineshaft".equals(SBInfo.INSTANCE.getMode());
     }
@@ -708,7 +713,8 @@ public final class DarkAddons {
             new ScoreFromScoreboard(),
             new RequeueKey(),
             new AutoExtraStats(),
-            new MaxorHPDisplay()
+            new MaxorHPDisplay(),
+            new GoldenFishTimer()
         );
 
         GuiManager.init();
