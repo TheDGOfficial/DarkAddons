@@ -1,5 +1,5 @@
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 64e708ae..a9992818 100644
+index 897fd582..9e2dcacd 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -18,6 +18,7 @@
@@ -17,8 +17,8 @@ index 64e708ae..a9992818 100644
 +    `maven-publish`
  }
  
- version = "1.9.7"
-@@ -294,6 +296,18 @@ signing {
+ version = "1.10.0-pre9"
+@@ -300,6 +302,18 @@ signing {
      }
  }
  
@@ -37,7 +37,7 @@ index 64e708ae..a9992818 100644
  /**
   * Builds the dependency notation for the named Ktor [module] at the given [version].
   *
-@@ -305,4 +319,4 @@ fun DependencyHandler.ktor(module: String, version: String? = null, addSuffix: B
+@@ -311,4 +325,4 @@ fun DependencyHandler.ktor(module: String, version: String? = null, addSuffix: B
  
  fun DependencyHandler.ktorClient(module: String, version: String? = null) = ktor("client-${module}", version)
  

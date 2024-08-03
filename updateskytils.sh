@@ -29,6 +29,12 @@ git stash &> /dev/null
 
 cd .. || { echo "cd failed"; exit 1; } 
 
+cd ws-shared || { echo "cd failed"; exit 1; } 
+
+git stash &> /dev/null
+
+cd .. || { echo "cd failed"; exit 1; } 
+
 git submodule init
 git submodule update
 
@@ -50,6 +56,15 @@ git stash pop &> /dev/null || true
 git stash drop &> /dev/null || true 
 
 git diff > ../../hypixel-api.patch
+
+cd .. || { echo "cd failed"; exit 1; } 
+
+cd ws-shared || { echo "cd failed"; exit 1; } 
+
+git stash pop &> /dev/null || true 
+git stash drop &> /dev/null || true 
+
+git diff > ../../ws-shared.patch
 
 cd .. || { echo "cd failed"; exit 1; } 
 cd .. || { echo "cd failed"; exit 1; } 

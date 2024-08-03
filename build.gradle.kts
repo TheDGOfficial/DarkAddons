@@ -66,6 +66,7 @@ repositories {
     mavenCentral()
     maven("https://repo.essential.gg/repository/maven-public/")
     maven("https://repo.essential.gg/repository/maven-releases/")
+    maven("https://repo.hypixel.net/repository/Hypixel/")
     maven("https://jitpack.io") {
         mavenContent {
             includeGroupAndSubgroups("com.github")

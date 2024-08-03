@@ -104,7 +104,11 @@ if [ "${1:-default}" != "--skip-build" ]; then
     cd hypixel-api || { echo "cd failed"; exit 1; } 
     git stash &> /dev/null
     git stash drop &> /dev/null || true
-    cd .. || { echo "cd failed"; exit 1; } 
+    cd .. || { echo "cd failed"; exit 1; }
+    cd ws-shared || { echo "cd failed"; exit 1; } 
+    git stash &> /dev/null
+    git stash drop &> /dev/null || true
+    cd .. || { echo "cd failed"; exit 1; }  
     git submodule init
     if [ "${1:-default}" != "--offline" ]; then
       git submodule update
@@ -113,6 +117,9 @@ if [ "${1:-default}" != "--skip-build" ]; then
     git apply ../SkytilsMod.patch &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; }
     git apply ../../hypixel-api.patch &> /dev/null
+    cd .. || { echo "cd failed"; exit 1; }
+    cd ws-shared || { echo "cd failed"; exit 1; }
+    git apply ../../ws-shared.patch &> /dev/null
     cd .. || { echo "cd failed"; exit 1; }
     if [ "${1:-default}" != "--offline" ]; then
       ./gradlew build remapJar publishToMavenLocal --no-daemon

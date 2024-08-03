@@ -1,0 +1,36 @@
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 4410697..dd5d153 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -15,9 +15,12 @@
+  * You should have received a copy of the GNU Affero General Public License
+  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+  */
++import java.util.Locale
++
+ plugins {
+     kotlin("jvm") version "1.9.22"
+     kotlin("plugin.serialization") version "1.9.22"
++    `maven-publish`
+ }
+ 
+ group = "gg.skytils.skytilsws.shared"
+@@ -35,4 +38,16 @@ dependencies {
+ 
+ kotlin {
+     jvmToolchain(8)
+-}
+\ No newline at end of file
++}
++
++publishing {
++    publications {
++        register("mavenJava", MavenPublication::class) {
++            groupId = project.group.toString()
++            artifactId = project.name.lowercase(Locale.ROOT)
++            version = project.version.toString()
++
++            from(components["java"])
++        }
++    }
++}
