@@ -103,6 +103,7 @@ loom {
         accessTransformer("src/main/resources/META-INF/darkaddons_at.cfg")
     }
     mixin {
+        useLegacyMixinAp = true
         defaultRefmapName = "mixins.darkaddons.refmap.json"
     }
 }
