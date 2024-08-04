@@ -47,17 +47,11 @@ final class AutoClicker {
     }
 
     static final boolean isHoldingTerm(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingABow(mc) && AutoClicker.isHoldingItemContaining(mc, "Terminator");
+        return AutoClicker.isHoldingABow(mc) && Utils.isHoldingItemContaining(mc, "Terminator");
     }
 
     static final boolean isHoldingClaymoreOrGS(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingASword(mc) && (AutoClicker.isHoldingItemContaining(mc, "Claymore") || AutoClicker.isHoldingItemContaining(mc, "Giant's Sword"));
-    }
-
-    private static final boolean isHoldingItemContaining(@NotNull final Minecraft mc, @SuppressWarnings("TypeMayBeWeakened") @NotNull final String search) {
-        final var itemStack = Utils.getHeldItemStack(mc);
-
-        return null != itemStack && itemStack.getDisplayName().contains(search);
+        return AutoClicker.isHoldingASword(mc) && (Utils.isHoldingItemContaining(mc, "Claymore") || Utils.isHoldingItemContaining(mc, "Giant's Sword"));
     }
 
     @SuppressWarnings("TypeMayBeWeakened")

@@ -464,6 +464,13 @@ final class Config extends Vigilant {
     )
     private static boolean nullStreamOptimizer;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "Render Skytils Waypoints only when holding AOTV",
+        description = "Renders Skytils waypoints in the world only if you are holding Aspect of the Void, which will improve performance if you have many waypoints.",
+        category = "Performance", subcategory = "Experimental"
+    )
+    private static boolean renderSkytilsWaypointsOnlyWhenHoldingAOTV;
+
     /*@Property(
         type = PropertyType.SWITCH, name = "Fail Notification",
         description = "Shows a title message on screen when the 4th dragon is spawned telling you there are 4 dragons alive (usually you'll have 35s left before 5th spawns) and also when the 5th dragon is spawning, but that one will be late since the dragons usually spawn 5 seconds after the spawning notification.",
@@ -1273,6 +1280,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.disablePeriodicConfigSaves;
+    }
+
+    static final boolean isRenderSkytilsWaypointsOnlyWhenHoldingAOTV() {
+        Config.checkUninit();
+
+        return Config.renderSkytilsWaypointsOnlyWhenHoldingAOTV;
     }
 
     /*static final boolean isBlockPosOptimizer() {

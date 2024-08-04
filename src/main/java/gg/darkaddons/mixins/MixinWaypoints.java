@@ -1,8 +1,12 @@
 package gg.darkaddons.mixins;
 
+import gg.darkaddons.DarkAddons;
 import gg.darkaddons.PublicUtils;
+
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+
 import org.jetbrains.annotations.NotNull;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -16,9 +20,12 @@ final class MixinWaypoints {
         super();
     }
 
-    @Inject(method = "onWorldRender", at = @At("HEAD"), remap = false)
+    @Inject(method = "onWorldRender", at = @At("HEAD"), remap = false, cancellable = true)
     private final void onWorldRenderPre$darkaddons(@NotNull final RenderWorldLastEvent event, @NotNull final CallbackInfo ci) {
         PublicUtils.startProfilingSection("skytils_render_waypoints");
+        if (DarkAddons.shouldNotRenderSkytilsWaypoints()) {
+            ci.cancel();
+        }
     }
 
     @Inject(method = "onWorldRender", at = @At("TAIL"), remap = false)

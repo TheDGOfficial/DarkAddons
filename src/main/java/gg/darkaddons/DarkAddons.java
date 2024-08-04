@@ -16,6 +16,7 @@ import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.init.Items;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -869,6 +870,16 @@ public final class DarkAddons {
      */
     public static final boolean isSmoothenFrames() {
         return Config.isSmoothenFrames();
+    }
+
+    /**
+     * Returns true if skytils waypoints should not be rendered, false otherwise.
+     *
+     * @return True if skytils waypoints should not be rendered.
+     */
+    public static final boolean shouldNotRenderSkytilsWaypoints() {
+        final var mc = Minecraft.getMinecraft();
+        return Config.isRenderSkytilsWaypointsOnlyWhenHoldingAOTV() && (Items.diamond_shovel != Utils.getHeldItem(mc) || !Utils.isHoldingItemContaining(mc, "Aspect of the Void"));
     }
 
     static final boolean isUsingSBA() {

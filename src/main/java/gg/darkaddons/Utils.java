@@ -677,6 +677,12 @@ final class Utils {
         return null == itemStack ? null : itemStack.getItem();
     }
 
+    static final boolean isHoldingItemContaining(@NotNull final Minecraft mc, @SuppressWarnings("TypeMayBeWeakened") @NotNull final String search) {
+        final var itemStack = Utils.getHeldItemStack(mc);
+
+        return null != itemStack && itemStack.getDisplayName().contains(search);
+    }
+
     private static final void setupConnectionProperties(@NotNull final URLConnection con,
                                                 @NotNull final Duration timeout,
                                                 @NotNull final String charset,
