@@ -22,10 +22,11 @@ final class MixinWaypoints {
 
     @Inject(method = "onWorldRender", at = @At("HEAD"), remap = false, cancellable = true)
     private final void onWorldRenderPre$darkaddons(@NotNull final RenderWorldLastEvent event, @NotNull final CallbackInfo ci) {
-        PublicUtils.startProfilingSection("skytils_render_waypoints");
         if (DarkAddons.shouldNotRenderSkytilsWaypoints()) {
             ci.cancel();
+            return;
         }
+        PublicUtils.startProfilingSection("skytils_render_waypoints");
     }
 
     @Inject(method = "onWorldRender", at = @At("TAIL"), remap = false)
