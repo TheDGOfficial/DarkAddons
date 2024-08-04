@@ -8,6 +8,7 @@ import gg.skytils.skytilsmod.Skytils;
 import gg.essential.elementa.ElementaVersion;
 import kotlin.KotlinVersion;
 import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.logging.log4j.LogManager;
@@ -112,6 +113,7 @@ final class Diagnostics {
 
         final var world = Minecraft.getMinecraft().theWorld;
         Diagnostics.diag("Loaded Entity Amount", Integer.toString(world.loadedEntityList.size()));
+        Diagnostics.diag("Loaded Tile Entity Amount", Integer.toString(world.loadedTileEntityList.size()));
         Diagnostics.diag("Loaded Player Entity Amount", Integer.toString(world.playerEntities.size()));
 
         Diagnostics.diag("Thread Count", "Total: " + ThreadPriorityTweaker.getThreadCount(false) + " - Daemon: " + ThreadPriorityTweaker.getThreadCount(true));
