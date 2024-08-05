@@ -135,7 +135,7 @@ dependencies {
     }
 
     api("gg.essential:elementa-1.8.9-forge:657")
-    implementation("gg.essential:universalcraft-1.8.9-forge:345+fix-numpad-enter")
+    implementation("gg.essential:universalcraft-1.8.9-forge:344+")
     implementation("gg.essential:vigilance-1.8.9-forge:299")
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.20-RC")
 
