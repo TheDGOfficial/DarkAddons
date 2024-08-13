@@ -63,7 +63,8 @@
         "MixinIceWalkUtils",
         "MixinFunny",
         "MixinDSMCatacombsTracker",
-        "MixinPlayerControllerMP"
+        "MixinPlayerControllerMP",
+        "MixinKotlinStringUtilsKt"
     ],
     "server": [
     ],

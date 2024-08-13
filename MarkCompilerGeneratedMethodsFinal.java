@@ -334,7 +334,7 @@ final class MarkCompilerGeneratedMethodsFinal {
                     //System.out.println("New signature: " + newDefinition);
                 }
 
-                if (className.contains("Kt") && !"invoke".equals(methodName) && !methodName.contains("<")) {
+                if (0 != (mn.access & Opcodes.ACC_PUBLIC) && className.contains("Kt") && !"invoke".equals(methodName) && !methodName.contains("<")) {
                     mn.access &= ~Opcodes.ACC_PUBLIC;
                     if (checkRun) {
                         throw new IllegalStateException("class " + className + " should've been on the list of classes to optimize, but it was not (method info: " + definition + ')');
