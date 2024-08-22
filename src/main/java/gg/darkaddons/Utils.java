@@ -663,7 +663,7 @@ final class Utils {
     }
 
     @Nullable
-    static final ItemStack getHeldItemStack(@NotNull final Minecraft mc) {
+    private static final ItemStack getHeldItemStack(@NotNull final Minecraft mc) {
         return mc.thePlayer.getHeldItem();
     }
 

@@ -8,7 +8,6 @@ import gg.skytils.skytilsmod.Skytils;
 import gg.essential.elementa.ElementaVersion;
 import kotlin.KotlinVersion;
 import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.logging.log4j.LogManager;
@@ -145,7 +144,7 @@ final class Diagnostics {
                 final var hp = living.getHealth();
                 final var maxHp = living.getMaxHealth();
 
-                final var hpPerc = (hp / maxHp) * 100;
+                final var hpPerc = hp / maxHp * 100;
 
                 extra += " with HP " + hp + '/' + maxHp + " (%" + hpPerc + ')';
             }
@@ -154,7 +153,7 @@ final class Diagnostics {
                 final var hp = boss.getHealth();
                 final var maxHp = boss.getMaxHealth();
 
-                final var hpPerc = (hp / maxHp) * 100;
+                final var hpPerc = hp / maxHp * 100;
 
                 extra += " and with boss HP " + hp + '/' + maxHp + " (%" + hpPerc + ')';
             }

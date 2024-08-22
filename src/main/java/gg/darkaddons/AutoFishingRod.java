@@ -16,8 +16,6 @@ import net.minecraft.init.Items;
 
 import net.minecraft.client.Minecraft;
 
-import gg.darkaddons.mixins.IMixinMinecraft;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 
@@ -28,8 +26,6 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 import net.minecraft.entity.projectile.EntityFishHook;
 
-import net.minecraft.util.MathHelper;
-
 import java.util.concurrent.TimeUnit;
 
 final class AutoFishingRod {
@@ -39,13 +35,13 @@ final class AutoFishingRod {
     @NotNull
     private static final Matcher countdownMatcher = Pattern.compile("§e§l(\\d+(\\.\\d+)?)").matcher("");
 
-    @NotNull
+    @Nullable
     private static WeakReference<EntityArmorStand> countdownArmorStand;
 
     @NotNull
     private static final SecureRandom secureRandom = new SecureRandom();
 
-    private static boolean hooking = false;
+    private static boolean hooking;
 
     private static long lastRodThrowTime;
 
@@ -61,7 +57,7 @@ final class AutoFishingRod {
     }
 
     private static final boolean isCountdownArmorStand(@Nullable final String customNameTag) {
-        return null != customNameTag && countdownMatcher.reset(customNameTag).matches();
+        return null != customNameTag && AutoFishingRod.countdownMatcher.reset(customNameTag).matches();
     }
 
     private static final boolean isCountdownArmorStand(@NotNull final EntityArmorStand armorStand) {
@@ -84,28 +80,25 @@ final class AutoFishingRod {
 
                 return armorStand;
             }
-       }
+        }
 
-       // Caller should handle this.
-       return null;
+        // Caller should handle this.
+        return null;
     }
 
     @Nullable
     private static final EntityArmorStand getOrFindCountdownArmorStand() {
-        if (null == countdownArmorStand) {
+        if (null == AutoFishingRod.countdownArmorStand) {
             // May return null; caller should handle it.
             return AutoFishingRod.findAndAssignCountdownArmorStand();
         }
 
-        final var cached = countdownArmorStand.get();
+        final var cached = AutoFishingRod.countdownArmorStand.get();
 
-        if (null == cached) {
-            // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case try to find and assign it again, otherwise will return null.
-            return AutoFishingRod.findAndAssignCountdownArmorStand();
-        }
+        // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case try to find and assign it again, otherwise will return null.
+        return null == cached ? AutoFishingRod.findAndAssignCountdownArmorStand() : cached;
 
         // Return existing entity.
-        return cached;
     }
 
     private static final void queueRightClick(@NotNull final Runnable continuation) {
@@ -142,10 +135,10 @@ final class AutoFishingRod {
     private static final void hook() {
         AutoFishingRod.tryExecMethods(Minecraft.class, new String[]{"func_147121_ag", "ax", "rightClickMouse"}, Minecraft.getMinecraft());
 
-        if (null != countdownArmorStand) {
-            countdownArmorStand.clear();
+        if (null != AutoFishingRod.countdownArmorStand) {
+            AutoFishingRod.countdownArmorStand.clear();
         }
-        countdownArmorStand = null;
+        AutoFishingRod.countdownArmorStand = null;
     }
 
     private static final boolean hasActiveBobber() {
@@ -170,7 +163,7 @@ final class AutoFishingRod {
 
             if (formattedMessage.contains("§")) {
                 if ("You spot a Golden Fish surface from beneath the lava!".equals(unformattedMessage) && !AutoFishingRod.hasActiveBobber()) {
-                   AutoFishingRod.throwBobber();
+                    AutoFishingRod.throwBobber();
                 } else if (("The Golden Fish escapes your hook.".equals(unformattedMessage) || "The Golden Fish escapes your hook but looks weakened.".equals(unformattedMessage)) && Config.isAutoFishingRodGoldenFishMode()) {
                     Utils.awaitCondition(() -> !AutoFishingRod.hasActiveBobber(), AutoFishingRod::throwBobber);
                 } else if ("The Golden Fish is weak!".equals(unformattedMessage) && Config.isAutoFishingRodGoldenFishMode()) {
@@ -186,69 +179,69 @@ final class AutoFishingRod {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public final void onEntityJoinWorld(@NotNull final EntityJoinWorldEvent event) {
-        if (Config.isAutoFishingRod() && event.entity instanceof EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler && AutoFishingRod.isHoldingRod()) {
-            lastRodThrowTime = System.currentTimeMillis();
-            moveMouse();
+        if (Config.isAutoFishingRod() && event.entity instanceof final EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler && AutoFishingRod.isHoldingRod()) {
+            AutoFishingRod.lastRodThrowTime = System.currentTimeMillis();
+            AutoFishingRod.moveMouse();
 
-            if (null != countdownArmorStand) {
-                countdownArmorStand.clear();
+            if (null != AutoFishingRod.countdownArmorStand) {
+                AutoFishingRod.countdownArmorStand.clear();
             }
-            countdownArmorStand = null;
+            AutoFishingRod.countdownArmorStand = null;
         }
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public final void onWorldChange(@NotNull final WorldEvent.Unload event) {
-        if (null != countdownArmorStand) {
-            countdownArmorStand.clear();
+        if (null != AutoFishingRod.countdownArmorStand) {
+            AutoFishingRod.countdownArmorStand.clear();
         }
-        countdownArmorStand = null;
+        AutoFishingRod.countdownArmorStand = null;
 
-        lastMouseMoveTime = 0;
-        lastMouseMoveWasAddition = false;
+        AutoFishingRod.lastMouseMoveTime = 0L;
+        AutoFishingRod.lastMouseMoveWasAddition = false;
     }
 
     private static final void moveMouse() {
         final var now = System.currentTimeMillis();
 
-        if (now - lastMouseMoveTime >= TimeUnit.SECONDS.toMillis(19)) { // Anti AFK seems to trigger about every 20 seconds
-            lastMouseMoveTime = now;
+        if (now - AutoFishingRod.lastMouseMoveTime >= TimeUnit.SECONDS.toMillis(19L)) { // Anti AFK seems to trigger about every 20 seconds
+            AutoFishingRod.lastMouseMoveTime = now;
 
-            if (lastMouseMoveWasAddition) {
+            if (AutoFishingRod.lastMouseMoveWasAddition) {
                 Minecraft.getMinecraft().thePlayer.rotationYaw -= 3.2F;
                 Minecraft.getMinecraft().thePlayer.rotationPitch -= 1.2F;
-                lastMouseMoveWasAddition = false;
+                AutoFishingRod.lastMouseMoveWasAddition = false;
             } else {
                 Minecraft.getMinecraft().thePlayer.rotationYaw += 3.2F;
                 Minecraft.getMinecraft().thePlayer.rotationPitch += 1.2F;
-                lastMouseMoveWasAddition = true;
+                AutoFishingRod.lastMouseMoveWasAddition = true;
             }
         }
     }
 
     private static final void tick() {
         if (AutoFishingRod.checkPreconditions() && !AutoFishingRod.hooking) {
-	    final var armorStand = AutoFishingRod.getOrFindCountdownArmorStand();
-	    if (null != armorStand) {
-	        final var customNameTag = armorStand.getCustomNameTag();
-	        final var ready = AutoFishingRod.READY.equals(customNameTag);
-	        if (ready && (!Config.isAutoFishingRodSlugfishMode() || (System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime) >= 10000L)) {
-	            AutoFishingRod.hooking = true;
-	            AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
-	        } else {
-	            if (ready && Config.isAutoFishingRodSlugfishMode()) {
-                        if (null != countdownArmorStand) {
-                            countdownArmorStand.clear();
+            final var armorStand = AutoFishingRod.getOrFindCountdownArmorStand();
+            if (null != armorStand) {
+                final var customNameTag = armorStand.getCustomNameTag();
+                final var ready = AutoFishingRod.READY.equals(customNameTag);
+                if (ready && (!Config.isAutoFishingRodSlugfishMode() || 10_000L <= (System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime))) {
+                    AutoFishingRod.hooking = true;
+                    AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
+                } else {
+                    if (ready && Config.isAutoFishingRodSlugfishMode()) {
+                        if (null != AutoFishingRod.countdownArmorStand) {
+                            AutoFishingRod.countdownArmorStand.clear();
                         }
-                        countdownArmorStand = null;
-	            }
-	        }
-	    } else if (DarkAddons.isPlayerInCrimsonIsle() && AutoFishingRod.hasActiveBobber() && !Config.isAutoFishingRodSlugfishMode() && System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime >= 10000L && Config.isAutoFishingRodGoldenFishMode()) {
+                        AutoFishingRod.countdownArmorStand = null;
+                    }
+                }
+            } else if (DarkAddons.isPlayerInCrimsonIsle() && AutoFishingRod.hasActiveBobber() && !Config.isAutoFishingRodSlugfishMode() && 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime && Config.isAutoFishingRodGoldenFishMode()) {
                 AutoFishingRod.hooking = true;
-	        AutoFishingRod.lastRodThrowTime = System.currentTimeMillis();
+                AutoFishingRod.lastRodThrowTime = System.currentTimeMillis();
 
                 AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
-	    }
+            }
         }
     }
 }

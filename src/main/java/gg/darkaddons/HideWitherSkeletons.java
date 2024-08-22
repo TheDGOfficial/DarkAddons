@@ -1,7 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntitySkeleton;

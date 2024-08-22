@@ -19,8 +19,6 @@ import net.minecraft.entity.projectile.EntityFishHook;
 
 import net.minecraft.init.Items;
 
-import net.minecraft.client.Minecraft;
-
 final class GoldenFishTimer extends SimpleGuiElement {
     private static long nextRodThrowThreshold;
 
@@ -54,11 +52,11 @@ final class GoldenFishTimer extends SimpleGuiElement {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public final void onEntityJoinWorld(@NotNull final EntityJoinWorldEvent event) {
-        if (Config.isGoldenFishTimer() && event.entity instanceof EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler && Items.fishing_rod == Utils.getHeldItem(Minecraft.getMinecraft()) && DarkAddons.isPlayerInCrimsonIsle()) {
+        if (Config.isGoldenFishTimer() && event.entity instanceof final EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler && Items.fishing_rod == Utils.getHeldItem(Minecraft.getMinecraft()) && DarkAddons.isPlayerInCrimsonIsle()) {
             final var now = System.currentTimeMillis();
-            nextRodThrowThreshold = now + TimeUnit.MINUTES.toMillis(3);
-            if (0 == nextGoldenFish) {
-                nextGoldenFish = now + TimeUnit.MINUTES.toMillis(15);
+            GoldenFishTimer.nextRodThrowThreshold = now + TimeUnit.MINUTES.toMillis(3);
+            if (0 == GoldenFishTimer.nextGoldenFish) {
+                GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(15);
             }
         }
     }
@@ -71,15 +69,15 @@ final class GoldenFishTimer extends SimpleGuiElement {
 
             if (formattedMessage.contains("§")) {
                 if ("You spot a Golden Fish surface from beneath the lava!".equals(unformattedMessage)) {
-                    nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15);
-                    goldenFishDespawnTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1);
+                    GoldenFishTimer.nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15);
+                    GoldenFishTimer.goldenFishDespawnTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1);
                 } else if ("The Golden Fish escapes your hook.".equals(unformattedMessage) || "The Golden Fish escapes your hook but looks weakened.".equals(unformattedMessage) || "The Golden Fish is weak!".equals(unformattedMessage)) {
-                    goldenFishDespawnTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1);
+                    GoldenFishTimer.goldenFishDespawnTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1);
                 } else if (unformattedMessage.startsWith("TROPHY FISH! You caught a Golden Fish ")) {
-                    goldenFishDespawnTime = 0;
+                    GoldenFishTimer.goldenFishDespawnTime = 0;
                 } else if ("The Golden Fish swims back beneath the lava...".equals(unformattedMessage)) {
-                    nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15);
-                    goldenFishDespawnTime = 0;
+                    GoldenFishTimer.nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(15);
+                    GoldenFishTimer.goldenFishDespawnTime = 0;
                 }
             }
         }
@@ -87,67 +85,62 @@ final class GoldenFishTimer extends SimpleGuiElement {
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public final void onWorldChange(@NotNull final WorldEvent.Unload event) {
-        goldenFishDespawnTime = 0;
-        nextGoldenFish = 0;
-        nextRodThrowThreshold = 0;
+        GoldenFishTimer.goldenFishDespawnTime = 0;
+        GoldenFishTimer.nextGoldenFish = 0;
+        GoldenFishTimer.nextRodThrowThreshold = 0;
     }
 
     @Override
     final void buildHudLines(@NotNull final Collection<String> lines) {
-        String goldenFishText;
- 
+
         final var now = System.currentTimeMillis();
 
-        boolean reset = false;
+        var reset = false;
 
-        if (0 == nextGoldenFish) {
-            nextGoldenFish = now + TimeUnit.MINUTES.toMillis(15);
+        if (0 == GoldenFishTimer.nextGoldenFish) {
+            GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(15);
             reset = true;
         }
 
-        final var timeUntilNextGoldenFish = nextGoldenFish - now;
+        final var timeUntilNextGoldenFish = GoldenFishTimer.nextGoldenFish - now;
         final var guaranteed = timeUntilNextGoldenFish <= -TimeUnit.MINUTES.toMillis(5);
 
+        String goldenFishText;
         if (guaranteed) {
             goldenFishText = "§a§lReady (Guaranteed)";
-        } else if (timeUntilNextGoldenFish <= 0) {
-            goldenFishText = "§aReady";
-        } else {
-            goldenFishText = Utils.formatTime(timeUntilNextGoldenFish, true);
+        } else goldenFishText = 0 >= timeUntilNextGoldenFish ? "§aReady" : Utils.formatTime(timeUntilNextGoldenFish, true);
+
+        if (0 == GoldenFishTimer.nextRodThrowThreshold) {
+            GoldenFishTimer.nextRodThrowThreshold = now + TimeUnit.MINUTES.toMillis(3);
         }
+
+        final var timeUntilMissingGoldenFish = GoldenFishTimer.nextRodThrowThreshold - now;
 
         final String throwRodText;
-
-        if (0 == nextRodThrowThreshold) {
-            nextRodThrowThreshold = now + TimeUnit.MINUTES.toMillis(3);
-        }
-
-        final var timeUntilMissingGoldenFish = nextRodThrowThreshold - now;
-
-        if (timeUntilMissingGoldenFish <= 0 && !reset) {
+        if (0 >= timeUntilMissingGoldenFish && !reset) {
             throwRodText = "§4You missed your chance to get Golden Fish!";
 
-            nextGoldenFish = now + TimeUnit.MINUTES.toMillis(15);
-            goldenFishText = Utils.formatTime(nextGoldenFish - now, true);
+            GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(15);
+            goldenFishText = Utils.formatTime(GoldenFishTimer.nextGoldenFish - now, true);
         } else {
             throwRodText = "§cThrow rod before " + Utils.formatTime(timeUntilMissingGoldenFish, true);
         }
 
         if (reset) {
             goldenFishText = "Throw rod to start";
-            nextGoldenFish = 0;
+            GoldenFishTimer.nextGoldenFish = 0;
         }
 
-        final String despawnText = 0 == goldenFishDespawnTime ? "" : Utils.formatTime(goldenFishDespawnTime - now, true);
+        final var despawnText = 0 == GoldenFishTimer.goldenFishDespawnTime ? "" : Utils.formatTime(GoldenFishTimer.goldenFishDespawnTime - now, true);
 
-        if (!despawnText.isEmpty()) {
-            lines.add("§6Golden Fish Timer: §6§lSpawned!");
-            lines.add("§cDespawns in " + despawnText);
-        } else {
+        if (despawnText.isEmpty()) {
             lines.add("§6Golden Fish Timer: " + goldenFishText);
             if ((timeUntilMissingGoldenFish <= TimeUnit.MINUTES.toMillis(1) || guaranteed) && !reset) {
                 lines.add(throwRodText);
             }
+        } else {
+            lines.add("§6Golden Fish Timer: §6§lSpawned!");
+            lines.add("§cDespawns in " + despawnText);
         }
     }
 }

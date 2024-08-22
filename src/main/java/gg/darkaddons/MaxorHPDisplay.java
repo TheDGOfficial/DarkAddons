@@ -9,9 +9,6 @@ import java.util.Collection;
 
 import net.minecraft.entity.boss.EntityWither;
 
-import net.minecraft.entity.boss.IBossDisplayData;
-import net.minecraft.entity.EntityLivingBase;
-
 import java.lang.ref.WeakReference;
 
 final class MaxorHPDisplay extends SimpleGuiElement {
@@ -45,43 +42,40 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
     @Nullable
     private static final EntityWither getOrFindMaxor() {
-        if (null == maxor) {
+        if (null == MaxorHPDisplay.maxor) {
             // May return null; caller should handle it.
             return MaxorHPDisplay.findAndAssignMaxor();
         }
 
-        final var cached = maxor.get();
+        final var cached = MaxorHPDisplay.maxor.get();
 
-        if (null == cached) {
-            // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case try to find and assign it again, otherwise will return null.
-            return MaxorHPDisplay.findAndAssignMaxor();
-        }
+        // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case try to find and assign it again, otherwise will return null.
+        return null == cached ? MaxorHPDisplay.findAndAssignMaxor() : cached;
 
         // Return existing entity.
-        return cached;
     }
 
     private static final double findMaxorHp() {
         final var entity = MaxorHPDisplay.getOrFindMaxor();
 
         if (null == entity) {
-            return -1;
+            return -1.0D;
         }
 
         final var hp = entity.getHealth();
-        MaxorHPDisplay.maxorDead = hp <= 1;
+        MaxorHPDisplay.maxorDead = 1.0F >= hp;
 
-        return (hp / Math.max(1, entity.getMaxHealth())) * 100;
+        return hp / Math.max(1.0D, entity.getMaxHealth()) * 100.0D;
     }
 
     @Override
     final void clear() {
         if (null != MaxorHPDisplay.maxor) {
-            maxor.clear();
+            MaxorHPDisplay.maxor.clear();
         }
         MaxorHPDisplay.maxor = null;
-        MaxorHPDisplay.maxorHp = 0;
-        MaxorHPDisplay.lastMaxorHp = 0;
+        MaxorHPDisplay.maxorHp = 0.0D;
+        MaxorHPDisplay.lastMaxorHp = 0.0D;
         MaxorHPDisplay.maxorDead = false;
 
         super.clear();
@@ -115,9 +109,9 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
         final var hp = MaxorHPDisplay.maxorHp;
 
-        final var color = MaxorHPDisplay.maxorDead ? "§4" : hp <= 24 ? "§c" : hp <= 74 ? "§e" : "§a";
-        final var hpText = MaxorHPDisplay.maxorDead ? "§a§lDead" : String.format("%.1f", hp) + "%";
+        final var color = MaxorHPDisplay.maxorDead ? "§4" : 24.0D >= hp ? "§c" : 74.0D >= hp ? "§e" : "§a";
+        final var hpText = MaxorHPDisplay.maxorDead ? "§a§lDead" : String.format("%.1f", hp) + '%';
 
-        lines.add(hp == -1 && !MaxorHPDisplay.maxorDead ? text + "§c§lUnknown" : text + color + hpText);
+        lines.add(-1 == hp && !MaxorHPDisplay.maxorDead ? text + "§c§lUnknown" : text + color + hpText);
     }
 }

@@ -297,11 +297,7 @@ final class AutoClassAbilities {
                 AutoClassAbilities.findClassAndAssignAbilities();
             }
 
-            boolean shouldUse = false;
-
-            if (AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE == AutoClassAbilities.ultimateClassAbility) {
-                shouldUse = true;
-            }
+            var shouldUse = UltimateClassAbility.CASTLE_OF_STONE == AutoClassAbilities.ultimateClassAbility;
 
             if (AutoClassAbilities.UltimateClassAbility.WISH == AutoClassAbilities.ultimateClassAbility) {
                 shouldUse = 7 == DungeonFeatures.INSTANCE.getDungeonFloorNumber();
