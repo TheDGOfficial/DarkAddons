@@ -64,7 +64,9 @@
         "MixinFunny",
         "MixinDSMCatacombsTracker",
         "MixinPlayerControllerMP",
-        "MixinKotlinStringUtilsKt"
+        "MixinKotlinStringUtilsKt",
+        "MixinDSMLootTracker",
+        "MixinDSMCustomMusic"
     ],
     "server": [
     ],
