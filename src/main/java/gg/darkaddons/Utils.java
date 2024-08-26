@@ -136,6 +136,24 @@ final class Utils {
         private static final EnumChatFormatting[] ENUM_CHAT_FORMATTING_VALUES = EnumChatFormatting.values();
 
         /**
+         * Holds all the formatting codes, to not call the
+         * {@link EnumChatFormatting#values()} method each time.
+         */
+        @NotNull
+        private static final String[] ENUM_CHAT_FORMATTING_VALUES_UPPERCASE = Utils.EnumChatFormattingHolder.getUppercaseChatFormattings();
+
+        private static final String[] getUppercaseChatFormattings() {
+            final ArrayList<String> uppercase = new ArrayList<>(Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES.length);
+            for (final var chatFormatting : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
+                final var code = chatFormatting.toString();
+                final var uppercaseCode = code.toUpperCase(Locale.ROOT);
+
+                uppercase.add(uppercaseCode);
+            }
+            return uppercase.toArray(new String[0]);
+        }
+
+        /**
          * Removes Minecraft color and formatting codes from the given string.
          * <p>
          * Note that unlike other methods this doesn't utilize a
@@ -162,12 +180,13 @@ final class Utils {
 
             for (final var chatFormatting : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
                 final var code = chatFormatting.toString();
-                if (text.contains(code)) {
+                if (withoutControlCodes.contains(code)) {
                     withoutControlCodes = StringUtils.remove(withoutControlCodes, code);
                 }
+            }
 
-                final var uppercaseCode = chatFormatting.toString().toUpperCase(Locale.ROOT);
-                if (text.contains(uppercaseCode)) {
+            for (final var uppercaseCode : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES_UPPERCASE) {
+                if (withoutControlCodes.contains(uppercaseCode)) {
                     withoutControlCodes = StringUtils.remove(withoutControlCodes, uppercaseCode);
                 }
             }

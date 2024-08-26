@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Pseudo
-@Mixin(targets = "com.desco.watersolver.WaterSolverMod", remap = false, priority = 1_001)
+@Mixin(targets = "dev.desco.watersolver.WaterSolverMod", remap = false, priority = 1_001)
 final class MixinWaterSolverMod {
     private MixinWaterSolverMod() {
         super();
