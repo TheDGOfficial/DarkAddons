@@ -20,7 +20,7 @@ final class TablistUtil {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
-        if (TickEvent.Phase.START != event.phase) {
+        if (TickEvent.Phase.START != event.phase || !DarkAddons.isPlayerInDungeonHub()) {
             return;
         }
 
