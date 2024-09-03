@@ -33,7 +33,7 @@ GSON_VERSION=2.2.4
 
 ASM_VERSION=9.7
 
-ERRORPRONE_VERSION=2.29.2
+ERRORPRONE_VERSION=2.31.0
 
 DARKADDONS_VERSION=${versionProperties["darkaddons.version"]}
 SKYTILS_VERSION=${versionProperties["skytils.version"]}
@@ -49,7 +49,7 @@ ensure_m2_artifact_exists() {
  ARTIFACT_PATH=$4
 
  if [ ! -f "$ARTIFACT_PATH" ]; then
-  ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.6.1:get -DremoteRepositories=https://repo.essential.gg/repository/maven-public/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+  ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.8.0:get -DremoteRepositories=https://repo.essential.gg/repository/maven-public/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
  fi
 }
 

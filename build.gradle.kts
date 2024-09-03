@@ -26,7 +26,7 @@ plugins {
     signing
     `maven-publish`
     id("io.github.sgtsilvio.gradle.proguard") version "0.7.0"
-    id("com.autonomousapps.dependency-analysis") version "1.33.0"
+    id("com.autonomousapps.dependency-analysis") version "2.0.1"
 }
 
 java {
@@ -137,7 +137,7 @@ dependencies {
     api("gg.essential:elementa-1.8.9-forge:657")
     implementation("gg.essential:universalcraft-1.8.9-forge:363")
     implementation("gg.essential:vigilance-1.8.9-forge:299")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.20-RC")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.20")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
@@ -160,9 +160,9 @@ dependencies {
     proguardClasspath("com.guardsquare:proguard-base:7.5.0") {
         exclude(module = "proguard-core")
     }
-    proguardClasspath("com.guardsquare:proguard-core:9.1.5")
+    proguardClasspath("com.guardsquare:proguard-core:9.1.6")
 
-    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC.2")
 
     annotationProcessor("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
     compileOnly("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
