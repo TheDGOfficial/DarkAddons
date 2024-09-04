@@ -20,11 +20,4 @@ final class MixinChunk {
             cir.setReturnValue(DarkAddons.MAXIMUM_LIGHT_LEVEL);
         }
     }
-
-    @Inject(method = "getBlockLightOpacity", at = @At("HEAD"), cancellable = true)
-    private final void getBlockLightOpacity$darkaddons(@SuppressWarnings("BoundedWildcard") @NotNull final CallbackInfoReturnable<Integer> cir) {
-        if (DarkAddons.isFullBright()) {
-            cir.setReturnValue(0);
-        }
-    }
 }
