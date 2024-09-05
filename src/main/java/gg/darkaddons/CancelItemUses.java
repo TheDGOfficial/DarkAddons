@@ -1,10 +1,12 @@
 package gg.darkaddons;
 
-//import net.minecraft.client.Minecraft;//
-//import net.minecraft.client.settings.GameSettings;//
+import gg.darkaddons.Config;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.GameSettings;
 
 import net.minecraft.client.settings.KeyBinding;
-//import net.minecraft.item.ItemStack;//
+import net.minecraft.item.ItemStack;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,36 +23,21 @@ final class CancelItemUses {
         throw Utils.staticClassException();
     }
 
+    private static final boolean isDev = "d5c721ce-1b12-4f71-9c1d-0f4e36829f99".equals(Minecraft.getMinecraft().thePlayer.getUniqueID().toString());
+
     static final boolean shouldAllowKeyPress(@NotNull final KeyBinding keyBinding) {
-        //
-        /*
+        if (!isDev || !Config.isExtraLuck()) {
+            return true;
+        }
+
         final Minecraft mc = Minecraft.getMinecraft();
         final GameSettings settings = mc.gameSettings;
 
         if (settings.keyBindUseItem == keyBinding) {
-            final ItemStack itemStack = Utils.getHeldItemStack(mc);
-
-            if (null != itemStack) {
-                final String displayName = itemStack.getDisplayName();
-
-                if (null != displayName) {
-                    return !displayName.contains("Gloomlock Grimoire") && !displayName.contains("Terminator") &&
-                            !displayName.contains("Daedalus Axe") && !displayName.contains("Gyrokinetic Wand");
-                }
-            }
+            return !Utils.isHoldingItemContaining(mc, "Gloomlock Grimoire") && !Utils.isHoldingItemContaining(mc, "Terminator") && !Utils.isHoldingItemContaining(mc, "Daedalus Axe") && !Utils.isHoldingItemContaining(mc, "Gyrokinetic Wand");
         } else if (settings.keyBindAttack == keyBinding) {
-            final ItemStack itemStack = Utils.getHeldItemStack(mc);
-
-            if (null != itemStack) {
-                final String displayName = itemStack.getDisplayName();
-
-                if (null != displayName) {
-                    return !displayName.contains("Terminator");
-                }
-            }
+            return !Utils.isHoldingItemContaining(mc, "Terminator");
         }
-        */
-        //
 
         return true;
     }

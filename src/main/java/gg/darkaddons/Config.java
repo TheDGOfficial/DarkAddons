@@ -804,6 +804,13 @@ final class Config extends Vigilant {
     private static boolean profilerMode;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Extra Luck",
+        description = "If you are a regular user of the mod, gives you extra luck (haters will say it's fake). Otherwise, enables some developer-only features.",
+        category = "Misc", subcategory = "Developer Options"
+    )
+    private static boolean extraLuck;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Century Raffle Ticket Timer",
         description = "Shows time till you can get a Raffle Ticket in the Century Raffle event. If unknown or negative value it will show as 20min. This depends on the chat messages to know when you get a ticket. Note: This was a feature dedicated to Year 300 Raffle Event, unless another Raffle Event happens in SkyBlock you probably shouldn't enable this feature.",
         category = "Misc", subcategory = "Events"
@@ -1538,6 +1545,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.debugMode;
+    }
+
+    static final boolean isExtraLuck() {
+        Config.checkUninit();
+
+        return Config.extraLuck;
     }
 
     static final boolean isProfilerMode() {
