@@ -932,6 +932,10 @@ final class Config extends Vigilant {
 
         this.addDependency("chromaSkyblock", "chromaToggle");
 
+        this.addDependencies2();
+    }
+
+    private final void addDependencies2() {
         this.addDependency("autoSalvationCpsLimit", "autoSalvation");
         this.addDependency("disableAutoSalvationInThornBoss", "autoSalvation");
 
