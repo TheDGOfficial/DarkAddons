@@ -1,5 +1,5 @@
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 9ccb628f..ed092fdb 100644
+index 4c08f3e8..945e3ca0 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -19,6 +19,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
@@ -17,7 +17,7 @@ index 9ccb628f..ed092fdb 100644
 +    `maven-publish`
  }
  
- version = "1.10.5"
+ version = "1.10.6"
 @@ -304,6 +306,18 @@ signing {
      }
  }
