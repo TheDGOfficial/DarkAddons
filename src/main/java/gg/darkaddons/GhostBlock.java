@@ -36,7 +36,7 @@ final class GhostBlock {
                     final var world = mc.theWorld;
                     final var lookingAtblock = world.getBlockState(blockPos).getBlock();
 
-                    if (!GhostBlock.isOnWhitelist(lookingAtblock) && Blocks.air != lookingAtblock) {
+                    if (!GhostBlock.isNotAllowedToGhostBlock(lookingAtblock) && Blocks.air != lookingAtblock) {
                         world.setBlockToAir(blockPos);
                     }
                 }
@@ -44,7 +44,7 @@ final class GhostBlock {
         }
     }
 
-    private static final boolean isOnWhitelist(@NotNull final Block block) {
-        return Blocks.chest == block || Blocks.lever == block || Blocks.trapped_chest == block || Blocks.wooden_button == block || Blocks.stone_button == block || Blocks.skull == block || Blocks.bedrock == block || Blocks.barrier == block;
+    private static final boolean isNotAllowedToGhostBlock(@NotNull final Block block) {
+        return Blocks.chest == block || Blocks.lever == block || Blocks.trapped_chest == block || Blocks.wooden_button == block || Blocks.stone_button == block || Blocks.skull == block || (!Config.isAllowGhostBlockingBedrockAndBarrier() && (Blocks.bedrock == block || Blocks.barrier == block));
     }
 }
