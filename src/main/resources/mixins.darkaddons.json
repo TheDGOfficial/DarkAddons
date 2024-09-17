@@ -66,7 +66,8 @@
         "MixinPlayerControllerMP",
         "MixinKotlinStringUtilsKt",
         "MixinDSMLootTracker",
-        "MixinDSMCustomMusic"
+        "MixinDSMCustomMusic",
+        "MixinDSMWaterSolver"
     ],
     "server": [
     ],
