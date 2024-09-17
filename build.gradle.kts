@@ -297,7 +297,9 @@ tasks {
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
         options.forkOptions.jvmArgs!!.add("-Xmx2G")
-        options.forkOptions.jvmArgs!!.add("-XX:+UnlockExperimentalVMOptions -XX:+IgnoreUnrecognizedVMOptions -XX:+EnableDynamicAgentLoading")
+        options.forkOptions.jvmArgs!!.add("-XX:+UnlockExperimentalVMOptions")
+        options.forkOptions.jvmArgs!!.add("-XX:+IgnoreUnrecognizedVMOptions")
+        options.forkOptions.jvmArgs!!.add("-XX:+EnableDynamicAgentLoading")
         options.compilerArgs.add("-parameters")
         options.compilerArgs.add("-Xlint:all,-options,-classfile,-processing,-overrides")
     }
