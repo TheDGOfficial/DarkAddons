@@ -182,15 +182,6 @@ public final class MethodMapping {
         }
 
         /**
-         * Gets the internal ID representing this side.
-         *
-         * @return The internal ID representing this side.
-         */
-        /*private final int getId() {
-            return this.id;
-        }*/
-
-        /**
          * Gets the side from internal ID.
          * <p>
          * This method loops through all sides and checks if the internal ID of that side
@@ -252,16 +243,6 @@ public final class MethodMapping {
     }
 
     /**
-     * Gets the obfuscated name of this method.
-     *
-     * @return The obfuscated name of this method.
-     */
-    /*@NotNull
-    private final String getObfName() {
-        return this.obfName;
-    }*/
-
-    /**
      * Gets the de-obfuscated name of this method.
      *
      * @return The de-obfuscated name of this method.
@@ -270,26 +251,6 @@ public final class MethodMapping {
     public final String getDeobfName() {
         return this.deobfName;
     }
-
-    /**
-     * Gets the side this method belongs to.
-     *
-     * @return The side this method belongs to.
-     */
-    /*@NotNull
-    public final MethodMapping.ObfSide getObfSide() {
-        return this.obfSide;
-    }*/
-
-    /**
-     * Gets the description of this method.
-     *
-     * @return The description of this method.
-     */
-    /*@NotNull
-    private final String getDesc() {
-        return this.desc;
-    }*/
 
     /**
      * Returns the debug string representation of this method mapping.

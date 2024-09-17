@@ -736,57 +736,6 @@ public final class DarkAddons {
         }
     }
 
-    // TODO remove all those bridge access widening methods after split
-
-    /**
-     * Called when a mob is spawned.
-     *
-     * @param entity The mob spawned as an entity.
-     */
-    /*public static final void onMobSpawned(final Entity entity) {
-        M7Features.onMobSpawned(entity);
-    }*/
-
-    /**
-     * Checks if dragon death animations should be hidden.
-     *
-     * @return True if dragon death animations should be hidden, false otherwise.
-     */
-    /*public static final boolean shouldHideDragonDeath() {
-        return M7Features.shouldHideDragonDeath();
-    }*/
-
-    /**
-     * Gets hurt opacity for a dragon.
-     *
-     * @param renderDragon The dragon renderer that is rendering the dragon.
-     * @param lastDrag The dragon to get hurt opacity of.
-     * @param value Current hurt opacity.
-     * @return The new hurt opacity, if applicable.
-     */
-    /*public static final float getHurtOpacity(final RenderDragon renderDragon, final EntityDragon lastDrag, final float value) {
-        return M7Features.getHurtOpacity(renderDragon, lastDrag, value);
-    }*/
-
-    /**
-     * Runs after a dragon hurt effect is rendered.
-     *
-     * @param renderDragon The dragon renderer that is rendering the dragon.
-     */
-    /*public static final void afterRenderHurtFrame(final RenderDragon renderDragon) {
-        M7Features.afterRenderHurtFrame(renderDragon);
-    }*/
-
-    /**
-     * Gets the texture of a dragon entity.
-     * This method returns void because it sets the value in {@link CallbackInfoReturnable}.
-     *
-     * @param entity The {@link EntityDragon} to get texture of.
-     * @param cir The {@link CallbackInfoReturnable} to hold the return value.
-     */
-    /*public static final void getEntityTexture(final EntityDragon entity, final CallbackInfoReturnable<? super ResourceLocation> cir) {
-        M7Features.getEntityTexture(entity, cir);
-    }*/
     public static final long getLastGameLoopTime() {
         return Diagnostics.getLastGameLoopTime();
     }
@@ -1110,37 +1059,6 @@ public final class DarkAddons {
     public static final boolean isPressedStatic(@NotNull final KeyBinding keyBinding, @NotNull final Runnable leftClick, @NotNull final Runnable rightClick) {
         return AutoClicker.isPressedStatic(keyBinding, leftClick, rightClick) && CancelItemUses.shouldAllowKeyPress(keyBinding);
     }
-
-    /**
-     * Gets the CPS limit for the specific AutoClicker.
-     *
-     * @param left Whether to get CPS limit of the left AutoClicker or right AutoClicker.
-     * @return The CPS limit for the specific AutoClicker.
-     */
-    /*public static final int getCpsLimit(final boolean left) {
-        return AutoClicker.getCpsLimit(left);
-    }*/
-
-    /**
-     * Returns true if Catchup AutoClicker is enabled in config, false otherwise.
-     *
-     * @return True if Catchup AutoClicker is enabled in config, false otherwise.
-     */
-    /*public static final boolean isCatchupAutoClicker() {
-        return Config.isCatchupAutoClicker();
-    }*/
-
-    /**
-     * Emulates auto clicker tick.
-     * <p>
-     * This can be used to tick AutoClicker in full even in very low TPS conditions, to keep
-     * up its CPS.
-     *
-     * @param left If the emulation is done for the left click auto clicker or not.
-     */
-    /*public static final void emulateACTick(final boolean left) {
-        AutoClicker.emulateACTick(left);
-    }*/
 
     /**
      * Returns true if Profiler Mode is enabled in config, false otherwise.

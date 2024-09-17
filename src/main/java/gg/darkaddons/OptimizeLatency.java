@@ -36,22 +36,6 @@ public final class OptimizeLatency {
     }
 
     /**
-     * Call this method right after creating a new {@link java.net.Socket}.
-     * <p>
-     * It will configure the socket to optimize latency.
-     *
-     * @param socket The socket to configure.
-     */
-    /*public static final void configureSocket(@NotNull final Socket socket) {
-        /*try {
-            socket.setTcpNoDelay(true);
-            socket.setTrafficClass(OptimizeLatency.IPTOS_LOWDELAY);
-        } catch (final SocketException ignored) {
-            // ignored, target OS likely doesn't support one of the options (i.e., Windows XP doesn't support IP_TOS, for example)
-        }*/
-    //}
-
-    /**
      * Call this method during {@link io.netty.channel.ChannelInitializer#initChannel(Channel)}.
      * <p>
      * It will configure the channel to optimize latency.

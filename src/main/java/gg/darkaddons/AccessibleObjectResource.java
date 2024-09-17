@@ -20,17 +20,6 @@ public final class AccessibleObjectResource<T extends AccessibleObject> implemen
     private final T accessibleObject;
 
     /**
-     * Creates a new wrapper resource for the given {@link AccessibleObject}.
-     *
-     * @param accessibleObjectIn The {@link AccessibleObject} to create the wrapper for.
-     */
-    /*public AccessibleObjectResource(@NotNull final T accessibleObjectIn) {
-        super();
-
-        this.accessibleObject = accessibleObjectIn;
-    }*/
-
-    /**
      * Creates a new wrapper resource for the given {@link Field}.
      *
      * @param field The {@link Field} to create the wrapper for.
