@@ -30,7 +30,7 @@ plugins {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(22)
+    toolchain.languageVersion = JavaLanguageVersion.of(23)
 
     withSourcesJar()
 }
@@ -166,6 +166,31 @@ dependencies {
 
     annotationProcessor("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
     compileOnly("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
+
+    constraints {
+        configurations.forEach { configuration ->
+            if ((!configuration.isCanBeConsumed() && !configuration.isCanBeResolved()) || configuration.name.equals("annotationProcessor")) {
+                add(configuration.name, "net.bytebuddy:byte-buddy-parent") {
+                    version {
+                        strictly("1.15.1")
+                        because("Older version doesn't have Java 23 support")
+                    }
+                }
+                add(configuration.name, "net.bytebuddy:byte-buddy") {
+                    version {
+                        strictly("1.15.1")
+                        because("Older version doesn't have Java 23 support")
+                    }
+                }
+                add(configuration.name, "net.bytebuddy:byte-buddy-agent") {
+                    version {
+                        strictly("1.15.1")
+                        because("Older version doesn't have Java 23 support")
+                    }
+                }
+            }
+        }
+    }
 }
 
 sourceSets {
@@ -292,7 +317,7 @@ tasks {
 
         //options.deprecation = true
         options.release = 8
-        sourceCompatibility = "22"
+        sourceCompatibility = "23"
 
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
