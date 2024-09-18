@@ -67,7 +67,8 @@
         "MixinKotlinStringUtilsKt",
         "MixinDSMLootTracker",
         "MixinDSMCustomMusic",
-        "MixinDSMWaterSolver"
+        "MixinDSMWaterSolver",
+        "MixinDSMSilverfishSolver"
     ],
     "server": [
     ],
