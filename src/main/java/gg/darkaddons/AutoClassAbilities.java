@@ -248,8 +248,8 @@ final class AutoClassAbilities {
                             lvlExtraCdReduc *= 2;
                         }
                         final var totalCdReducMultiplier = 1 - ((baseCdReduc + lvlExtraCdReduc) / 100.0D);
-                        AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP.cooldownInMs = TimeUnit.SECONDS.toMillis(30L * totalCdReducMultiplier);
-                        AutoClassAbilities.UltimateClassAbility.THUNDERSTORM.cooldownInMs = TimeUnit.SECONDS.toMillis(500L * totalCdReducMultiplier);
+                        AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (30L * totalCdReducMultiplier));
+                        AutoClassAbilities.UltimateClassAbility.THUNDERSTORM.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (500L * totalCdReducMultiplier));
                         AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP;
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.THUNDERSTORM;
                     }
