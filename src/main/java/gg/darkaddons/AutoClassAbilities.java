@@ -3,6 +3,7 @@ package gg.darkaddons;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.listeners.DungeonListener;
+import gg.skytils.skytilsmod.utils.DungeonClass;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -145,7 +146,7 @@ final class AutoClassAbilities {
             }
         };
 
-        private final long cooldownInMs;
+        private long cooldownInMs;
         private long nextUse;
 
         private UltimateClassAbility(@NotNull final TimeUnit unit, final long cooldown) {
@@ -211,10 +212,18 @@ final class AutoClassAbilities {
         return DarkAddons.isInDungeons() && -1L == DungeonTimer.INSTANCE.getBossClearTime() && -1L != DungeonTimer.INSTANCE.getDungeonStartTime();
     }
 
+    private static final boolean isHoldingTermOrRCM(@NotNull final Minecraft mc) {
+        if (AutoClicker.isHoldingTerm(mc)) {
+            return true;
+        }
+
+        return AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP == AutoClassAbilities.regularClassAbility && AutoClassAbilities.UltimateClassAbility.THUNDERSTORM == AutoClassAbilities.ultimateClassAbility && (Utils.isHoldingItemContaining(mc, "Astrea") || Utils.isHoldingItemContaining(mc, "Hyperion"));
+    }
+
     private static final boolean checkPreconditions() {
         final var mc = Minecraft.getMinecraft();
 
-        return AutoClassAbilities.checkPrePreconditions() && (mc.gameSettings.keyBindUseItem.isKeyDown() && AutoClicker.isHoldingTerm(mc) || mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreOrGS(mc));
+        return AutoClassAbilities.checkPrePreconditions() && (mc.gameSettings.keyBindUseItem.isKeyDown() && AutoClassAbilities.isHoldingTermOrRCM(mc) || mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreOrGS(mc));
     }
 
     private static final void findClassAndAssignAbilities() {
@@ -225,7 +234,7 @@ final class AutoClassAbilities {
                 final var dungeonClass = teammate.getDungeonClass();
                 switch (dungeonClass) {
                     case ARCHER -> {
-                        AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT.cooldownInMs = TimeUnit.SECONDS.toMillis(40L - (teammate.getClassLevel() / 5L << 1L));
+                        AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT.cooldownInMs = TimeUnit.SECONDS.toMillis(40L - (Math.min(50, teammate.getClassLevel()) / 5L << 1L));
                         AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT;
 
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAPID_FIRE;
@@ -235,6 +244,15 @@ final class AutoClassAbilities {
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAGNAROK;
                     }
                     case MAGE -> {
+                        final var baseCdReduc = 25;
+                        final var isDupeMage = DungeonListener.INSTANCE.getTeam().values().stream().filter((t) -> DungeonClass.MAGE == t.getDungeonClass()).count() > 1;
+                        var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) / 2;
+                        if (!isDupeMage) {
+                            lvlExtraCdReduc *= 2;
+                        }
+                        final var totalCdReducMultiplier = 1 - ((baseCdReduc + lvlExtraCdReduc) / 100);
+                        AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP.cooldownInMs = TimeUnit.SECONDS.toMillis(30L * totalCdReducMultiplier);
+                        AutoClassAbilities.UltimateClassAbility.THUNDERSTORM.cooldownInMs = TimeUnit.SECONDS.toMillis(500L * totalCdReducMultiplier);
                         AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP;
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.THUNDERSTORM;
                     }
