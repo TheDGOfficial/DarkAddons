@@ -212,18 +212,15 @@ final class AutoClassAbilities {
         return DarkAddons.isInDungeons() && -1L == DungeonTimer.INSTANCE.getBossClearTime() && -1L != DungeonTimer.INSTANCE.getDungeonStartTime();
     }
 
-    private static final boolean isHoldingTermOrRCM(@NotNull final Minecraft mc) {
-        if (AutoClicker.isHoldingTerm(mc)) {
-            return true;
-        }
-
+    private static final boolean isRCMing(@NotNull final Minecraft mc) {
         return AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP == AutoClassAbilities.regularClassAbility && AutoClassAbilities.UltimateClassAbility.THUNDERSTORM == AutoClassAbilities.ultimateClassAbility && (Utils.isHoldingItemContaining(mc, "Astraea") || Utils.isHoldingItemContaining(mc, "Hyperion"));
     }
 
     private static final boolean checkPreconditions() {
         final var mc = Minecraft.getMinecraft();
+        final var rc = mc.gameSettings.keyBindUseItem;
 
-        return AutoClassAbilities.checkPrePreconditions() && (mc.gameSettings.keyBindUseItem.isKeyDown() && AutoClassAbilities.isHoldingTermOrRCM(mc) || mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreOrGS(mc));
+        return AutoClassAbilities.checkPrePreconditions() && ((rc.isPressed() && AutoClassAbilities.isRCMing(mc)) || ((rc.isKeyDown() && AutoClicker.isHoldingTerm(mc)) || (mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreOrGS(mc))));
     }
 
     private static final void findClassAndAssignAbilities() {
@@ -250,7 +247,7 @@ final class AutoClassAbilities {
                         if (!isDupeMage) {
                             lvlExtraCdReduc *= 2;
                         }
-                        final var totalCdReducMultiplier = 1 - ((baseCdReduc + lvlExtraCdReduc) / 100);
+                        final var totalCdReducMultiplier = 1 - ((baseCdReduc + lvlExtraCdReduc) / 100.0D);
                         AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP.cooldownInMs = TimeUnit.SECONDS.toMillis(30L * totalCdReducMultiplier);
                         AutoClassAbilities.UltimateClassAbility.THUNDERSTORM.cooldownInMs = TimeUnit.SECONDS.toMillis(500L * totalCdReducMultiplier);
                         AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP;
