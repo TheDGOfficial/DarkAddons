@@ -87,8 +87,8 @@ add_m2_artifact_to_classpath org.ow2.asm asm-commons "$ASM_VERSION"
 add_m2_artifact_to_classpath org.apache.commons commons-lang3 "$COMMONS_LANG3_VERSION"
 add_m2_artifact_to_classpath org.jetbrains annotations "$JETBRAINS_ANNOTATIONS_VERSION"
 
-add_m2_artifact_to_classpath gg.essential vigilance-1.8.9-forge "$VIGILANCE_VERSION"
-add_m2_artifact_to_classpath gg.essential elementa-1.8.9-forge "$ELEMENTA_VERSION"
+add_m2_artifact_to_classpath gg.essential vigilance "$VIGILANCE_VERSION"
+add_m2_artifact_to_classpath gg.essential elementa "$ELEMENTA_VERSION"
 add_m2_artifact_to_classpath gg.essential universalcraft-1.8.9-forge "$UNIVERSALCRAFT_VERSION"
 
 add_m2_artifact_to_classpath net.minecraft launchwrapper "$LAUNCHWRAPPER_VERSION"

@@ -134,9 +134,10 @@ dependencies {
         exclude(module = "vigilance-1.8.9-forge")
     }
 
-    api("gg.essential:elementa-1.8.9-forge:667")
+    implementation("gg.essential:vigilance:306")
+    api("gg.essential:elementa:667")
     implementation("gg.essential:universalcraft-1.8.9-forge:363")
-    implementation("gg.essential:vigilance-1.8.9-forge:306")
+
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.0-Beta1")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
