@@ -217,7 +217,7 @@ final class AutoClassAbilities {
             return true;
         }
 
-        return AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP == AutoClassAbilities.regularClassAbility && AutoClassAbilities.UltimateClassAbility.THUNDERSTORM == AutoClassAbilities.ultimateClassAbility && (Utils.isHoldingItemContaining(mc, "Astrea") || Utils.isHoldingItemContaining(mc, "Hyperion"));
+        return AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP == AutoClassAbilities.regularClassAbility && AutoClassAbilities.UltimateClassAbility.THUNDERSTORM == AutoClassAbilities.ultimateClassAbility && (Utils.isHoldingItemContaining(mc, "Astraea") || Utils.isHoldingItemContaining(mc, "Hyperion"));
     }
 
     private static final boolean checkPreconditions() {
