@@ -213,7 +213,7 @@ final class AutoClassAbilities {
     }
 
     private static final boolean isRCMing(@NotNull final Minecraft mc) {
-        return AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP == AutoClassAbilities.regularClassAbility && AutoClassAbilities.UltimateClassAbility.THUNDERSTORM == AutoClassAbilities.ultimateClassAbility && (Utils.isHoldingItemContaining(mc, "Astraea") || Utils.isHoldingItemContaining(mc, "Hyperion"));
+        return Utils.isHoldingItemContaining(mc, "Astraea") || Utils.isHoldingItemContaining(mc, "Hyperion");
     }
 
     private static final boolean checkPreconditions() {
