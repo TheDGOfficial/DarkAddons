@@ -68,7 +68,9 @@
         "MixinDSMLootTracker",
         "MixinDSMCustomMusic",
         "MixinDSMWaterSolver",
-        "MixinDSMSilverfishSolver"
+        "MixinDSMSilverfishSolver",
+        "MixinNEUItemTooltipListener",
+        "MixinFontRenderer"
     ],
     "server": [
     ],
