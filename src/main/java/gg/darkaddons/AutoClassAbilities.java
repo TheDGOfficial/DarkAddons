@@ -212,15 +212,11 @@ final class AutoClassAbilities {
         return DarkAddons.isInDungeons() && -1L == DungeonTimer.INSTANCE.getBossClearTime() && -1L != DungeonTimer.INSTANCE.getDungeonStartTime();
     }
 
-    private static final boolean isRCMing(@NotNull final Minecraft mc) {
-        return Utils.isHoldingItemContaining(mc, "Astraea") || Utils.isHoldingItemContaining(mc, "Hyperion");
-    }
-
     private static final boolean checkPreconditions() {
         final var mc = Minecraft.getMinecraft();
         final var rc = mc.gameSettings.keyBindUseItem;
 
-        return AutoClassAbilities.checkPrePreconditions() && ((rc.isKeyDown() && (AutoClicker.isHoldingTerm(mc) || AutoClassAbilities.isRCMing(mc))) || (mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreOrGS(mc)));
+        return AutoClassAbilities.checkPrePreconditions() && ((rc.isKeyDown() && AutoClicker.isHoldingTermOrRCM(mc)) || (mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreOrGS(mc)));
     }
 
     private static final void findClassAndAssignAbilities() {

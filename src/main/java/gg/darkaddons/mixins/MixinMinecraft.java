@@ -95,7 +95,7 @@ final class MixinMinecraft {
         final var actual = keyBinding.isKeyDown();
 
         //noinspection ObjectEquality
-        return (settings.keyBindUseItem != keyBinding || !DarkAddons.isRightClickAutoClicker() || !DarkAddons.isHoldingTerm(mc)) && (settings.keyBindAttack != keyBinding || !DarkAddons.isLeftClickAutoClicker() || !DarkAddons.isHoldingASword(mc)) && actual;
+        return (settings.keyBindUseItem != keyBinding || !DarkAddons.isRightClickAutoClicker() || !DarkAddons.isHoldingTermOrRCM(mc)) && (settings.keyBindAttack != keyBinding || !DarkAddons.isLeftClickAutoClicker() || !DarkAddons.isHoldingASword(mc)) && actual;
     }
 
     @Unique

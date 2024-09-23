@@ -1020,13 +1020,13 @@ public final class DarkAddons {
     }
 
     /**
-     * Checks if the player is holding a Terminator.
+     * Checks if the player is holding a Terminator or a RCM weapon.
      *
      * @param mc The Minecraft instance.
-     * @return True if the player is holding a Terminator, false otherwise.
+     * @return True if the player is holding a Terminator or a RCM weapon, false otherwise.
      */
-    public static final boolean isHoldingTerm(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingTerm(mc);
+    public static final boolean isHoldingTermOrRCM(@NotNull final Minecraft mc) {
+        return AutoClicker.isHoldingTermOrRCM(mc);
     }
 
     /**

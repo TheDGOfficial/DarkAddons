@@ -46,8 +46,12 @@ final class AutoClicker {
         return Items.bow == item;
     }
 
-    static final boolean isHoldingTerm(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingABow(mc) && Utils.isHoldingItemContaining(mc, "Terminator");
+    private static final boolean isHoldingTerm(@NotNull final Minecraft mc) {
+       return AutoClicker.isHoldingABow(mc) && Utils.isHoldingItemContaining(mc, "Terminator");
+    }
+
+    static final boolean isHoldingTermOrRCM(@NotNull final Minecraft mc) {
+        return (AutoClicker.isHoldingTerm(mc)) || (Utils.isHoldingItemContaining(mc, "Astraea") || Utils.isHoldingItemContaining(mc, "Hyperion"));
     }
 
     static final boolean isHoldingClaymoreOrGS(@NotNull final Minecraft mc) {
@@ -235,7 +239,7 @@ final class AutoClicker {
     }
 
     private static final boolean handleRightClick(@NotNull final Runnable rightClick, @NotNull final KeyBinding right, @NotNull final Minecraft mc) {
-        final var newIsPressed = Config.isRightClickAutoClicker() && right.isKeyDown() && AutoClicker.isHoldingTerm(mc);
+        final var newIsPressed = Config.isRightClickAutoClicker() && right.isKeyDown() && AutoClicker.isHoldingTermOrRCM(mc);
         if (newIsPressed) {
             ++AutoClicker.rightClickTicks;
 
