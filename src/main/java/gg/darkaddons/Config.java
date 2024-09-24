@@ -564,6 +564,13 @@ final class Config extends Vigilant {
     private static boolean sendMessageOn300Score;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Send Message on Melody Terminal",
+        description = "Sends message when opening melody terminal or when progressing on it.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean sendMessageOnMelodyTerminal;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Chroma/Rainbow Toggle",
         description = "If enabled, will use chroma/rainbow color in various places. (Requires SkyblockAddons)",
         category = "Misc", subcategory = "Chroma"
@@ -1138,6 +1145,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.sendMessageOn300Score;
+    }
+
+    static final boolean isSendMessageOnMelodyTerminal() {
+        Config.checkUninit();
+
+        return Config.sendMessageOnMelodyTerminal;
     }
 
     static final boolean isSbRejoinCooldownAfterKickDisplay() {
