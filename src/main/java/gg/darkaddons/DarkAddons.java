@@ -157,7 +157,7 @@ public final class DarkAddons {
         ElementaVersion v;
 
         try {
-            v = ElementaVersion.V6;
+            v = ElementaVersion.V7;
         } catch (final NoSuchFieldError ignored) {
             // Caused by old Essential version. Automatic updates are opt-in on the latest version, and most users are clueless about this, so warn them.
             DarkAddons.queueWarning("Old version of bundled libraries detected. Please type /essential and enable auto updates & restart your-game to fix this. If this still appears on the latest Essential version, please report this.");
