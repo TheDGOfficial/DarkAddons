@@ -164,13 +164,25 @@ final class Diagnostics {
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void dumpEntityTypes(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
-        final var nonDuplicateTypes = new ArrayList<String>(10);
+        final var nonDuplicateTypes = new HashMap<String, Integer>(10);
         for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
             final var type = entity.getClass().getSimpleName();
-            if (!nonDuplicateTypes.contains(type)) {
-                nonDuplicateTypes.add(type);
-                outputConsumer.accept(type);
-            }
+            nonDuplicateTypes.merge(type, 1, Integer::sum);
+        }
+        for (final var type : nonDuplicateTypes.entrySet()) {
+            outputConsumer.accept(type.getKey() + " (" + type.getValue() + ')');
+        }
+    }
+
+    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
+    static final void dumpTileEntityTypes(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
+        final var nonDuplicateTypes = new HashMap<String, Integer>(10);
+        for (final var tileEntity : Minecraft.getMinecraft().theWorld.loadedTileEntityList) {
+            final var type = tileEntity.getClass().getSimpleName();
+            nonDuplicateTypes.merge(type, 1, Integer::sum);
+        }
+        for (final var type : nonDuplicateTypes.entrySet()) {
+            outputConsumer.accept(type.getKey() + " (" + type.getValue() + ')');
         }
     }
 

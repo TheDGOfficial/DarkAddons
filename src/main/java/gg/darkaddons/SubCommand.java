@@ -46,7 +46,7 @@ final class SubCommand {
         private static final Logger LOGGER = LogManager.getLogger();
     }
 
-    private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 16;
+    private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 17;
     @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"})
     @NotNull
     private static final LinkedHashSet<SubCommand> subCommandsRegistered = new LinkedHashSet<>(Utils.calculateHashMapCapacity(SubCommand.COLLECTIONS_SUB_COMMAND_COUNT_HINT));
@@ -141,6 +141,8 @@ final class SubCommand {
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpEntities(DarkAddons::queueWarning), "dumpentities"));
 
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpEntityTypes(DarkAddons::queueWarning), "dumpentitytypes"));
+
+        SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpTileEntityTypes(DarkAddons::queueWarning), "dumptileentitytypes"));
 
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpPlayerEntities(DarkAddons::queueWarning), "dumpplayerentities"));
     }
