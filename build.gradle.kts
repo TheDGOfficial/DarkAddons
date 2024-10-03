@@ -158,7 +158,7 @@ dependencies {
 
     compileOnly("gg.skytils:skytilsmod:$skytilsVersion")
 
-    proguardClasspath("com.guardsquare:proguard-base:7.5.0") {
+    proguardClasspath("com.guardsquare:proguard-base:7.6.0") {
         exclude(module = "proguard-core")
     }
     proguardClasspath("com.guardsquare:proguard-core:9.1.6")
