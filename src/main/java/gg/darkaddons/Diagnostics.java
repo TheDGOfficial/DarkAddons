@@ -23,24 +23,33 @@ import javax.management.NotificationBroadcaster;
 import javax.management.NotificationListener;
 import javax.management.openmbean.CompositeData;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.lang.management.ThreadInfo;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.IBossDisplayData;
+
+import net.minecraft.tileentity.TileEntitySkull;
+
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiNewChat;
 
 final class Diagnostics {
     @NotNull
@@ -99,6 +108,74 @@ final class Diagnostics {
         }
     }
 
+    @Nullable
+    private static final GuiNewChat getGuiNewChat() {
+        return Minecraft.getMinecraft().ingameGUI.getChatGUI();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Nullable
+    private static final <T, V> V getPrivateFieldValue(@NotNull final Class<? extends T> clazz, @NotNull final T instance, @NotNull final String name) {
+        Field field = null;
+        try {
+            field = clazz.getDeclaredField(name);
+        } catch (final NoSuchFieldException nsfe) {
+            DarkAddons.modError(nsfe);
+        }
+        if (field == null) {
+            return null;
+        } else {
+            field.setAccessible(true);
+            V value = null;
+            try {
+                value = (V) field.get(instance);
+            } catch (final IllegalAccessException iae) {
+                DarkAddons.modError(iae);
+            }
+            field.setAccessible(false);
+            return value;
+        }
+    }
+
+    @Nullable
+    private static final List<?> getChatLines(@NotNull final GuiNewChat chat) {
+        if ("net.labymod.core_implementation.mc18.gui.GuiChatAdapter".equals(chat.getClass().getName())) {
+            // LabyMod has a second chat so this gets the main chat instance
+            final var mainChatRenderer = Diagnostics.getPrivateFieldValue(chat.getClass(), chat, "chatMain");
+
+            // Return type is ArrayList<ChatLine> but use List<?> since we don't care about specific list implementation and content type, we only need it for calling .size() - NOTE: The ChatLine class in the ArrayList<ChatLine> is different from vanilla's when the chat implementation is LabyMod.
+            return Diagnostics.getPrivateFieldValue(mainChatRenderer.getClass().getSuperclass() /* This returns the base chat class which both the main and second chat extend from */, mainChatRenderer, "chatLines" /* And that base class has this field that stores the lines */);
+        }
+
+        // Return type is ArrayList<ChatLine> but use List<?> since we don't care about specific list implementation and content type, we only need it for calling .size()
+        return Diagnostics.getPrivateFieldValue(GuiNewChat.class, chat, "field_146252_h");
+    }
+
+    @Nullable
+    private static final List<?> getDrawnChatLines(@NotNull final GuiNewChat chat) {
+        if ("net.labymod.core_implementation.mc18.gui.GuiChatAdapter".equals(chat.getClass().getName())) {
+            return Diagnostics.getChatLines(chat);
+        }
+
+        // Return type is ArrayList<ChatLine> but use List<?> since we don't care about specific list implementation and content type, we only need it for calling .size()
+        return Diagnostics.getPrivateFieldValue(GuiNewChat.class, chat, "field_146253_i");
+    }
+
+    private static final void diagChat() {
+        final var chat = Diagnostics.getGuiNewChat();
+
+        final var sentMessages = null != chat ? chat.getSentMessages().size() : -1;
+
+        final var chatLines = null != chat ? Diagnostics.getChatLines(chat) : null;
+        final var drawnChatLines = null != chat ? Diagnostics.getDrawnChatLines(chat) : null;
+
+        final var chatLinesSize = null != chatLines ? chatLines.size() : -1;
+        final var drawnChatLinesSize = null != drawnChatLines ? drawnChatLines.size() : -1;
+
+        Diagnostics.diag("Chat Implementation", chat.getClass().getName());
+        Diagnostics.diag("Chat Stats", "Sent Message History Size: " + sentMessages + ", Chat Lines: " + chatLinesSize + ", Drawn Chat Lines: " + drawnChatLinesSize);
+    }
+
     private static final void loadDiagnosticData() {
         Diagnostics.diag("DarkAddons Version", Reference.VERSION);
 
@@ -116,6 +193,8 @@ final class Diagnostics {
         Diagnostics.diag("Loaded Player Entity Amount", Integer.toString(world.playerEntities.size()));
 
         Diagnostics.diag("Thread Count", "Total: " + ThreadPriorityTweaker.getThreadCount(false) + " - Daemon: " + ThreadPriorityTweaker.getThreadCount(true));
+
+        Diagnostics.diagChat();
 
         Diagnostics.diag("Last Game Loop Time", Diagnostics.getLastGameLoopTimeString() + " (" + 1_000L / Diagnostics.getLastGameLoopTime() + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
     }
@@ -160,6 +239,30 @@ final class Diagnostics {
 
             outputConsumer.accept(entity.getClass().getSimpleName() + " with name " + entity.getName() + "§r§e" + extra);
         }
+    }
+
+    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
+    static final void dumpSkulls(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
+        final var skullType = new HashMap<Integer, Integer>();
+        final var texturesValue = new HashMap<String, Integer>();
+        final var texturesSignature = new HashMap<String, Integer>();
+        for (final var tileEntity : Minecraft.getMinecraft().theWorld.loadedTileEntityList) {
+            if (tileEntity instanceof final TileEntitySkull skull) {
+                final var gameProfile = skull.getPlayerProfile();
+                if (null != gameProfile) {
+                   final var texturesProperty = gameProfile.getProperties().get("textures").iterator().next();
+ texturesValue.merge(StringUtils.replace(StringUtils.substringBefore(StringUtils.substringAfter(new String(Base64.getDecoder().decode(texturesProperty.getValue())), "\"url\":\""), "\""), "http://", "https://"), 1, Integer::sum);
+                   texturesSignature.merge(texturesProperty.hasSignature() ? texturesProperty.getSignature() : "null", 1, Integer::sum);
+                }
+                skullType.merge(skull.getSkullType(), 1, Integer::sum);
+            }
+        }
+        // This will be the type of the skull, i.e player (0), skeleton (3), etc.
+        skullType.forEach((key, value) -> outputConsumer.accept("Skull Type " + key + " appeared " + value + " times."));
+        // This will be a link to the png image of the skin from official Minecraft site.
+        texturesValue.forEach((key, value) -> outputConsumer.accept("Skull Owner Textures Value " + key + " appeared " + value + " times."));
+        // Most of the time this null, but sometimes it has helpful markers like BEACH_BALL for furniture cosmetics.
+        texturesSignature.forEach((key, value) -> outputConsumer.accept("Skull Owner Textures Signature " + key + " appeared " + value + " times."));
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")

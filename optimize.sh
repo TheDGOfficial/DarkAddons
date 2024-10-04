@@ -21,6 +21,8 @@ VIGILANCE_VERSION=306
 ELEMENTA_VERSION=670
 UNIVERSALCRAFT_VERSION=363
 
+AUTHLIB_VERSION=1.5.25
+
 LAUNCHWRAPPER_VERSION=1.12
 
 NETTY_VERSION=4.0.23.Final
@@ -90,6 +92,8 @@ add_m2_artifact_to_classpath org.jetbrains annotations "$JETBRAINS_ANNOTATIONS_V
 add_m2_artifact_to_classpath gg.essential vigilance "$VIGILANCE_VERSION"
 add_m2_artifact_to_classpath gg.essential elementa "$ELEMENTA_VERSION"
 add_m2_artifact_to_classpath gg.essential universalcraft-1.8.9-forge "$UNIVERSALCRAFT_VERSION"
+
+add_m2_artifact_to_classpath com.mojang authlib "$AUTHLIB_VERSION"
 
 add_m2_artifact_to_classpath net.minecraft launchwrapper "$LAUNCHWRAPPER_VERSION"
 add_m2_artifact_to_classpath io.netty netty-all "$NETTY_VERSION"
