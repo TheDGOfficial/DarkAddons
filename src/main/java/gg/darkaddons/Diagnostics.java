@@ -193,6 +193,17 @@ final class Diagnostics {
         }
     }
 
+    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
+    static final void dumpThreadNames(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
+        final var threadNameDupes = new HashMap<String, Integer>(10);
+        for (final var thread : Utils.getAllThreads()) {
+            threadNameDupes.merge(thread.getName(), 1, Integer::sum);
+        }
+        for (final var type : threadNameDupes.entrySet()) {
+            outputConsumer.accept(type.getKey() + " (" + type.getValue() + ')');
+        }
+    }
+
     private static final void dumpThread0(@NotNull final ThreadInfo threadInfo, @NotNull final Consumer<String> outputConsumer) {
         Diagnostics.dumpGeneralInfo(threadInfo, outputConsumer);
         final var lockedMonitors = threadInfo.getLockedMonitors();
