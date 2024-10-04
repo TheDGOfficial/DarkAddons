@@ -70,7 +70,9 @@
         "MixinDSMWaterSolver",
         "MixinDSMSilverfishSolver",
         "MixinNEUItemTooltipListener",
-        "MixinFontRenderer"
+        "MixinFontRenderer",
+        "MixinGuiNewChat",
+        "MixinIngameChatManager"
     ],
     "server": [
     ],
