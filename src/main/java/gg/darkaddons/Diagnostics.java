@@ -267,7 +267,7 @@ final class Diagnostics {
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void dumpEntityTypes(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
-        final var nonDuplicateTypes = new HashMap<String, Integer>(10);
+        final var nonDuplicateTypes = new HashMap<String, Integer>();
         for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
             final var type = entity.getClass().getSimpleName();
             nonDuplicateTypes.merge(type, 1, Integer::sum);
@@ -279,7 +279,7 @@ final class Diagnostics {
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void dumpTileEntityTypes(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
-        final var nonDuplicateTypes = new HashMap<String, Integer>(10);
+        final var nonDuplicateTypes = new HashMap<String, Integer>();
         for (final var tileEntity : Minecraft.getMinecraft().theWorld.loadedTileEntityList) {
             final var type = tileEntity.getClass().getSimpleName();
             nonDuplicateTypes.merge(type, 1, Integer::sum);
@@ -298,7 +298,7 @@ final class Diagnostics {
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void dumpThreadNames(@SuppressWarnings("BoundedWildcard") @NotNull final Consumer<String> outputConsumer) {
-        final var threadNameDupes = new HashMap<String, Integer>(10);
+        final var threadNameDupes = new HashMap<String, Integer>();
         for (final var thread : Utils.getAllThreads()) {
             threadNameDupes.merge(thread.getName(), 1, Integer::sum);
         }
