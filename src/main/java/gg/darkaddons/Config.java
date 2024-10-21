@@ -571,6 +571,13 @@ final class Config extends Vigilant {
     private static boolean sendMessageOnMelodyTerminal;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Dialogue Skip Helper",
+        description = "Shows a title and plays a sound when you should start killing blood mobs.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean dialogueSkipHelper;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Chroma/Rainbow Toggle",
         description = "If enabled, will use chroma/rainbow color in various places. (Requires SkyblockAddons)",
         category = "Misc", subcategory = "Chroma"
@@ -1151,6 +1158,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.sendMessageOnMelodyTerminal;
+    }
+
+    static final boolean isDialogueSkipHelper() {
+        Config.checkUninit();
+
+        return Config.dialogueSkipHelper;
     }
 
     static final boolean isSbRejoinCooldownAfterKickDisplay() {

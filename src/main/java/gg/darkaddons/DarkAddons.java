@@ -934,6 +934,7 @@ public final class DarkAddons {
         SlayerRNGDisplay.onReceiveChatMessage(event);
 
         RejoinCooldownDisplay.onMessage(event);
+        DialogueSkipHelper.onMessage(event);
     }
 
     /**

@@ -72,7 +72,9 @@
         "MixinNEUItemTooltipListener",
         "MixinFontRenderer",
         "MixinGuiNewChat",
-        "MixinIngameChatManager"
+        "MixinIngameChatManager",
+        "MixinSBADungeonManager",
+        "MixinDSMPetColours"
     ],
     "server": [
     ],
