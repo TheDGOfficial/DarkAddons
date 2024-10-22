@@ -44,28 +44,28 @@ jobs:
       java-version: 23
 
    - name: Cache Gradle wrapper
-     uses: actions/cache@v4.1.1
+     uses: actions/cache@v4.1.2
      with:
       key: gradle-wrapper-${{hashFiles('**/gradle-wrapper.properties') }}
       path: |
        ~/.gradle/wrapper
 
    - name: Cache Gradle packages
-     uses: actions/cache@v4.1.1
+     uses: actions/cache@v4.1.2
      with:
       key: gradle-packages-${{ hashFiles('**/*.gradle*') }}-${{hashFiles('**/versions.properties') }}
       path: |
        ~/.gradle/caches
 
    - name: Cache Maven packages
-     uses: actions/cache@v4.1.1
+     uses: actions/cache@v4.1.2
      with:
       key: maven-packages-${{hashFiles('.sha256sum') }}
       path: |
        ~/.m2
 
    - name: Initialize CodeQL
-     uses: github/codeql-action/init@v3.26.13
+     uses: github/codeql-action/init@v3.27.0
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
@@ -85,7 +85,7 @@ jobs:
       if-no-files-found: error
 
    - name: Perform CodeQL Analysis
-     uses: github/codeql-action/analyze@v3.26.13
+     uses: github/codeql-action/analyze@v3.27.0
      with:
       category: "/language:${{ matrix.language }}"
       upload: failure-only
@@ -116,7 +116,7 @@ jobs:
       output: sarif-results/${{ matrix.language }}.sarif
 
    - name: Upload CodeQL Analysis Results
-     uses: github/codeql-action/upload-sarif@v3.26.13
+     uses: github/codeql-action/upload-sarif@v3.27.0
      with:
       sarif_file: sarif-results/${{ matrix.language }}.sarif
 
