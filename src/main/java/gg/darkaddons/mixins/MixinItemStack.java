@@ -24,7 +24,7 @@ final class MixinItemStack {
         throw MixinUtils.shadowFail();
     }
 
-    @Inject(method = "getDisplayName", at = @At("HEAD"))
+    @Inject(method = "getDisplayName", at = @At("HEAD"), cancellable = true)
     private final void getDisplayName$darkaddons(@NotNull final CallbackInfoReturnable<String> cir) {
         if (null == this.getItem()) {
             cir.setReturnValue("");
