@@ -73,8 +73,7 @@
         "MixinFontRenderer",
         "MixinGuiNewChat",
         "MixinIngameChatManager",
-        "MixinSBADungeonManager",
-        "MixinItemStack"
+        "MixinSBADungeonManager"
     ],
     "server": [
     ],
