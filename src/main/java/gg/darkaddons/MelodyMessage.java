@@ -31,7 +31,7 @@ final class MelodyMessage {
     }
 
     @SubscribeEvent
-    public final void onGuiLoad(@NotNull final GuiOpenEvent event) {
+    public final void onGuiOpen(@NotNull final GuiOpenEvent event) {
         final var gui = event.gui;
         if (null == gui) {
             MelodyMessage.saidMelody = false;
