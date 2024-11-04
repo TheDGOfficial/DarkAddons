@@ -1,5 +1,5 @@
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 4c08f3e8..945e3ca0 100644
+index 432f588c..2e915bac 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -19,6 +19,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
@@ -17,7 +17,7 @@ index 4c08f3e8..945e3ca0 100644
 +    `maven-publish`
  }
  
- version = "1.10.6"
+ version = "1.10.7"
 @@ -304,6 +306,18 @@ signing {
      }
  }
@@ -37,15 +37,8 @@ index 4c08f3e8..945e3ca0 100644
  /**
   * Builds the dependency notation for the named Ktor [module] at the given [version].
   *
-@@ -315,4 +329,4 @@ fun DependencyHandler.ktor(module: String, version: String? = null, addSuffix: B
- 
- fun DependencyHandler.ktorClient(module: String, version: String? = null) = ktor("client-${module}", version)
- 
--fun DependencyHandler.ktorServer(module: String, version: String? = null) = ktor("server-${module}", version)
-\ No newline at end of file
-+fun DependencyHandler.ktorServer(module: String, version: String? = null) = ktor("server-${module}", version)
 diff --git a/events/build.gradle.kts b/events/build.gradle.kts
-index 9e967282..64f45149 100644
+index 9e967282..05f46837 100644
 --- a/events/build.gradle.kts
 +++ b/events/build.gradle.kts
 @@ -16,11 +16,13 @@
@@ -66,8 +59,6 @@ index 9e967282..64f45149 100644
  tasks.withType<AbstractArchiveTask> {
      isPreserveFileTimestamps = false
      isReproducibleFileOrder = true
--}
-\ No newline at end of file
 +}
 +
 +publishing {
@@ -80,4 +71,5 @@ index 9e967282..64f45149 100644
 +            from(components["java"])
 +        }
 +    }
-+}
+ }
+\ No newline at end of file
