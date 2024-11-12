@@ -848,6 +848,7 @@ public final class DarkAddons {
 
         M7Features.handlePacket(packet);
         ChromaScoreboard.handlePacket(packet);
+        RagAxeStrengthGained.handlePacket(packet);
 
         return true;
     }
