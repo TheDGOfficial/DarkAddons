@@ -93,11 +93,25 @@ final class Config extends Vigilant {
     private static boolean maxorHPDisplay;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Send Enrage Skip Helper Message",
+        description = "Sends a message to party chat when Maxor has enough damage dealt for the first DPS phase (You only have to deal 25% damage, a.k.a lower it to 75% hp in the first DPS phase).",
+        category = "Dungeons", subcategory = "HUD"
+    )
+    private static boolean sendEnrageSkipHelperMessage;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Blessing on Screen",
         description = "Shows Blessing levels on screen with colors based on the level.",
         category = "Dungeons", subcategory = "HUD"
     )
     private static boolean blessingHud = true;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Send Detailed Blessings Message",
+        description = "Sends a message to party chat at Master Mode Floor 7 Phase 5 about detailed blessings, including wisdom blessing (for mages) and base weapon damage gained from blessing of stone, which dragprio chattriggers module doesn't take into account.",
+        category = "Dungeons", subcategory = "HUD"
+    )
+    private static boolean sendDetailedBlessingsMessage;
 
     @Property(
         type = PropertyType.SWITCH, name = "Hide Blessing if Level 0",
@@ -529,6 +543,13 @@ final class Config extends Vigilant {
     private static boolean ultReminder = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Send Message for Wish",
+        description = "Additionally sends a message to party chat requesting wish from healer when Maxor enrages or when Goldor fight starts.",
+        category = "Dungeons", subcategory = "Reminders"
+    )
+    private static boolean sendMessageForWish;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Edrag Reminder",
         description = "Shows a title message on screen when Phase 4 ends to remind you about equipping Ender Dragon pet.",
         category = "Dungeons", subcategory = "Reminders"
@@ -562,6 +583,13 @@ final class Config extends Vigilant {
         category = "Dungeons", subcategory = "Helpers"
     )
     private static boolean sendMessageOn300Score;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Send Message for Score At Boss Entry and Affordable Deaths for S+",
+        description = "Sends a message on boss entry showing the score at boss entry and affordable deaths to still have S+ rank. This assumes first death will have spirit pet.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean sendMessageForScoreAtBossEntry;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message on Melody Terminal",
@@ -952,6 +980,9 @@ final class Config extends Vigilant {
         this.addDependency("ehpHudOutOfDungeons", "ehpHud");
 
         this.addDependency("chromaSkyblock", "chromaToggle");
+        this.addDependency("sendMessageForScoreAtBossEntry", "sendMessageOn300Score");
+        this.addDependency("sendEnrageSkipHelperMessage", "maxorHPDisplay");
+        this.addDependency("sendMessageForWish", "ultReminder");
 
         this.addDependencies2();
     }
@@ -1071,10 +1102,22 @@ final class Config extends Vigilant {
         return Config.maxorHPDisplay;
     }
 
+    static final boolean isSendEnrageSkipHelperMessage() {
+        Config.checkUninit();
+
+        return Config.sendEnrageSkipHelperMessage;
+    }
+
     static final boolean isBlessingHud() {
         Config.checkUninit();
 
         return Config.blessingHud;
+    }
+
+    static final boolean isSendDetailedBlessingsMessage() {
+        Config.checkUninit();
+
+        return Config.sendDetailedBlessingsMessage;
     }
 
     static final boolean isHideBlessingWhenZero() {
@@ -1159,6 +1202,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.sendMessageOn300Score;
+    }
+
+    static final boolean isSendMessageForScoreAtBossEntry() {
+        Config.checkUninit();
+
+        return Config.sendMessageForScoreAtBossEntry;
     }
 
     static final boolean isSendMessageOnMelodyTerminal() {
@@ -1405,6 +1454,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.ultReminder;
+    }
+
+    static final boolean isSendMessageForWish() {
+        Config.checkUninit();
+
+        return Config.sendMessageForWish;
     }
 
     static final boolean isEdragReminder() {

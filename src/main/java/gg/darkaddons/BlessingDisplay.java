@@ -1,10 +1,13 @@
 package gg.darkaddons;
 
+import gg.skytils.skytilsmod.Skytils;
+
 import gg.darkaddons.mixins.IMixinGuiPlayerTabOverlay;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +26,7 @@ final class BlessingDisplay extends GuiElement {
     }
 
     private static final void updateBlessingsFromTab() {
-        if (!Config.isBlessingHud() || !DarkAddons.isInDungeons()) {
+        if ((!Config.isBlessingHud() && !Config.isSendDetailedBlessingsMessage()) || !DarkAddons.isInDungeons()) {
             return;
         }
 
@@ -39,6 +42,33 @@ final class BlessingDisplay extends GuiElement {
         BlessingDisplay.clearBlessings();
 
         DarkAddons.registerTickTask("update_blessings_tab", BlessingDisplay.BLESSING_UPDATE_INTERVAL, true, BlessingDisplay::updateBlessingsFromTab);
+    }
+
+    private static final double getBaseDamageBonusFromBlessingOfStone() {
+        final var tier = BlessingDisplay.getBlessingOrDefault(BlessingType.STONE, 0);
+        final var paulMult = DarkAddons.isPaulMoreEffectiveBlessingsActive() ? 1.25D : 1.0D;
+
+        return 1.1D * paulMult * 1.2D * (tier * 6); // Source: https://wiki.hypixel.net/Blessings - Assume F3+ floor cause this for M7. Assume maxed wither essence blessing perk because you are throwing if you don't have it.
+    }
+
+    static final void doCheckMessage(@NotNull final ClientChatReceivedEvent event) {
+        McProfilerHelper.startSection("blessing_display_check_message");
+
+        if (Config.isSendDetailedBlessingsMessage() && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type) && DarkAddons.isInSkyblock() && DarkAddons.isInDungeons()) {
+            final var message = Utils.removeControlCodes(event.message.getUnformattedText());
+            if (message.endsWith(" picked the Corrupted Blue Relic!")) {
+                DarkAddons.registerTickTask("send_detailed_blessings_message", 41, false, () -> {
+                    final var power = BlessingDisplay.getBlessingOrDefault(BlessingType.POWER, 0);
+                    final var time = BlessingDisplay.getBlessingOrDefault(BlessingType.TIME, 0);
+                    final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingType.WISDOM, 0);
+                    final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
+
+                    Skytils.sendMessageQueue.add("/pc Detailed Blessings: Power " + power + (time != 0 ? " - Time " + time : "") + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
+                });
+            }
+        }
+
+        McProfilerHelper.endSection();
     }
 
     @SuppressWarnings("FieldNotUsedInToString")
@@ -158,7 +188,7 @@ final class BlessingDisplay extends GuiElement {
             }
 
             for (final var blessingType : BlessingDisplay.BlessingType.getValues()) {
-                if (blessingType.isEnabled() && line.contains(blessingType.getBlessingInTabPrefix())) {
+                if ((blessingType.isEnabled() || Config.isSendDetailedBlessingsMessage()) && line.contains(blessingType.getBlessingInTabPrefix())) {
                     final var level = StringUtils.remove(line, BlessingDisplay.BlessingType.BLESSING_OF + blessingType.prettyNamePlusSpace);
                     BlessingDisplay.blessings[blessingType.enumOrdinal] = Utils.fastRomanToInt(level);
 

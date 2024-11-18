@@ -511,6 +511,21 @@ public final class DarkAddons {
         return "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor());
     }
 
+    public static final boolean isPaulMoreEffectiveBlessingsActive() {
+        if (MayorInfo.INSTANCE.getAllPerks().contains("Benediction")) {
+            return true;
+        }
+
+        final var jerryMayor = MayorInfo.INSTANCE.getJerryMayor();
+
+        if (null != jerryMayor && "Paul".equals(jerryMayor.getName())) {
+            // We don't need to check for perks if Paul is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Frees memory (unnecessary objects).
      * <p>
@@ -936,6 +951,8 @@ public final class DarkAddons {
 
         RejoinCooldownDisplay.onMessage(event);
         DialogueSkipHelper.onMessage(event);
+
+        BlessingDisplay.doCheckMessage(event);
     }
 
     /**

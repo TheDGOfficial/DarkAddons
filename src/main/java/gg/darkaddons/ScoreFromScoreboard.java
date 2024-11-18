@@ -13,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 
 final class ScoreFromScoreboard {
     private static boolean blazeDoneReceived;
+    private static int previousScore;
+    private static boolean hasSaidScoreAtBossEntry;
 
     ScoreFromScoreboard() {
         super();
@@ -35,6 +37,8 @@ final class ScoreFromScoreboard {
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public final void onWorldChange(@NotNull final WorldEvent.Unload event) {
         ScoreFromScoreboard.blazeDoneReceived = false;
+        ScoreFromScoreboard.previousScore = 0;
+        ScoreFromScoreboard.hasSaidScoreAtBossEntry = false;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
@@ -70,6 +74,35 @@ final class ScoreFromScoreboard {
         } else if (270 <= score && !sc.getHasSaid270()) {
             sc.setHasSaid270(true);
             Skytils.sendMessageQueue.add("/pc 270 score");
+        }
+
+        final var diff = score - ScoreFromScoreboard.previousScore;
+
+        if (diff >= 28 || score >= 300) {
+            ScoreFromScoreboard.realScoreHook(Math.max(score, sc.getTotalScore().get()), sc.getDeaths().get());
+        }
+
+        ScoreFromScoreboard.previousScore = score;
+    }
+
+    private static final void realScoreHook(final int score, final int deaths) {
+        if (Config.isSendMessageForScoreAtBossEntry() && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && !ScoreFromScoreboard.hasSaidScoreAtBossEntry) {
+            var affordableDeaths = 0;
+            var extraScore = score - 300;
+
+            var tempDeaths = deaths;
+            while (extraScore > (tempDeaths < 1 ? 0 : 1)) {
+                 if (tempDeaths < 1) {
+                     --extraScore; // Assume spirit pet
+                 } else {
+                     extraScore -= 2;
+                 }
+                 ++tempDeaths;
+                 ++affordableDeaths;
+            }
+
+            ScoreFromScoreboard.hasSaidScoreAtBossEntry = true;
+            Skytils.sendMessageQueue.add("/pc Score At Boss Entry: " + score + " | " + (score >= 300 ? "Affordable Deaths For S+: " + affordableDeaths : "No S+"));
         }
     }
 }

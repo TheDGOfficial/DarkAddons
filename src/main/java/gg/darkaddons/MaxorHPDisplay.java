@@ -1,5 +1,7 @@
 package gg.darkaddons;
 
+import gg.skytils.skytilsmod.Skytils;
+
 import net.minecraft.client.Minecraft;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +21,8 @@ final class MaxorHPDisplay extends SimpleGuiElement {
     private static double lastMaxorHp;
 
     private static boolean maxorDead;
+
+    private static boolean saidEnrageSkipHelperMessage;
 
     MaxorHPDisplay() {
         super("Maxor HP Display", Config::isMaxorHPDisplay, () -> true, () -> 0);
@@ -77,6 +81,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
         MaxorHPDisplay.maxorHp = 0.0D;
         MaxorHPDisplay.lastMaxorHp = 0.0D;
         MaxorHPDisplay.maxorDead = false;
+        MaxorHPDisplay.saidEnrageSkipHelperMessage = false;
 
         super.clear();
     }
@@ -113,5 +118,10 @@ final class MaxorHPDisplay extends SimpleGuiElement {
         final var hpText = MaxorHPDisplay.maxorDead ? "§a§lDead" : String.format("%.1f", hp) + '%';
 
         lines.add(-1 == hp && !MaxorHPDisplay.maxorDead ? text + "§c§lUnknown" : text + color + hpText);
+
+        if (Config.isSendEnrageSkipHelperMessage() && !MaxorHPDisplay.saidEnrageSkipHelperMessage && hp <= 74.0D) {
+            MaxorHPDisplay.saidEnrageSkipHelperMessage = true;
+            Skytils.sendMessageQueue.add("/pc Maxor HP: " + hpText + " | Enough damage dealt for first DPS phase!");
+        }
     }
 }

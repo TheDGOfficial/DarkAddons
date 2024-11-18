@@ -1,5 +1,7 @@
 package gg.darkaddons;
 
+import gg.skytils.skytilsmod.Skytils;
+
 import gg.essential.universal.UChat;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
@@ -248,6 +250,9 @@ final class AdditionalM7Features {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor is enraged. Use your ultimate ability!");
                     AdditionalM7Features.sendUseUltTitle();
                     AdditionalM7Features.firstLaserNotDone = false;
+                    if (Config.isSendMessageForWish()) {
+                        Skytils.sendMessageQueue.add("/pc Wishing time!");
+                    }
                 }
             }
             case "[BOSS] Storm: At least my son died by your hands." -> {
@@ -264,6 +269,9 @@ final class AdditionalM7Features {
                 if (Config.isUltReminder()) {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Goldor fight starting. Use your ultimate ability!");
                     AdditionalM7Features.sendUseUltTitle();
+                    if (Config.isSendMessageForWish()) {
+                        Skytils.sendMessageQueue.add("/pc Wishing time!");
+                    }
                 }
             }
             default -> AdditionalM7Features.handleMessage3(message);
