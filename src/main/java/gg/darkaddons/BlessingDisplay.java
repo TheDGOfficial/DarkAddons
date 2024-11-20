@@ -188,7 +188,7 @@ final class BlessingDisplay extends GuiElement {
             }
 
             for (final var blessingType : BlessingDisplay.BlessingType.getValues()) {
-                if ((blessingType.isEnabled() || Config.isSendDetailedBlessingsMessage()) && line.contains(blessingType.getBlessingInTabPrefix())) {
+                if ((blessingType.isEnabled() || (blessingType != BlessingDisplay.BlessingType.LIFE && Config.isSendDetailedBlessingsMessage())) && line.contains(blessingType.getBlessingInTabPrefix())) {
                     final var level = StringUtils.remove(line, BlessingDisplay.BlessingType.BLESSING_OF + blessingType.prettyNamePlusSpace);
                     BlessingDisplay.blessings[blessingType.enumOrdinal] = Utils.fastRomanToInt(level);
 
