@@ -819,14 +819,14 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Auto Regular Ability",
-        description = "Uses regular ability once the cooldown expires, while holding down RC while holding a Terminator (or LC while holding Dark Claymore), inside Dungeons if the boss is not defeated yet. This uses Shift + Drop for all classes. Healer will use Healing Circle (2s cd), Mage will use Guided Sheep (30s cd), Berserk will use Throwing Axe (10s cd), Archer will use Explosive Shot (40s cd), Tank will use Seismic Wave (15s cd).",
+        description = "Uses regular ability once the cooldown expires, while holding down RC while holding a Terminator (or LC while holding Dark Claymore/Midas/GS), inside Dungeons if the boss is not defeated yet. This uses Shift + Drop for all classes. Healer will use Healing Circle (2s cd), Mage will use Guided Sheep (30s cd), Berserk will use Throwing Axe (10s cd), Archer will use Explosive Shot (40s cd), Tank will use Seismic Wave (15s cd).",
         category = "QOL", subcategory = "General"
     )
     private static boolean autoRegularAbility;
 
     @Property(
         type = PropertyType.SWITCH, name = "Auto Ultimate Ability",
-        description = "Uses ultimate ability once the cooldown expires, while holding down RC while holding a Terminator (or LC while holding Dark Claymore), inside Dungeons if the boss is not defeated yet. This uses Drop key for all classes. Healer will use Wish (2m cd), Mage will use Thunderstorm (8.3m cd), Berserk will use Ragnarok (1m cd), Archer will use Rapid Fire (1.6m cd), Tank will use Seismic Wave (2.5m cd).",
+        description = "Uses ultimate ability once the cooldown expires, while holding down RC while holding a Terminator (or LC while holding Dark Claymore/Midas/GS), inside Dungeons if the boss is not defeated yet. This uses Drop key for all classes. Healer will use Wish (2m cd), Mage will use Thunderstorm (8.3m cd), Berserk will use Ragnarok (1m cd), Archer will use Rapid Fire (1.6m cd), Tank will use Seismic Wave (2.5m cd).",
         category = "QOL", subcategory = "General"
     )
     private static boolean autoUltimateAbility;

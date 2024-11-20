@@ -54,8 +54,8 @@ final class AutoClicker {
         return (AutoClicker.isHoldingTerm(mc)) || (Utils.isHoldingItemContaining(mc, "Astraea") || Utils.isHoldingItemContaining(mc, "Hyperion"));
     }
 
-    static final boolean isHoldingClaymoreOrGS(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingASword(mc) && (Utils.isHoldingItemContaining(mc, "Claymore") || Utils.isHoldingItemContaining(mc, "Giant's Sword"));
+    static final boolean isHoldingClaymoreMidasOrGS(@NotNull final Minecraft mc) {
+        return AutoClicker.isHoldingASword(mc) && (Utils.isHoldingItemContaining(mc, "Claymore") || Utils.isHoldingItemContaining(mc, "Midas'") || Utils.isHoldingItemContaining(mc, "Giant's Sword"));
     }
 
     @SuppressWarnings("TypeMayBeWeakened")
