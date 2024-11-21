@@ -216,7 +216,7 @@ final class AutoClassAbilities {
         final var mc = Minecraft.getMinecraft();
         final var rc = mc.gameSettings.keyBindUseItem;
 
-        return AutoClassAbilities.checkPrePreconditions() && ((rc.isKeyDown() && AutoClicker.isHoldingTermOrRCM(mc)) || (mc.gameSettings.keyBindAttack.isKeyDown() && AutoClicker.isHoldingClaymoreMidasOrGS(mc)));
+        return AutoClassAbilities.checkPrePreconditions() && ((rc.isKeyDown() && AutoClicker.isHoldingTermOrRCM(mc)) || (mc.gameSettings.keyBindAttack.isKeyDown() && (AutoClicker.isHoldingClaymoreMidasOrGS(mc) || AutoClicker.isHoldingHype(mc))));
     }
 
     private static final void findClassAndAssignAbilities() {
