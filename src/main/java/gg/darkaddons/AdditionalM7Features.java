@@ -251,7 +251,7 @@ final class AdditionalM7Features {
                     AdditionalM7Features.sendUseUltTitle();
                     AdditionalM7Features.firstLaserNotDone = false;
                     if (Config.isSendMessageForWish()) {
-                        Skytils.sendMessageQueue.add("/pc Wishing time!");
+                        Skytils.sendMessageQueue.add("/pc Wish and castle of stone!");
                     }
                 }
             }
@@ -270,7 +270,7 @@ final class AdditionalM7Features {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Goldor fight starting. Use your ultimate ability!");
                     AdditionalM7Features.sendUseUltTitle();
                     if (Config.isSendMessageForWish()) {
-                        Skytils.sendMessageQueue.add("/pc Wishing time!");
+                        Skytils.sendMessageQueue.add("/pc Wishing and castle of stone!");
                     }
                 }
             }
