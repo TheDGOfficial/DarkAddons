@@ -35,7 +35,7 @@ GSON_VERSION=2.2.4
 
 ASM_VERSION=9.7.1
 
-ERRORPRONE_VERSION=2.35.1
+ERRORPRONE_VERSION=2.36.0
 
 DARKADDONS_VERSION=${versionProperties["darkaddons.version"]}
 SKYTILS_VERSION=${versionProperties["skytils.version"]}
