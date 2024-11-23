@@ -2,6 +2,7 @@ package gg.darkaddons;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.mixins.extensions.ExtensionEntityLivingBase;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
@@ -402,7 +403,9 @@ final class M7Features {
     static final void handleRenderWorld(@NotNull final RenderWorldLastEvent event) {
         McProfilerHelper.startSection("m7features_handle_render_world");
 
-        if (Config.isShowStatueBox() && -1L != DungeonTimer.INSTANCE.getPhase4ClearTime() && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
+        final var player = Minecraft.getMinecraft().thePlayer;
+
+        if (Config.isShowStatueBox() && (-1L != DungeonTimer.INSTANCE.getPhase4ClearTime() || (player != null && player.getPosition().getY() <= 45)) && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
             final var width = Config.isSharperDragonBoundingBox() ? Config.getDragonBoundingBoxWidth() : 3.69F;
 
             for (final var drag : WitherKingDragons.getValues()) {
