@@ -359,10 +359,26 @@ final class ClassAverage50Display extends GuiElement {
         ClassAverage50Display.linesToRender.add("§dFor more details or to sync class XP, do /darkaddon rtca");
     }
 
+    @NotNull
+    private static final RunsTillCA50.Mode getMode() {
+        final var mode = Config.getClassAverage50DisplayMode();
+
+        switch (mode) {
+            case 0:
+                return RunsTillCA50.Mode.OPTIMAL;
+            case 1:
+                return RunsTillCA50.Mode.EARLY;
+            case 2:
+                return RunsTillCA50.Mode.SKULL;
+            default:
+                throw new IllegalStateException("unsupported mode index: " + mode);
+        }
+    }
+
     private static final void buildHudLines(@NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap, @NotNull final ClassAverage50Display.DungeonFloor floor, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> originalXpMap) {
         ClassAverage50Display.header();
 
-        final var result = RunsTillCA50.simulateAllRuns(xpMap, new EnumMap<>(xpMap), 0.0D, ClassAverage50Display.DungeonFloor.M7 == floor, DarkAddons.isDerpy(), RunsTillCA50.Mode.OPTIMAL);
+        final var result = RunsTillCA50.simulateAllRuns(xpMap, new EnumMap<>(xpMap), 0.0D, ClassAverage50Display.DungeonFloor.M7 == floor, DarkAddons.isDerpy(), ClassAverage50Display.getMode());
         final var floorName = floor.name();
 
         final var totalExperiences = RunsTillCA50.getTotalExperiencesNoOverflow(originalXpMap);

@@ -71,6 +71,14 @@ final class Config extends Vigilant {
     private static int classAverage50DisplayCompactness;
 
     @Property(
+        type = PropertyType.SELECTOR, name = "Class Average 50 Display Mode",
+        description = "Select mode used for the algorithm. Optimal uses the most optimal route. Early uses an algorithm that gets you Level 50 in all before moving onto the next one. Skull mode forces the simulation algorithm to play only 1 class and get the rest 4 classes Level 50 from Shared XP.",
+        category = "Dungeons", subcategory = "HUD", triggerActionOnInitialization = false,
+        options = {"Optimal", "Early", "Skull"}
+    )
+    private static int classAverage50DisplayMode;
+
+    @Property(
         type = PropertyType.SELECTOR, name = "Class Average 50 Display Shadow",
         description = "Select shadow to use when rendering text in Class Average 50 Display.",
         category = "Dungeons", subcategory = "HUD",
@@ -1010,6 +1018,7 @@ final class Config extends Vigilant {
         this.addDependency("classAverage50DisplayVisibility", "classAverage50Display");
         this.addDependency("classAverage50DisplayShadow", "classAverage50Display");
         this.addDependency("classAverage50DisplayCompactness", "classAverage50Display");
+        this.addDependency("classAverage50DisplayMode", "classAverage50Display");
 
         this.addDependency("burgersDone", "slayerRngDisplay");
 
@@ -1034,6 +1043,7 @@ final class Config extends Vigilant {
         this.registerListener("classAverage50Display", Config::reSyncClassXP);
         this.registerListener("classAverage50DisplayFloor", Config::reSyncClassXPUnconditionally);
         this.registerListener("classAverage50DisplayCompactness", Config::reSyncClassXPUnconditionally);
+        this.registerListener("classAverage50DisplayMode", Config::reSyncClassXPUnconditionally);
 
         this.registerListener("burgersDone", Config::updateBurgersDone);
         this.registerListener("blockPosOptimizer", Config::updateBlockPosOptimizer);
@@ -1095,6 +1105,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.classAverage50DisplayCompactness;
+    }
+
+    static final int getClassAverage50DisplayMode() {
+        Config.checkUninit();
+
+        return Config.classAverage50DisplayMode;
     }
 
     static final boolean isUnopenedChestsDisplay() {
