@@ -729,6 +729,13 @@ final class Config extends Vigilant {
     private static boolean allowGhostBlockingBedrockAndBarrier;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Replace Diorite",
+        description = "Replaces Diorite in crusher pillars of the Storm boss fight with a stained glass of their respective color.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean replaceDiorite;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Press Key to Requeue",
         description = "Requeues into another instanced game when you press the configured key (by default R, go to standard Minecraft vanilla Controls menu in Settings if you want to change it). Instanced in this context means Dungeons or Kuudra in the context of Skyblock, but any game that supports the /instancerequeue command will work.",
         category = "QOL", subcategory = "General"
@@ -1574,6 +1581,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.allowGhostBlockingBedrockAndBarrier;
+    }
+
+    static final boolean isReplaceDiorite() {
+        Config.checkUninit();
+
+        return Config.replaceDiorite;
     }
 
     static final boolean isPressKeyToRequeue() {

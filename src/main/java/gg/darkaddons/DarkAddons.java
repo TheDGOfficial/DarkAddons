@@ -734,7 +734,8 @@ public final class DarkAddons {
             new MaxorHPDisplay(),
             new GoldenFishTimer(),
             new AutoFishingRod(),
-            new MelodyMessage()
+            new MelodyMessage(),
+            new ReplaceDiorite()
         );
 
         GuiManager.init();
