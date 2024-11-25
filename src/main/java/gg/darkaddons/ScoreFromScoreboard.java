@@ -28,7 +28,7 @@ final class ScoreFromScoreboard {
                 final var withoutColor = Utils.removeControlCodes(line);
                 if (withoutColor.startsWith("Cleared: ")) {
                     final var score = Utils.safeParseIntFast(StringUtils.removeEnd(StringUtils.substringAfter(withoutColor, "% ("), ")"));
-                    ScoreFromScoreboard.onScoreUpdate(ScoreFromScoreboard.fixScoreboardScore(score));
+                    ScoreFromScoreboard.onScoreUpdate(ScoreFromScoreboard.fixScoreboardScore(score), score);
                 }
             }
         });
@@ -65,7 +65,7 @@ final class ScoreFromScoreboard {
         return fixedScore;
     }
 
-    private static final void onScoreUpdate(final int score) {
+    private static final void onScoreUpdate(final int score, final int rawScore) {
         final var sc = ScoreCalculation.INSTANCE;
 
         if (300 <= score && !sc.getHasSaid300()) {
@@ -76,13 +76,13 @@ final class ScoreFromScoreboard {
             Skytils.sendMessageQueue.add("/pc 270 score");
         }
 
-        final var diff = score - ScoreFromScoreboard.previousScore;
+        final var diff = rawScore - ScoreFromScoreboard.previousScore;
 
-        if (diff >= 28 || score >= 300) {
-            ScoreFromScoreboard.realScoreHook(Math.max(score, sc.getTotalScore().get()), sc.getDeaths().get());
+        if (diff >= 28 || rawScore >= 300) {
+            ScoreFromScoreboard.realScoreHook(Math.max(rawScore, sc.getTotalScore().get()), sc.getDeaths().get());
         }
 
-        ScoreFromScoreboard.previousScore = score;
+        ScoreFromScoreboard.previousScore = rawScore;
     }
 
     private static final void realScoreHook(final int score, final int deaths) {
