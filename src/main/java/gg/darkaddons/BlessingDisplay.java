@@ -21,12 +21,19 @@ final class BlessingDisplay extends GuiElement {
 
     private static final int @NotNull [] blessings = new int[BlessingDisplay.BlessingType.getValuesLength()];
 
+    private static boolean needBlessingInfo;
+
+    private static final boolean needBlessingInfo() {
+        return Config.isSendDetailedBlessingsMessage() && needBlessingInfo;
+    }
+
     private static final void clearBlessings() {
         Utils.fillIntArray(BlessingDisplay.blessings, -1);
+        BlessingDisplay.needBlessingInfo = true;
     }
 
     private static final void updateBlessingsFromTab() {
-        if ((!Config.isBlessingHud() && !Config.isSendDetailedBlessingsMessage()) || !DarkAddons.isInDungeons()) {
+        if ((!Config.isBlessingHud() && !BlessingDisplay.needBlessingInfo()) || !DarkAddons.isInDungeons()) {
             return;
         }
 
@@ -64,6 +71,7 @@ final class BlessingDisplay extends GuiElement {
                     final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
 
                     Skytils.sendMessageQueue.add("/pc Detailed Blessings: Power " + power + (time != 0 ? " - Time " + time : "") + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
+                    BlessingDisplay.needBlessingInfo = false;
                 });
             }
         }
@@ -188,7 +196,7 @@ final class BlessingDisplay extends GuiElement {
             }
 
             for (final var blessingType : BlessingDisplay.BlessingType.getValues()) {
-                if ((blessingType.isEnabled() || (blessingType != BlessingDisplay.BlessingType.LIFE && Config.isSendDetailedBlessingsMessage())) && line.contains(blessingType.getBlessingInTabPrefix())) {
+                if ((blessingType.isEnabled() || (blessingType != BlessingDisplay.BlessingType.LIFE && BlessingDisplay.needBlessingInfo())) && line.contains(blessingType.getBlessingInTabPrefix())) {
                     final var level = StringUtils.remove(line, BlessingDisplay.BlessingType.BLESSING_OF + blessingType.prettyNamePlusSpace);
                     BlessingDisplay.blessings[blessingType.enumOrdinal] = Utils.fastRomanToInt(level);
 
