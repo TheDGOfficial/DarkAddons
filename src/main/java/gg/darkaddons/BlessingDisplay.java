@@ -29,7 +29,6 @@ final class BlessingDisplay extends GuiElement {
 
     private static final void clearBlessings() {
         Utils.fillIntArray(BlessingDisplay.blessings, -1);
-        BlessingDisplay.needBlessingInfo = true;
     }
 
     private static final void updateBlessingsFromTab() {
@@ -64,14 +63,16 @@ final class BlessingDisplay extends GuiElement {
         if (Config.isSendDetailedBlessingsMessage() && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type) && DarkAddons.isInSkyblock() && DarkAddons.isInDungeons()) {
             final var message = Utils.removeControlCodes(event.message.getUnformattedText());
             if (message.endsWith(" picked the Corrupted Blue Relic!")) {
+                BlessingDisplay.needBlessingInfo = true;
                 DarkAddons.registerTickTask("send_detailed_blessings_message", 41, false, () -> {
-                    final var power = BlessingDisplay.getBlessingOrDefault(BlessingType.POWER, 0);
-                    final var time = BlessingDisplay.getBlessingOrDefault(BlessingType.TIME, 0);
-                    final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingType.WISDOM, 0);
-                    final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
+                    Utils.awaitCondition(() -> !BlessingDisplay.needBlessingInfo, () -> {
+                        final var power = BlessingDisplay.getBlessingOrDefault(BlessingType.POWER, 0);
+                        final var time = BlessingDisplay.getBlessingOrDefault(BlessingType.TIME, 0);
+                        final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingType.WISDOM, 0);
+                        final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
 
-                    Skytils.sendMessageQueue.add("/pc Detailed Blessings: Power " + power + (time != 0 ? " - Time " + time : "") + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
-                    BlessingDisplay.needBlessingInfo = false;
+                        Skytils.sendMessageQueue.add("/pc Detailed Blessings: Power " + power + (time != 0 ? " - Time " + time : "") + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
+                    });
                 });
             }
         }
@@ -203,6 +204,10 @@ final class BlessingDisplay extends GuiElement {
                     break;
                 }
             }
+        }
+
+        if (BlessingDisplay.needBlessingInfo()) {
+            BlessingDisplay.needBlessingInfo = false;
         }
     }
 
