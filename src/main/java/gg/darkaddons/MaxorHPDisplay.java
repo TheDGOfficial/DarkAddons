@@ -119,7 +119,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
         lines.add(-1 == hp && !MaxorHPDisplay.maxorDead ? text + "§c§lUnknown" : text + color + hpText);
 
-        if (Config.isSendEnrageSkipHelperMessage() && !MaxorHPDisplay.saidEnrageSkipHelperMessage && hp <= 74.0D) {
+        if (Config.isSendEnrageSkipHelperMessage() && !MaxorHPDisplay.saidEnrageSkipHelperMessage && hp <= 74.0D && !DarkAddons.isInLocationEditingGui()) {
             MaxorHPDisplay.saidEnrageSkipHelperMessage = true;
             Skytils.sendMessageQueue.add("/pc Maxor HP: " + hpText + " | Enough damage dealt for first DPS phase!");
         }
