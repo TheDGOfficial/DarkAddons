@@ -64,7 +64,7 @@ final class ReplaceDiorite {
 
     @SubscribeEvent
     public final void onTick(@NotNull final ClientTickEvent event) {
-        if (Config.isReplaceDiorite() && TickEvent.Phase.END == event.phase && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && -1L == DungeonTimer.INSTANCE.getPhase2ClearTime()) {
+        if (Config.isReplaceDiorite() && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && -1L == DungeonTimer.INSTANCE.getPhase2ClearTime()) {
             ReplaceDiorite.replaceDiorite();
         }
     }
