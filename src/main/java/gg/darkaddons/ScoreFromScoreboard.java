@@ -29,6 +29,7 @@ final class ScoreFromScoreboard {
                 if (withoutColor.startsWith("Cleared: ")) {
                     final var score = Utils.safeParseIntFast(StringUtils.removeEnd(StringUtils.substringAfter(withoutColor, "% ("), ")"));
                     ScoreFromScoreboard.onScoreUpdate(ScoreFromScoreboard.fixScoreboardScore(score), score);
+                    break;
                 }
             }
         });
