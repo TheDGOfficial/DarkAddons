@@ -236,6 +236,7 @@ final class ClassAverage50Display extends GuiElement {
 
         if (RunsTillCA50.isCA50(xpMap)) {
             ClassAverage50Display.linesToRender.add("§aAlready CA50");
+            ClassAverage50Display.updateWidthHeightSize();
             return;
         }
 
