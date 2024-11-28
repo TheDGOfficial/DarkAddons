@@ -551,11 +551,11 @@ final class Config extends Vigilant {
     private static boolean ultReminder = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Send Message for Wish",
-        description = "Additionally sends a message to party chat requesting wish from healer when Maxor enrages or when Goldor fight starts.",
+        type = PropertyType.SWITCH, name = "Send Message for Wish and Castle of Stone",
+        description = "Sends a message to party chat reminding wish and castle of stone when Maxor enrages or when Goldor fight starts.",
         category = "Dungeons", subcategory = "Reminders"
     )
-    private static boolean sendMessageForWish;
+    private static boolean sendMessageForWishAndCastleOfStone;
 
     @Property(
         type = PropertyType.SWITCH, name = "Edrag Reminder",
@@ -1478,10 +1478,10 @@ final class Config extends Vigilant {
         return Config.ultReminder;
     }
 
-    static final boolean isSendMessageForWish() {
+    static final boolean isSendMessageForWishAndCastleOfStone() {
         Config.checkUninit();
 
-        return Config.sendMessageForWish;
+        return Config.sendMessageForWishAndCastleOfStone;
     }
 
     static final boolean isEdragReminder() {

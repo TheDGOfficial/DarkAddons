@@ -253,7 +253,7 @@ final class AdditionalM7Features {
                         AdditionalM7Features.sendUseUltTitle();
                         flag = true;
                     }
-                    if (Config.isSendMessageForWish()) {
+                    if (Config.isSendMessageForWishAndCastleOfStone()) {
                         Skytils.sendMessageQueue.add("/pc Wish and castle of stone!");
                         flag = true;
                     }
@@ -277,7 +277,7 @@ final class AdditionalM7Features {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Goldor fight starting. Use your ultimate ability!");
                     AdditionalM7Features.sendUseUltTitle();
                 }
-                if (Config.isSendMessageForWish()) {
+                if (Config.isSendMessageForWishAndCastleOfStone()) {
                     Skytils.sendMessageQueue.add("/pc Wish and castle of stone!");
                 }
             }
