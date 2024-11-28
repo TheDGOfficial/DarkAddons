@@ -64,7 +64,7 @@ final class BlessingDisplay extends GuiElement {
             final var message = Utils.removeControlCodes(event.message.getUnformattedText());
             if (message.endsWith(" picked the Corrupted Blue Relic!")) {
                 BlessingDisplay.needBlessingInfo = true;
-                DarkAddons.registerTickTask("send_detailed_blessings_message", 41, false, () -> {
+                DarkAddons.registerTickTask("send_detailed_blessings_message", 46, false, () -> {
                     Utils.awaitCondition(() -> !BlessingDisplay.needBlessingInfo, () -> {
                         final var power = BlessingDisplay.getBlessingOrDefault(BlessingType.POWER, 0);
                         final var time = BlessingDisplay.getBlessingOrDefault(BlessingType.TIME, 0);
