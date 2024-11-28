@@ -246,12 +246,19 @@ final class AdditionalM7Features {
         switch (message) {
             case "⚠ Maxor is enraged! ⚠" -> {
                 AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
-                if (Config.isUltReminder() && AdditionalM7Features.firstLaserNotDone) {
-                    DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor is enraged. Use your ultimate ability!");
-                    AdditionalM7Features.sendUseUltTitle();
-                    AdditionalM7Features.firstLaserNotDone = false;
+                if (AdditionalM7Features.firstLaserNotDone) {
+                    boolean flag = false;
+                    if (Config.isUltReminder()) {
+                        DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor is enraged. Use your ultimate ability!");
+                        AdditionalM7Features.sendUseUltTitle();
+                        flag = true;
+                    }
                     if (Config.isSendMessageForWish()) {
                         Skytils.sendMessageQueue.add("/pc Wish and castle of stone!");
+                        flag = true;
+                    }
+                    if (flag) {
+                        AdditionalM7Features.firstLaserNotDone = false;
                     }
                 }
             }
@@ -269,9 +276,9 @@ final class AdditionalM7Features {
                 if (Config.isUltReminder()) {
                     DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Goldor fight starting. Use your ultimate ability!");
                     AdditionalM7Features.sendUseUltTitle();
-                    if (Config.isSendMessageForWish()) {
-                        Skytils.sendMessageQueue.add("/pc Wish and castle of stone!");
-                    }
+                }
+                if (Config.isSendMessageForWish()) {
+                    Skytils.sendMessageQueue.add("/pc Wish and castle of stone!");
                 }
             }
             default -> AdditionalM7Features.handleMessage3(message);

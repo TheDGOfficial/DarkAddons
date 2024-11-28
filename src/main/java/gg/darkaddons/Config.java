@@ -997,7 +997,6 @@ final class Config extends Vigilant {
         this.addDependency("chromaSkyblock", "chromaToggle");
         this.addDependency("sendMessageForScoreAtBossEntry", "sendMessageOn300Score");
         this.addDependency("sendEnrageSkipHelperMessage", "maxorHPDisplay");
-        this.addDependency("sendMessageForWish", "ultReminder");
 
         this.addDependencies2();
     }
