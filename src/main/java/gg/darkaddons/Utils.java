@@ -802,7 +802,7 @@ final class Utils {
     }
 
     @Nullable
-    private static final String sendWebRequest(@NotNull final String url, @NotNull final String contentTypeWithoutEncoding, final boolean setUserAgentAndReferer, final long timeoutSeconds) {
+    static final String sendWebRequest(@NotNull final String url, @NotNull final String contentTypeWithoutEncoding, final boolean setUserAgentAndReferer, final long timeoutSeconds) {
         try {
             final var con = Utils.urlOf(url).openConnection();
 

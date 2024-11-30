@@ -149,6 +149,14 @@ final class SubCommand {
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpPlayerEntities(DarkAddons::queueWarning), "dumpplayerentities"));
 
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> Diagnostics.dumpThreadNames(DarkAddons::queueWarning), "dumpthreadnames"));
+
+        SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
+            if (self.hasArgument(1)) {
+                UpgradeChecker.dumpSuggestions(self.getArgument(1), DarkAddons::queueWarning);
+            } else {
+                DarkAddons.queueWarning("Please enter a player name to check.");
+            }
+        }, "upgradecheck", new Class<?>[]{String.class}, "<player name>", "checkupgrade"));
     }
 
     private static final void registerSubCommands() {
