@@ -383,19 +383,22 @@ final class UpgradeChecker {
     private static final void processArrows(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonArray quiver, @NotNull final String selectedArrow) {
         boolean hasArmorshredArrowsLeft = false;
         boolean hasMultipleArrowTypes = false;
+        String otherArrowType = "none";
         for (final var arrow : quiver) {
             final var name = arrow.getAsJsonObject().get("display_name");
             if (null != name) {
-                if ("Armorshred Arrow".equals(name.getAsString())) {
+                final var displayName = name.getAsString();
+                if ("Armorshred Arrow".equals(displayName)) {
                     hasArmorshredArrowsLeft = true;
                     break;
                 } else {
+                    otherArrowType = displayName;
                     hasMultipleArrowTypes = true;
                 }
             }
         }
         if (!hasArmorshredArrowsLeft) {
-            outputConsumer.accept("Missing Armorshred Arrows");
+            outputConsumer.accept("Missing Armorshred Arrows (has " + otherArrowType + ')');
         } else if (!"Armorshred Arrow".equals(selectedArrow) && hasMultipleArrowTypes) {
             outputConsumer.accept("Armorshred Arrows not selected in Arrow Swapper (Selected: " + selectedArrow + ')');
         }
