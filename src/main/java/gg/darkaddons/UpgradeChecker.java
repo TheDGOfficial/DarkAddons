@@ -295,7 +295,7 @@ final class UpgradeChecker {
         int highestTier = 0;
         for (final var rawAccessory : rawAccessories) {
             if (rawAccessory.startsWith("MASTER_SKULL_TIER_")) {
-                final var tier = Integer.parseInt(StringUtils.removeStart(rawAccessory, "MASTER_SKULL_TIER_"));
+                final var tier = Utils.safeParseIntFast(StringUtils.removeStart(rawAccessory, "MASTER_SKULL_TIER_"));
                 if (tier > highestTier) {
                     highestTier = tier;
                 }
