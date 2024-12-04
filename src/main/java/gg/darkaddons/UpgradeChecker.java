@@ -175,7 +175,7 @@ final class UpgradeChecker {
             registerPerk(UpgradeType.MORE_DPS, "permanent_strength", 5, (level) -> "+" + level + " Strength");
             registerPerk(UpgradeType.MORE_DPS, "fero_vs_dragons", 5, (level) -> "+" + (level * 2) + " Ferocity against Dragons");
 
-            registerPerk(UpgradeType.MORE_RNG, "catacombs_boss_luck", 4, (level) -> "+" + (10 - (level == 3 ? 5 : level == 2 ? 3 : 1)) + "% RNG");
+            registerPerk(UpgradeType.MORE_RNG, "catacombs_boss_luck", 4, (level) -> "+" + (level == 3 ? 5 : level == 2 ? 7 : 9) + "% RNG");
             registerPerk(UpgradeType.MORE_RNG, "catacombs_looting", 5, (level) -> "+" + (level * 2) + "% quality on Mob drops");
 
             registerPerk(UpgradeType.MORE_XP, "unbridled_rage", 5, (level) -> "+" + (level * 2) + "% Berserker Class XP");
@@ -286,7 +286,7 @@ final class UpgradeChecker {
             perk.currentLevel = level;
 
             if (perk.currentLevel != perk.maxLevel && UpgradeChecker.checkDependencies(perk)) {
-                outputConsumer.accept("Missing " + perk.descriptionAtLevel.apply(perk.maxLevel - perk.currentLevel));
+                outputConsumer.accept("Missing " + perk.descriptionAtLevel.apply("catacombs_boss_luck".equals(perk.internalName) ? perk.currentLevel : (perk.maxLevel - perk.currentLevel)));
             }
         }
     }
