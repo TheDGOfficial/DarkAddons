@@ -89,14 +89,12 @@ final class ReplaceDiorite {
     }
 
     private static final void setGlass(@NotNull final World world, @NotNull final BlockPos pos, @NotNull final HashSet<BlockPos> coordinate) {
-        var i = 0;
         var index = 0;
         for (final var coord : coordinates) {
             if (coordinate == coord) {
-                index = i;
                 break;
             }
-            ++i;
+            ++index;
         }
         world.setBlockState(pos, glassStates[pillarColors[index]], 3);
     }
