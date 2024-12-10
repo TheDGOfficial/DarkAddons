@@ -133,7 +133,16 @@ final class Utils {
          * {@link EnumChatFormatting#values()} method each time.
          */
         @NotNull
-        private static final EnumChatFormatting[] ENUM_CHAT_FORMATTING_VALUES = EnumChatFormatting.values();
+        private static final String[] ENUM_CHAT_FORMATTING_VALUES = Utils.EnumChatFormattingHolder.getChatFormattings();
+
+        private static final String[] getChatFormattings() {
+            final var formattings = EnumChatFormatting.values();
+            final ArrayList<String> list = new ArrayList<>(formattings.length);
+            for (final var formatting : formattings) {
+                list.add(formatting.toString());
+            }
+            return list.toArray(new String[0]);
+        }
 
         /**
          * Holds all the formatting codes, to not call the
@@ -144,8 +153,7 @@ final class Utils {
 
         private static final String[] getUppercaseChatFormattings() {
             final ArrayList<String> uppercase = new ArrayList<>(Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES.length);
-            for (final var chatFormatting : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
-                final var code = chatFormatting.toString();
+            for (final var code : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
                 final var uppercaseCode = code.toUpperCase(Locale.ROOT);
 
                 uppercase.add(uppercaseCode);
@@ -178,8 +186,7 @@ final class Utils {
 
             var withoutControlCodes = text;
 
-            for (final var chatFormatting : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
-                final var code = chatFormatting.toString();
+            for (final var code : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
                 if (withoutControlCodes.contains(code)) {
                     withoutControlCodes = StringUtils.remove(withoutControlCodes, code);
                 }
