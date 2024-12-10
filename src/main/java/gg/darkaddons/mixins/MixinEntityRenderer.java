@@ -41,15 +41,20 @@ final class MixinEntityRenderer {
 
         if (DarkAddons.isFullBright()) {
             if (!this.updated) {
-                this.writeWhiteTexture$darkaddons();
+                this.updated = true;
+
+                final var texture = this.lightmapTexture;
+
+                for (var i = 0; 256 > i; ++i) {
+                    texture.getTextureData()[i] = -1;
+                }
+
+                this.lightmapTexture.updateDynamicTexture();
             }
 
-            this.updated = true;
-            MixinEntityRenderer.sanityOp$darkaddons(this.lightmapTexture, DynamicTexture::updateDynamicTexture);
-
             PublicUtils.endProfilingSection();
-
             ci.cancel();
+
             return;
         }
 
@@ -60,25 +65,6 @@ final class MixinEntityRenderer {
         this.updated = false;
 
         PublicUtils.endProfilingSection();
-    }
-
-    @Unique
-    private final void writeWhiteTexture$darkaddons() {
-        final var texture = MixinEntityRenderer.sanityCheck$darkaddons(this.lightmapTexture);
-
-        for (var i = 0; 256 > i; ++i) {
-            texture.getTextureData()[i] = -1;
-        }
-    }
-
-    @NotNull
-    @Unique
-    private static final DynamicTexture sanityCheck$darkaddons(@Nullable final DynamicTexture texture) {
-        if (null == texture) {
-            throw MixinUtils.shadowFail();
-        }
-
-        return texture;
     }
 
     @Unique
