@@ -49,7 +49,7 @@ final class MixinEntityRenderer {
                     texture.getTextureData()[i] = -1;
                 }
 
-                this.lightmapTexture.updateDynamicTexture();
+                texture.updateDynamicTexture();
             }
 
             PublicUtils.endProfilingSection();
@@ -65,11 +65,6 @@ final class MixinEntityRenderer {
         this.updated = false;
 
         PublicUtils.endProfilingSection();
-    }
-
-    @Unique
-    private static final void sanityOp$darkaddons(@Nullable final DynamicTexture texture, @SuppressWarnings("BoundedWildcard") @NotNull final Consumer<DynamicTexture> op) {
-        op.accept(MixinEntityRenderer.sanityCheck$darkaddons(texture));
     }
 
     @Override
