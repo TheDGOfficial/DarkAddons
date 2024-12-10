@@ -64,4 +64,38 @@ final class TestRemoveControlCodes {
 
         Assertions.assertEquals(text, Utils.removeControlCodes(textColored.toString()));
     }
+
+    @Test
+    final void testShort() {
+        Assertions.assertEquals("", Utils.removeControlCodes("§"));
+        Assertions.assertEquals("a", Utils.removeControlCodes("a§"));
+        Assertions.assertEquals("b", Utils.removeControlCodes("§ab§"));
+    }
+
+    @Test
+    final void testDoubleControlChar() {
+        Assertions.assertEquals("1", Utils.removeControlCodes("§§1"));
+    }
+
+    @Test
+    final void testPlainString() {
+        Assertions.assertEquals("bcdefgp", Utils.removeControlCodes("bcdefgp"));
+        Assertions.assertEquals("", Utils.removeControlCodes(""));
+    }
+
+    @Test
+    final void testSomeNormalTestCases() {
+        Assertions.assertEquals(
+            "You are not currently in a party.",
+            Utils.removeControlCodes("§r§cYou are not currently in a party.§r")
+        );
+        Assertions.assertEquals(
+            "Ancient Necron's Chestplate ✪✪✪✪",
+            Utils.removeControlCodes("§dAncient Necron's Chestplate §6✪§6✪§6✪§6✪")
+        );
+        Assertions.assertEquals(
+            "PROMOTE ➜ [158] Manager",
+            Utils.removeControlCodes("§5§o§a§lPROMOTE §8➜ §7[158§7] §5Manager")
+        );
+    }
 }

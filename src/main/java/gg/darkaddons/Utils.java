@@ -129,39 +129,6 @@ final class Utils {
         }
 
         /**
-         * Holds all the formatting codes, to not call the
-         * {@link EnumChatFormatting#values()} method each time.
-         */
-        @NotNull
-        private static final String[] ENUM_CHAT_FORMATTING_VALUES = Utils.EnumChatFormattingHolder.getChatFormattings();
-
-        private static final String[] getChatFormattings() {
-            final var formattings = EnumChatFormatting.values();
-            final ArrayList<String> list = new ArrayList<>(formattings.length);
-            for (final var formatting : formattings) {
-                list.add(formatting.toString());
-            }
-            return list.toArray(new String[0]);
-        }
-
-        /**
-         * Holds all the formatting codes, to not call the
-         * {@link EnumChatFormatting#values()} method each time.
-         */
-        @NotNull
-        private static final String[] ENUM_CHAT_FORMATTING_VALUES_UPPERCASE = Utils.EnumChatFormattingHolder.getUppercaseChatFormattings();
-
-        private static final String[] getUppercaseChatFormattings() {
-            final ArrayList<String> uppercase = new ArrayList<>(Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES.length);
-            for (final var code : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
-                final var uppercaseCode = code.toUpperCase(Locale.ROOT);
-
-                uppercase.add(uppercaseCode);
-            }
-            return uppercase.toArray(new String[0]);
-        }
-
-        /**
          * Removes Minecraft color and formatting codes from the given string.
          * <p>
          * Note that unlike other methods this doesn't utilize a
@@ -177,33 +144,37 @@ final class Utils {
         @NotNull
         private static final String removeControlCodes(@Nullable final String text) {
             if (null == text) {
+                return null;
+            }
+
+            final var length = text.length();
+
+            if (0 == length) {
                 return "";
             }
 
-            if (!text.contains(Utils.CONTROL_START)) {
+            var nextFormattingSequence = text.indexOf(Utils.CONTROL_START);
+
+            if (-1 == nextFormattingSequence) {
                 return text;
             }
 
-            var withoutControlCodes = text;
+            final var cleanedString = new StringBuilder(length);
 
-            for (final var code : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES) {
-                if (withoutControlCodes.contains(code)) {
-                    withoutControlCodes = StringUtils.remove(withoutControlCodes, code);
-                }
+            var readIndex = 0;
+
+            while (-1 != nextFormattingSequence) {
+                cleanedString.append(text, readIndex, nextFormattingSequence);
+
+                readIndex = nextFormattingSequence + 2;
+                nextFormattingSequence = text.indexOf(Utils.CONTROL_START, readIndex);
+
+                readIndex = Math.min(length, readIndex);
             }
 
-            for (final var uppercaseCode : Utils.EnumChatFormattingHolder.ENUM_CHAT_FORMATTING_VALUES_UPPERCASE) {
-                if (withoutControlCodes.contains(uppercaseCode)) {
-                    withoutControlCodes = StringUtils.remove(withoutControlCodes, uppercaseCode);
-                }
-            }
+            cleanedString.append(text, readIndex, length);
 
-            // Chroma color is not on EnumChatFormatting, needs manual handling.
-            if (withoutControlCodes.contains(Utils.CONTROL_START + 'z')) {
-                withoutControlCodes = StringUtils.remove(withoutControlCodes, Utils.CONTROL_START + 'z');
-            }
-
-            return withoutControlCodes.contains(Utils.CONTROL_START + 'Z') ? StringUtils.remove(withoutControlCodes, Utils.CONTROL_START + 'Z') : withoutControlCodes;
+            return cleanedString.toString();
         }
     }
 
