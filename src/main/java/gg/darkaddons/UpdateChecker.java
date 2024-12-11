@@ -52,6 +52,8 @@ final class UpdateChecker {
         }
 
         DarkAddons.queueWarning("A new version of " + DarkAddons.MOD_NAME + " is available: v" + latestVersion + ". You are running " + DarkAddons.class.getSimpleName() + " v" + currentVersion + ". It is recommended to always use the latest version available of the mod, please update when convenient.");
+        DarkAddons.queueWarning("The latest release of the mod can be installed from GitHub at: https://github.com/TheDGOfficial/DarkAddons/releases");
+        DarkAddons.queueWarning("Version upgrades are always recommended and will include various bug fixes, performance enchancements, and new features. Instructions for installing from GitHub: Head down to the Assets section and expand it then download the JAR file (not source code!), and put in mods folder as usual. Remove any older versions to avoid conflicts.");
         return UpdateChecker.UpdateCheckerResult.OUT_OF_DATE;
     }
 
