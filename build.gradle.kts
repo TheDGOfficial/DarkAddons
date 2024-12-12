@@ -16,7 +16,7 @@ import java.nio.charset.StandardCharsets
 import java.util.Properties
 
 plugins {
-    //kotlin("jvm") version "2.1.20-dev-2782"
+    //kotlin("jvm") version "2.1.20-dev-6370"
     id("com.gradleup.shadow") version "8.3.5"
     id("gg.essential.loom") version "1.6.21"
     id("dev.architectury.architectury-pack200") version "0.1.3"

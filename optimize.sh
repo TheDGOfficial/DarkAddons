@@ -10,7 +10,7 @@ while IFS='=' read -r key value; do
   fi
 done < versions.properties
 
-#KOTLIN_VERSION=2.1.20-dev-2782
+#KOTLIN_VERSION=2.1.20-dev-6370
 
 GUAVA_VERSION=${versionProperties["guava.version"]}
 
