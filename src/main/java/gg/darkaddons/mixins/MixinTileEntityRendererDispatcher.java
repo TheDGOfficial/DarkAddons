@@ -15,8 +15,10 @@ final class MixinTileEntityRendererDispatcher {
         super();
     }
 
-    @Inject(method = "renderTileEntityAt(Lnet/minecraft/tileentity/TileEntity;DDDFI)V", at = @At("HEAD"))
+    @Inject(method = "renderTileEntityAt(Lnet/minecraft/tileentity/TileEntity;DDDFI)V", at = @At("HEAD"), cancellable = true)
     private final void renderTileEntityAt$darkaddons(@NotNull final TileEntity tileEntityIn, final double x, final double y, final double z, final float partialTicks, final int destroyStage, @NotNull final CallbackInfo ci) {
-        DarkAddons.handleRenderTileEntity(tileEntityIn);
+        if (!DarkAddons.handleRenderTileEntity(tileEntityIn)) {
+            ci.cancel();
+        }
     }
 }

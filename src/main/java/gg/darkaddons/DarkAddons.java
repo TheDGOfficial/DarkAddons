@@ -909,9 +909,10 @@ public final class DarkAddons {
      * Handles tile entity render.
      *
      * @param tileEntity The tile entity that is going to be rendered.
+     * @return Whether to continue rendering or not.
      */
-    public static final void handleRenderTileEntity(@NotNull final TileEntity tileEntity) {
-        HideSigns.handleRenderTileEntity(tileEntity);
+    public static final boolean handleRenderTileEntity(@NotNull final TileEntity tileEntity) {
+        return HideSigns.handleRenderTileEntity(tileEntity);
     }
 
     /**

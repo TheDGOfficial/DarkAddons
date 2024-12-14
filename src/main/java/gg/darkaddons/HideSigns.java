@@ -18,12 +18,15 @@ final class HideSigns {
         throw Utils.staticClassException();
     }
 
-    static final void handleRenderTileEntity(@NotNull final TileEntity tileEntity) {
-        final var mc = Minecraft.getMinecraft();
+    static final boolean handleRenderTileEntity(@NotNull final TileEntity tileEntity) {
         McProfilerHelper.startSection("darkaddons_hide_signs");
+        final var mc = Minecraft.getMinecraft();
         if (Config.isHideSigns() && null == mc.currentScreen && tileEntity instanceof TileEntitySign && (DarkAddons.isInDungeons() || DarkAddons.isPlayerInCrystalHollows())) {
             mc.theWorld.removeTileEntity(tileEntity.getPos());
+            McProfilerHelper.endSection();
+            return false;
         }
         McProfilerHelper.endSection();
+        return true;
     }
 }
