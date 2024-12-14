@@ -912,7 +912,7 @@ public final class DarkAddons {
      * @return Whether to continue rendering or not.
      */
     public static final boolean handleRenderTileEntity(@NotNull final TileEntity tileEntity) {
-        return HideSigns.handleRenderTileEntity(tileEntity);
+        return HideSigns.handleRenderTileEntity(tileEntity) && HideEndPortals.handleRenderTileEntity(tileEntity);
     }
 
     /**

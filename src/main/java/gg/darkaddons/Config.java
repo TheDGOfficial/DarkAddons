@@ -428,6 +428,13 @@ final class Config extends Vigilant {
     )
     private static boolean hideExperienceOrbs;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "Hide End Portals",
+        description = "Hides End Portals at Master Mode Floor 7 Phase 5, as even those 4 end portals below the relics cause about 1-2% FPS loss due to their detailed texture and suboptimal rendering code.",
+        category = "Performance", subcategory = "Experimental"
+    )
+    private static boolean hideEndPortals;
+
     /*@Property(
         type = PropertyType.SELECTOR, name = "Hide Wither King",
         description = "Hides Wither King during Phase 5 on Master Mode Floor 7 to improve FPS, with the specified mode. Hide just doesn't render it but keeps it as an entity in the world which will still tick it. Remove will completely remove it from the world as if it didn't exist at all, and disabled will not change anything.",
@@ -1380,6 +1387,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.hideExperienceOrbs;
+    }
+
+    static final boolean isHideEndPortals() {
+        Config.checkUninit();
+
+        return Config.hideEndPortals;
     }
 
     /*static final int getHideWitherKing() {
