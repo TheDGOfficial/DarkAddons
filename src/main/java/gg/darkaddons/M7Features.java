@@ -405,7 +405,7 @@ final class M7Features {
 
         final var player = Minecraft.getMinecraft().thePlayer;
 
-        if (Config.isShowStatueBox() && (-1L != DungeonTimer.INSTANCE.getPhase4ClearTime() || (player != null && player.getPosition().getY() <= 45)) && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
+        if (Config.isShowStatueBox() && (-1L != DungeonTimer.INSTANCE.getPhase4ClearTime() || (null != player && player.getPosition().getY() <= 45)) && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
             final var width = Config.isSharperDragonBoundingBox() ? Config.getDragonBoundingBoxWidth() : 3.69F;
 
             for (final var drag : WitherKingDragons.getValues()) {

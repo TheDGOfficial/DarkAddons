@@ -43,7 +43,6 @@ final class MixinEventBus {
         } else if (tickEvent && event instanceof TickEvent.PlayerTickEvent) {
             DarkAddons.handlePlayerTick((TickEvent.PlayerTickEvent) event);
         } else if (event instanceof final ClientChatReceivedEvent e) {
-
             DarkAddons.handleClientChatReceived(e);
         } else if (event instanceof GuiOpenEvent) {
             DarkAddons.handleGuiOpen((GuiOpenEvent) event);
