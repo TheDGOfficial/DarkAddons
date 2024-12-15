@@ -156,7 +156,7 @@ final class M7Features {
         //noinspection ChainOfInstanceofChecks
         if (Config.isDragonHud() && p instanceof S2CPacketSpawnGlobalEntity) {
             M7Features.handleS2CPacketSpawnGlobalEntity((S2CPacketSpawnGlobalEntity) p);
-        } else if (Config.isSpawningNotification() && p instanceof final S2APacketParticles packet) {
+        } else if ((Config.isSpawningNotification() || Config.isDragonHud()) && p instanceof final S2APacketParticles packet) {
 
             if (20 != packet.getParticleCount() || !Utils.compareDoubleExact(packet.getYCoordinate(), 19.0) || EnumParticleTypes.FLAME != packet.getParticleType() || !Utils.compareFloatExact(packet.getXOffset(), 2.0F) || !Utils.compareFloatExact(packet.getYOffset(), 3.0F) || !Utils.compareFloatExact(packet.getZOffset(), 2.0F) || 0.0F != packet.getParticleSpeed() || !packet.isLongDistance() || 0.0D != packet.getXCoordinate() % 1.0D || 0.0D != packet.getZCoordinate() % 1.0D) {
                 return;
@@ -181,15 +181,15 @@ final class M7Features {
                     M7Features.debugLogAliveDragons();
                 }*/
 
-                //if (Config.isSpawningNotification()) {
-                final var color = owner.getChatColor();
-                final var name = owner.getEnumName();
+                if (Config.isSpawningNotification()) {
+                    final var color = owner.getChatColor();
+                    final var name = owner.getEnumName();
 
-                //UChat.chat("§c§lThe " + color + "§l" + name + " §c§ldragon is spawning!");
-                //if (!owner.isDestroyed()) {
-                GuiManager.queueTitle(color + "§l" + name + " §c§lis spawning!"); // shown for 2 seconds (implementation detail)
-                //}
-                //}
+                    //UChat.chat("§c§lThe " + color + "§l" + name + " §c§ldragon is spawning!");
+                    //if (!owner.isDestroyed()) {
+                    GuiManager.queueTitle(color + "§l" + name + " §c§lis spawning!"); // shown for 2 seconds (implementation detail)
+                    //}
+                }
 
                 return System.currentTimeMillis() + 5_000L;
             });
