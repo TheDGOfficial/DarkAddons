@@ -174,6 +174,7 @@ final class UpgradeChecker {
             registerPerk(UpgradeType.MORE_DPS, "edrag_cd", 5, (level) -> "+" + (level * 2) + " Crit Damage on Ender Dragon pet", Pet.allPets.stream().filter((pet) -> "ENDER_DRAGON".equals(pet.internalName)).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Ender Dragon in Pets!")));
             registerPerk(UpgradeType.MORE_DPS, "permanent_strength", 5, (level) -> "+" + level + " Strength");
             registerPerk(UpgradeType.MORE_DPS, "fero_vs_dragons", 5, (level) -> "+" + (level * 2) + " Ferocity against Dragons");
+            registerPerk(UpgradeType.MORE_DPS, "blessing_of_time", 3, (level) -> "+" + (level * 2) + " Strength");
 
             registerPerk(UpgradeType.MORE_RNG, "catacombs_boss_luck", 4, (level) -> "+" + (level == 3 ? 5 : level == 2 ? 7 : 9) + "% RNG");
             registerPerk(UpgradeType.MORE_RNG, "catacombs_looting", 5, (level) -> "+" + (level * 2) + "% quality on Mob drops");
@@ -286,7 +287,7 @@ final class UpgradeChecker {
             perk.currentLevel = level;
 
             if (perk.currentLevel != perk.maxLevel && UpgradeChecker.checkDependencies(perk)) {
-                outputConsumer.accept("Missing " + perk.descriptionAtLevel.apply("catacombs_boss_luck".equals(perk.internalName) ? perk.currentLevel : (perk.maxLevel - perk.currentLevel)));
+                outputConsumer.accept("Missing " + perk.descriptionAtLevel.apply("catacombs_boss_luck".equals(perk.internalName) ? perk.currentLevel : (perk.maxLevel - perk.currentLevel)) + " from " + perk.internalName);
             }
         }
     }
