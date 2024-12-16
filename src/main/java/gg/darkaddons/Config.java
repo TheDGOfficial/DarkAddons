@@ -607,6 +607,13 @@ final class Config extends Vigilant {
     private static boolean sendMessageForScoreAtBossEntry;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Send Title On 301/302 Score",
+        description = "Sends a title along with a sound effect when 301 score with 0 deaths or 302 score with 1+ deaths has been reached. Mainly useful for M7.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean sendTitleOn301Score;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Send Message on Melody Terminal",
         description = "Sends message when opening melody terminal or when progressing on it.",
         category = "Dungeons", subcategory = "Helpers"
@@ -1003,6 +1010,7 @@ final class Config extends Vigilant {
 
         this.addDependency("chromaSkyblock", "chromaToggle");
         this.addDependency("sendMessageForScoreAtBossEntry", "sendMessageOn300Score");
+        this.addDependency("sendTitleOn301Score", "sendMessageOn300Score");
         this.addDependency("sendEnrageSkipHelperMessage", "maxorHPDisplay");
 
         this.addDependencies2();
@@ -1237,6 +1245,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.sendMessageForScoreAtBossEntry;
+    }
+
+    static final boolean isSendTitleOn301Score() {
+        Config.checkUninit();
+
+        return Config.sendTitleOn301Score;
     }
 
     static final boolean isSendMessageOnMelodyTerminal() {

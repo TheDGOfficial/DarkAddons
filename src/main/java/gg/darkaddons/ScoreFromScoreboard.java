@@ -15,6 +15,7 @@ final class ScoreFromScoreboard {
     private static boolean blazeDoneReceived;
     private static int previousScore;
     private static boolean hasSaidScoreAtBossEntry;
+    private static boolean sentTitleOn301Score;
 
     ScoreFromScoreboard() {
         super();
@@ -40,6 +41,7 @@ final class ScoreFromScoreboard {
         ScoreFromScoreboard.blazeDoneReceived = false;
         ScoreFromScoreboard.previousScore = 0;
         ScoreFromScoreboard.hasSaidScoreAtBossEntry = false;
+        ScoreFromScoreboard.sentTitleOn301Score = false;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
@@ -77,10 +79,20 @@ final class ScoreFromScoreboard {
             Skytils.sendMessageQueue.add("/pc 270 score");
         }
 
+        final var stScore = sc.getTotalScore().get();
+        final var highestScore = Math.max(score, stScore);
+        final var deaths = sc.getDeaths().get();
+        final var scoreReq = deaths >= 1 ? 302 : 301;
+
+        if (highestScore >= scoreReq && !ScoreFromScoreboard.sentTitleOn301Score) {
+            ScoreFromScoreboard.sentTitleOn301Score = true;
+            GuiManager.createTitle("§a✔ " + scoreReq + " Score!", "§a§lYou can go in.", 60, 60, true, GuiManager.Sound.LEVEL_UP);
+        }
+
         final var diff = rawScore - ScoreFromScoreboard.previousScore;
 
         if (diff >= 28 || rawScore >= 300) {
-            ScoreFromScoreboard.realScoreHook(Math.max(rawScore, sc.getTotalScore().get()), sc.getDeaths().get());
+            ScoreFromScoreboard.realScoreHook(Math.max(rawScore, stScore), deaths);
         }
 
         ScoreFromScoreboard.previousScore = rawScore;
