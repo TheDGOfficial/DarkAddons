@@ -18,7 +18,7 @@ final class DialogueSkipHelper {
         final var clean = Utils.removeControlCodes(message);
 
         if ("[BOSS] The Watcher: Let's see how you can handle this.".equals(clean)) {
-            GuiManager.createTitle("§4Kill Blood Mobs!", 60, true, GuiManager.Sound.PLING);
+            GuiManager.createTitle("§4Kill Blood Mobs!", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
         }
     }
 }
