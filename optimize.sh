@@ -10,6 +10,8 @@ while IFS='=' read -r key value; do
   fi
 done < versions.properties
 
+MAVEN_DEPENDENCY_PLUGIN_VERSION=3.8.1
+
 #KOTLIN_VERSION=2.1.20-dev-6370
 
 GUAVA_VERSION=${versionProperties["guava.version"]}
@@ -51,7 +53,7 @@ ensure_m2_artifact_exists() {
  ARTIFACT_PATH=$4
 
  if [ ! -f "$ARTIFACT_PATH" ]; then
-  ./mvnw org.apache.maven.plugins:maven-dependency-plugin:3.8.0:get -DremoteRepositories=https://repo.essential.gg/repository/maven-public/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+  ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/repository/maven-public/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
  fi
 }
 
