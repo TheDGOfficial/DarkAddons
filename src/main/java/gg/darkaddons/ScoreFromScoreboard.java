@@ -86,7 +86,7 @@ final class ScoreFromScoreboard {
 
         if (highestScore >= scoreReq && !ScoreFromScoreboard.sentTitleOn301Score) {
             ScoreFromScoreboard.sentTitleOn301Score = true;
-            GuiManager.createTitle("§a✔ " + scoreReq + " Score!", "§a§lYou can go in.", 60, 60, true, GuiManager.Sound.LEVEL_UP);
+            GuiManager.createTitle("§a✔ " + highestScore + " Score!", "§a§lYou can go in.", 60, 60, true, GuiManager.Sound.LEVEL_UP);
         }
 
         final var diff = rawScore - ScoreFromScoreboard.previousScore;
