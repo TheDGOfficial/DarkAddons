@@ -293,7 +293,7 @@ final class AdditionalM7Features {
                     GuiManager.createTitle("§bSwap to edrag!", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
                 }
             }
-            case "[BOSS] Wither King: You.. again?", "[BOSS] Wither King: Ohhh?" -> {
+            case "[BOSS] Wither King: You... again?", "[BOSS] Wither King: Ohhh?" -> {
                 AdditionalM7Features.phase5Started = true;
                 if (Config.isPhase5StartingNotification()) {
                     final var msg = Utils.chromaIfEnabledOrAqua() + "Phase 5 starting";
