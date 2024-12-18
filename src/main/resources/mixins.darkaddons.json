@@ -73,7 +73,10 @@
         "MixinFontRenderer",
         "MixinGuiNewChat",
         "MixinIngameChatManager",
-        "MixinSBADungeonManager"
+        "MixinSBADungeonManager",
+        "MixinNEUUtils",
+        "MixinOverflowAnimations",
+        "MixinWorldAgeDisplay"
     ],
     "server": [
     ],

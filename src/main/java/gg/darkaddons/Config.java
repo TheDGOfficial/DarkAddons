@@ -435,6 +435,13 @@ final class Config extends Vigilant {
     )
     private static boolean hideEndPortals;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "Hide Skulls",
+        description = "Hides Skulls at Master Mode Floor 7 Phase 5. Inside Dungeons, there's usually 500+ TileEntitySkull's being ticked and like 64 of them being rendered at all times.",
+        category = "Performance", subcategory = "Experimental"
+    )
+    private static boolean hideSkulls;
+
     /*@Property(
         type = PropertyType.SELECTOR, name = "Hide Wither King",
         description = "Hides Wither King during Phase 5 on Master Mode Floor 7 to improve FPS, with the specified mode. Hide just doesn't render it but keeps it as an entity in the world which will still tick it. Remove will completely remove it from the world as if it didn't exist at all, and disabled will not change anything.",
@@ -1407,6 +1414,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.hideEndPortals;
+    }
+
+    static final boolean isHideSkulls() {
+        Config.checkUninit();
+
+        return Config.hideSkulls;
     }
 
     /*static final int getHideWitherKing() {
