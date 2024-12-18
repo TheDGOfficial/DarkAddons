@@ -76,7 +76,12 @@
         "MixinSBADungeonManager",
         "MixinNEUUtils",
         "MixinOverflowAnimations",
-        "MixinWorldAgeDisplay"
+        "MixinWorldAgeDisplay",
+        "MixinStringUtilsKt",
+        "MixinTextUtils",
+        "MixinNEUStringUtils",
+        "MixinVanillaStringUtils",
+        "MixinEnumChatFormatting"
     ],
     "server": [
     ],
