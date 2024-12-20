@@ -102,7 +102,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Enrage Skip Helper Message",
-        description = "Sends a message to party chat when Maxor has enough damage dealt for the first DPS phase (You only have to deal 25% damage, a.k.a lower it to 75% hp in the first DPS phase).",
+        description = "Sends a message to party chat when Maxor has enough damage dealt for the first DPS phase (You only have to deal 25%% damage, a.k.a lower it to 75%% hp in the first DPS phase).",
         category = "Dungeons", subcategory = "HUD"
     )
     private static boolean sendEnrageSkipHelperMessage;
@@ -430,7 +430,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Hide End Portals",
-        description = "Hides End Portals at Master Mode Floor 7 Phase 5, as even those 4 end portals below the relics cause about 1-2% FPS loss due to their detailed texture and suboptimal rendering code.",
+        description = "Hides End Portals at Master Mode Floor 7 Phase 5, as even those 4 end portals below the relics cause about 1-2%% FPS loss due to their detailed texture and suboptimal rendering code.",
         category = "Performance", subcategory = "Experimental"
     )
     private static boolean hideEndPortals;
