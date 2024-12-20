@@ -3,6 +3,7 @@ package gg.darkaddons;
 import net.minecraft.client.Minecraft;
 import net.minecraft.scoreboard.ScorePlayerTeam;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +24,12 @@ final class ScoreboardUtil {
         throw Utils.staticClassException();
     }
 
-    @NotNull
-    static final String cleanSB(@NotNull final String scoreboard) {
+    @Nullable
+    static final String cleanSB(@Nullable final String scoreboard) {
+        if (null == scoreboard) {
+            return null;
+        }
+
         final var chars = Utils.removeControlCodes(scoreboard).toCharArray();
 
         final var builder = new StringBuilder(chars.length);

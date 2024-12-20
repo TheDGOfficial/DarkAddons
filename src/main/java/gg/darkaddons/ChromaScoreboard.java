@@ -23,8 +23,8 @@ final class ChromaScoreboard {
 
     static final void handlePacket(@NotNull final Packet<?> packet) {
         if (Config.isChromaToggle() && Config.isChromaSkyblock() && DarkAddons.isUsingSBA() && packet instanceof S3BPacketScoreboardObjective) {
-            final var currentObjective = ScoreboardUtil.cleanSB(Utils.removeControlCodes(((S3BPacketScoreboardObjective) packet).func_149337_d()));
-            if (currentObjective.contains("SKYBLOCK") || currentObjective.contains("SKIBLOCK")) {
+            final var currentObjective = ScoreboardUtil.cleanSB(((S3BPacketScoreboardObjective) packet).func_149337_d());
+            if (null != currentObjective && (currentObjective.contains("SKYBLOCK") || currentObjective.contains("SKIBLOCK"))) {
                 ((AccessorS3BPacketScoreboardObjective) packet).setObjectiveValue("§z§lSKYBLOCK");
             }
         }
