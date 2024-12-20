@@ -1127,7 +1127,7 @@ public final class DarkAddons {
     }
 
     private static final void checkForSBA() {
-        DarkAddons.usingSBA = Loader.isModLoaded("skyblockaddons");
+        DarkAddons.usingSBA = Loader.isModLoaded("skyblockaddons") || Loader.isModLoaded("sbaunofficial");
     }
 
     /*private static final void preloadMixinClasses() {
