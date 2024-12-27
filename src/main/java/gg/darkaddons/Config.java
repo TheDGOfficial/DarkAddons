@@ -923,6 +923,13 @@ final class Config extends Vigilant {
     )
     private static boolean burgersDone;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "Prioritize Dice",
+        description = "Prioritizes High Class Archfiend Dice no matter the mayor for Blaze Slayer.",
+        category = "Slayers", subcategory = "HUD", triggerActionOnInitialization = false
+    )
+    private static boolean prioritizeDice;
+
     private static boolean initialized;
 
     @NotNull
@@ -977,6 +984,11 @@ final class Config extends Vigilant {
     private static final void updateBurgersDone(final boolean state) {
         // Delay needed because the listener runs before the value is actually changed.
         DarkAddons.runOnceInNextTick("config_hook_update_burgers_done", SlayerRNGDisplay::markUpdateNeeded);
+    }
+
+    private static final void updatePrioritizeDice(final boolean state) {
+        // Delay needed because the listener runs before the value is actually changed.
+        DarkAddons.runOnceInNextTick("config_hook_update_prioritize_dice", SlayerRNGDisplay::markUpdateNeeded);
     }
 
     private static final void updateBlockPosOptimizer(final boolean state) {
@@ -1042,6 +1054,7 @@ final class Config extends Vigilant {
         this.addDependency("classAverage50DisplayMode", "classAverage50Display");
 
         this.addDependency("burgersDone", "slayerRngDisplay");
+        this.addDependency("prioritizeDice", "slayerRngDisplay");
 
         this.addDependency("keepHoldingToCreateMoreGhostBlocks", "createGhostBlockWithKey");
         this.addDependency("allowGhostBlockingBedrockAndBarrier", "createGhostBlockWithKey");
@@ -1067,6 +1080,7 @@ final class Config extends Vigilant {
         this.registerListener("classAverage50DisplayMode", Config::reSyncClassXPUnconditionally);
 
         this.registerListener("burgersDone", Config::updateBurgersDone);
+        this.registerListener("prioritizeDice", Config::updatePrioritizeDice);
         this.registerListener("blockPosOptimizer", Config::updateBlockPosOptimizer);
         this.registerListener("nullStreamOptimizer", Config::updateNullStreamOptimizer);
 
@@ -1804,6 +1818,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.burgersDone;
+    }
+
+    static final boolean isPrioritizeDice() {
+        Config.checkUninit();
+
+        return Config.prioritizeDice;
     }
 
     static final boolean isAutoSalvation() {

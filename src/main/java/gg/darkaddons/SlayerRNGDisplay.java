@@ -503,7 +503,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
         DUPLEX_I_BOOK(/*"ENCHANTMENT_ULTIMATE_REITERATE_1"*/"ENCHANTED_BOOK-ULTIMATE_REITERATE-1", 28_214, 1.772_2D, SlayerRNGDisplay.Slayer.BLAZE, 6, 4, 3, SlayerRNGDisplay.SellingMethod.BAZAAR),
 
-        HIGH_CLASS_ARCHFIEND_DICE(230_240, 0.217_2D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> "Aatrox".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 2),
+        HIGH_CLASS_ARCHFIEND_DICE(230_240, 0.217_2D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 5 : "Aatrox".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 2),
 
         GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 6_357, 7.865_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 1, SlayerRNGDisplay.SellingMethod.BAZAAR),
 
