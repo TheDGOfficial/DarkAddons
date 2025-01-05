@@ -83,7 +83,8 @@
         "MixinVanillaStringUtils",
         "MixinEnumChatFormatting",
         "MixinDSMSelectAllColourSolver",
-        "MixinSelectAllColorSolver"
+        "MixinSelectAllColorSolver",
+        "MixinNEU"
     ],
     "server": [
     ],
