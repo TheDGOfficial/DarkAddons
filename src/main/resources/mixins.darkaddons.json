@@ -84,7 +84,11 @@
         "MixinEnumChatFormatting",
         "MixinDSMSelectAllColourSolver",
         "MixinSelectAllColorSolver",
-        "MixinNEU"
+        "MixinNEU",
+        "MixinSlayerStatic",
+        "MixinSlayer",
+        "MixinDemonlordSlayer",
+        "MixinSlayerPacket"
     ],
     "server": [
     ],
