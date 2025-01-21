@@ -65,11 +65,11 @@ jobs:
        ~/.m2
 
    - name: Initialize CodeQL
-     uses: github/codeql-action/init@v3.28.1
+     uses: github/codeql-action/init@v3.28.2
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
-      tools: https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.20.1/codeql-bundle-linux64.tar.gz
+      tools: https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.20.2/codeql-bundle-linux64.tar.gz
       #packs: |
       # Marcono1234/codeql-custom-queries-java@0.0.1
 
@@ -85,7 +85,7 @@ jobs:
       if-no-files-found: error
 
    - name: Perform CodeQL Analysis
-     uses: github/codeql-action/analyze@v3.28.1
+     uses: github/codeql-action/analyze@v3.28.2
      with:
       category: "/language:${{ matrix.language }}"
       upload: failure-only
@@ -116,7 +116,7 @@ jobs:
       output: sarif-results/${{ matrix.language }}.sarif
 
    - name: Upload CodeQL Analysis Results
-     uses: github/codeql-action/upload-sarif@v3.28.1
+     uses: github/codeql-action/upload-sarif@v3.28.2
      with:
       sarif_file: sarif-results/${{ matrix.language }}.sarif
 
