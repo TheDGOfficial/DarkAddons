@@ -22,7 +22,7 @@ final class MixinKeyBinding {
         throw MixinUtils.shadowFail();
     }
 
-    @Inject(method = "isKeyDown", at = @At("TAIL"), cancellable = true)
+    @Inject(method = "isKeyDown", at = @At("RETURN"), cancellable = true)
     private final void isKeyDown$darkaddons(@NotNull final CallbackInfoReturnable<Boolean> cir) {
         final var originalReturnValueAsPrimitiveInverted = MixinKeyBinding.isOriginalReturnValueAsPrimitiveInverted$darkaddons(cir);
 

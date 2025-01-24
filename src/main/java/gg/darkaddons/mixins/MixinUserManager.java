@@ -18,7 +18,7 @@ final class MixinUserManager {
     }
 
     @SuppressWarnings("unchecked")
-    @Inject(method = "accept", remap = false, at = @At("TAIL"))
+    @Inject(method = "accept", remap = false, at = @At("RETURN"))
     private final void afterLoadWhitelist$darkaddons(@NotNull final Integer accepted, @NotNull final CallbackInfo ci) {
         try {
             final var outerClassField = this.getClass().getDeclaredField("this$0");

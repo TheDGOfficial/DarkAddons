@@ -30,7 +30,7 @@ final class MixinConfigCore {
         throw MixinUtils.shadowFail();
     }
 
-    @Inject(method = "<clinit>", remap = false, at = @At(value = "TAIL"))
+    @Inject(method = "<clinit>", remap = false, at = @At(value = "RETURN"))
     private static final void afterStaticInitializer$darkaddons(@NotNull final CallbackInfo ci) {
         // Save before cleanly exiting the game via "Quit Game" in the main menu in case periodic save didn't kick in after changing settings in time (or disabled)
         DarkAddons.addShutdownTask(MixinConfigCore::saveAll);

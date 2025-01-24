@@ -18,7 +18,7 @@ final class MixinDefaultSocketChannelConfig {
         super();
     }
 
-    @Inject(method = "<init>", remap = false, at = @At("TAIL"))
+    @Inject(method = "<init>", remap = false, at = @At("RETURN"))
     private final void init$darkaddons(@NotNull final SocketChannel channel, @NotNull final Socket javaSocket, @NotNull final CallbackInfo ci) {
         OptimizeLatency.configureChannelConfig((ChannelConfig) (Object) this, () -> false);
     }

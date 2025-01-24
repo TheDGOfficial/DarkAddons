@@ -23,7 +23,7 @@ final class MixinIngameChatManager {
         super();
     }
 
-    @Inject(method = "addToSentMessages", at = @At(value = "TAIL"))
+    @Inject(method = "addToSentMessages", at = @At(value = "RETURN"))
     private final void afterAddToSentMessages$darkaddons(@NotNull final String message, @NotNull final CallbackInfo ci) {
         final var sentMessages = this.getSentMessages();
 

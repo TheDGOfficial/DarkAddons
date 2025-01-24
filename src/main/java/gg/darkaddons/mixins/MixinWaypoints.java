@@ -29,7 +29,7 @@ final class MixinWaypoints {
         PublicUtils.startProfilingSection("skytils_render_waypoints");
     }
 
-    @Inject(method = "onWorldRender", at = @At("TAIL"), remap = false)
+    @Inject(method = "onWorldRender", at = @At("RETURN"), remap = false)
     private final void onWorldRenderPost$darkaddons(@NotNull final RenderWorldLastEvent event, @NotNull final CallbackInfo ci) {
         PublicUtils.endProfilingSection();
     }

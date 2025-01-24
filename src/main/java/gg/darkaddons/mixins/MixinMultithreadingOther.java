@@ -31,7 +31,7 @@ final class MixinMultithreadingOther {
     @Nullable
     private static ThreadPoolExecutor POOL;
 
-    @Inject(method = "<clinit>", remap = false, at = @At("TAIL"))
+    @Inject(method = "<clinit>", remap = false, at = @At("RETURN"))
     private static final void afterStaticInitializer$darkaddons(@NotNull final CallbackInfo ci) {
         if (null == MixinMultithreadingOther.POOL) {
             throw MixinUtils.shadowFail();

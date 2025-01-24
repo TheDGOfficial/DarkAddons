@@ -26,7 +26,7 @@ final class MixinRenderManager {
         DarkAddons.doRenderEntityPre(entity);
     }
 
-    @Inject(method = "doRenderEntity", at = @At("TAIL"))
+    @Inject(method = "doRenderEntity", at = @At("RETURN"))
     private final void doRenderEntityPost$darkaddons(@NotNull final Entity entity, final double x, final double y, final double z, final float entityYaw, final float partialTicks, final boolean p_147939_10_, @NotNull final CallbackInfoReturnable<Boolean> cir) {
         DarkAddons.doRenderEntityPost();
     }

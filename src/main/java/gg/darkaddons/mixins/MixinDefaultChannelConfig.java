@@ -16,7 +16,7 @@ final class MixinDefaultChannelConfig {
         super();
     }
 
-    @Inject(method = "<init>", remap = false, at = @At("TAIL"))
+    @Inject(method = "<init>", remap = false, at = @At("RETURN"))
     private final void init$darkaddons(@NotNull final Channel channel, @NotNull final CallbackInfo ci) {
         OptimizeLatency.configureChannelConfig((ChannelConfig) (Object) this, () -> true); // Skip socket-specific options, those should be set from MixinDefaultSocketChannelConfig, because this mixin's init method is called for DefaultSocketChannelConfig's as well, and at that point in time, the javaSocket is null, it causes NPE otherwise.
     }

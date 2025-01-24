@@ -14,7 +14,7 @@ final class MixinWorldAgeDisplay {
         super();
     }
 
-    @Inject(method = "getToggled", at = @At(value = "TAIL"), remap = false, cancellable = true)
+    @Inject(method = "getToggled", at = @At(value = "RETURN"), remap = false, cancellable = true)
     private final void getToggled$darkaddons(@NotNull final CallbackInfoReturnable<Boolean> cir) {
         final var origResult = cir.getReturnValue();
         if (origResult) {

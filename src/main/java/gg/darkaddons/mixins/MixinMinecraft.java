@@ -27,7 +27,7 @@ final class MixinMinecraft {
         DarkAddons.handleGameLoopPre();
     }
 
-    @Inject(method = "runGameLoop", at = @At("TAIL"))
+    @Inject(method = "runGameLoop", at = @At("RETURN"))
     private final void runGameLoopPost$darkaddons(@NotNull final CallbackInfo ci) {
         DarkAddons.handleGameLoopPost();
     }

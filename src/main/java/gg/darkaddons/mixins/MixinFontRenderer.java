@@ -39,7 +39,7 @@ final class MixinFontRenderer {
         return MixinFontRenderer.cachedLowerCaseText;
     }
 
-    @Inject(method = "renderStringAtPos", at = @At(value = "TAIL"))
+    @Inject(method = "renderStringAtPos", at = @At(value = "RETURN"))
     private final void renderStringAtPosEnd$darkaddons(@NotNull final String text, final boolean shadow, @NotNull final CallbackInfo ci) {
         MixinFontRenderer.cachedLowerCaseText = null;
     }
