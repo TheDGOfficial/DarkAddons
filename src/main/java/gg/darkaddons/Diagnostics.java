@@ -75,6 +75,12 @@ final class Diagnostics {
     @NotNull
     private static final ExecutorService diagnosticsExecutor = Executors.newSingleThreadExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Diagnostics Thread"));
 
+    static final void init() {
+        if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
+            throw new IllegalStateException("not allowed to run static initializer from thread " + Thread.currentThread().getName() + " which is not the client thread");
+        }
+    }
+
     static final long MC_THREAD_ID = Diagnostics.getMcThreadId();
 
     private static final long getMcThreadId() {

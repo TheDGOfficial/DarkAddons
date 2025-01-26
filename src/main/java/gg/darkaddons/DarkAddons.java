@@ -1221,6 +1221,7 @@ public final class DarkAddons {
         ThrowingRunnable.of(() -> {
             DarkAddons.initConfig();
             DarkAddons.freeMemory();
+            Diagnostics.init();
             if (Config.isTweakJavaFlags()) {
                 DarkAddons.tweakFlags();
             }
