@@ -501,11 +501,11 @@ final class SlayerRNGDisplay extends GuiElement {
         OVERFLUX_CAPACITOR(1_232_700, 0.040_6D, SlayerRNGDisplay.Slayer.WOLF, 7, 4),
         JUDGEMENT_CORE(885_562, 0.056_5D, SlayerRNGDisplay.Slayer.ENDERMAN, 7, 4),
 
-        DUPLEX_I_BOOK(/*"ENCHANTMENT_ULTIMATE_REITERATE_1"*/"ENCHANTED_BOOK-ULTIMATE_REITERATE-1", 28_214, 1.772_2D, SlayerRNGDisplay.Slayer.BLAZE, 6, 4, 3, SlayerRNGDisplay.SellingMethod.BAZAAR),
+        DUPLEX_I_BOOK(/*"ENCHANTMENT_ULTIMATE_REITERATE_1"*/"ENCHANTED_BOOK-ULTIMATE_REITERATE-1", 23_220, 2.153_3D, SlayerRNGDisplay.Slayer.BLAZE, 6, 4, 3, SlayerRNGDisplay.SellingMethod.BAZAAR),
 
-        HIGH_CLASS_ARCHFIEND_DICE(230_240, 0.217_2D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 5 : "Aatrox".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 2),
+        HIGH_CLASS_ARCHFIEND_DICE(194_939, 0.256_5D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 5 : "Aatrox".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 2),
 
-        GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 6_357, 7.865_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 1, SlayerRNGDisplay.SellingMethod.BAZAAR),
+        GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 10_649, 4.695_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 1, SlayerRNGDisplay.SellingMethod.BAZAAR),
 
         MC_GRUBBERS_BURGER(18_450, 1.219_5D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 4, () -> Config.isBurgersDone() ? 1 : 4, SlayerRNGDisplay.SellingMethod.NONE, "McGrubber's Burger"),
 
