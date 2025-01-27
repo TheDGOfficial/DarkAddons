@@ -64,7 +64,7 @@ description =
 repositories {
     mavenLocal()
     mavenCentral()
-    maven("https://repo.essential.gg/repository/maven-public/")
+    maven("https://repo.essential.gg/public/")
     maven("https://repo.essential.gg/repository/maven-releases/")
     maven("https://repo.hypixel.net/repository/Hypixel/")
     maven("https://jitpack.io") {
@@ -136,9 +136,9 @@ dependencies {
 
     implementation("gg.essential:vigilance:306")
     api("gg.essential:elementa:676")
-    implementation("gg.essential:universalcraft-1.8.9-forge:369")
+    implementation("gg.essential:universalcraft-1.8.9-forge:370+fix-background-drawing-on-1.21.2")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.10")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20-Beta1")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
