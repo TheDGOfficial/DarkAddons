@@ -65,13 +65,7 @@ repositories {
     mavenLocal()
     mavenCentral()
     maven("https://repo.essential.gg/public/")
-    maven("https://repo.essential.gg/repository/maven-releases/")
     maven("https://repo.hypixel.net/repository/Hypixel/")
-    maven("https://jitpack.io") {
-        mavenContent {
-            includeGroupAndSubgroups("com.github")
-        }
-    }
     //maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
 }
 

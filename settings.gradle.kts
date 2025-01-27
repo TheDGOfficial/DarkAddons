@@ -3,15 +3,9 @@ pluginManagement {
         mavenLocal()
         mavenCentral()
         gradlePluginPortal()
-        maven("https://maven.architectury.dev/")
-        maven("https://maven.fabricmc.net")
-        maven("https://maven.minecraftforge.net/")
         maven("https://repo.essential.gg/public/")
-        maven("https://jitpack.io") {
-            mavenContent {
-                includeGroupAndSubgroups("com.github")
-            }
-        }
+        maven("https://maven.architectury.dev/")
+        maven("https://maven.fabricmc.net/")
         //maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
     }
 }
