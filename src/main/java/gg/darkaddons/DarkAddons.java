@@ -688,13 +688,14 @@ public final class DarkAddons {
         SubCommand.registerAll();
     }
 
-    /**
-     * Registers all {@link GuiElement}s and {@link Event}s.
-     * <p>
-     * This method should not be called multiple times
-     * and only during the start-up.
-     */
-    private static final void registerAll() {
+    private static final void initGuiManager() {
+        GuiManager.init();
+
+        GuiManager.load();
+        DarkAddons.saveGuiPositions(true); // Preloads GsonBuilder classes to prevent a freeze when first-time saving
+    }
+
+    private static final void registerStatic() {
         MemoryLeakFix.registerPeriodicClean();
         RemoveBlankArmorStands.registerPeriodicRemoval();
 
@@ -702,6 +703,16 @@ public final class DarkAddons {
         RequeueKey.registerKeybindings();
 
         AutoFishingRod.registerTick();
+    }
+
+    /**
+     * Registers all {@link GuiElement}s and {@link Event}s.
+     * <p>
+     * This method should not be called multiple times
+     * and only during the start-up.
+     */
+    private static final void registerAll() {
+        DarkAddons.registerStatic();
 
         DarkAddons.register(
             TickTask.newManager(),
@@ -733,10 +744,7 @@ public final class DarkAddons {
             new ReplaceDiorite()
         );
 
-        GuiManager.init();
-
-        GuiManager.load();
-        DarkAddons.saveGuiPositions(true); // Preloads GsonBuilder classes to prevent a freeze when first-time saving
+        DarkAddons.initGuiManager();
     }
 
     private static final void register(@NotNull final Object... all) {

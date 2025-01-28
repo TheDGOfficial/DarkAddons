@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -317,7 +316,7 @@ final class UpgradeChecker {
             final var name = stat.getKey();
             final var points = stat.getValue().getAsInt();
             if (!"critical_chance".equals(name) && !"walk_speed".equals(name) && 0 < points) {
-                outputConsumer.accept("Non CC and Non-Speed tunings (+" + points + " points on " + WordUtils.capitalize(StringUtils.replace(name, "_", " ")) + ')');
+                outputConsumer.accept("Non CC and Non-Speed tunings (+" + points + " points on " + org.apache.commons.lang3.text.WordUtils.capitalize(StringUtils.replace(name, "_", " ")) + ')');
                 break;
             }
         }
