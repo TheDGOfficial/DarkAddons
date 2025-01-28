@@ -364,16 +364,12 @@ final class ClassAverage50Display extends GuiElement {
     private static final RunsTillCA50.Mode getMode() {
         final var mode = Config.getClassAverage50DisplayMode();
 
-        switch (mode) {
-            case 0:
-                return RunsTillCA50.Mode.OPTIMAL;
-            case 1:
-                return RunsTillCA50.Mode.EARLY;
-            case 2:
-                return RunsTillCA50.Mode.SKULL;
-            default:
-                throw new IllegalStateException("unsupported mode index: " + mode);
-        }
+        return switch (mode) {
+            case 0 -> RunsTillCA50.Mode.OPTIMAL;
+            case 1 -> RunsTillCA50.Mode.EARLY;
+            case 2 -> RunsTillCA50.Mode.SKULL;
+            default -> throw new IllegalStateException("unsupported mode index: " + mode);
+        };
     }
 
     private static final void buildHudLines(@NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap, @NotNull final ClassAverage50Display.DungeonFloor floor, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> originalXpMap) {

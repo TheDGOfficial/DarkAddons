@@ -34,7 +34,7 @@ final class MixinCapeManager {
             MixinCapeManager.selfUUIDCached = StringUtils.remove(selfUUID.toString(), '-');
         }
 
-        return self ? selfUUIDCached : uuid.toString();
+        return self ? MixinCapeManager.selfUUIDCached : uuid.toString();
     }
 
     @Redirect(method = "onPlayerTick", at = @At(value = "INVOKE", target = "Ljava/lang/String;replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;"), remap = false)

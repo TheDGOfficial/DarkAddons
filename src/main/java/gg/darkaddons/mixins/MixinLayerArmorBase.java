@@ -18,9 +18,9 @@ final class MixinLayerArmorBase {
         final var len = values.length;
 
         return switch (len) {
-            case 4 -> values[0].toString() + ":textures/models/armor/" + values[1].toString() + "_layer_" + values[2].toString() + values[3].toString() + ".png";
+            case 4 -> values[0] + ":textures/models/armor/" + values[1] + "_layer_" + values[2] + values[3] + ".png";
             case 1 -> '_' + values[0].toString();
-            case 3 -> "textures/models/armor/" + values[0].toString() + "_layer_" + values[1].toString() + values[2].toString() + ".png";
+            case 3 -> "textures/models/armor/" + values[0] + "_layer_" + values[1] + values[2] + ".png";
             default -> throw new IllegalStateException("unexpected len of " + len);
         };
     }

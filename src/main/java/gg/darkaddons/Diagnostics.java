@@ -273,9 +273,7 @@ final class Diagnostics {
             final var type = entity.getClass().getSimpleName();
             nonDuplicateTypes.merge(type, 1, Integer::sum);
         }
-        for (final var type : nonDuplicateTypes.entrySet()) {
-            outputConsumer.accept(type.getKey() + " (" + type.getValue() + ')');
-        }
+        nonDuplicateTypes.forEach((key, value) -> outputConsumer.accept(key + " (" + value + ')'));
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
@@ -285,9 +283,7 @@ final class Diagnostics {
             final var type = tileEntity.getClass().getSimpleName();
             nonDuplicateTypes.merge(type, 1, Integer::sum);
         }
-        for (final var type : nonDuplicateTypes.entrySet()) {
-            outputConsumer.accept(type.getKey() + " (" + type.getValue() + ')');
-        }
+        nonDuplicateTypes.forEach((key, value) -> outputConsumer.accept(key + " (" + value + ')'));
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
@@ -303,9 +299,7 @@ final class Diagnostics {
         for (final var thread : Utils.getAllThreads()) {
             threadNameDupes.merge(thread.getName(), 1, Integer::sum);
         }
-        for (final var type : threadNameDupes.entrySet()) {
-            outputConsumer.accept(type.getKey() + " (" + type.getValue() + ')');
-        }
+        threadNameDupes.forEach((key, value) -> outputConsumer.accept(key + " (" + value + ')'));
     }
 
     private static final void dumpThread0(@NotNull final ThreadInfo threadInfo, @NotNull final Consumer<String> outputConsumer) {

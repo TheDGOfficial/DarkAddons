@@ -23,9 +23,10 @@ final class MixinDSMSelectAllColourSolver {
     }
 
     @Redirect(method = "onGuiRender", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/String;contains(Ljava/lang/CharSequence;)Z"))
-    private final boolean onGuiRender$darkaddons(@NotNull final String itemName, @NotNull final CharSequence terminalColorNeeded) {
+    private final boolean onGuiRender$darkaddons(@NotNull final String itemName, @NotNull final CharSequence termColorNeeded) {
+        final var terminalColorNeeded = termColorNeeded.toString();
         if (itemName.contains(terminalColorNeeded)) {
-            final var wantedBlue = "BLUE".equals(terminalColorNeeded.toString());
+            final var wantedBlue = "BLUE".equals(terminalColorNeeded);
             return !wantedBlue || !itemName.contains("LIGHT BLUE");
         }
         return false;

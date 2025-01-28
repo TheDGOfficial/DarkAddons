@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.GameSettings;
 
 import net.minecraft.client.settings.KeyBinding;
 
@@ -23,20 +22,13 @@ final class CancelItemUses {
     private static final boolean IS_MOD_DEVELOPER = "d5c721ce-1b12-4f71-9c1d-0f4e36829f99".equals(Minecraft.getMinecraft().thePlayer.getUniqueID().toString());
 
     static final boolean shouldAllowKeyPress(@NotNull final KeyBinding keyBinding) {
-        if (!IS_MOD_DEVELOPER || !Config.isExtraLuck()) {
+        if (!CancelItemUses.IS_MOD_DEVELOPER || !Config.isExtraLuck()) {
             return true;
         }
 
-        final Minecraft mc = Minecraft.getMinecraft();
-        final GameSettings settings = mc.gameSettings;
+        final var mc = Minecraft.getMinecraft();
+        final var settings = mc.gameSettings;
 
-        if (settings.keyBindUseItem == keyBinding) {
-            return !Utils.isHoldingItemContaining(mc, "Gloomlock Grimoire") && !Utils.isHoldingItemContaining(mc, "Terminator") && !Utils.isHoldingItemContaining(mc, "Daedalus Axe") && !Utils.isHoldingItemContaining(mc, "Gyrokinetic Wand");
-        }
-        if (settings.keyBindAttack == keyBinding) {
-            return !Utils.isHoldingItemContaining(mc, "Terminator");
-        }
-
-        return true;
+        return settings.keyBindUseItem == keyBinding ? !Utils.isHoldingItemContaining(mc, "Gloomlock Grimoire") && !Utils.isHoldingItemContaining(mc, "Terminator") && !Utils.isHoldingItemContaining(mc, "Daedalus Axe") && !Utils.isHoldingItemContaining(mc, "Gyrokinetic Wand") : settings.keyBindAttack != keyBinding || !Utils.isHoldingItemContaining(mc, "Terminator");
     }
 }

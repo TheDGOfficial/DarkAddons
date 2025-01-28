@@ -24,7 +24,7 @@ final class BlessingDisplay extends GuiElement {
     private static boolean needBlessingInfo;
 
     private static final boolean needBlessingInfo() {
-        return Config.isSendDetailedBlessingsMessage() && needBlessingInfo;
+        return Config.isSendDetailedBlessingsMessage() && BlessingDisplay.needBlessingInfo;
     }
 
     private static final void clearBlessings() {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.lang3.text.WordUtils;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,23 +85,23 @@ final class UpgradeChecker {
         private static final ArrayList<UpgradeChecker.Accessory> allAccessories = new ArrayList<>(16);
 
         static {
-            registerAccessory(UpgradeChecker.UpgradeType.LESS_DMG, "WITHER_RELIC", "-25% Damage from Withers");
-            registerAccessory(UpgradeChecker.UpgradeType.MORE_XP, "SCARF_GRIMOIRE", "+6% Class XP");
-            registerAccessory(UpgradeChecker.UpgradeType.MORE_RNG, "TREASURE_ARTIFACT", "+3% RNG");
-            registerAccessory(UpgradeChecker.UpgradeType.MORE_XP, "CATACOMBS_EXPERT_RING", "+10% Catacombs XP");
-            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "DRACONIC_ARTIFACT", "+5% Damage against Dragons");
-            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "MASTER_SKULL_TIER_7", "+10% Strength and Health in MM Catacombs");
-            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "BOOK_OF_PROGRESSION", "Extra Infliction Passive", lore -> Utils.removeControlCodes(lore.stream().filter(line -> line.endsWith(" Passive")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Book of Progression bonus!"))), "Up to +5% Damage");
-            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "HANDY_BLOOD_CHALICE", "On", lore -> Utils.removeControlCodes(StringUtils.removeStart(lore.stream().filter(line -> line.startsWith("§7Enabled: ")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Book of Progression bonus!")), "§7Enabled: ")), "+20 Ferocity");
-            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "GENERAL_MEDALLION", "+6%", lore -> StringUtils.removeStart(lore.stream().filter(line -> !line.isEmpty() && line.charAt(line.length() - 1) == '%').findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find General's Medallion bonus!")), "§7Bonus: §a"), "+6% Item Stats");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.LESS_DMG, "WITHER_RELIC", "-25% Damage from Withers");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.MORE_XP, "SCARF_GRIMOIRE", "+6% Class XP");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.MORE_RNG, "TREASURE_ARTIFACT", "+3% RNG");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.MORE_XP, "CATACOMBS_EXPERT_RING", "+10% Catacombs XP");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "DRACONIC_ARTIFACT", "+5% Damage against Dragons");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "MASTER_SKULL_TIER_7", "+10% Strength and Health in MM Catacombs");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "BOOK_OF_PROGRESSION", "Extra Infliction Passive", lore -> Utils.removeControlCodes(lore.stream().filter(line -> line.endsWith(" Passive")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Book of Progression bonus!"))), "Up to +5% Damage");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "HANDY_BLOOD_CHALICE", "On", lore -> Utils.removeControlCodes(StringUtils.removeStart(lore.stream().filter(line -> line.startsWith("§7Enabled: ")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Book of Progression bonus!")), "§7Enabled: ")), "+20 Ferocity");
+            UpgradeChecker.Accessory.registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "GENERAL_MEDALLION", "+6%", lore -> StringUtils.removeStart(lore.stream().filter(line -> !line.isEmpty() && '%' == line.charAt(line.length() - 1)).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find General's Medallion bonus!")), "§7Bonus: §a"), "+6% Item Stats");
         }
 
         private static final void registerAccessory(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @NotNull final String description, @NotNull final UpgradeChecker.Upgrade... dependencies) {
-            allAccessories.add(new UpgradeChecker.Accessory(upgradeType, internalName, null, null, description, dependencies));
+            UpgradeChecker.Accessory.allAccessories.add(new UpgradeChecker.Accessory(upgradeType, internalName, null, null, description, dependencies));
         }
 
         private static final void registerAccessory(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @Nullable final String loreCondition, @Nullable final Function<ArrayList<String>, String> loreExtractor, @NotNull final String description, @NotNull final UpgradeChecker.Upgrade... dependencies) {
-            allAccessories.add(new UpgradeChecker.Accessory(upgradeType, internalName, loreCondition, loreExtractor, description, dependencies));
+            UpgradeChecker.Accessory.allAccessories.add(new UpgradeChecker.Accessory(upgradeType, internalName, loreCondition, loreExtractor, description, dependencies));
         }
 
         private final String internalName;
@@ -124,19 +125,19 @@ final class UpgradeChecker {
         private static final ArrayList<UpgradeChecker.Pet> allPets = new ArrayList<>(16);
 
         static {
-            registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "GOLDEN_DRAGON", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 200, 200);
-            registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "ENDER_DRAGON", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 100, 100, "CROCHET_TIGER_PLUSHIE");
-            registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "JELLYFISH", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 100, 100);
-            registerPet(UpgradeChecker.UpgradeType.LESS_DMG, "PHOENIX", UpgradeChecker.Rarity.EPIC, UpgradeChecker.Rarity.LEGENDARY, 1, 100, "CROCHET_TIGER_PLUSHIE");
-            registerPet(UpgradeChecker.UpgradeType.MORE_RNG, "SPIRIT", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 1, 100);
+            UpgradeChecker.Pet.registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "GOLDEN_DRAGON", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 200, 200);
+            UpgradeChecker.Pet.registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "ENDER_DRAGON", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 100, 100, "CROCHET_TIGER_PLUSHIE");
+            UpgradeChecker.Pet.registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "JELLYFISH", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 100, 100);
+            UpgradeChecker.Pet.registerPet(UpgradeChecker.UpgradeType.LESS_DMG, "PHOENIX", UpgradeChecker.Rarity.EPIC, UpgradeChecker.Rarity.LEGENDARY, 1, 100, "CROCHET_TIGER_PLUSHIE");
+            UpgradeChecker.Pet.registerPet(UpgradeChecker.UpgradeType.MORE_RNG, "SPIRIT", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 1, 100);
         }
 
         private static final void registerPet(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @NotNull final UpgradeChecker.Rarity minimumWantedRarity, @NotNull final UpgradeChecker.Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @NotNull final UpgradeChecker.Upgrade... dependencies) {
-            registerPet(upgradeType, internalName, minimumWantedRarity, maxRarity, minimumWantedLevel, maxLevel, null, dependencies);
+            UpgradeChecker.Pet.registerPet(upgradeType, internalName, minimumWantedRarity, maxRarity, minimumWantedLevel, maxLevel, null, dependencies);
         }
 
         private static final void registerPet(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @NotNull final UpgradeChecker.Rarity minimumWantedRarity, @NotNull final UpgradeChecker.Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @Nullable final String optimalPetItem, @NotNull final UpgradeChecker.Upgrade... dependencies) {
-            allPets.add(new UpgradeChecker.Pet(upgradeType, internalName, minimumWantedRarity, maxRarity, minimumWantedLevel, maxLevel, optimalPetItem, dependencies));
+            UpgradeChecker.Pet.allPets.add(new UpgradeChecker.Pet(upgradeType, internalName, minimumWantedRarity, maxRarity, minimumWantedLevel, maxLevel, optimalPetItem, dependencies));
         }
 
         private final String internalName;
@@ -169,26 +170,26 @@ final class UpgradeChecker {
         private static final ArrayList<UpgradeChecker.EssenceShopPerk> allPerks = new ArrayList<>(16);
 
         static {
-            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "forbidden_blessing", 10, level -> "+" + level + "% stats from Blessings");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "catacombs_crit_damage", 5, level -> "+" + level * 10 + " Crit Damage");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "catacombs_strength", 5, level -> "+" + level * 10 + " Strength");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "edrag_cd", 5, level -> "+" + level * 2 + " Crit Damage on Ender Dragon pet", UpgradeChecker.Pet.allPets.stream().filter(pet -> "ENDER_DRAGON".equals(pet.internalName)).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Ender Dragon in Pets!")));
-            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "permanent_strength", 5, level -> "+" + level + " Strength");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "fero_vs_dragons", 5, level -> "+" + level * 2 + " Ferocity against Dragons");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "blessing_of_time", 3, level -> "+" + level * 2 + " Strength");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "forbidden_blessing", 10, level -> "+" + level + "% stats from Blessings");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "catacombs_crit_damage", 5, level -> "+" + level * 10 + " Crit Damage");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "catacombs_strength", 5, level -> "+" + level * 10 + " Strength");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "edrag_cd", 5, level -> "+" + (level << 1) + " Crit Damage on Ender Dragon pet", UpgradeChecker.Pet.allPets.stream().filter(pet -> "ENDER_DRAGON".equals(pet.internalName)).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Ender Dragon in Pets!")));
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "permanent_strength", 5, level -> "+" + level + " Strength");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "fero_vs_dragons", 5, level -> "+" + (level << 1) + " Ferocity against Dragons");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "blessing_of_time", 3, level -> "+" + (level << 1) + " Strength");
 
-            registerPerk(UpgradeChecker.UpgradeType.MORE_RNG, "catacombs_boss_luck", 4, level -> "+" + (3 == level ? 5 : 2 == level ? 7 : 9) + "% RNG");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_RNG, "catacombs_looting", 5, level -> "+" + level * 2 + "% quality on Mob drops");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_RNG, "catacombs_boss_luck", 4, level -> "+" + (3 == level ? 5 : 2 == level ? 7 : 9) + "% RNG");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_RNG, "catacombs_looting", 5, level -> "+" + (level << 1) + "% quality on Mob drops");
 
-            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "unbridled_rage", 5, level -> "+" + level * 2 + "% Berserker Class XP");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "toxophilite", 5, level -> "+" + level * 2 + "% Archer Class XP");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "diamond_in_the_rough", 5, level -> "+" + level * 2 + "% Tank Class XP");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "heart_of_gold", 5, level -> "+" + level * 2 + "% Healer Class XP");
-            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "cold_efficiency", 5, level -> "+" + level * 2 + "% Mage Class XP");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "unbridled_rage", 5, level -> "+" + (level << 1) + "% Berserker Class XP");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "toxophilite", 5, level -> "+" + (level << 1) + "% Archer Class XP");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "diamond_in_the_rough", 5, level -> "+" + (level << 1) + "% Tank Class XP");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "heart_of_gold", 5, level -> "+" + (level << 1) + "% Healer Class XP");
+            UpgradeChecker.EssenceShopPerk.registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "cold_efficiency", 5, level -> "+" + (level << 1) + "% Mage Class XP");
         }
 
         private static final void registerPerk(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, final int maxLevel, @NotNull final Function<Integer, String> descriptionAtLevel, @NotNull final UpgradeChecker.Upgrade... dependencies) {
-            allPerks.add(new UpgradeChecker.EssenceShopPerk(upgradeType, internalName, maxLevel, descriptionAtLevel, dependencies));
+            UpgradeChecker.EssenceShopPerk.allPerks.add(new UpgradeChecker.EssenceShopPerk(upgradeType, internalName, maxLevel, descriptionAtLevel, dependencies));
         }
 
         private final String internalName;
@@ -292,7 +293,7 @@ final class UpgradeChecker {
     }
 
     private static final int findMasterSkullTier(@NotNull final ArrayList<String> rawAccessories) {
-        int highestTier = 0;
+        var highestTier = 0;
         for (final var rawAccessory : rawAccessories) {
             if (rawAccessory.startsWith("MASTER_SKULL_TIER_")) {
                 final var tier = Utils.safeParseIntFast(StringUtils.removeStart(rawAccessory, "MASTER_SKULL_TIER_"));
@@ -309,14 +310,14 @@ final class UpgradeChecker {
         if (!"fortuitous".equals(powerStone)) {
             outputConsumer.accept("Power Stone set to " + StringUtils.capitalize(powerStone) + " instead of Fortuitous");
         }
-        if (1701 > mp) {
+        if (1_701 > mp) {
             outputConsumer.accept("Magical Power: " + mp + " - less than the max of 1701");
         }
         for (final var stat : tunings.entrySet()) {
             final var name = stat.getKey();
             final var points = stat.getValue().getAsInt();
             if (!"critical_chance".equals(name) && !"walk_speed".equals(name) && 0 < points) {
-                outputConsumer.accept("Non CC and Non-Speed tunings (+" + points + " points on " + org.apache.commons.lang3.text.WordUtils.capitalize(StringUtils.replace(name, "_", " ")) + ')');
+                outputConsumer.accept("Non CC and Non-Speed tunings (+" + points + " points on " + WordUtils.capitalize(StringUtils.replace(name, "_", " ")) + ')');
                 break;
             }
         }
@@ -326,7 +327,7 @@ final class UpgradeChecker {
         if (0 < missingCCEnrich) {
             outputConsumer.accept("Missing +" + missingCCEnrich + " Crit Chance from Enrichment Swapper");
         }
-        boolean shouldFindMasterSkullTier = false;
+        var shouldFindMasterSkullTier = false;
         for (final var accessory : UpgradeChecker.Accessory.allAccessories) {
             if (!currentAccessories.contains(accessory) && UpgradeChecker.checkDependencies(accessory)) {
                 if ("MASTER_SKULL_TIER_7".equals(accessory.internalName)) {
@@ -348,7 +349,7 @@ final class UpgradeChecker {
     private static final void processAccessories(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonArray accessories, @NotNull final String powerStone, final int mp, @NotNull final JsonObject tunings) {
         final var rawAccessories = new ArrayList<String>(100);
         final var currentAccessories = new ArrayList<UpgradeChecker.Accessory>(16);
-        int missingCCEnrich = 0;
+        var missingCCEnrich = 0;
         for (final var accessory : accessories) {
             final var tagElem = accessory.getAsJsonObject().get("tag");
             if (null == tagElem) {
@@ -381,9 +382,9 @@ final class UpgradeChecker {
     }
 
     private static final void processArrows(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonArray quiver, @NotNull final String selectedArrow) {
-        boolean hasArmorshredArrowsLeft = false;
-        boolean hasMultipleArrowTypes = false;
-        String otherArrowType = "none";
+        var hasArmorshredArrowsLeft = false;
+        var hasMultipleArrowTypes = false;
+        var otherArrowType = "none";
         for (final var arrow : quiver) {
             final var name = arrow.getAsJsonObject().get("display_name");
             if (null != name) {

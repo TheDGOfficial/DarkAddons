@@ -28,14 +28,14 @@ final class ReplaceDiorite {
 
     static {
         for (var i = 0; 16 > i; ++i) {
-            glassStates[i] = Blocks.stained_glass.getStateFromMeta(i);
+            ReplaceDiorite.glassStates[i] = Blocks.stained_glass.getStateFromMeta(i);
         }
     }
 
     @NotNull
-    private static final BlockPos[] pillars = {new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
+    private static final BlockPos[] pillars = new BlockPos[]{new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
 
-    private static final int @NotNull [] pillarColors = {5, 4, 10, 14};
+    private static final int @NotNull [] pillarColors = new int[]{5, 4, 10, 14};
 
     @NotNull
     private static final HashSet<BlockPos>[] coordinates = ReplaceDiorite.createPillarSets();
@@ -74,7 +74,7 @@ final class ReplaceDiorite {
         if (null != world) {
             final var chunkProvider = world.getChunkProvider();
             final var chunks = new HashMap<Long, Chunk>(16);
-            for (final var coordinate : coordinates) {
+            for (final var coordinate : ReplaceDiorite.coordinates) {
                 for (final var pos : coordinate) {
                     final long chunkX = pos.getX() >> 4L;
                     final long chunkZ = pos.getZ() >> 4L;
@@ -90,12 +90,12 @@ final class ReplaceDiorite {
 
     private static final void setGlass(@NotNull final World world, @NotNull final BlockPos pos, @NotNull final HashSet<BlockPos> coordinate) {
         var index = 0;
-        for (final var coord : coordinates) {
+        for (final var coord : ReplaceDiorite.coordinates) {
             if (coordinate == coord) {
                 break;
             }
             ++index;
         }
-        world.setBlockState(pos, glassStates[pillarColors[index]], 3);
+        world.setBlockState(pos, ReplaceDiorite.glassStates[ReplaceDiorite.pillarColors[index]], 3);
     }
 }

@@ -247,7 +247,7 @@ final class AdditionalM7Features {
             case "⚠ Maxor is enraged! ⚠" -> {
                 AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
                 if (AdditionalM7Features.firstLaserNotDone) {
-                    boolean flag = false;
+                    var flag = false;
                     if (Config.isUltReminder()) {
                         DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor is enraged. Use your ultimate ability!");
                         AdditionalM7Features.sendUseUltTitle();
