@@ -12,7 +12,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -321,7 +320,7 @@ public final class DarkAddons {
 
     /*static final void mixinError(@NotNull final Class<?> mixinClass) {
         if (!mixinClass.isInterface() && !Modifier.isAbstract(mixinClass.getModifiers())) {
-            DarkAddons.notifyError("A mixin failure occurred and the given source is not an interface or abstract class. Source class: " + mixinClass.getName());
+            DarkAddons.notifyError("A mixin failure occurred, and the given source is not an interface or abstract class. Source class: " + mixinClass.getName());
         }
 
         DarkAddons.notifyError("Mixin error: Mixin " + mixinClass.getName() + " likely failed to apply");
@@ -511,19 +510,15 @@ public final class DarkAddons {
         return "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor());
     }
 
-    public static final boolean isPaulMoreEffectiveBlessingsActive() {
+    static final boolean isPaulMoreEffectiveBlessingsActive() {
         if (MayorInfo.INSTANCE.getAllPerks().contains("Benediction")) {
             return true;
         }
 
         final var jerryMayor = MayorInfo.INSTANCE.getJerryMayor();
 
-        if (null != jerryMayor && "Paul".equals(jerryMayor.getName())) {
-            // We don't need to check for perks if Paul is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
-            return true;
-        }
-
-        return false;
+        // We don't need to check for perks if Paul is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
+        return null != jerryMayor && "Paul".equals(jerryMayor.getName());
     }
 
     /**
@@ -1042,10 +1037,10 @@ public final class DarkAddons {
     }
 
     /**
-     * Checks if the player is holding a Terminator or a RCM weapon.
+     * Checks if the player is holding a Terminator or an RCM weapon.
      *
      * @param mc The Minecraft instance.
-     * @return True if the player is holding a Terminator or a RCM weapon, false otherwise.
+     * @return True if the player is holding a Terminator or an RCM weapon, false otherwise.
      */
     public static final boolean isHoldingTermOrRCM(@NotNull final Minecraft mc) {
         return AutoClicker.isHoldingTermOrRCM(mc);

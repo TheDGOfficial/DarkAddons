@@ -17,8 +17,8 @@ final class MixinNEUItemTooltipListener {
     @Redirect(method = "onItemTooltipLow", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/String;replaceAll(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;", remap = false))
     @NotNull
     private final String replaceAll$darkaddons(@NotNull final String text, @NotNull final String search, @NotNull final String replacement) {
-        // Who cares about shiny items anyway (Cosmetics eww)
-        // In future we should ideally just use StringUtils.replace or a compiled pattern here.
+        // Who'll care about shiny items anyway (Cosmetics eww)
+        // In the future, we should ideally just use StringUtils.replace or a compiled pattern here.
         return text;
     }
 }

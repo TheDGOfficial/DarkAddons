@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Function;
 import java.util.function.Consumer;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
@@ -46,7 +45,7 @@ final class UpgradeChecker {
         DIVINE,
         SPECIAL,
         VERY_SPECIAL,
-        ULTIMATE;
+        ULTIMATE
     }
 
     private enum UpgradeSource {
@@ -56,50 +55,52 @@ final class UpgradeChecker {
         ARMOR,
         EQUIPMENT,
         WEAPON,
-        MISC;
+        MISC
     }
 
     private enum UpgradeType {
         MORE_DPS,
         LESS_DMG,
         MORE_RNG,
-        MORE_XP;
+        MORE_XP
     }
 
-    private static abstract class Upgrade {
-        private final UpgradeSource source;
-        private final UpgradeType type;
-        private final Upgrade[] dependencies;
+    private abstract static class Upgrade {
+        private final UpgradeChecker.UpgradeSource source;
+        private final UpgradeChecker.UpgradeType type;
+        private final UpgradeChecker.Upgrade[] dependencies;
         boolean found;
 
-        private Upgrade(@NotNull final UpgradeSource source, @NotNull final UpgradeType type, @NotNull Upgrade... dependencies) {
+        private Upgrade(@NotNull final UpgradeChecker.UpgradeSource source, @NotNull final UpgradeChecker.UpgradeType type, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            super();
+
             this.source = source;
             this.type = type;
             this.dependencies = dependencies;
         }
     }
 
-    private static final class Accessory extends Upgrade {
-        private static final ArrayList<Accessory> allAccessories = new ArrayList<>();
+    private static final class Accessory extends UpgradeChecker.Upgrade {
+        private static final ArrayList<UpgradeChecker.Accessory> allAccessories = new ArrayList<>(16);
 
         static {
-            registerAccessory(UpgradeType.LESS_DMG, "WITHER_RELIC", "-25% Damage from Withers");
-            registerAccessory(UpgradeType.MORE_XP, "SCARF_GRIMOIRE", "+6% Class XP");
-            registerAccessory(UpgradeType.MORE_RNG, "TREASURE_ARTIFACT", "+3% RNG");
-            registerAccessory(UpgradeType.MORE_XP, "CATACOMBS_EXPERT_RING", "+10% Catacombs XP");
-            registerAccessory(UpgradeType.MORE_DPS, "DRACONIC_ARTIFACT", "+5% Damage against Dragons");
-            registerAccessory(UpgradeType.MORE_DPS, "MASTER_SKULL_TIER_7", "+10% Strength and Health in MM Catacombs");
-            registerAccessory(UpgradeType.MORE_DPS, "BOOK_OF_PROGRESSION", "Extra Infliction Passive", (lore) -> Utils.removeControlCodes(lore.stream().filter((line) -> line.endsWith(" Passive")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Book of Progression bonus!"))), "Up to +5% Damage");
-            registerAccessory(UpgradeType.MORE_DPS, "HANDY_BLOOD_CHALICE", "On", (lore) -> Utils.removeControlCodes(StringUtils.removeStart(lore.stream().filter((line) -> line.startsWith("§7Enabled: ")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Book of Progression bonus!")), "§7Enabled: ")), "+20 Ferocity");
-            registerAccessory(UpgradeType.MORE_DPS, "GENERAL_MEDALLION", "+6%", (lore) -> StringUtils.removeStart(lore.stream().filter((line) -> line.endsWith("%")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find General's Medallion bonus!")), "§7Bonus: §a"), "+6% Item Stats");
+            registerAccessory(UpgradeChecker.UpgradeType.LESS_DMG, "WITHER_RELIC", "-25% Damage from Withers");
+            registerAccessory(UpgradeChecker.UpgradeType.MORE_XP, "SCARF_GRIMOIRE", "+6% Class XP");
+            registerAccessory(UpgradeChecker.UpgradeType.MORE_RNG, "TREASURE_ARTIFACT", "+3% RNG");
+            registerAccessory(UpgradeChecker.UpgradeType.MORE_XP, "CATACOMBS_EXPERT_RING", "+10% Catacombs XP");
+            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "DRACONIC_ARTIFACT", "+5% Damage against Dragons");
+            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "MASTER_SKULL_TIER_7", "+10% Strength and Health in MM Catacombs");
+            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "BOOK_OF_PROGRESSION", "Extra Infliction Passive", lore -> Utils.removeControlCodes(lore.stream().filter(line -> line.endsWith(" Passive")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Book of Progression bonus!"))), "Up to +5% Damage");
+            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "HANDY_BLOOD_CHALICE", "On", lore -> Utils.removeControlCodes(StringUtils.removeStart(lore.stream().filter(line -> line.startsWith("§7Enabled: ")).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Book of Progression bonus!")), "§7Enabled: ")), "+20 Ferocity");
+            registerAccessory(UpgradeChecker.UpgradeType.MORE_DPS, "GENERAL_MEDALLION", "+6%", lore -> StringUtils.removeStart(lore.stream().filter(line -> !line.isEmpty() && line.charAt(line.length() - 1) == '%').findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find General's Medallion bonus!")), "§7Bonus: §a"), "+6% Item Stats");
         }
 
-        private static final void registerAccessory(@NotNull final UpgradeType upgradeType, @NotNull final String internalName, @NotNull final String description, @NotNull final Upgrade... dependencies) {
-            allAccessories.add(new Accessory(upgradeType, internalName, null, null, description, dependencies));
+        private static final void registerAccessory(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @NotNull final String description, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            allAccessories.add(new UpgradeChecker.Accessory(upgradeType, internalName, null, null, description, dependencies));
         }
 
-        private static final void registerAccessory(@NotNull final UpgradeType upgradeType, @NotNull final String internalName, @Nullable final String loreCondition, @Nullable final Function<ArrayList<String>, String> loreExtractor, @NotNull final String description, @NotNull final Upgrade... dependencies) {
-            allAccessories.add(new Accessory(upgradeType, internalName, loreCondition, loreExtractor, description, dependencies));
+        private static final void registerAccessory(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @Nullable final String loreCondition, @Nullable final Function<ArrayList<String>, String> loreExtractor, @NotNull final String description, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            allAccessories.add(new UpgradeChecker.Accessory(upgradeType, internalName, loreCondition, loreExtractor, description, dependencies));
         }
 
         private final String internalName;
@@ -108,8 +109,8 @@ final class UpgradeChecker {
         private final String loreCondition;
         private final Function<ArrayList<String>, String> loreExtractor;
 
-        private Accessory(@NotNull final UpgradeType upgradeType, @NotNull final String internalName, @Nullable final String loreCondition, @Nullable final Function<ArrayList<String>, String> loreExtractor, @NotNull final String description, @NotNull final Upgrade... dependencies) {
-            super(UpgradeSource.ACCESSORY_BAG, upgradeType, dependencies);
+        private Accessory(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @Nullable final String loreCondition, @Nullable final Function<ArrayList<String>, String> loreExtractor, @NotNull final String description, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            super(UpgradeChecker.UpgradeSource.ACCESSORY_BAG, upgradeType, dependencies);
 
             this.internalName = internalName;
             this.description = description;
@@ -119,31 +120,31 @@ final class UpgradeChecker {
         }
     }
 
-    private static final class Pet extends Upgrade {
-        private static final ArrayList<Pet> allPets = new ArrayList<>();
+    private static final class Pet extends UpgradeChecker.Upgrade {
+        private static final ArrayList<UpgradeChecker.Pet> allPets = new ArrayList<>(16);
 
         static {
-            registerPet(UpgradeType.MORE_DPS, "GOLDEN_DRAGON", Rarity.LEGENDARY, Rarity.LEGENDARY, 200, 200);
-            registerPet(UpgradeType.MORE_DPS, "ENDER_DRAGON", Rarity.LEGENDARY, Rarity.LEGENDARY, 100, 100, "CROCHET_TIGER_PLUSHIE");
-            registerPet(UpgradeType.MORE_DPS, "JELLYFISH", Rarity.LEGENDARY, Rarity.LEGENDARY, 100, 100);
-            registerPet(UpgradeType.LESS_DMG, "PHOENIX", Rarity.EPIC, Rarity.LEGENDARY, 1, 100, "CROCHET_TIGER_PLUSHIE");
-            registerPet(UpgradeType.MORE_RNG, "SPIRIT", Rarity.LEGENDARY, Rarity.LEGENDARY, 1, 100);
+            registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "GOLDEN_DRAGON", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 200, 200);
+            registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "ENDER_DRAGON", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 100, 100, "CROCHET_TIGER_PLUSHIE");
+            registerPet(UpgradeChecker.UpgradeType.MORE_DPS, "JELLYFISH", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 100, 100);
+            registerPet(UpgradeChecker.UpgradeType.LESS_DMG, "PHOENIX", UpgradeChecker.Rarity.EPIC, UpgradeChecker.Rarity.LEGENDARY, 1, 100, "CROCHET_TIGER_PLUSHIE");
+            registerPet(UpgradeChecker.UpgradeType.MORE_RNG, "SPIRIT", UpgradeChecker.Rarity.LEGENDARY, UpgradeChecker.Rarity.LEGENDARY, 1, 100);
         }
 
-        private static final void registerPet(@NotNull final UpgradeType upgradeType, @NotNull final String internalName, @NotNull final Rarity minimumWantedRarity, @NotNull final Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @NotNull final Upgrade... dependencies) {
+        private static final void registerPet(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @NotNull final UpgradeChecker.Rarity minimumWantedRarity, @NotNull final UpgradeChecker.Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @NotNull final UpgradeChecker.Upgrade... dependencies) {
             registerPet(upgradeType, internalName, minimumWantedRarity, maxRarity, minimumWantedLevel, maxLevel, null, dependencies);
         }
 
-        private static final void registerPet(@NotNull final UpgradeType upgradeType, @NotNull final String internalName, @NotNull final Rarity minimumWantedRarity, @NotNull final Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @Nullable final String optimalPetItem, @NotNull final Upgrade... dependencies) {
-            allPets.add(new Pet(upgradeType, internalName, minimumWantedRarity, maxRarity, minimumWantedLevel, maxLevel, optimalPetItem, dependencies));
+        private static final void registerPet(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @NotNull final UpgradeChecker.Rarity minimumWantedRarity, @NotNull final UpgradeChecker.Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @Nullable final String optimalPetItem, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            allPets.add(new UpgradeChecker.Pet(upgradeType, internalName, minimumWantedRarity, maxRarity, minimumWantedLevel, maxLevel, optimalPetItem, dependencies));
         }
 
         private final String internalName;
 
-        private Rarity currentRarity;
+        private UpgradeChecker.Rarity currentRarity;
 
-        private final Rarity minimumWantedRarity;
-        private final Rarity maxRarity;
+        private final UpgradeChecker.Rarity minimumWantedRarity;
+        private final UpgradeChecker.Rarity maxRarity;
 
         private int currentLevel;
 
@@ -152,8 +153,8 @@ final class UpgradeChecker {
 
         private final String optimalPetItem;
 
-        private Pet(@NotNull final UpgradeType upgradeType, @NotNull final String internalName, @NotNull final Rarity minimumWantedRarity, @NotNull final Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @Nullable final String optimalPetItem, @NotNull final Upgrade... dependencies) {
-            super(UpgradeSource.PETS_MENU, upgradeType, dependencies);
+        private Pet(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @NotNull final UpgradeChecker.Rarity minimumWantedRarity, @NotNull final UpgradeChecker.Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @Nullable final String optimalPetItem, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            super(UpgradeChecker.UpgradeSource.PETS_MENU, upgradeType, dependencies);
 
             this.internalName = internalName;
             this.minimumWantedRarity = minimumWantedRarity;
@@ -164,30 +165,30 @@ final class UpgradeChecker {
         }
     }
 
-    private static final class EssenceShopPerk extends Upgrade {
-        private static final ArrayList<EssenceShopPerk> allPerks = new ArrayList<>();
+    private static final class EssenceShopPerk extends UpgradeChecker.Upgrade {
+        private static final ArrayList<UpgradeChecker.EssenceShopPerk> allPerks = new ArrayList<>(16);
 
         static {
-            registerPerk(UpgradeType.MORE_DPS, "forbidden_blessing", 10, (level) -> "+" + level + "% stats from Blessings");
-            registerPerk(UpgradeType.MORE_DPS, "catacombs_crit_damage", 5, (level) -> "+" + (level * 10) + " Crit Damage");
-            registerPerk(UpgradeType.MORE_DPS, "catacombs_strength", 5, (level) -> "+" + (level * 10) + " Strength");
-            registerPerk(UpgradeType.MORE_DPS, "edrag_cd", 5, (level) -> "+" + (level * 2) + " Crit Damage on Ender Dragon pet", Pet.allPets.stream().filter((pet) -> "ENDER_DRAGON".equals(pet.internalName)).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Ender Dragon in Pets!")));
-            registerPerk(UpgradeType.MORE_DPS, "permanent_strength", 5, (level) -> "+" + level + " Strength");
-            registerPerk(UpgradeType.MORE_DPS, "fero_vs_dragons", 5, (level) -> "+" + (level * 2) + " Ferocity against Dragons");
-            registerPerk(UpgradeType.MORE_DPS, "blessing_of_time", 3, (level) -> "+" + (level * 2) + " Strength");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "forbidden_blessing", 10, level -> "+" + level + "% stats from Blessings");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "catacombs_crit_damage", 5, level -> "+" + level * 10 + " Crit Damage");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "catacombs_strength", 5, level -> "+" + level * 10 + " Strength");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "edrag_cd", 5, level -> "+" + level * 2 + " Crit Damage on Ender Dragon pet", UpgradeChecker.Pet.allPets.stream().filter(pet -> "ENDER_DRAGON".equals(pet.internalName)).findFirst().orElseThrow(() -> new IllegalStateException("Couldn't find Ender Dragon in Pets!")));
+            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "permanent_strength", 5, level -> "+" + level + " Strength");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "fero_vs_dragons", 5, level -> "+" + level * 2 + " Ferocity against Dragons");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_DPS, "blessing_of_time", 3, level -> "+" + level * 2 + " Strength");
 
-            registerPerk(UpgradeType.MORE_RNG, "catacombs_boss_luck", 4, (level) -> "+" + (level == 3 ? 5 : level == 2 ? 7 : 9) + "% RNG");
-            registerPerk(UpgradeType.MORE_RNG, "catacombs_looting", 5, (level) -> "+" + (level * 2) + "% quality on Mob drops");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_RNG, "catacombs_boss_luck", 4, level -> "+" + (3 == level ? 5 : 2 == level ? 7 : 9) + "% RNG");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_RNG, "catacombs_looting", 5, level -> "+" + level * 2 + "% quality on Mob drops");
 
-            registerPerk(UpgradeType.MORE_XP, "unbridled_rage", 5, (level) -> "+" + (level * 2) + "% Berserker Class XP");
-            registerPerk(UpgradeType.MORE_XP, "toxophilite", 5, (level) -> "+" + (level * 2) + "% Archer Class XP");
-            registerPerk(UpgradeType.MORE_XP, "diamond_in_the_rough", 5, (level) -> "+" + (level * 2) + "% Tank Class XP");
-            registerPerk(UpgradeType.MORE_XP, "heart_of_gold", 5, (level) -> "+" + (level * 2) + "% Healer Class XP");
-            registerPerk(UpgradeType.MORE_XP, "cold_efficiency", 5, (level) -> "+" + (level * 2) + "% Mage Class XP");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "unbridled_rage", 5, level -> "+" + level * 2 + "% Berserker Class XP");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "toxophilite", 5, level -> "+" + level * 2 + "% Archer Class XP");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "diamond_in_the_rough", 5, level -> "+" + level * 2 + "% Tank Class XP");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "heart_of_gold", 5, level -> "+" + level * 2 + "% Healer Class XP");
+            registerPerk(UpgradeChecker.UpgradeType.MORE_XP, "cold_efficiency", 5, level -> "+" + level * 2 + "% Mage Class XP");
         }
 
-        private static final void registerPerk(@NotNull final UpgradeType upgradeType, @NotNull final String internalName, final int maxLevel, @NotNull final Function<Integer, String> descriptionAtLevel, @NotNull final Upgrade... dependencies) {
-            allPerks.add(new EssenceShopPerk(upgradeType, internalName, maxLevel, descriptionAtLevel, dependencies));
+        private static final void registerPerk(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, final int maxLevel, @NotNull final Function<Integer, String> descriptionAtLevel, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            allPerks.add(new UpgradeChecker.EssenceShopPerk(upgradeType, internalName, maxLevel, descriptionAtLevel, dependencies));
         }
 
         private final String internalName;
@@ -197,8 +198,8 @@ final class UpgradeChecker {
 
         private final Function<Integer, String> descriptionAtLevel;
 
-        private EssenceShopPerk(@NotNull final UpgradeType upgradeType, @NotNull final String internalName, final int maxLevel, @NotNull final Function<Integer, String> descriptionAtLevel, @NotNull final Upgrade... dependencies) {
-            super(UpgradeSource.ESSENCE_SHOP, upgradeType, dependencies);
+        private EssenceShopPerk(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, final int maxLevel, @NotNull final Function<Integer, String> descriptionAtLevel, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            super(UpgradeChecker.UpgradeSource.ESSENCE_SHOP, upgradeType, dependencies);
 
             this.internalName = internalName;
             this.maxLevel = maxLevel;
@@ -208,7 +209,7 @@ final class UpgradeChecker {
 
     @NotNull
     private static final ArrayList<String> getLore(@NotNull final JsonObject tag) {
-        final var loreList = new ArrayList<String>();
+        final var loreList = new ArrayList<String>(16);
         for (final var lore : tag.get("display").getAsJsonObject().get("Lore").getAsJsonArray()) {
             loreList.add(lore.getAsString());
         }
@@ -224,7 +225,7 @@ final class UpgradeChecker {
         return false;
     }
 
-    private static final boolean checkDependencies(@NotNull final Upgrade upgrade) {
+    private static final boolean checkDependencies(@NotNull final UpgradeChecker.Upgrade upgrade) {
         for (final var dependency : upgrade.dependencies) {
             if (!dependency.found) {
                 return false;
@@ -233,10 +234,10 @@ final class UpgradeChecker {
         return true;
     }
 
-    private static final void processPet(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonObject pet, @NotNull final Pet registryPet, @NotNull final String internalName) {
+    private static final void processPet(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonObject pet, @NotNull final UpgradeChecker.Pet registryPet, @NotNull final String internalName) {
         registryPet.found = true;
 
-        registryPet.currentRarity = Rarity.valueOf(pet.get("tier").getAsString());
+        registryPet.currentRarity = UpgradeChecker.Rarity.valueOf(pet.get("tier").getAsString());
         registryPet.currentLevel = pet.get("level").getAsJsonObject().get("level").getAsInt();
 
         final var currentLevel = registryPet.currentLevel;
@@ -246,11 +247,11 @@ final class UpgradeChecker {
         final var minimumWantedRarity = registryPet.minimumWantedRarity;
 
         if (currentLevel < minimumWantedLevel || currentRarity.ordinal() < minimumWantedRarity.ordinal()) {
-            outputConsumer.accept("Expected [Lvl >= " + minimumWantedLevel + "] " + minimumWantedRarity.name() + " or above rarity " + internalName + ", but has " + "[Lvl " + currentLevel + "] " + currentRarity.name() + " " + internalName);
+            outputConsumer.accept("Expected [Lvl >= " + minimumWantedLevel + "] " + minimumWantedRarity.name() + " or above rarity " + internalName + ", but has " + "[Lvl " + currentLevel + "] " + currentRarity.name() + ' ' + internalName);
         }
 
         final var heldItem = pet.get("heldItem");
-        final var item = null != heldItem && (!(heldItem instanceof JsonNull)) ? heldItem.getAsString() : "no pet item";
+        final var item = null != heldItem && !(heldItem instanceof JsonNull) ? heldItem.getAsString() : "no pet item";
 
         final var optimalPetItem = registryPet.optimalPetItem;
 
@@ -260,11 +261,11 @@ final class UpgradeChecker {
     }
 
     private static final void processPets(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonArray pets) {
-        final var currentPets = new ArrayList<Pet>();
+        final var currentPets = new ArrayList<UpgradeChecker.Pet>(16);
         for (final var petElem : pets) {
             final var pet = petElem.getAsJsonObject();
             final var type = pet.get("type").getAsString();
-            for (final var registryPet : Pet.allPets) {
+            for (final var registryPet : UpgradeChecker.Pet.allPets) {
                 final var internalName = registryPet.internalName;
                 if (internalName.equals(type) && UpgradeChecker.checkDependencies(registryPet)) {
                     UpgradeChecker.processPet(outputConsumer, pet, registryPet, internalName);
@@ -272,7 +273,7 @@ final class UpgradeChecker {
                 }
             }
         }
-        for (final var pet : Pet.allPets) {
+        for (final var pet : UpgradeChecker.Pet.allPets) {
             if (!currentPets.contains(pet) && UpgradeChecker.checkDependencies(pet)) {
                 outputConsumer.accept("Missing " + pet.internalName);
             }
@@ -280,14 +281,12 @@ final class UpgradeChecker {
     }
 
     private static final void processPerks(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonObject perks) {
-        for (final var perk : EssenceShopPerk.allPerks) {
+        for (final var perk : UpgradeChecker.EssenceShopPerk.allPerks) {
             final var value = perks.get(perk.internalName);
-            final var level = null != value ? value.getAsInt() : 0;
-  
-            perk.currentLevel = level;
+            perk.currentLevel = null == value ? 0 : value.getAsInt();
 
             if (perk.currentLevel != perk.maxLevel && UpgradeChecker.checkDependencies(perk)) {
-                outputConsumer.accept("Missing " + perk.descriptionAtLevel.apply("catacombs_boss_luck".equals(perk.internalName) ? perk.currentLevel : (perk.maxLevel - perk.currentLevel)) + " from " + perk.internalName);
+                outputConsumer.accept("Missing " + perk.descriptionAtLevel.apply("catacombs_boss_luck".equals(perk.internalName) ? perk.currentLevel : perk.maxLevel - perk.currentLevel) + " from " + perk.internalName);
             }
         }
     }
@@ -310,25 +309,25 @@ final class UpgradeChecker {
         if (!"fortuitous".equals(powerStone)) {
             outputConsumer.accept("Power Stone set to " + StringUtils.capitalize(powerStone) + " instead of Fortuitous");
         }
-        if (mp < 1701) {
+        if (1701 > mp) {
             outputConsumer.accept("Magical Power: " + mp + " - less than the max of 1701");
         }
         for (final var stat : tunings.entrySet()) {
             final var name = stat.getKey();
             final var points = stat.getValue().getAsInt();
-            if (!"critical_chance".equals(name) && !"walk_speed".equals(name) && points > 0) {
+            if (!"critical_chance".equals(name) && !"walk_speed".equals(name) && 0 < points) {
                 outputConsumer.accept("Non CC and Non-Speed tunings (+" + points + " points on " + org.apache.commons.lang3.text.WordUtils.capitalize(StringUtils.replace(name, "_", " ")) + ')');
                 break;
             }
         }
     }
 
-    private static final void processAccessoryOutput(@NotNull final Consumer<String> outputConsumer, @NotNull final ArrayList<Accessory> currentAccessories, @NotNull final ArrayList<String> rawAccessories, final int missingCCEnrich, @NotNull final String powerStone, final int mp, @NotNull final JsonObject tunings) {
-        if (missingCCEnrich > 0) {
+    private static final void processAccessoryOutput(@NotNull final Consumer<String> outputConsumer, @NotNull final ArrayList<UpgradeChecker.Accessory> currentAccessories, @NotNull final ArrayList<String> rawAccessories, final int missingCCEnrich, @NotNull final String powerStone, final int mp, @NotNull final JsonObject tunings) {
+        if (0 < missingCCEnrich) {
             outputConsumer.accept("Missing +" + missingCCEnrich + " Crit Chance from Enrichment Swapper");
         }
         boolean shouldFindMasterSkullTier = false;
-        for (final var accessory : Accessory.allAccessories) {
+        for (final var accessory : UpgradeChecker.Accessory.allAccessories) {
             if (!currentAccessories.contains(accessory) && UpgradeChecker.checkDependencies(accessory)) {
                 if ("MASTER_SKULL_TIER_7".equals(accessory.internalName)) {
                     shouldFindMasterSkullTier = true;
@@ -338,17 +337,17 @@ final class UpgradeChecker {
             }
         }
         if (shouldFindMasterSkullTier) {
-            final int[] tierBonuses = {1, 2, 3, 4, 6, 8, 10};
+            final var tierBonuses = new int[]{1, 2, 3, 4, 6, 8, 10};
             final var tier = UpgradeChecker.findMasterSkullTier(rawAccessories);
-            final var missingBonus = tierBonuses[6] - (tier > 0 ? tierBonuses[tier - 1] : 0);
+            final var missingBonus = tierBonuses[6] - (0 < tier ? tierBonuses[tier - 1] : 0);
             outputConsumer.accept("Missing +" + missingBonus + "% Strength and Health in MM Catacombs (from Tier " + tier + " to 7)");
         }
         UpgradeChecker.processAccessoryOutputFurther(outputConsumer, powerStone, mp, tunings);
     }
 
     private static final void processAccessories(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonArray accessories, @NotNull final String powerStone, final int mp, @NotNull final JsonObject tunings) {
-        final var rawAccessories = new ArrayList<String>();
-        final var currentAccessories = new ArrayList<Accessory>();
+        final var rawAccessories = new ArrayList<String>(100);
+        final var currentAccessories = new ArrayList<UpgradeChecker.Accessory>(16);
         int missingCCEnrich = 0;
         for (final var accessory : accessories) {
             final var tagElem = accessory.getAsJsonObject().get("tag");
@@ -365,7 +364,7 @@ final class UpgradeChecker {
             if (null != type) {
                 final var id = type.getAsString();
                 rawAccessories.add(id);
-                for (final var registryAccessory : Accessory.allAccessories) {
+                for (final var registryAccessory : UpgradeChecker.Accessory.allAccessories) {
                     final var internalName = registryAccessory.internalName;
                     if (internalName.equals(id) && UpgradeChecker.checkDependencies(registryAccessory)) {
                         final var lore = UpgradeChecker.getLore(tag);
@@ -392,10 +391,9 @@ final class UpgradeChecker {
                 if ("Armorshred Arrow".equals(displayName)) {
                     hasArmorshredArrowsLeft = true;
                     break;
-                } else {
-                    otherArrowType = displayName;
-                    hasMultipleArrowTypes = true;
                 }
+                otherArrowType = displayName;
+                hasMultipleArrowTypes = true;
             }
         }
         if (!hasArmorshredArrowsLeft) {
@@ -406,8 +404,8 @@ final class UpgradeChecker {
     }
 
     private static final void processBank(@NotNull final Consumer<String> outputConsumer, final int bank) {
-        if (bank < 1_000_000_000) {
-            final var millions = bank / 1000000;
+        if (1_000_000_000 > bank) {
+            final var millions = bank / 1_000_000;
             outputConsumer.accept("No 1B Bank (" + millions + "M)");
         }
     }
@@ -424,15 +422,15 @@ final class UpgradeChecker {
         UpgradeChecker.processPerks(outputConsumer, perks);
         UpgradeChecker.processAccessories(outputConsumer, accessories, rawAccessories.get("selected_power").getAsString(), rawAccessories.get("highest_magical_power").getAsInt(), rawAccessories.get("tuning").getAsJsonObject().get("slot_0").getAsJsonObject());
         final var favoriteArrow = data.get("misc").getAsJsonObject().get("uncategorized").getAsJsonObject().get("favorite_arrow");
-        UpgradeChecker.processArrows(outputConsumer, items.get("quiver").getAsJsonArray(), null != favoriteArrow ? favoriteArrow.getAsJsonObject().get("formatted").getAsString() : "none");
-        UpgradeChecker.processBank(outputConsumer, data.get("currencies").getAsJsonObject().get("bank").getAsInt()); 
+        UpgradeChecker.processArrows(outputConsumer, items.get("quiver").getAsJsonArray(), null == favoriteArrow ? "none" : favoriteArrow.getAsJsonObject().get("formatted").getAsString());
+        UpgradeChecker.processBank(outputConsumer, data.get("currencies").getAsJsonObject().get("bank").getAsInt());
     }
 
     static final void dumpSuggestions(@NotNull final String playerName, @NotNull final Consumer<String> outputConsumer) {
         UpgradeChecker.upgradeCheckerExecutor.execute(() -> {
             outputConsumer.accept("Fetching data from API, please wait...");
             Utils.sendWebRequest("https://sky.shiiyu.moe/stats/" + playerName, "text/html", false, 30L); // The api doesn't update unless a request to frontend is sent first.
-            final var output = Utils.sendWebRequest("https://sky.shiiyu.moe/api/v2/profile/" + playerName + "?cache=" + UUID.randomUUID().toString(), "application/json", true, 10L); // The api returns cached result (the cache seems to not expire even after a day) so we use a query parameter with random UUID to bypass the cache.
+            final var output = Utils.sendWebRequest("https://sky.shiiyu.moe/api/v2/profile/" + playerName + "?cache=" + UUID.randomUUID(), "application/json", true, 10L); // The api returns cached a result (the cache seems to not expire even after a day) so we use a query parameter with random UUID to bypass the cache.
             if (null == output) {
                 outputConsumer.accept("An error occurred while connecting to the API.");
                 return;

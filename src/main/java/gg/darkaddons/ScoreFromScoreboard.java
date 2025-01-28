@@ -21,7 +21,7 @@ final class ScoreFromScoreboard {
         super();
 
         DarkAddons.registerTickTask("update_score_from_scoreboard", 20, true, () -> {
-            if ((!Config.isSendMessageOn270Score() && !Config.isSendMessageOn300Score()) || !DarkAddons.isInDungeons()) {
+            if (!Config.isSendMessageOn270Score() && !Config.isSendMessageOn300Score() || !DarkAddons.isInDungeons()) {
                 return;
             }
 
@@ -82,7 +82,7 @@ final class ScoreFromScoreboard {
         final var stScore = sc.getTotalScore().get();
         final var highestScore = Math.max(score, stScore);
         final var deaths = sc.getDeaths().get();
-        final var scoreReq = deaths >= 1 ? 302 : 301;
+        final var scoreReq = 1 <= deaths ? 302 : 301;
 
         if (highestScore >= scoreReq && !ScoreFromScoreboard.sentTitleOn301Score) {
             ScoreFromScoreboard.sentTitleOn301Score = true;
@@ -91,7 +91,7 @@ final class ScoreFromScoreboard {
 
         final var diff = rawScore - ScoreFromScoreboard.previousScore;
 
-        if (diff >= 28 || rawScore >= 300) {
+        if (28 <= diff || 300 <= rawScore) {
             ScoreFromScoreboard.realScoreHook(Math.max(rawScore, stScore), deaths);
         }
 
@@ -99,23 +99,23 @@ final class ScoreFromScoreboard {
     }
 
     private static final void realScoreHook(final int score, final int deaths) {
-        if (Config.isSendMessageForScoreAtBossEntry() && (-1L != DungeonTimer.INSTANCE.getBossEntryTime() || score >= 300) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry) {
+        if (Config.isSendMessageForScoreAtBossEntry() && (-1L != DungeonTimer.INSTANCE.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry) {
             var affordableDeaths = 0;
             var extraScore = score - 300;
 
             var tempDeaths = deaths;
-            while (extraScore > (tempDeaths < 1 ? 0 : 1)) {
-                 if (tempDeaths < 1) {
-                     --extraScore; // Assume spirit pet
-                 } else {
-                     extraScore -= 2;
-                 }
-                 ++tempDeaths;
-                 ++affordableDeaths;
+            while (extraScore > (1 > tempDeaths ? 0 : 1)) {
+                if (1 > tempDeaths) {
+                    --extraScore; // Assume spirit pet
+                } else {
+                    extraScore -= 2;
+                }
+                ++tempDeaths;
+                ++affordableDeaths;
             }
 
             ScoreFromScoreboard.hasSaidScoreAtBossEntry = true;
-            Skytils.sendMessageQueue.add("/pc Score At Boss Entry: " + score + " | " + (score >= 300 ? "Affordable Deaths For S+: " + affordableDeaths : "No S+"));
+            Skytils.sendMessageQueue.add("/pc Score At Boss Entry: " + score + " | " + (300 <= score ? "Affordable Deaths For S+: " + affordableDeaths : "No S+"));
         }
     }
 }

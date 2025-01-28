@@ -16,7 +16,7 @@ final class MixinVanillaStringUtils {
         super();
     }
 
-    @Inject(method = "stripControlCodes", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "stripControlCodes", at = @At("HEAD"), cancellable = true)
     private static final void stripControlCodes$darkaddons(@NotNull final String text, @NotNull final CallbackInfoReturnable<String> cir) {
         cir.setReturnValue(PublicUtils.removeControlCodes(text));
     }

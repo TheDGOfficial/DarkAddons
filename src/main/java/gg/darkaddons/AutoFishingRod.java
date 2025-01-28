@@ -95,7 +95,8 @@ final class AutoFishingRod {
 
         final var cached = AutoFishingRod.countdownArmorStand.get();
 
-        // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case try to find and assign it again, otherwise will return null.
+        // Since it's a WeakReference, it can get cleared without us calling the clear method.
+        // In this case, try to find and assign it again, otherwise will return null.
         return null == cached ? AutoFishingRod.findAndAssignCountdownArmorStand() : cached;
 
         // Return existing entity.
@@ -225,7 +226,7 @@ final class AutoFishingRod {
             if (null != armorStand) {
                 final var customNameTag = armorStand.getCustomNameTag();
                 final var ready = AutoFishingRod.READY.equals(customNameTag);
-                if (ready && (!Config.isAutoFishingRodSlugfishMode() || 10_000L <= (System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime))) {
+                if (ready && (!Config.isAutoFishingRodSlugfishMode() || 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime)) {
                     AutoFishingRod.hooking = true;
                     AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
                 } else {

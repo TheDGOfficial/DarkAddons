@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 
 final class MaxorHPDisplay extends SimpleGuiElement {
     // Safety: Uses WeakReference to not create a memory leak of the entity.
-    private static WeakReference<EntityWither> maxor;
+    private static @Nullable WeakReference<EntityWither> maxor;
 
     private static double maxorHp;
     private static double lastMaxorHp;
@@ -38,10 +38,10 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
                 return wither;
             }
-       }
+        }
 
-       // Caller should handle this.
-       return null;
+        // Caller should handle this.
+        return null;
     }
 
     @Nullable
@@ -53,7 +53,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
         final var cached = MaxorHPDisplay.maxor.get();
 
-        // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case try to find and assign it again, otherwise will return null.
+        // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case, try to find and assign it again, otherwise will return null.
         return null == cached ? MaxorHPDisplay.findAndAssignMaxor() : cached;
 
         // Return existing entity.
@@ -101,7 +101,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
         MaxorHPDisplay.maxorHp = MaxorHPDisplay.findMaxorHp();
 
-        if (isDemoRenderBypass || MaxorHPDisplay.lastMaxorHp != MaxorHPDisplay.maxorHp || this.isEmpty()) {
+        if (isDemoRenderBypass || !Utils.compareDoubleExact(MaxorHPDisplay.lastMaxorHp, MaxorHPDisplay.maxorHp) || this.isEmpty()) {
             MaxorHPDisplay.lastMaxorHp = MaxorHPDisplay.maxorHp;
 
             super.update();
@@ -117,9 +117,9 @@ final class MaxorHPDisplay extends SimpleGuiElement {
         final var color = MaxorHPDisplay.maxorDead ? "§4" : 24.0D >= hp ? "§c" : 74.0D >= hp ? "§e" : "§a";
         final var hpText = MaxorHPDisplay.maxorDead ? "§a§lDead" : String.format("%.1f", hp) + '%';
 
-        lines.add(-1 == hp && !MaxorHPDisplay.maxorDead ? text + "§c§lUnknown" : text + color + hpText);
+        lines.add(Utils.compareDoubleExact(-1.0D, hp) && !MaxorHPDisplay.maxorDead ? text + "§c§lUnknown" : text + color + hpText);
 
-        if (Config.isSendEnrageSkipHelperMessage() && !MaxorHPDisplay.saidEnrageSkipHelperMessage && hp <= 74.0D && !DarkAddons.isInLocationEditingGui()) {
+        if (Config.isSendEnrageSkipHelperMessage() && !MaxorHPDisplay.saidEnrageSkipHelperMessage && 74.0D >= hp && !DarkAddons.isInLocationEditingGui()) {
             MaxorHPDisplay.saidEnrageSkipHelperMessage = true;
             Skytils.sendMessageQueue.add("/pc Maxor HP: " + hpText + " | Enough damage dealt for first DPS phase!");
         }

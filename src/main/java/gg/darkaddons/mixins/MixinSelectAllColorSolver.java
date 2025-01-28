@@ -22,8 +22,7 @@ final class MixinSelectAllColorSolver {
         if (itemName.contains(terminalColorNeeded)) {
             final var wantedBlue = "BLUE".equals(terminalColorNeeded);
             return !wantedBlue || !itemName.contains("lightBlue");
-        } else {
-            return false;
         }
+        return false;
     }
 }

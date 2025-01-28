@@ -9,12 +9,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -141,7 +141,7 @@ final class Utils {
          * @return Empty string if the given text is null, or the given text
          * without control codes otherwise.
          */
-        @NotNull
+        @Contract("null -> null")
         private static final String removeControlCodes(@Nullable final String text) {
             if (null == text) {
                 return null;
@@ -681,11 +681,11 @@ final class Utils {
     }
 
     private static final void setupConnectionProperties(@NotNull final URLConnection con,
-                                                @NotNull final Duration timeout,
-                                                @NotNull final String charset,
-                                                @NotNull final String contentType,
-                                                @NotNull final String userAgent,
-                                                @Nullable final String referer) {
+                                                        @NotNull final Duration timeout,
+                                                        @NotNull final String charset,
+                                                        @NotNull final String contentType,
+                                                        @NotNull final String userAgent,
+                                                        @Nullable final String referer) {
         con.setAllowUserInteraction(false);
 
         if (con instanceof final HttpURLConnection conn) {
@@ -939,7 +939,7 @@ final class Utils {
     }
 
     @NotNull
-    static final Thread[] getAllThreads() {
+    static final Thread @Nullable [] getAllThreads() {
         final var threadGroup = Utils.getRootThreadGroup();
         var count = threadGroup.activeCount();
 

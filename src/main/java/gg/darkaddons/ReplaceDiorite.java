@@ -15,8 +15,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 
@@ -29,16 +27,15 @@ final class ReplaceDiorite {
     private static final IBlockState[] glassStates = new IBlockState[16];
 
     static {
-        for (var i = 0; i < 16; ++i) {
+        for (var i = 0; 16 > i; ++i) {
             glassStates[i] = Blocks.stained_glass.getStateFromMeta(i);
         }
     }
 
     @NotNull
-    private static final BlockPos[] pillars = new BlockPos[] {new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
- 
-    @NotNull
-    private static final int[] pillarColors = new int[] {5, 4, 10, 14};
+    private static final BlockPos[] pillars = {new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
+
+    private static final int @NotNull [] pillarColors = {5, 4, 10, 14};
 
     @NotNull
     private static final HashSet<BlockPos>[] coordinates = ReplaceDiorite.createPillarSets();
@@ -52,9 +49,12 @@ final class ReplaceDiorite {
     private static final HashSet<BlockPos> createPillarSet(final int pillarIndex) {
         final var pillar = ReplaceDiorite.pillars[pillarIndex];
         final var set = new HashSet<BlockPos>(16);
-        for (var x = pillar.getX() - 3; x <= pillar.getX() + 3; ++x) {
-            for (var y = pillar.getY(); y <= pillar.getY() + 37; ++y) {
-                for (var z = pillar.getZ() - 3; z <= pillar.getZ() + 3; ++z) {
+        final var pillarX = pillar.getX();
+        final var pillarY = pillar.getY();
+        final var pillarZ = pillar.getZ();
+        for (var x = pillarX - 3; x <= pillarX + 3; ++x) {
+            for (var y = pillarY; y <= pillarY + 37; ++y) {
+                for (var z = pillarZ - 3; z <= pillarZ + 3; ++z) {
                     set.add(new BlockPos(x, y, z));
                 }
             }
@@ -63,7 +63,7 @@ final class ReplaceDiorite {
     }
 
     @SubscribeEvent
-    public final void onTick(@NotNull final ClientTickEvent event) {
+    public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
         if (Config.isReplaceDiorite() && TickEvent.Phase.END == event.phase && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && -1L == DungeonTimer.INSTANCE.getPhase2ClearTime()) {
             ReplaceDiorite.replaceDiorite();
         }
@@ -79,7 +79,7 @@ final class ReplaceDiorite {
                     final long chunkX = pos.getX() >> 4L;
                     final long chunkZ = pos.getZ() >> 4L;
 
-                    final var chunk = chunks.computeIfAbsent((chunkX << 32L) | chunkZ, (k) -> chunkProvider.provideChunk((int) chunkX, (int) chunkZ));
+                    final var chunk = chunks.computeIfAbsent(chunkX << 32L | chunkZ, k -> chunkProvider.provideChunk((int) chunkX, (int) chunkZ));
                     if (chunk.getBlock(pos) == Blocks.stone) {
                         ReplaceDiorite.setGlass(world, pos, coordinate);
                     }

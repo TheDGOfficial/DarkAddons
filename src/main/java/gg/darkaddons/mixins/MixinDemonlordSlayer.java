@@ -19,7 +19,7 @@ final class MixinDemonlordSlayer {
     }
 
     @Redirect(method = "invoke", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/item/EntityArmorStand;getDistanceSq(Lnet/minecraft/util/BlockPos;)D", remap = true))
-    private final double invoke$darkaddons(@NotNull final EntityArmorStand entityArmorStand, @Nullable BlockPos pos) {
-        return null != pos ? entityArmorStand.getDistanceSq(pos) : 10.0D;
+    private final double invoke$darkaddons(@NotNull final EntityArmorStand entityArmorStand, @Nullable final BlockPos pos) {
+        return null == pos ? 10.0D : entityArmorStand.getDistanceSq(pos);
     }
 }

@@ -52,7 +52,7 @@ public final class ASMUtils {
     }*/
 
     @NotNull
-    public static final ClassNode readClass(@NotNull final byte... bytes) {
+    public static final ClassNode readClass(final byte @NotNull ... bytes) {
         final var classReader = new ClassReader(bytes);
 
         return ASMUtils.readClassNode(classReader);

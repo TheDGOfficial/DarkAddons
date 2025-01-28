@@ -26,7 +26,7 @@ final class RagAxeStrengthGained {
 
     static final void handlePacket(@NotNull final Packet<?> packet) {
         final var mc = Minecraft.getMinecraft();
-        if (Config.isSendMessageOnRagAxe() && packet instanceof final S29PacketSoundEffect soundPacket && "mob.wolf.howl".equals(soundPacket.getSoundName()) && 1.4920635F == soundPacket.getPitch() && Utils.isHoldingItemContaining(mc, "Ragnarock Axe")) {
+        if (Config.isSendMessageOnRagAxe() && packet instanceof final S29PacketSoundEffect soundPacket && "mob.wolf.howl".equals(soundPacket.getSoundName()) && Utils.compareFloatExact(1.492_063_5F, soundPacket.getPitch()) && Utils.isHoldingItemContaining(mc, "Ragnarock Axe")) {
             final var player = mc.thePlayer;
             if (null != player) {
                 final var item = player.getHeldItem();
@@ -44,12 +44,12 @@ final class RagAxeStrengthGained {
                                         final var amount = StringUtils.substringBefore(StringUtils.substringAfter(line, "Strength: +"), " ");
                                         try {
                                             final var parsed = Double.parseDouble(amount);
-                                            Skytils.sendMessageQueue.add("/pc Gained strength from rag axe: " + ((int) Math.floor(parsed * 1.5)));
+                                            Skytils.sendMessageQueue.add("/pc Gained strength from rag axe: " + (int) Math.floor(parsed * 1.5));
                                         } catch (final NumberFormatException nfe) {
                                             DarkAddons.modError(nfe);
                                         }
                                         break;
-                                     }
+                                    }
                                 }
                             }
                         }

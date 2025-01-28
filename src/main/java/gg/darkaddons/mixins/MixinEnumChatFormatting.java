@@ -16,7 +16,7 @@ final class MixinEnumChatFormatting {
         super();
     }
 
-    @Inject(method = "getTextWithoutFormattingCodes", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "getTextWithoutFormattingCodes", at = @At("HEAD"), cancellable = true)
     private static final void getTextWithoutFormattingCodes$darkaddons(@NotNull final String text, @NotNull final CallbackInfoReturnable<String> cir) {
         cir.setReturnValue(PublicUtils.removeControlCodes(text));
     }

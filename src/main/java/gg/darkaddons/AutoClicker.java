@@ -47,7 +47,7 @@ final class AutoClicker {
     }
 
     private static final boolean isHoldingTerm(@NotNull final Minecraft mc) {
-       return AutoClicker.isHoldingABow(mc) && Utils.isHoldingItemContaining(mc, "Terminator");
+        return AutoClicker.isHoldingABow(mc) && Utils.isHoldingItemContaining(mc, "Terminator");
     }
 
     static final boolean isHoldingHype(@NotNull final Minecraft mc) {
@@ -55,7 +55,7 @@ final class AutoClicker {
     }
 
     static final boolean isHoldingTermOrRCM(@NotNull final Minecraft mc) {
-        return (AutoClicker.isHoldingTerm(mc)) || (Utils.isHoldingItemContaining(mc, "Astraea") || AutoClicker.isHoldingHype(mc));
+        return AutoClicker.isHoldingTerm(mc) || Utils.isHoldingItemContaining(mc, "Astraea") || AutoClicker.isHoldingHype(mc);
     }
 
     static final boolean isHoldingClaymoreMidasOrGS(@NotNull final Minecraft mc) {

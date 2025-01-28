@@ -4,6 +4,18 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 
 final class DialogueSkipHelper {
+    /**
+     * Private constructor since this class only contains static members.
+     * <p>
+     * Always throws {@link UnsupportedOperationException} (for when
+     * constructed via reflection).
+     */
+    private DialogueSkipHelper() {
+        super();
+
+        throw Utils.staticClassException();
+    }
+
     static final void onMessage(@NotNull final ClientChatReceivedEvent event) {
         McProfilerHelper.startSection("dialogue_skip_helper_check_message");
 

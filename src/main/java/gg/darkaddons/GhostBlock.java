@@ -45,6 +45,6 @@ final class GhostBlock {
     }
 
     private static final boolean isNotAllowedToGhostBlock(@NotNull final Block block) {
-        return Blocks.chest == block || Blocks.lever == block || Blocks.trapped_chest == block || Blocks.wooden_button == block || Blocks.stone_button == block || Blocks.skull == block || (!Config.isAllowGhostBlockingBedrockAndBarrier() && (Blocks.bedrock == block || Blocks.barrier == block));
+        return Blocks.chest == block || Blocks.lever == block || Blocks.trapped_chest == block || Blocks.wooden_button == block || Blocks.stone_button == block || Blocks.skull == block || !Config.isAllowGhostBlockingBedrockAndBarrier() && (Blocks.bedrock == block || Blocks.barrier == block);
     }
 }

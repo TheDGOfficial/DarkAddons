@@ -16,7 +16,7 @@ final class MixinNEUUtils {
         super();
     }
 
-    @Inject(method = "cleanColour", at = @At(value = "HEAD"), remap = false, cancellable = true)
+    @Inject(method = "cleanColour", at = @At("HEAD"), remap = false, cancellable = true)
     private static final void cleanColour$darkaddons(@NotNull final String text, @NotNull final CallbackInfoReturnable<String> cir) {
         cir.setReturnValue(PublicUtils.removeControlCodes(text));
     }

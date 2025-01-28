@@ -16,7 +16,7 @@ final class MixinTextUtils {
         super();
     }
 
-    @Inject(method = "stripColor", at = @At(value = "HEAD"), remap = false, cancellable = true)
+    @Inject(method = "stripColor", at = @At("HEAD"), remap = false, cancellable = true)
     private static final void stripControlCodes$darkaddons(@NotNull final String text, @NotNull final CallbackInfoReturnable<String> cir) {
         cir.setReturnValue(PublicUtils.removeControlCodes(text));
     }

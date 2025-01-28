@@ -58,7 +58,7 @@ final class MixinItemModelGenerator {
     }
 
     @Unique
-    private static final int addElements(@NotNull final String key, final int layer, final int height, final int width, @NotNull final int[] textureData, int size, @NotNull final ArrayList<BlockPart> elements, final float xRatio, final float yRatio) {
+    private static final int addElements(@NotNull final String key, final int layer, final int height, final int width, final int @NotNull [] textureData, int size, @NotNull final ArrayList<BlockPart> elements, final float xRatio, final float yRatio) {
         for (var y = 0; y < height; ++y) {
             for (var x = 0; x < width; ++x) {
                 final var previous = 0 > x - 1 || MixinItemModelGenerator.isTransparent(textureData, x - 1, y, width, height);
@@ -129,7 +129,7 @@ final class MixinItemModelGenerator {
     }
 
     @Unique
-    private static final boolean isTransparent(@NotNull final int[] textureData, final int x, final int y, final int width, final int height) {
+    private static final boolean isTransparent(final int @NotNull [] textureData, final int x, final int y, final int width, final int height) {
         return 0 > x || 0 > y || x >= width || y >= height || 0 == (textureData[y * width + x] >> 24 & 255);
     }
 }

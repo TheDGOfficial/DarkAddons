@@ -1,7 +1,6 @@
 package gg.darkaddons.mixins;
 
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

@@ -2,7 +2,6 @@ package gg.darkaddons.mixins;
 
 import gg.darkaddons.DarkAddons;
 import gg.darkaddons.PublicUtils;
-import gg.darkaddons.mixin.MixinUtils;
 import gg.darkaddons.annotations.bytecode.Name;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
@@ -15,8 +14,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.Unique;
-
-import java.util.function.Consumer;
 
 @Mixin(value = EntityRenderer.class, priority = 1_001)
 final class MixinEntityRenderer {

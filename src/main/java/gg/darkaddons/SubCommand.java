@@ -266,7 +266,7 @@ final class SubCommand {
         SubCommand.registerHelp();
     }
 
-    private static final void processThreadDatas(@NotNull final long runtime, @NotNull final ArrayList<Diagnostics.ThreadData> threadDatas) {
+    private static final void processThreadDatas(final long runtime, @NotNull final ArrayList<Diagnostics.ThreadData> threadDatas) {
         var totalBytes = 0L;
 
         for (final var data : threadDatas) {
@@ -307,6 +307,9 @@ final class SubCommand {
                     case "cpu":
                         threadDatas.sort(Comparator.comparingLong(Diagnostics.ThreadData::getCpu).reversed());
                         break;
+                    // Default above prio here to use the fall-thru mechanic.
+                    // Essentially, we send the unknown sorting option message and then
+                    // fall-thru to the default of prio.
                     //noinspection DefaultNotLastCaseInSwitch
                     default:
                         DarkAddons.queueWarning("Unknown sorting option, using the default of \"prio\"!");

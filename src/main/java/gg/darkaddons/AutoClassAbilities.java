@@ -216,7 +216,7 @@ final class AutoClassAbilities {
         final var mc = Minecraft.getMinecraft();
         final var rc = mc.gameSettings.keyBindUseItem;
 
-        return AutoClassAbilities.checkPrePreconditions() && ((rc.isKeyDown() && AutoClicker.isHoldingTermOrRCM(mc)) || (mc.gameSettings.keyBindAttack.isKeyDown() && (AutoClicker.isHoldingClaymoreMidasOrGS(mc) || AutoClicker.isHoldingHype(mc))));
+        return AutoClassAbilities.checkPrePreconditions() && (rc.isKeyDown() && AutoClicker.isHoldingTermOrRCM(mc) || mc.gameSettings.keyBindAttack.isKeyDown() && (AutoClicker.isHoldingClaymoreMidasOrGS(mc) || AutoClicker.isHoldingHype(mc)));
     }
 
     private static final void findClassAndAssignAbilities() {
@@ -237,15 +237,15 @@ final class AutoClassAbilities {
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAGNAROK;
                     }
                     case MAGE -> {
-                        final var baseCdReduc = 25;
-                        final var isDupeMage = DungeonListener.INSTANCE.getTeam().values().stream().filter((t) -> DungeonClass.MAGE == t.getDungeonClass()).count() > 1;
+                        final var isDupeMage = 1 < DungeonListener.INSTANCE.getTeam().values().stream().filter(t -> DungeonClass.MAGE == t.getDungeonClass()).count();
                         var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) / 2;
                         if (!isDupeMage) {
-                            lvlExtraCdReduc *= 2;
+                            lvlExtraCdReduc <<= 1;
                         }
-                        final var totalCdReducMultiplier = 1 - ((baseCdReduc + lvlExtraCdReduc) / 100.0D);
-                        AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (30L * totalCdReducMultiplier));
-                        AutoClassAbilities.UltimateClassAbility.THUNDERSTORM.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (500L * totalCdReducMultiplier));
+                        final var baseCdReduc = 25;
+                        final var totalCdReducMultiplier = 1.0D - (baseCdReduc + lvlExtraCdReduc) / 100.0D;
+                        AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (30.0D * totalCdReducMultiplier));
+                        AutoClassAbilities.UltimateClassAbility.THUNDERSTORM.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (500.0D * totalCdReducMultiplier));
                         AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP;
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.THUNDERSTORM;
                     }
@@ -308,7 +308,7 @@ final class AutoClassAbilities {
                 AutoClassAbilities.findClassAndAssignAbilities();
             }
 
-            var shouldUse = UltimateClassAbility.CASTLE_OF_STONE == AutoClassAbilities.ultimateClassAbility;
+            var shouldUse = AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE == AutoClassAbilities.ultimateClassAbility;
 
             if (AutoClassAbilities.UltimateClassAbility.WISH == AutoClassAbilities.ultimateClassAbility) {
                 shouldUse = 7 == DungeonFeatures.INSTANCE.getDungeonFloorNumber();

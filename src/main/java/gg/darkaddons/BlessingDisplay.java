@@ -32,7 +32,7 @@ final class BlessingDisplay extends GuiElement {
     }
 
     private static final void updateBlessingsFromTab() {
-        if ((!Config.isBlessingHud() && !BlessingDisplay.needBlessingInfo()) || !DarkAddons.isInDungeons()) {
+        if (!Config.isBlessingHud() && !BlessingDisplay.needBlessingInfo() || !DarkAddons.isInDungeons()) {
             return;
         }
 
@@ -51,10 +51,14 @@ final class BlessingDisplay extends GuiElement {
     }
 
     private static final double getBaseDamageBonusFromBlessingOfStone() {
-        final var tier = BlessingDisplay.getBlessingOrDefault(BlessingType.STONE, 0);
+        final var tier = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.STONE, 0);
         final var paulMult = DarkAddons.isPaulMoreEffectiveBlessingsActive() ? 1.25D : 1.0D;
 
-        return 1.1D * paulMult * 1.2D * (tier * 6); // Source: https://wiki.hypixel.net/Blessings - Assume F3+ floor cause this for M7. Assume maxed wither essence blessing perk because you are throwing if you don't have it.
+        // Source: https://wiki.hypixel.net/Blessings
+        // Assume F3 or an above floor cause this for M7.
+        // Assume maxed wither essence blessing perk
+        // because you are throwing if you don't have it.
+        return 1.1D * paulMult * 1.2D * (tier * 6.0D);
     }
 
     static final void doCheckMessage(@NotNull final ClientChatReceivedEvent event) {
@@ -64,16 +68,16 @@ final class BlessingDisplay extends GuiElement {
             final var message = Utils.removeControlCodes(event.message.getUnformattedText());
             if (message.endsWith(" picked the Corrupted Blue Relic!")) {
                 BlessingDisplay.needBlessingInfo = true;
-                DarkAddons.registerTickTask("send_detailed_blessings_message", 46, false, () -> {
+                DarkAddons.registerTickTask("send_detailed_blessings_message", 46, false, () ->
                     Utils.awaitCondition(() -> !BlessingDisplay.needBlessingInfo, () -> {
-                        final var power = BlessingDisplay.getBlessingOrDefault(BlessingType.POWER, 0);
-                        final var time = BlessingDisplay.getBlessingOrDefault(BlessingType.TIME, 0);
-                        final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingType.WISDOM, 0);
+                        final var power = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.POWER, 0);
+                        final var time = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.TIME, 0);
+                        final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.WISDOM, 0);
                         final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
 
-                        Skytils.sendMessageQueue.add("/pc Detailed Blessings: Power " + power + (time != 0 ? " - Time " + time : "") + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
-                    });
-                });
+                        Skytils.sendMessageQueue.add("/pc Detailed Blessings: Power " + power + (0 == time ? "" : " - Time " + time) + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
+                    })
+                );
             }
         }
 
@@ -197,7 +201,7 @@ final class BlessingDisplay extends GuiElement {
             }
 
             for (final var blessingType : BlessingDisplay.BlessingType.getValues()) {
-                if ((blessingType.isEnabled() || (blessingType != BlessingDisplay.BlessingType.LIFE && BlessingDisplay.needBlessingInfo())) && line.contains(blessingType.getBlessingInTabPrefix())) {
+                if ((blessingType.isEnabled() || BlessingDisplay.BlessingType.LIFE != blessingType && BlessingDisplay.needBlessingInfo()) && line.contains(blessingType.getBlessingInTabPrefix())) {
                     final var level = StringUtils.remove(line, BlessingDisplay.BlessingType.BLESSING_OF + blessingType.prettyNamePlusSpace);
                     BlessingDisplay.blessings[blessingType.enumOrdinal] = Utils.fastRomanToInt(level);
 

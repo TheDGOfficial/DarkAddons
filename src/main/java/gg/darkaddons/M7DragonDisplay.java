@@ -162,7 +162,7 @@ final class M7DragonDisplay extends GuiElement {
         }
 
         // Assume spawned and dead if it's spawning in negative time.
-        return 0L > timeTillSpawn && (!demo || WitherKingDragons.FLAME == dragon) ? M7DragonDisplay.DEAD_TEXT : "§bSpawning in §" + color + Utils.formatMillisecondsAsSeconds(timeTillSpawn);
+        return 0L > timeTillSpawn ? M7DragonDisplay.DEAD_TEXT : "§bSpawning in §" + color + Utils.formatMillisecondsAsSeconds(timeTillSpawn);
     }
 
     private static final void resetHPs() {

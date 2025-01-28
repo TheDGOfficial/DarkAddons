@@ -70,7 +70,7 @@ public final class MethodMapping {
 
             final var map = new HashMap<String, MethodMapping>((int) Math.ceil(mappingSize / 0.75D)); // Inlined short version of Utils#calculateHashMapCapacity
 
-            // Read file on the disk line by line
+            // Read the file on the disk line by line
             for (final var line : StringUtils.replace(PublicUtils.read(mappingsFile), "\\n", "<br>").split("\n")) {
                 MethodMapping.MethodMappingsHolder.parseCSVLineIntoMap(Objects.requireNonNull(line), map);
             }

@@ -24,7 +24,7 @@ final class HideEndPortals {
         McProfilerHelper.startSection("darkaddons_hide_end_portals");
         final var mc = Minecraft.getMinecraft();
         final var player = mc.thePlayer;
-        if (Config.isHideEndPortals() && tileEntity instanceof TileEntityEndPortal && (-1L != DungeonTimer.INSTANCE.getPhase4ClearTime() || (null != player && player.getPosition().getY() <= 45)) && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
+        if (Config.isHideEndPortals() && tileEntity instanceof TileEntityEndPortal && (-1L != DungeonTimer.INSTANCE.getPhase4ClearTime() || null != player && 45 >= player.getPosition().getY()) && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
             McProfilerHelper.endSection();
             return false;
         }

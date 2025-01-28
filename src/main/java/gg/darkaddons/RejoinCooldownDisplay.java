@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BooleanSupplier;
 
 final class RejoinCooldownDisplay extends SimpleGuiElement {
-    @NotNull
     private static final long COOLDOWN_MS = TimeUnit.MINUTES.toMillis(1L);
     @NotNull
     private static final BooleanSupplier isEnabled = Config::isSbRejoinCooldownAfterKickDisplay;
