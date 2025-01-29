@@ -72,13 +72,6 @@ final class TinyConfig {
     }
 
     @Nullable
-    static final Boolean getBoolean(@NotNull final String key) {
-        final var value = TinyConfig.tinyConfigSettings.getProperty(key);
-
-        return null == value ? null : TinyConfig.parseBoolean(value);
-    }
-
-    @Nullable
     static final String getString(@NotNull final String key) {
         return TinyConfig.tinyConfigSettings.getProperty(key);
     }
@@ -91,6 +84,13 @@ final class TinyConfig {
     static final void setString(@NotNull final String key, @NotNull final String value) {
         TinyConfig.tinyConfigSettings.setProperty(key, value);
         TinyConfig.save();
+    }
+
+    @Nullable
+    static final Boolean getBoolean(@NotNull final String key) {
+        final var value = TinyConfig.tinyConfigSettings.getProperty(key);
+
+        return null == value ? null : TinyConfig.parseBoolean(value);
     }
 
     static final boolean getBoolean(@NotNull final String key, final boolean defaultValue) {
