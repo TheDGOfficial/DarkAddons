@@ -981,6 +981,11 @@ final class Config extends Vigilant {
         ClassAverage50Display.syncClassXP();
     }
 
+    private static final void updateSlayerRngDisplay(final boolean state) {
+        // Delay needed because the listener runs before the value is actually changed.
+        DarkAddons.runOnceInNextTick("config_hook_update_slayer_rng_display_prices", SlayerRNGDisplay::forcePriceUpdateIfNecessary);
+    }
+
     private static final void updateBurgersDone(final boolean state) {
         // Delay needed because the listener runs before the value is actually changed.
         DarkAddons.runOnceInNextTick("config_hook_update_burgers_done", SlayerRNGDisplay::markUpdateNeeded);
@@ -1079,6 +1084,7 @@ final class Config extends Vigilant {
         this.registerListener("classAverage50DisplayCompactness", Config::reSyncClassXPUnconditionally);
         this.registerListener("classAverage50DisplayMode", Config::reSyncClassXPUnconditionally);
 
+        this.registerListener("slayerRngDisplay", Config::updateSlayerRngDisplay);
         this.registerListener("burgersDone", Config::updateBurgersDone);
         this.registerListener("prioritizeDice", Config::updatePrioritizeDice);
         this.registerListener("blockPosOptimizer", Config::updateBlockPosOptimizer);

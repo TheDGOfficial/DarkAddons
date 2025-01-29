@@ -20,7 +20,9 @@ import java.util.function.Supplier;
 import java.util.function.IntSupplier;
 
 import java.util.concurrent.Executors;
+
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 
 final class SlayerRNGDisplay extends GuiElement {
     @NotNull
@@ -236,8 +238,19 @@ final class SlayerRNGDisplay extends GuiElement {
         return 0.0D == hours ? 0 : (int) Math.round(coins / hours);
     }
 
-    private static final void registerPriceUpdateTask() {
-        SlayerRNGDisplay.scheduler.scheduleWithFixedDelay(() -> {
+    static final void forcePriceUpdateIfNecessary() {
+        for (final var slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
+            if (/*SlayerRNGDisplay.SellingMethod.AUCTION_HOUSE == slayerDrop.sellingMethod*/SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
+                if (0 == slayerDrop.price) {
+                    // This will cancel the previous registered task and register a new one, set to run with 0 delay for the first time and 1 minute intervals on subsequent ones.
+                    SlayerRNGDisplay.registerPriceUpdateTask();
+                    break;
+                }
+            }
+        }
+    }
+
+    private static final Runnable priceUpdateTask = () -> {
             if (!Config.isSlayerRngDisplay() || DarkAddons.isInDungeons()) {
                 return;
             }
@@ -251,11 +264,21 @@ final class SlayerRNGDisplay extends GuiElement {
                 }
 
                 final var lowestBINPrices = Utils.parseJsonObjectFromString(lbResp);
+                var updateNeeded = false;
 
                 for (final var slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
                     if (/*SlayerRNGDisplay.SellingMethod.AUCTION_HOUSE == slayerDrop.sellingMethod*/SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
+                        if (0 == slayerDrop.price) {
+                            // If any of the slayer drops that supposed to have a AH/BZ price has none, we need to update the display so that it does not keep showing 0 coins till the next time you kill a boss.
+                            // Otherwise, no need to unnecessarily update the display - it will be updated the next time a slayer boss is done.
+                            updateNeeded = true;
+                        }
                         slayerDrop.price = lowestBINPrices.get(slayerDrop.getItemId()).getAsInt();
                     }
+                }
+
+                if (updateNeeded) {
+                    SlayerRNGDisplay.updateNeeded = true;
                 }
 
                 /*final String bzResp = Utils.sendWebRequest("https://api.hypixel.net/skyblock/bazaar");
@@ -290,7 +313,16 @@ final class SlayerRNGDisplay extends GuiElement {
             } catch (final Throwable error) {
                 DarkAddons.modError(error);
             }
-        }, 0L, 1L, TimeUnit.MINUTES);
+    };
+
+    @Nullable
+    private static ScheduledFuture<?> scheduledPriceUpdateTask;
+
+    private static final void registerPriceUpdateTask() {
+        if (SlayerRNGDisplay.scheduledPriceUpdateTask != null) {
+            SlayerRNGDisplay.scheduledPriceUpdateTask.cancel(false);
+        }
+        SlayerRNGDisplay.scheduledPriceUpdateTask = SlayerRNGDisplay.scheduler.scheduleWithFixedDelay(priceUpdateTask, 0L, 1L, TimeUnit.MINUTES);
     }
 
     private static final void registerQuestDetectionTask() {
