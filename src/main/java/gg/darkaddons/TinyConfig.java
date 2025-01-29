@@ -128,4 +128,27 @@ final class TinyConfig {
             throw new RuntimeException("Unable to parse \"" + value + "\" as double", numberFormatException);
         }
     }
+
+    static final Long getLong(@NotNull final String key) {
+        final var value = TinyConfig.tinyConfigSettings.getProperty(key);
+
+        return null == value ? null : TinyConfig.parseLong(value);
+    }
+
+    static final long getLong(@NotNull final String key, final long defaultValue) {
+        return TinyConfig.parseLong(TinyConfig.tinyConfigSettings.getProperty(key, Long.toString(defaultValue)));
+    }
+
+    static final void setLong(@NotNull final String key, final long value) {
+        TinyConfig.tinyConfigSettings.setProperty(key, Long.toString(value));
+        TinyConfig.save();
+    }
+
+    private static final long parseLong(@NotNull final String value) {
+        try {
+            return Long.parseLong(value);
+        } catch (final NumberFormatException numberFormatException) {
+            throw new RuntimeException("Unable to parse \"" + value + "\" as long", numberFormatException);
+        }
+    }
 }
