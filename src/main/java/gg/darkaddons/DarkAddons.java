@@ -741,7 +741,8 @@ public final class DarkAddons {
             new GoldenFishTimer(),
             new AutoFishingRod(),
             new MelodyMessage(),
-            new ReplaceDiorite()
+            new ReplaceDiorite(),
+            new BlazeEffectTimer()
         );
 
         DarkAddons.initGuiManager();
@@ -958,6 +959,7 @@ public final class DarkAddons {
         DialogueSkipHelper.onMessage(event);
 
         BlessingDisplay.doCheckMessage(event);
+        BlazeEffectTimer.onMessage(event);
     }
 
     /**

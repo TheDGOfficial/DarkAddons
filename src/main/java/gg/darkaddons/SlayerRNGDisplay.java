@@ -327,7 +327,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private static final void registerQuestDetectionTask() {
         DarkAddons.registerTickTask("update_slayer_quest_detection", 4, true, () -> {
-            if (!Config.isSlayerRngDisplay() || DarkAddons.isInDungeons()) {
+            if ((!Config.isSlayerRngDisplay() && !Config.isBlazeEffectTimer()) || DarkAddons.isInDungeons()) {
                 return;
             }
 
@@ -519,6 +519,10 @@ final class SlayerRNGDisplay extends GuiElement {
 
     @Nullable
     private static SlayerRNGDisplay.Slayer currentSlayer;
+
+    static final boolean isDoingInfernoDemonlordSlayer() {
+        return Slayer.BLAZE == SlayerRNGDisplay.currentSlayer && SlayerRNGDisplay.currentSlayer.hasActiveQuest && SlayerRNGDisplay.currentSlayer.isInSlayerArea();
+    }
 
     private enum SellingMethod {
         AUCTION_HOUSE, BAZAAR, NONE;
