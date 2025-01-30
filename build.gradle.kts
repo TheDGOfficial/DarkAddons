@@ -132,7 +132,7 @@ dependencies {
     api("gg.essential:elementa:676")
     implementation("gg.essential:universalcraft-1.8.9-forge:370+fix-background-drawing-on-1.21.2")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20-Beta1")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20-Beta2")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
