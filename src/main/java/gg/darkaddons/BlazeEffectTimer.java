@@ -41,7 +41,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
             BlazeEffectTimer.polarizationEnd = System.currentTimeMillis() + (polarizationEndLocal - lastInSkyblockTimeLocal);
             BlazeEffectTimer.icePotionEnd = System.currentTimeMillis() + (icePotionEndLocal - lastInSkyblockTimeLocal);
 
-            BlazeEffectTimer.lastInSkyblockTime = lastInSkyblockTimeLocal;
+            BlazeEffectTimer.lastInSkyblockTime = System.currentTimeMillis();
         }
     }
 
@@ -137,6 +137,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
                 // Counting down client side would also be less accurate cause of FPS or TPS limitations and server de-sync. So we are simply calculating the end time when the timer starts and then calculating time left based off of current and end date.
                 BlazeEffectTimer.polarizationEnd = currentTime + TimeUnit.SECONDS.toMillis(polarizationTimeLeftSecondsLocal);
                 BlazeEffectTimer.icePotionEnd = currentTime + TimeUnit.SECONDS.toMillis(icePotionTimeLeftSecondsLocal);
+                BlazeEffectTimer.lastInSkyblockTime = currentTime;
             }
 
             return;
