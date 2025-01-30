@@ -150,7 +150,9 @@ dependencies {
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.11.4")
 
-    compileOnly("gg.skytils:skytilsmod:$skytilsVersion")
+    compileOnly("gg.skytils:skytilsmod:$skytilsVersion") {
+        exclude(module = "kotlin-stdlib")
+    }
 
     proguardClasspath("com.guardsquare:proguard-base:7.6.1") {
         exclude(module = "proguard-core")
