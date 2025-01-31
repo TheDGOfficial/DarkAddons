@@ -105,6 +105,8 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         BlazeEffectTimer.icePotionTimeLeftSeconds = 0L;
         BlazeEffectTimer.lastIcePotionTimeLeftSeconds = 0L;
 
+        BlazeEffectTimer.lastInSkyblockTime = 0L;
+
         super.clear();
     }
 
