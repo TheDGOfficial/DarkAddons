@@ -910,8 +910,8 @@ final class Config extends Vigilant {
     private static boolean extraLuck;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Century Raffle Ticket Timer",
-        description = "Shows time till you can get a Raffle Ticket in the Century Raffle event. If unknown or negative value it will show as 20min. This depends on the chat messages to know when you get a ticket. Note: This was a feature dedicated to Year 300 Raffle Event, unless another Raffle Event happens in SkyBlock you probably shouldn't enable this feature.",
+        type = PropertyType.SWITCH, name = "Century Raffle Playtime Ticket Timer",
+        description = "Shows time till you can get a Raffle Playtime Ticket in the Century Raffle event. If unknown or negative value it will show as 30min. This depends on the chat messages to know when you get a ticket. This feature does not take the cap of tickets you can earn per day into account, so it will always keep showing a timer even if you can't earn any more tickets. Note: This was a feature dedicated to Year 300 and 400 Raffle Events, unless another Raffle Event happens in SkyBlock you probably shouldn't enable this feature.",
         category = "Misc", subcategory = "Events"
     )
     private static boolean centuryRaffleTicketTimer;
