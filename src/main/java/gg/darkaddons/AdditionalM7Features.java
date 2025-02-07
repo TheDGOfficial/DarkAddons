@@ -134,31 +134,16 @@ final class AdditionalM7Features {
             // TODO sometimes causes weird bugs, i.e., shows for the wrong dragon, or shows killed when its actually missed, or doesn't show at all, etc.
             if (AdditionalM7Features.MAX_RETRY_TICKS_WAITING_FOR_DEATH_EVENT > ticks) {
                 DarkAddons.runOnceInNextTick("process_statue_message_recheck", () -> AdditionalM7Features.processStatueMessage(destroy, ticks + 1));
-                if (Config.isDebugMode() && 1 == ticks) {
-                    DarkAddons.debug(() -> "Scheduled re-check of determining last killed dragon to show statue " + (destroy ? "destroyed" : "missed") + " notification to the next tick. Will keep rescheduling till we find it or give up after " + AdditionalM7Features.MAX_RETRY_TICKS_WAITING_FOR_DEATH_EVENT + " ticks.");
-                }
-            } else if (Config.isDebugMode()) {
-                DarkAddons.debug(() -> "Gave up trying to find last killed dragon to show statue " + (destroy ? "destroyed" : "missed") + " notification");
             }
         } else {
             if (destroy) {
-                if (lastDragon.isDestroyed()) {
-                    if (Config.isDebugMode()) {
-                        DarkAddons.debug(() -> "Skipping statue destroyed notification for " + lastDragon.getEnumName() + " because it's statue is already destroyed");
-                    }
-                } else {
+                if (!lastDragon.isDestroyed()) {
                     lastDragon.setDestroyed(true);
 
                     AdditionalM7Features.onStatueDestroyed(lastDragon);
                 }
-            } else {
-                if (lastDragon.isDestroyed()) {
-                    if (Config.isDebugMode()) {
-                        DarkAddons.debug(() -> "Skipping statue missed notification for " + lastDragon.getEnumName() + " because it's statue is already destroyed");
-                    }
-                } else {
-                    AdditionalM7Features.onStatueMissed(lastDragon);
-                }
+            } else if (!lastDragon.isDestroyed()) {
+                AdditionalM7Features.onStatueMissed(lastDragon);
             }
             AdditionalM7Features.lastKilledDragon = null;
         }
@@ -172,15 +157,8 @@ final class AdditionalM7Features {
         final var entity = event.entityLiving;
         if (entity instanceof EntityDragon) {
             final var type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
-            if (null == type) {
-                if (Config.isDebugMode()) {
-                    DarkAddons.debug(() -> "Can't find last killed dragon type for entity with name " + entity.getName() + "§r§e at x=" + entity.posX + ",y=" + entity.posY + ",z=" + entity.posZ);
-                }
-            } else {
+            if (null != type) {
                 AdditionalM7Features.lastKilledDragon = type;
-                if (Config.isDebugMode()) {
-                    DarkAddons.debug(() -> "Set last killed dragon type to " + type.getEnumName());
-                }
             }
         }
     }
@@ -207,9 +185,6 @@ final class AdditionalM7Features {
         AdditionalM7Features.lividsSpawned = false;
         AdditionalM7Features.giantsFalling = false;
         AdditionalM7Features.playingTank = false;
-        if (Config.isDebugMode() && null != AdditionalM7Features.lastKilledDragon) {
-            DarkAddons.debug(() -> "Reset data since dimension changed.");
-        }
         AdditionalM7Features.lastKilledDragon = null;
         AdditionalM7Features.phase5Started = false;
         AdditionalM7Features.canRemoveBlankArmorStands = true;

@@ -130,23 +130,6 @@ final class M7Features {
         return counter;
     }*/
 
-    /*private static final void debugLogAliveDragons() {
-        for (final int entityId : M7Features.reverseDragonMap) {
-            if (-1 != entityId) {
-                @Nullable final Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(entityId);
-
-                if (entity instanceof EntityDragon) {
-                    final WitherKingDragons type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
-                    if (Config.isDebugMode()) {
-                        DarkAddons.debug(() -> "Alive dragon: " + (null == type ? "UNKNOWN" : type.getEnumName()));
-                    }
-                } else {
-                    M7Features.debugLogEntity(entityId, entity);
-                }
-            }
-        }
-    }*/
-
     static final void handlePacket(@NotNull final Packet<?> p) {
         // TODO: this method is called outside the Client thread, inspect if modifications to collections are only done here and all other threads only read it or perhaps use concurrent collection variants.
         if (-1L == DungeonTimer.INSTANCE.getPhase4ClearTime() || AdditionalM7Features.isWitherKingDefeated() || !AdditionalM7Features.isInM7()) {
@@ -178,7 +161,6 @@ final class M7Features {
                         true,
                         GuiManager.Sound.ANVIL_LAND
                     );
-                    M7Features.debugLogAliveDragons();
                 }*/
 
                 if (Config.isSpawningNotification()) {
@@ -258,17 +240,11 @@ final class M7Features {
             M7Features.dragonMap.put(id, type);
             M7Features.reverseDragonMap[type.getEnumOrdinal()] = id;
 
-            if (Config.isDebugMode()) {
-                final var finalType = type;
-                DarkAddons.debug(() -> "Set masterDragonType to " + finalType.getEnumName() + " and added the spawned dragon to the dragonMap.");
-            }
-
             M7Features.spawningDragons.remove(type);
             M7Features.killedDragons.remove(type);
 
             /*if (Config.isWitherKingFightFailNotification() && 4 == M7Features.getAliveDragonCount()) {
                 GuiManager.createTitle("§c§l4 Drags Alive!", 60, true, GuiManager.Sound.PLING);
-                M7Features.debugLogAliveDragons();
             }*/
         }
     }
@@ -291,10 +267,6 @@ final class M7Features {
             M7Features.spawningDragons.remove(type);
             M7Features.dragonMap.remove(entity.getEntityId());
             M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
-
-            if (Config.isDebugMode()) {
-                DarkAddons.debug(() -> "Removed dying dragon from the dragonMap");
-            }
         }
     }
 
@@ -316,17 +288,8 @@ final class M7Features {
         M7Features.killedDragons.clear();
         M7Features.dragonMap.clear();
 
-        var shouldCallDebug = true;
         final var len = M7Features.reverseDragonMap.length;
         for (var i = 0; i < len; ++i) {
-            if (shouldCallDebug && -1 != M7Features.reverseDragonMap[i]) {
-                shouldCallDebug = false;
-
-                if (Config.isDebugMode()) {
-                    DarkAddons.debug(() -> "Reset dragonMap because dimension changed.");
-                }
-            }
-
             M7Features.reverseDragonMap[i] = -1;
         }
 

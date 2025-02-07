@@ -1253,9 +1253,6 @@ public final class DarkAddons {
             ThreadPriorityTweaker.init();
 
             DarkAddons.checkForSBA();
-            /*if (Config.isDebugMode() && !Config.isUnsafeMode()) {
-                DarkAddons.preloadMixinClasses();
-            }*/
 
             DarkAddons.reducePatcherBackgroundThreads();
             //DarkAddons.checkElementaVersion();

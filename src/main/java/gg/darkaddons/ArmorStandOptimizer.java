@@ -208,14 +208,6 @@ final class ArmorStandOptimizer {
 
     @NotNull
     private static final Object[][] allocEntityArray(final int size) {
-        if (Config.isDebugMode()) {
-            try {
-                return new Object[size][];
-            } catch (final OutOfMemoryError outOfMemoryError) {
-                DarkAddons.modError(outOfMemoryError);
-                throw outOfMemoryError; // Re-throw to let JVM handle signals and heapdump if the -XX:+HeapDumpOnOutOfMemoryError parameter is specified
-            }
-        }
         return new Object[size][];
     }
 

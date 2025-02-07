@@ -125,16 +125,11 @@ final class ThreadPriorityTweaker {
 
                 final var thread = entry.getKey();
 
-                final var currentPriority = thread.getPriority();
                 final int originalPriority = entry.getValue();
 
                 //noinspection CallToThreadSetPriority
                 thread.setPriority(originalPriority);
                 iterator.remove();
-
-                if (Config.isDebugMode()) {
-                    DarkAddons.debug(() -> "Restored priority of thread " + thread.getName() + " to be " + originalPriority + " (from " + currentPriority + ')');
-                }
             }
         });
     }
