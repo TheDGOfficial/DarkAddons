@@ -843,6 +843,15 @@ public final class DarkAddons {
     }
 
     /**
+     * Returns true if disable patcher font renderer is true, false otherwise.
+     *
+     * @return True if disable patcher font renderer is enabled in Config.
+     */
+    public static final boolean isDisablePatcherFontRenderer() {
+        return Config.isDisablePatcherFontRenderer();
+    }
+
+    /**
      * Returns true if skytils waypoints should not be rendered, false otherwise.
      *
      * @return True if skytils waypoints should not be rendered.

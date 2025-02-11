@@ -910,6 +910,13 @@ final class Config extends Vigilant {
     private static boolean extraLuck;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Disable Patcher Font Renderer",
+        description = "Disables Patcher Font Renderer that is normally used when you enable Optimized Font Renderer option in Patcher. Unlike disabling Optimized Font Render completely and losing out on cached getStringWidth along with other calculations/optimizations, this option only disables the rendering part, letting vanilla handle it. May solve freezes when opening Spirit Leap Menu in Dungeons caused by Patcher's Renderer or weird green line in /friend list output caused by Cached Font Data in uncommon platforms, like Mesa OpenGL in Linux. Do not enable unless you know what you are doing.",
+        category = "Misc", subcategory = "Developer Options"
+    )
+    private static boolean disablePatcherFontRenderer;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Century Raffle Playtime Ticket Timer",
         description = "Shows time till you can get a Raffle Playtime Ticket in the Century Raffle event. If unknown or negative value it will show as 30min. This depends on the chat messages to know when you get a ticket. This feature does not take the cap of tickets you can earn per day into account, so it will always keep showing a timer even if you can't earn any more tickets. Note: This was a feature dedicated to Year 300 and 400 Raffle Events, unless another Raffle Event happens in SkyBlock you probably shouldn't enable this feature.",
         category = "Misc", subcategory = "Events"
@@ -1765,6 +1772,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.extraLuck;
+    }
+
+    static final boolean isDisablePatcherFontRenderer() {
+        Config.checkUninit();
+
+        return Config.disablePatcherFontRenderer;
     }
 
     static final boolean isProfilerMode() {
