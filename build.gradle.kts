@@ -25,7 +25,7 @@ plugins {
     idea
     signing
     `maven-publish`
-    id("io.github.sgtsilvio.gradle.proguard") version "0.7.0"
+    id("io.github.sgtsilvio.gradle.proguard") version "0.8.0"
     id("com.autonomousapps.dependency-analysis") version "2.8.2"
 }
 
