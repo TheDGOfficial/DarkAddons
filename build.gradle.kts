@@ -137,7 +137,7 @@ dependencies {
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
     compileOnly("org.spongepowered:mixin:$mixinVersion")
-    annotationProcessor("org.spongepowered:mixin:$mixinVersion:processor")
+    //annotationProcessor("org.spongepowered:mixin:$mixinVersion:processor")
 
     compileOnly("com.google.guava:guava:$guavaVersion") // TODO make it back shadowMe
 
