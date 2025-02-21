@@ -17,6 +17,15 @@ final class MixinSelectAllColorSolver {
 
     @Redirect(method = "onBackgroundDrawn", remap = false, at = @At(value = "INVOKE", target = "Lkotlin/text/StringsKt;contains$default(Ljava/lang/CharSequence;Ljava/lang/CharSequence;ZILjava/lang/Object;)Z", ordinal = 1))
     private final boolean onBackgroundDrawn$darkaddons(@NotNull final CharSequence iName, @NotNull final CharSequence termColorNeeded, final boolean ignoreCase, final int i, @Nullable final Object o) {
+        return MixinSelectAllColorSolver.fixBlueItemsMatchingLightBlueItems(iName, termColorNeeded);
+    }
+
+    @Redirect(method = "handleItemStack", remap = false, at = @At(value = "INVOKE", target = "Lkotlin/text/StringsKt;contains$default(Ljava/lang/CharSequence;Ljava/lang/CharSequence;ZILjava/lang/Object;)Z", ordinal = 1))
+    private final boolean handleItemStack$darkaddons(@NotNull final CharSequence iName, @NotNull final CharSequence termColorNeeded, final boolean ignoreCase, final int i, @Nullable final Object o) {
+        return MixinSelectAllColorSolver.fixBlueItemsMatchingLightBlueItems(iName, termColorNeeded);
+    }
+
+    private static final boolean fixBlueItemsMatchingLightBlueItems(@NotNull final CharSequence iName, @NotNull final CharSequence termColorNeeded) {
         final var itemName = iName.toString();
         final var terminalColorNeeded = termColorNeeded.toString();
         if (itemName.contains(terminalColorNeeded)) {
