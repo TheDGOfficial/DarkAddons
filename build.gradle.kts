@@ -17,7 +17,7 @@ import java.util.Properties
 
 plugins {
     //kotlin("jvm") version "2.1.20-dev-6370"
-    id("com.gradleup.shadow") version "8.3.6"
+    id("com.gradleup.shadow") version "9.0.0-beta8"
     id("gg.essential.loom") version "1.9.24"
     id("dev.architectury.architectury-pack200") version "0.1.3"
     id("com.github.ben-manes.versions") version "0.52.0"
@@ -285,6 +285,7 @@ tasks {
     //TODO javaCompile task never says UP-TO-DATE, figure why it doesnt work with build cache.
     withType<JavaCompile> {
         val path = File("${projectDir}/src/main/java/gg/darkaddons/Reference.java").toPath()
+        val version = project.version.toString()
 
         doFirst {
             Files.write(
@@ -292,7 +293,7 @@ tasks {
                 StringUtils.replace(
                     String(Files.readAllBytes(path), StandardCharsets.UTF_8),
                     "@VERSION@",
-                    project.version.toString()
+                    version
                 ).toByteArray(StandardCharsets.UTF_8)
             )
         }
@@ -302,7 +303,7 @@ tasks {
                 path,
                 StringUtils.replace(
                     String(Files.readAllBytes(path), StandardCharsets.UTF_8),
-                    project.version.toString(),
+                    version,
                     "@VERSION@"
                 ).toByteArray(StandardCharsets.UTF_8)
             )
