@@ -18,7 +18,7 @@ import java.util.Properties
 plugins {
     //kotlin("jvm") version "2.1.20-dev-6370"
     id("com.gradleup.shadow") version "8.3.6"
-    id("gg.essential.loom") version "1.6.21"
+    id("gg.essential.loom") version "1.9.24"
     id("dev.architectury.architectury-pack200") version "0.1.3"
     id("com.github.ben-manes.versions") version "0.52.0"
     java
