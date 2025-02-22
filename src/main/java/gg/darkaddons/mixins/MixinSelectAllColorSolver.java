@@ -15,12 +15,12 @@ final class MixinSelectAllColorSolver {
         super();
     }
 
-    @Redirect(method = "onBackgroundDrawn", remap = false, at = @At(value = "INVOKE", target = "Lkotlin/text/StringsKt;contains$default(Ljava/lang/CharSequence;Ljava/lang/CharSequence;ZILjava/lang/Object;)Z", ordinal = 1))
+    @Redirect(method = "onBackgroundDrawn", remap = false, at = @At(value = "INVOKE", target = "Lkotlin/text/StringsKt;contains$default(Ljava/lang/CharSequence;Ljava/lang/CharSequence;ZILjava/lang/Object;)Z", ordinal = 1), require = 0)
     private final boolean onBackgroundDrawn$darkaddons(@NotNull final CharSequence iName, @NotNull final CharSequence termColorNeeded, final boolean ignoreCase, final int i, @Nullable final Object o) {
         return MixinSelectAllColorSolver.fixBlueItemsMatchingLightBlueItems(iName, termColorNeeded);
     }
 
-    @Redirect(method = "handleItemStack", remap = false, at = @At(value = "INVOKE", target = "Lkotlin/text/StringsKt;contains$default(Ljava/lang/CharSequence;Ljava/lang/CharSequence;ZILjava/lang/Object;)Z", ordinal = 1))
+    @Redirect(method = "handleItemStack", remap = false, at = @At(value = "INVOKE", target = "Lkotlin/text/StringsKt;contains$default(Ljava/lang/CharSequence;Ljava/lang/CharSequence;ZILjava/lang/Object;)Z"), require = 0)
     private final boolean handleItemStack$darkaddons(@NotNull final CharSequence iName, @NotNull final CharSequence termColorNeeded, final boolean ignoreCase, final int i, @Nullable final Object o) {
         return MixinSelectAllColorSolver.fixBlueItemsMatchingLightBlueItems(iName, termColorNeeded);
     }
