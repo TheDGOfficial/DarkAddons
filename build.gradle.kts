@@ -199,12 +199,12 @@ sourceSets {
 
 tasks {
     processResources {
-        inputs.property("version", project.version)
+        inputs.property("version", provider { project.version })
         inputs.property("mcversion", "1.8.9")
-        inputs.property("description", project.description)
+        inputs.property("description", provider { project.description })
 
         filesMatching("mcmod.info") {
-            expand(mapOf("version" to project.version, "mcversion" to "1.8.9", "description" to project.description))
+            expand(mapOf("version" to provider { project.version }.get(), "mcversion" to "1.8.9", "description" to provider { project.description }.get()))
         }
         dependsOn(compileJava)
     }
