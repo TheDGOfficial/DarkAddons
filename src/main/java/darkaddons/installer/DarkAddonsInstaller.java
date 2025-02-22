@@ -483,7 +483,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
         //noinspection ObjectEquality
         if (e.getSource() == this.getForgeTextArea()) {
             try {
-                Desktop.getDesktop().browse(new URI("https://files.minecraftforge.net/maven/net/minecraftforge/forge/index_1.8.9.html"));
+                Desktop.getDesktop().browse(new URI("https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html"));
             } catch (final IOException | URISyntaxException ex) {
                 DarkAddonsInstaller.showErrorPopup(ex, () -> "Unable to open Forge download website via default browser with Desktop Environment");
             }
