@@ -51,9 +51,30 @@ ensure_m2_artifact_exists() {
  ARTIFACT=$2
  VERSION=$3
  ARTIFACT_PATH=$4
+ SOURCES_PATH=$5
+ JAVADOC_PATH=$6
+ PROCESSOR_PATH=$7
+ FETCH_SOURCE=$8
+ FETCH_JAVADOC=$9
+ HAS_PROCESSOR=${10}
 
  if [ ! -f "$ARTIFACT_PATH" ]; then
-  ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/repository/maven-public/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+  ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+ fi
+ if [ "$FETCH_SOURCE" = "true" ]; then
+  if [ ! -f "$SOURCES_PATH" ]; then
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:sources
+  fi
+ fi
+ if [ "$FETCH_JAVADOC" = "true" ]; then
+  if [ ! -f "$JAVADOC_PATH" ]; then
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:javadoc
+  fi
+ fi
+ if [ "$HAS_PROCESSOR" = "true" ]; then
+  if [ ! -f "$PROCESSOR_PATH" ]; then
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:processor
+  fi
  fi
 }
 
@@ -71,7 +92,13 @@ add_m2_artifact_to_classpath() {
  GROUP=${GROUP_WITH_DOTS//./\/}
 
  ARTIFACT_PATH=$REPO/$GROUP/$ARTIFACT/$VERSION/$ARTIFACT-$VERSION.jar
- ensure_m2_artifact_exists "$GROUP_WITH_DOTS" "$ARTIFACT" "$VERSION" "$ARTIFACT_PATH"
+ SOURCES_PATH=$REPO/$GROUP/$ARTIFACT/$VERSION/$ARTIFACT-$VERSION-sources.jar
+ JAVADOC_PATH=$REPO/$GROUP/$ARTIFACT/$VERSION/$ARTIFACT-$VERSION-javadoc.jar
+ PROCESSOR_PATH=$REPO/$GROUP/$ARTIFACT/$VERSION/$ARTIFACT-$VERSION-processor.jar
+ HAS_PROCESSOR="${4:-false}"
+ FETCH_SOURCE="${5:-false}"
+ FETCH_JAVADOC="${6:-false}"
+ ensure_m2_artifact_exists "$GROUP_WITH_DOTS" "$ARTIFACT" "$VERSION" "$ARTIFACT_PATH" "$SOURCES_PATH" "$JAVADOC_PATH" "$PROCESSOR_PATH" "$FETCH_SOURCE" "$FETCH_JAVADOC" "$HAS_PROCESSOR"
 
  CLASSPATH=$CLASSPATH:$ARTIFACT_PATH
  HASH=$HASH$VERSION
@@ -99,7 +126,7 @@ add_m2_artifact_to_classpath com.mojang authlib "$AUTHLIB_VERSION"
 
 add_m2_artifact_to_classpath net.minecraft launchwrapper "$LAUNCHWRAPPER_VERSION"
 add_m2_artifact_to_classpath io.netty netty-all "$NETTY_VERSION"
-add_m2_artifact_to_classpath org.spongepowered mixin "$MIXIN_VERSION"
+add_m2_artifact_to_classpath org.spongepowered mixin "$MIXIN_VERSION" true
 add_m2_artifact_to_classpath org.lwjgl.lwjgl lwjgl "$LWJGL_VERSION"
 
 add_m2_artifact_to_classpath org.apache.logging.log4j log4j-api "$LOG4J_VERSION"

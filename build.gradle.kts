@@ -66,6 +66,7 @@ repositories {
     mavenCentral()
     maven("https://repo.essential.gg/public/")
     maven("https://repo.hypixel.net/repository/Hypixel/")
+    maven("https://repo.spongepowered.org/maven/")
     //maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
 }
 
@@ -137,7 +138,7 @@ dependencies {
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
     compileOnly("org.spongepowered:mixin:$mixinVersion")
-    //annotationProcessor("org.spongepowered:mixin:$mixinVersion:processor")
+    annotationProcessor("org.spongepowered:mixin:$mixinVersion:processor")
 
     compileOnly("com.google.guava:guava:$guavaVersion") // TODO make it back shadowMe
 
