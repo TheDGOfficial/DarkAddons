@@ -150,6 +150,12 @@ if [ "${1:-default}" == "--refresh-dependencies" ]; then
   exit
 fi
 
+if [ "${1:-default}" == "--clean-build" ]; then
+  echo "Doing a clean build (will be a lot slower!)"
+  ./gradlew build test remapJar --refresh-dependencies --rerun-tasks --no-build-cache --warning-mode all
+  exit
+fi
+
 EXIT_CODE=1
 
 if [ "${1:-default}" != "--skip-build" ]; then
