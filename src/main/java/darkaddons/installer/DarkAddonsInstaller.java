@@ -641,7 +641,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
     @NotNull
     private static final DarkAddonsInstaller.OperatingSystem getOperatingSystem() {
-        final var osName = System.getProperty("os.name").toLowerCase(Locale.US);
+        final var osName = System.getProperty("os.name").toLowerCase(Locale.ROOT);
         if (osName.contains("win")) {
             return DarkAddonsInstaller.OperatingSystem.WINDOWS;
 
