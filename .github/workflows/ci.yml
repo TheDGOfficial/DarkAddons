@@ -47,6 +47,8 @@ jobs:
      uses: actions/cache@v4.2.1
      with:
       key: gradle-wrapper-${{hashFiles('**/gradle-wrapper.properties') }}
+      restore-keys: |
+       gradle-wrapper-
       path: |
        ~/.gradle/wrapper
 
@@ -54,6 +56,9 @@ jobs:
      uses: actions/cache@v4.2.1
      with:
       key: gradle-packages-${{ hashFiles('**/*.gradle*') }}-${{hashFiles('**/versions.properties') }}-${{hashFiles('**/gradle.properties') }}-${{hashFiles('**/settings.gradle*') }}
+      restore-keys: |
+       gradle-packages-
+       gradle-packages-${{ hashFiles('**/*.gradle*') }}-
       path: |
        ~/.gradle/caches
        .gradle/configuration-cache
@@ -63,6 +68,8 @@ jobs:
      uses: actions/cache@v4.2.1
      with:
       key: maven-packages-${{hashFiles('.sha256sum') }}
+      restore-keys: |
+       maven-packages-
       path: |
        ~/.m2
 
