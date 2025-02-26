@@ -53,7 +53,7 @@ jobs:
    - name: Cache Gradle packages
      uses: actions/cache@v4.2.1
      with:
-      key: gradle-packages-${{ hashFiles('**/*.gradle*') }}-${{hashFiles('**/versions.properties') }}
+      key: gradle-packages-${{ hashFiles('**/*.gradle*') }}-${{hashFiles('**/versions.properties') }}-${{hashFiles('**/gradle.properties') }}-${{hashFiles('**/settings.gradle*') }}
       path: |
        ~/.gradle/caches
        .gradle/configuration-cache
