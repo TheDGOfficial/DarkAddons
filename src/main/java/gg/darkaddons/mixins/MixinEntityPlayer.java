@@ -26,31 +26,14 @@ final class MixinEntityPlayer {
 
     @Inject(method = "setCurrentItemOrArmor", at = @At("HEAD"), cancellable = true)
     private final void setCurrentItemOrArmor$darkaddons(final int slot, @NotNull final ItemStack itemStack, @NotNull final CallbackInfo ci) {
-        final var inv = this.sanityGetInventory$darkaddons();
         final var currentItem = 0 == slot;
 
-        final var array = currentItem ? inv.mainInventory : inv.armorInventory;
-        final var index = currentItem ? inv.currentItem : slot - 1;
-
-        //noinspection IfCanBeAssertion
-        if (null == array) {
-            throw new IllegalStateException("null array");
-        }
+        final var array = currentItem ? this.inventory.mainInventory : this.inventory.armorInventory;
+        final var index = currentItem ? this.inventory.currentItem : slot - 1;
 
         if (!MixinEntityPlayer.isArrayAccessInBounds$darkaddons(array, index)) {
             ci.cancel();
         }
-    }
-
-    @NotNull
-    @Unique
-    private final InventoryPlayer sanityGetInventory$darkaddons() {
-        final var inv = this.inventory;
-        if (null == inv) {
-            throw MixinUtils.shadowFail();
-        }
-
-        return inv;
     }
 
     @Unique

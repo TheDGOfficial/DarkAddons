@@ -36,31 +36,16 @@ final class MixinASMEventHandler {
     @Unique
     private boolean startedProfiling;
 
-    @Unique
-    private final void sanityCheck$darkaddons(final boolean checkListener) {
-        if (null == this.owner) {
-            throw MixinUtils.shadowFail();
-        }
-
-        //noinspection IfCanBeAssertion
-        if (checkListener && null == this.listenerMethodName) {
-            throw new IllegalStateException("this.listenerMethodName is null");
-        }
-    }
-
     @Inject(method = "<init>", at = @At("RETURN"), remap = false)
     private final void init$darkaddons(@NotNull final Object target, @NotNull final Method method, @NotNull final ModContainer ownerIn, @NotNull final CallbackInfo ci) {
         if (DarkAddons.isProfilerMode()) {
             this.listenerMethodName = method.getName();
-            this.sanityCheck$darkaddons(true);
         }
     }
 
     @Inject(method = "invoke", at = @At("HEAD"), remap = false)
     private final void beforeInvoke$darkaddons(@NotNull final Event event, @NotNull final CallbackInfo ci) {
         if (DarkAddons.isProfilerMode() && null != this.listenerMethodName && DarkAddons.shouldProfile() && Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
-            this.sanityCheck$darkaddons(false);
-
             PublicUtils.startProfilingSection(this.owner.getModId() + '_' + this.listenerMethodName);
             this.startedProfiling = true;
         }
@@ -69,8 +54,6 @@ final class MixinASMEventHandler {
     @Inject(method = "invoke", at = @At("RETURN"), remap = false)
     private final void afterInvoke$darkaddons(@NotNull final Event event, @NotNull final CallbackInfo ci) {
         if (null != this.listenerMethodName && this.startedProfiling && Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
-            this.sanityCheck$darkaddons(false);
-
             PublicUtils.endProfilingSection();
             this.startedProfiling = false;
         }
