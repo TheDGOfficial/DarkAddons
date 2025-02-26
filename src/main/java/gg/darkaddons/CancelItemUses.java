@@ -22,7 +22,7 @@ final class CancelItemUses {
     private static final boolean IS_MOD_DEVELOPER = "d5c721ce-1b12-4f71-9c1d-0f4e36829f99".equals(Minecraft.getMinecraft().thePlayer.getUniqueID().toString());
 
     static final boolean shouldAllowKeyPress(@NotNull final KeyBinding keyBinding) {
-        if (!CancelItemUses.IS_MOD_DEVELOPER || !Config.isExtraLuck()) {
+        if (!Config.isExtraLuck() || !CancelItemUses.IS_MOD_DEVELOPER) {
             return true;
         }
 

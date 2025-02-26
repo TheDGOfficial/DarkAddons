@@ -68,7 +68,7 @@ final class AutoDance {
             if (subTitle.contains("Jump") && !subTitle.contains("Don't jump")) {
                 // TODO we fail a lot with the reason "You weren't mid-air!", figure out how many ticks after the title exactly to jump and only jump 1 time instead of multiple.
                 MixinUtils.setJumpOverride(true);
-                MixinUtils.setJumpOverridePrecondition(() -> AutoDance.isOnDanceBlock(/*false*/true) && (Config.isAggressiveJump() || 0.0D == Minecraft.getMinecraft().thePlayer.motionX && 0.0D == Minecraft.getMinecraft().thePlayer.motionZ)); // This so that we don't jump while the player is moving (makes player get off of block).
+                MixinUtils.setJumpOverridePrecondition(() -> (Config.isAggressiveJump() || 0.0D == Minecraft.getMinecraft().thePlayer.motionX && 0.0D == Minecraft.getMinecraft().thePlayer.motionZ) && AutoDance.isOnDanceBlock(/*false*/true)); // This so that we don't jump while the player is moving (makes player get off of block).
             }
 
             if (!subTitle.contains("Sneak") && !subTitle.contains("Jump") && !subTitle.contains("Don't jump") && !subTitle.contains("Stand") && subTitle.contains("Punch!")) {

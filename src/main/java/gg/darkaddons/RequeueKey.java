@@ -23,7 +23,7 @@ final class RequeueKey {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
-        if (TickEvent.Phase.END == event.phase && Config.isPressKeyToRequeue() && RequeueKey.REQUEUE_KEY.isPressed()) {
+        if (Config.isPressKeyToRequeue() && TickEvent.Phase.END == event.phase && RequeueKey.REQUEUE_KEY.isPressed()) {
             final var requeueCommand = "/instancerequeue";
             final var commandQueue = Skytils.sendMessageQueue;
 

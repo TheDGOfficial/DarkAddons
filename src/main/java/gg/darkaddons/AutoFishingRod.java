@@ -163,15 +163,15 @@ final class AutoFishingRod {
             final var unformattedMessage = Utils.removeControlCodes(event.message.getUnformattedText()).trim();
 
             if (formattedMessage.contains("§")) {
-                if ("You spot a Golden Fish surface from beneath the lava!".equals(unformattedMessage) && !AutoFishingRod.hasActiveBobber()) {
+                if (!AutoFishingRod.hasActiveBobber() && "You spot a Golden Fish surface from beneath the lava!".equals(unformattedMessage)) {
                     AutoFishingRod.throwBobber();
-                } else if (("The Golden Fish escapes your hook.".equals(unformattedMessage) || "The Golden Fish escapes your hook but looks weakened.".equals(unformattedMessage)) && Config.isAutoFishingRodGoldenFishMode()) {
+                } else if (Config.isAutoFishingRodGoldenFishMode() && ("The Golden Fish escapes your hook.".equals(unformattedMessage) || "The Golden Fish escapes your hook but looks weakened.".equals(unformattedMessage))) {
                     Utils.awaitCondition(() -> !AutoFishingRod.hasActiveBobber(), AutoFishingRod::throwBobber);
-                } else if ("The Golden Fish is weak!".equals(unformattedMessage) && Config.isAutoFishingRodGoldenFishMode()) {
+                } else if (Config.isAutoFishingRodGoldenFishMode() && "The Golden Fish is weak!".equals(unformattedMessage)) {
                     AutoFishingRod.throwBobber();
-                } else if ("The Golden Fish swims back beneath the lava...".equals(unformattedMessage) && !AutoFishingRod.hasActiveBobber()) {
+                } else if (!AutoFishingRod.hasActiveBobber() && "The Golden Fish swims back beneath the lava...".equals(unformattedMessage)) {
                     AutoFishingRod.throwBobber();
-                } else if (unformattedMessage.startsWith("TROPHY FISH! You caught a Golden Fish ") && Config.isAutoFishingRodGoldenFishMode()) {
+                } else if (Config.isAutoFishingRodGoldenFishMode() && unformattedMessage.startsWith("TROPHY FISH! You caught a Golden Fish ")) {
                     Utils.awaitCondition(() -> !AutoFishingRod.hasActiveBobber(), AutoFishingRod::throwBobber);
                 }
             }
@@ -230,14 +230,14 @@ final class AutoFishingRod {
                     AutoFishingRod.hooking = true;
                     AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
                 } else {
-                    if (ready && Config.isAutoFishingRodSlugfishMode()) {
+                    if (Config.isAutoFishingRodSlugfishMode() && ready) {
                         if (null != AutoFishingRod.countdownArmorStand) {
                             AutoFishingRod.countdownArmorStand.clear();
                         }
                         AutoFishingRod.countdownArmorStand = null;
                     }
                 }
-            } else if (DarkAddons.isPlayerInCrimsonIsle() && AutoFishingRod.hasActiveBobber() && !Config.isAutoFishingRodSlugfishMode() && 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime && Config.isAutoFishingRodGoldenFishMode()) {
+            } else if (!Config.isAutoFishingRodSlugfishMode() && Config.isAutoFishingRodGoldenFishMode() && 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime && DarkAddons.isPlayerInCrimsonIsle() && AutoFishingRod.hasActiveBobber()) {
                 AutoFishingRod.hooking = true;
                 AutoFishingRod.lastRodThrowTime = System.currentTimeMillis();
 
