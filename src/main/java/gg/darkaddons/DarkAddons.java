@@ -210,7 +210,12 @@ public final class DarkAddons {
 
     public static final void runShutdownTasks() {
         DarkAddons.shutdownTasks.removeIf((@NotNull final Runnable task) -> {
-            task.run();
+            try {
+                task.run();
+            } catch (final Throwable error) {
+                DarkAddons.LoggerHolder.LOGGER.error("Error while running shutdown task");
+                DarkAddons.LoggerHolder.LOGGER.catching(error);
+            }
 
             return true;
         });
