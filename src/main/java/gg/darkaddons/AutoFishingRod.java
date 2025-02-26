@@ -98,8 +98,6 @@ final class AutoFishingRod {
         // Since it's a WeakReference, it can get cleared without us calling the clear method.
         // In this case, try to find and assign it again, otherwise will return null.
         return null == cached ? AutoFishingRod.findAndAssignCountdownArmorStand() : cached;
-
-        // Return existing entity.
     }
 
     private static final void queueRightClick(@NotNull final Runnable continuation) {
