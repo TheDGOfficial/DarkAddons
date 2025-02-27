@@ -122,7 +122,7 @@ if [ "${1:-default}" != "--skip-build" ]; then
     git apply ../../ws-shared.patch &> /dev/null
     cd .. || { echo "cd failed"; exit 1; }
     if [ "${1:-default}" != "--offline" ]; then
-      ./gradlew build remapJar publishToMavenLocal --no-daemon --refresh-dependencies
+      ./gradlew build remapJar publishToMavenLocal --no-daemon
     else
       ./gradlew build remapJar publishToMavenLocal --no-daemon --offline
     fi
