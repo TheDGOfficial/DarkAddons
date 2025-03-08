@@ -1,7 +1,6 @@
 package darkaddons.installer;
 
 import gg.darkaddons.AccessibleObjectResource;
-import gg.darkaddons.PublicUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,8 +99,8 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     private int xCoord;
     private int yCoord;
 
-    private int w = DarkAddonsInstaller.TOTAL_WIDTH;
-    private int h;
+    private int width = DarkAddonsInstaller.TOTAL_WIDTH;
+    private int height;
     private int margin;
 
     private DarkAddonsInstaller() {
@@ -210,20 +209,20 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     private final JLabel getPictureLabel() {
         if (null == this.logo) {
             try {
-                this.h = this.w >> 1;
+                this.height = this.width >> 1;
                 this.margin = 5;
 
                 final var myPicture = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader()
                     .getResourceAsStream("assets/darkaddons/darkaddons.logo.png"), "Logo not found."));
-                final var scaled = myPicture.getScaledInstance(this.w - (this.margin << 1), this.h - this.margin, Image.SCALE_SMOOTH);
+                final var scaled = myPicture.getScaledInstance(this.width - (this.margin << 1), this.height - this.margin, Image.SCALE_SMOOTH);
                 this.logo = new JLabel(new ImageIcon(scaled));
                 this.logo.setName("Logo");
-                this.logo.setBounds(this.xCoord + this.margin, this.yCoord + this.margin, this.w - (this.margin << 1), this.h - this.margin);
+                this.logo.setBounds(this.xCoord + this.margin, this.yCoord + this.margin, this.width - (this.margin << 1), this.height - this.margin);
                 this.logo.setFont(new Font(Font.DIALOG, Font.BOLD, 18));
                 this.logo.setHorizontalAlignment(SwingConstants.CENTER);
-                this.logo.setPreferredSize(new Dimension(this.w, this.h));
+                this.logo.setPreferredSize(new Dimension(this.width, this.height));
 
-                this.yCoord += this.h;
+                this.yCoord += this.height;
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to load and put application logo in app container");
             }
@@ -235,17 +234,17 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     private final JLabel getVersionInfo() {
         if (null == this.versionInfo) {
             try {
-                this.h = 25;
+                this.height = 25;
 
                 this.versionInfo = new JLabel();
                 this.versionInfo.setName("LabelMcVersion");
-                this.versionInfo.setBounds(this.xCoord, this.yCoord, this.w, this.h);
+                this.versionInfo.setBounds(this.xCoord, this.yCoord, this.width, this.height);
                 this.versionInfo.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
                 this.versionInfo.setHorizontalAlignment(SwingConstants.CENTER);
-                this.versionInfo.setPreferredSize(new Dimension(this.w, this.h));
+                this.versionInfo.setPreferredSize(new Dimension(this.width, this.height));
                 this.versionInfo.setText('v' + this.getVersionFromMcmodInfo() + " for Minecraft 1.8.9");
 
-                this.yCoord += this.h;
+                this.yCoord += this.height;
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Version Info\" label");
             }
@@ -257,7 +256,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     private final JTextArea getTextArea() {
         if (null == this.descriptionText) {
             try {
-                this.h = 60;
+                this.height = 60;
                 this.margin = 10;
 
                 this.descriptionText = new JTextArea();
@@ -267,7 +266,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                     "Close this if you prefer to do this yourself!");
                 this.descriptionText.setWrapStyleWord(true);
 
-                this.yCoord += this.h;
+                this.yCoord += this.height;
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Installer Description\" text area");
             }
@@ -276,21 +275,21 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     }
 
     private final void setTextAreaProperties(final JTextArea textArea) {
-        textArea.setBounds(this.xCoord + this.margin, this.yCoord + this.margin, this.w - (this.margin << 1), this.h - this.margin);
+        textArea.setBounds(this.xCoord + this.margin, this.yCoord + this.margin, this.width - (this.margin << 1), this.height - this.margin);
         textArea.setEditable(false);
         textArea.setHighlighter(null);
         textArea.setEnabled(true);
         textArea.setFont(new Font(Font.DIALOG, Font.PLAIN, 12));
         textArea.setLineWrap(true);
         textArea.setOpaque(false);
-        textArea.setPreferredSize(new Dimension(this.w - (this.margin << 1), this.h - this.margin));
+        textArea.setPreferredSize(new Dimension(this.width - (this.margin << 1), this.height - this.margin));
     }
 
     @NotNull
     private final JTextArea getForgeTextArea() {
         if (null == this.forgeDescriptionText) {
             try {
-                this.h = 55;
+                this.height = 55;
                 this.margin = 10;
 
                 this.forgeDescriptionText = new JTextArea();
@@ -301,7 +300,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                 this.forgeDescriptionText.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 this.forgeDescriptionText.setWrapStyleWord(true);
 
-                this.yCoord += this.h;
+                this.yCoord += this.height;
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Forge Description\" text area");
             }
@@ -312,22 +311,22 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private final JLabel getLabelFolder() {
         if (null == this.labelFolder) {
-            this.h = 16;
-            this.w = 65;
+            this.height = 16;
+            this.width = 65;
 
             this.xCoord += 10; // Padding
 
             try {
                 this.labelFolder = new JLabel();
                 this.labelFolder.setName("LabelFolder");
-                this.labelFolder.setBounds(this.xCoord, this.yCoord + 2, this.w, this.h);
-                this.labelFolder.setPreferredSize(new Dimension(this.w, this.h));
+                this.labelFolder.setBounds(this.xCoord, this.yCoord + 2, this.width, this.height);
+                this.labelFolder.setPreferredSize(new Dimension(this.width, this.height));
                 this.labelFolder.setText("Mods Folder");
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Mods Folder\" label");
             }
 
-            this.xCoord += this.w;
+            this.xCoord += this.width;
         }
         return this.labelFolder;
     }
@@ -335,20 +334,20 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private final JTextField getFieldFolder() {
         if (null == this.textFieldFolderLocation) {
-            this.h = 20;
-            this.w = 287;
+            this.height = 20;
+            this.width = 287;
 
             try {
                 this.textFieldFolderLocation = new JTextField();
                 this.textFieldFolderLocation.setName("FieldFolder");
-                this.textFieldFolderLocation.setBounds(this.xCoord, this.yCoord, this.w, this.h);
+                this.textFieldFolderLocation.setBounds(this.xCoord, this.yCoord, this.width, this.height);
                 this.textFieldFolderLocation.setEditable(false);
-                this.textFieldFolderLocation.setPreferredSize(new Dimension(this.w, this.h));
+                this.textFieldFolderLocation.setPreferredSize(new Dimension(this.width, this.height));
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Mods Folder Location\" text field");
             }
 
-            this.xCoord += this.w;
+            this.xCoord += this.width;
         }
         return this.textFieldFolderLocation;
     }
@@ -356,19 +355,19 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private final JButton getButtonFolder() {
         if (null == this.buttonChooseFolder) {
-            this.h = 20;
-            this.w = 25;
+            this.height = 20;
+            this.width = 25;
 
             this.xCoord += 10; // Padding
 
             try {
                 final var myPicture = ImageIO.read(Objects.requireNonNull(this.getClass().getClassLoader()
                     .getResourceAsStream("assets/darkaddons/folder_icon_for_installer.png"), "Folder icon not found."));
-                final var scaled = myPicture.getScaledInstance(this.w - 8, this.h - 6, Image.SCALE_SMOOTH);
+                final var scaled = myPicture.getScaledInstance(this.width - 8, this.height - 6, Image.SCALE_SMOOTH);
                 this.buttonChooseFolder = new JButton(new ImageIcon(scaled));
                 this.buttonChooseFolder.setName("ButtonFolder");
-                this.buttonChooseFolder.setBounds(this.xCoord, this.yCoord, this.w, this.h);
-                this.buttonChooseFolder.setPreferredSize(new Dimension(this.w, this.h));
+                this.buttonChooseFolder.setBounds(this.xCoord, this.yCoord, this.width, this.height);
+                this.buttonChooseFolder.setPreferredSize(new Dimension(this.width, this.height));
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Mods Folder Selector\" button");
             }
@@ -397,13 +396,13 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private final JButton getButtonInstall() {
         if (null == this.buttonInstall) {
-            this.w = 100;
-            this.h = 26;
+            this.width = 100;
+            this.height = 26;
 
             try {
                 this.buttonInstall = new JButton();
                 this.buttonInstall.setName("ButtonInstall");
-                this.buttonInstall.setPreferredSize(new Dimension(this.w, this.h));
+                this.buttonInstall.setPreferredSize(new Dimension(this.width, this.height));
                 this.buttonInstall.setText("Install");
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Install\" button");
@@ -415,13 +414,13 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private final JButton getButtonOpenFolder() {
         if (null == this.buttonOpenFolder) {
-            this.w = 130;
-            this.h = 26;
+            this.width = 130;
+            this.height = 26;
 
             try {
                 this.buttonOpenFolder = new JButton();
                 this.buttonOpenFolder.setName("ButtonOpenFolder");
-                this.buttonOpenFolder.setPreferredSize(new Dimension(this.w, this.h));
+                this.buttonOpenFolder.setPreferredSize(new Dimension(this.width, this.height));
                 this.buttonOpenFolder.setText("Open Mods Folder");
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Open Mods Folder\" button");
@@ -433,12 +432,12 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private final JButton getButtonClose() {
         if (null == this.buttonClose) {
-            this.w = 100;
-            this.h = 26;
+            this.width = 100;
+            this.height = 26;
 
             try {
                 (this.buttonClose = new JButton()).setName("ButtonClose");
-                this.buttonClose.setPreferredSize(new Dimension(this.w, this.h));
+                this.buttonClose.setPreferredSize(new Dimension(this.width, this.height));
                 this.buttonClose.setText("Cancel");
             } catch (final Throwable ivjExc) {
                 DarkAddonsInstaller.showErrorPopup(ivjExc, () -> "Unable to create the \"Close\" button");
@@ -461,27 +460,27 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
 
     @SuppressWarnings("ObjectEquality")
     @Override
-    public final void actionPerformed(final ActionEvent e) {
-        if (e.getSource() == this.getButtonClose()) {
+    public final void actionPerformed(final ActionEvent actionEvent) {
+        if (actionEvent.getSource() == this.getButtonClose()) {
             this.dispose();
             //noinspection CallToSystemExit
             System.exit(0);
         }
-        if (e.getSource() == this.getButtonFolder()) {
+        if (actionEvent.getSource() == this.getButtonFolder()) {
             this.onFolderSelect();
         }
-        if (e.getSource() == this.getButtonInstall()) {
+        if (actionEvent.getSource() == this.getButtonInstall()) {
             this.onInstall();
         }
-        if (e.getSource() == this.getButtonOpenFolder()) {
+        if (actionEvent.getSource() == this.getButtonOpenFolder()) {
             DarkAddonsInstaller.onOpenFolder();
         }
     }
 
     @Override
-    public final void mouseClicked(final MouseEvent e) {
+    public final void mouseClicked(final MouseEvent mouseEvent) {
         //noinspection ObjectEquality
-        if (e.getSource() == this.getForgeTextArea()) {
+        if (mouseEvent.getSource() == this.getForgeTextArea()) {
             try {
                 Desktop.getDesktop().browse(new URI("https://files.minecraftforge.net/net/minecraftforge/forge/index_1.8.9.html"));
             } catch (final IOException | URISyntaxException ex) {
@@ -771,22 +770,22 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     }
 
     @Override
-    public final void mousePressed(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent e) {
+    public final void mousePressed(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent mouseEvent) {
         // do nothing
     }
 
     @Override
-    public final void mouseReleased(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent e) {
+    public final void mouseReleased(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent mouseEvent) {
         // do nothing
     }
 
     @Override
-    public final void mouseEntered(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent e) {
+    public final void mouseEntered(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent mouseEvent) {
         // do nothing
     }
 
     @Override
-    public final void mouseExited(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent e) {
+    public final void mouseExited(@SuppressWarnings("NullableProblems") @NotNull final MouseEvent mouseEvent) {
         // do nothing
     }
 
@@ -809,8 +808,8 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
             ", buttonClose=" + this.buttonClose +
             ", x=" + this.xCoord +
             ", y=" + this.yCoord +
-            ", w=" + this.w +
-            ", h=" + this.h +
+            ", w=" + this.width +
+            ", h=" + this.height +
             ", margin=" + this.margin +
             '}';
     }
