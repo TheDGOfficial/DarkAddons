@@ -988,7 +988,7 @@ final class Utils {
                     Utils.LoggerHolder.LOGGER.warn("Thread {} derives its own thread class from {} at {}, which overrides the getId() method. This method is not meant to be overridden.", thread.getName(), originalThreadClass.getName(), clazz.getName());
                 }
             } catch (final NoSuchMethodException noSuchMethodException) {
-                throw JavaUtils.sneakyThrow(noSuchMethodException); // Should never happen
+                throw new IllegalStateException(noSuchMethodException); // Should never happen
             }
         }
 
