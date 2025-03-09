@@ -24,17 +24,21 @@ final class BlazeEffectTimer extends SimpleGuiElement {
 
     private static long lastInSkyblockTime;
 
+    private static int bossesDone;
+
     private static final void syncToDisk() {
         // No need to save timeLeft or lastTimeLeftSeconds since those are calculated on the fly.
         TinyConfig.setLong("polarizationEnd", BlazeEffectTimer.polarizationEnd);
         TinyConfig.setLong("icePotionEnd", BlazeEffectTimer.icePotionEnd);
         TinyConfig.setLong("lastInSkyblockTime", BlazeEffectTimer.lastInSkyblockTime);
+        TinyConfig.setInt("bossesDone", BlazeEffectTimer.bossesDone);
     }
- 
+
     private static final void syncFromDisk() {
         final var polarizationEndLocal = TinyConfig.getLong("polarizationEnd");
         final var icePotionEndLocal = TinyConfig.getLong("icePotionEnd");
         final var lastInSkyblockTimeLocal = TinyConfig.getLong("lastInSkyblockTime");
+        final var bossesDone = TinyConfig.getInt("bossesDone");
 
         // Require all values to exist (if a config value does not exist the TinyConfig methods will return null), since we save all at the same time. If one of them exists while other(s) do not it means something got corrupted or interrupted during save, or the config got edited manually, regardless, we do not care nor support those edge cases.
         if (null != polarizationEndLocal && null != icePotionEndLocal && null != lastInSkyblockTimeLocal) {
@@ -42,6 +46,10 @@ final class BlazeEffectTimer extends SimpleGuiElement {
             BlazeEffectTimer.icePotionEnd = System.currentTimeMillis() + (icePotionEndLocal - lastInSkyblockTimeLocal);
 
             BlazeEffectTimer.lastInSkyblockTime = System.currentTimeMillis();
+        }
+
+        if (null != bossesDone) {
+            BlazeEffectTimer.bossesDone = bossesDone;
         }
     }
 
@@ -63,7 +71,8 @@ final class BlazeEffectTimer extends SimpleGuiElement {
                 // Re-heated Gummy Polar Bear's can be stacked after a previous game update a while ago.
                 // Only the ones stacked after mod was installed will be taken into account.
                 // Data will not be saved to the disk in a un-clean exit of the game so that will also make the timer inaccurate.
-                BlazeEffectTimer.polarizationEnd = BlazeEffectTimer.polarizationEnd > System.currentTimeMillis() ?  BlazeEffectTimer.polarizationEnd + BlazeEffectTimer.SMOLDERING_POLARIZATION_DURATION_MS : System.currentTimeMillis() + BlazeEffectTimer.SMOLDERING_POLARIZATION_DURATION_MS;
+                BlazeEffectTimer.polarizationEnd = BlazeEffectTimer.polarizationEnd > System.currentTimeMillis() ? BlazeEffectTimer.polarizationEnd + BlazeEffectTimer.SMOLDERING_POLARIZATION_DURATION_MS : System.currentTimeMillis() + BlazeEffectTimer.SMOLDERING_POLARIZATION_DURATION_MS;
+                BlazeEffectTimer.bossesDone = 0;
                 BlazeEffectTimer.syncToDisk();
             }
             case "BUFF! You splashed yourself with Wisp's Ice-Flavored Water I! Press TAB or type /effects to view your active effects!" -> {
@@ -76,6 +85,10 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         if (message.startsWith("BUFF! You were splashed by") && message.endsWith("with Wisp's Ice-Flavored Water I! Press TAB or type /effects to view your active effects!")) {
             BlazeEffectTimer.icePotionEnd = System.currentTimeMillis() + BlazeEffectTimer.WISPS_ICE_FLAVORED_SPLASH_POTION_DURATION_MS;
             BlazeEffectTimer.syncToDisk();
+        }
+
+        if (message.startsWith("SLAYER QUEST COMPLETE!")) {
+            ++BlazeEffectTimer.bossesDone;
         }
     }
 
@@ -161,5 +174,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         // Normally, formatTime can show time left values like 500 ms for a short period of time when the time left value is not 0 nor 1 second. However, this does not apply to us since we already convert from seconds to milliseconds it'll either be 0 or 1.
         lines.add(0L == BlazeEffectTimer.polarizationTimeLeftSeconds ? "§cSmoldering Polarization Expired!" : "§aSmoldering Polarization: " + Utils.formatTime(TimeUnit.SECONDS.toMillis(BlazeEffectTimer.polarizationTimeLeftSeconds), true));
         lines.add(0L == BlazeEffectTimer.icePotionTimeLeftSeconds ? "§cWisp's Ice Flavored Splash Potion Expired!" : "§aWisp's Ice Flavored Splash Potion: " + Utils.formatTime(TimeUnit.SECONDS.toMillis(BlazeEffectTimer.icePotionTimeLeftSeconds), true));
+        lines.add("");
+        lines.add("§eBosses Done Since Smoldering Polarization: §6" + BlazeEffectTimer.bossesDone);
     }
 }
