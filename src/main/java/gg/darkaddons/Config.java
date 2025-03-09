@@ -642,6 +642,13 @@ final class Config extends Vigilant {
     private static boolean sendMessageOnRagAxe;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Send Message for Ragnarock Axe Strength Gained Only In Dungeons",
+        description = "Makes it so the message is only sent while in dungeons.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean sendMessageOnRagAxeOnlyInDungeons;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Dialogue Skip Helper",
         description = "Shows a title and plays a sound when you should start killing blood mobs.",
         category = "Dungeons", subcategory = "Helpers"
@@ -1082,6 +1089,8 @@ final class Config extends Vigilant {
         this.addDependency("autoFishingRodMaximumDelay", "autoFishingRod");
         this.addDependency("autoFishingRodSlugfishMode", "autoFishingRod");
         this.addDependency("autoFishingRodGoldenFishMode", "autoFishingRod");
+
+        this.addDependency("sendMessageOnRagAxeOnlyInDungeons", "sendMessageOnRagAxe");
     }
 
     private final void addListeners() {
@@ -1304,6 +1313,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.sendMessageOnRagAxe;
+    }
+
+    static final boolean isSendMessageOnRagAxeOnlyInDungeons() {
+        Config.checkUninit();
+
+        return Config.sendMessageOnRagAxeOnlyInDungeons;
     }
 
     static final boolean isDialogueSkipHelper() {
