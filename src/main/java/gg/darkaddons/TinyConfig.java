@@ -151,4 +151,27 @@ final class TinyConfig {
             throw new RuntimeException("Unable to parse \"" + value + "\" as long", numberFormatException);
         }
     }
+
+    static final Integer getInt(@NotNull final String key) {
+        final var value = TinyConfig.tinyConfigSettings.getProperty(key);
+
+        return null == value ? null : TinyConfig.parseInt(value);
+    }
+
+    static final int getInt(@NotNull final String key, final int defaultValue) {
+        return TinyConfig.parseInt(TinyConfig.tinyConfigSettings.getProperty(key, Integer.toString(defaultValue)));
+    }
+
+    static final void setInt(@NotNull final String key, final int value) {
+        TinyConfig.tinyConfigSettings.setProperty(key, Integer.toString(value));
+        TinyConfig.save();
+    }
+
+    private static final int parseInt(@NotNull final String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (final NumberFormatException numberFormatException) {
+            throw new RuntimeException("Unable to parse \"" + value + "\" as int", numberFormatException);
+        }
+    }
 }
