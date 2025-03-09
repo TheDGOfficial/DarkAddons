@@ -115,13 +115,6 @@ final class Config extends Vigilant {
     private static boolean blessingHud = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Send Detailed Blessings Message",
-        description = "Sends a message to party chat at Master Mode Floor 7 Phase 5 about detailed blessings, including wisdom blessing (for mages) and base weapon damage gained from blessing of stone, which dragprio chattriggers module doesn't take into account.",
-        category = "Dungeons", subcategory = "HUD"
-    )
-    private static boolean sendDetailedBlessingsMessage;
-
-    @Property(
         type = PropertyType.SWITCH, name = "Hide Blessing if Level 0",
         description = "Hides blessings if they are Level 0.",
         category = "Dungeons", subcategory = "HUD"
@@ -162,6 +155,13 @@ final class Config extends Vigilant {
         category = "Dungeons", subcategory = "HUD"
     )
     private static boolean wisdomBlessing;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Send Detailed Blessings Message",
+        description = "Sends a message to party chat at Master Mode Floor 7 Phase 5 about detailed blessings, including wisdom blessing (for mages) and base weapon damage gained from blessing of stone, which dragprio chattriggers module doesn't take into account.",
+        category = "Dungeons", subcategory = "HUD"
+    )
+    private static boolean sendDetailedBlessingsMessage;
 
     @Property(
         type = PropertyType.SWITCH, name = "EHP on Screen",
@@ -1192,12 +1192,6 @@ final class Config extends Vigilant {
         return Config.blessingHud;
     }
 
-    static final boolean isSendDetailedBlessingsMessage() {
-        Config.checkUninit();
-
-        return Config.sendDetailedBlessingsMessage;
-    }
-
     static final boolean isHideBlessingWhenZero() {
         Config.checkUninit();
 
@@ -1232,6 +1226,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.wisdomBlessing;
+    }
+
+    static final boolean isSendDetailedBlessingsMessage() {
+        Config.checkUninit();
+
+        return Config.sendDetailedBlessingsMessage;
     }
 
     static final boolean isEhpHud() {
