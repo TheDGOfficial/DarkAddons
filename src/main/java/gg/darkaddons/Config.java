@@ -691,6 +691,13 @@ final class Config extends Vigilant {
     private static boolean autoDance;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Aggressive Jump",
+        description = "Causes jumping in Auto Dance to be done more aggressively. May help if you are failing a lot with \"You weren't mid-air!\", but it might also make you get off of the glass block, because this makes the mod able to jump while you are not standing still, which causes your momentum to change.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean aggressiveJump;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Auto Fishing Rod",
         description = "While fishing, automatically pulls the rod when a catch is hooked and then re-throws it. You need to manually throw it the first time for it to start working. You need SkyBlock Menu -> Settings -> Personal -> Fishing Settings -> Fishing Status Holograms and Fishing Timer enabled for it to work. This does not automatically kill any sea creatures. Should work well for Trophy Fishing. The mod will move your head every 20 seconds to bypass anti-AFK system of Hypixel.",
         category = "QOL", subcategory = "General"
@@ -728,13 +735,6 @@ final class Config extends Vigilant {
         category = "QOL", subcategory = "General"
     )
     private static boolean autoFishingRodGoldenFishMode;
-
-    @Property(
-        type = PropertyType.SWITCH, name = "Aggressive Jump",
-        description = "Causes jumping in Auto Dance to be done more aggressively. May help if you are failing a lot with \"You weren't mid-air!\", but it might also make you get off of the glass block, because this makes the mod able to jump while you are not standing still, which causes your momentum to change.",
-        category = "QOL", subcategory = "General"
-    )
-    private static boolean aggressiveJump;
 
     @Property(
         type = PropertyType.SWITCH, name = "Mining Ping Fix",
@@ -1618,6 +1618,12 @@ final class Config extends Vigilant {
         return Config.autoDance;
     }
 
+    static final boolean isAggressiveJump() {
+        Config.checkUninit();
+
+        return Config.aggressiveJump;
+    }
+
     static final boolean isAutoFishingRod() {
         Config.checkUninit();
 
@@ -1646,12 +1652,6 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.autoFishingRodGoldenFishMode;
-    }
-
-    static final boolean isAggressiveJump() {
-        Config.checkUninit();
-
-        return Config.aggressiveJump;
     }
 
     static final boolean isMiningPingFix() {
