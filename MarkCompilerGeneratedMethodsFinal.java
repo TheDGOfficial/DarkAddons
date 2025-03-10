@@ -363,6 +363,21 @@ final class MarkCompilerGeneratedMethodsFinal {
                     mn.desc = StringUtils.replace(mn.desc, "ArrayList", "List");
                 }
 
+                if ("gg/darkaddons/SubCommand$StopCodeflowException".equals(className)) {
+                    if ("java/lang/RuntimeException".equals(classNode.superName)) {
+                        classNode.superName = "java/lang/Throwable";
+                        if ("<init>".equals(mn.name)) {
+                            for (final Iterator<AbstractInsnNode> insnNodeIterator = mn.instructions.iterator(); insnNodeIterator.hasNext();) {
+                                final var insnNode = insnNodeIterator.next();
+
+                                if (insnNode instanceof final MethodInsnNode mnInsnNode && "<init>".equals(mnInsnNode.name) && "java/lang/RuntimeException".equals(mnInsnNode.owner)) {
+                                    mnInsnNode.owner = "java/lang/Throwable";
+                                }
+                            }
+                        }
+                    }
+                }
+
                 final var annotationNodeList = mn.visibleAnnotations;
                 if (null != annotationNodeList && MarkCompilerGeneratedMethodsFinal.ANNOTATIONS_PRESENT) {
                     for (final var it = mn.visibleAnnotations.iterator(); it.hasNext();) {
