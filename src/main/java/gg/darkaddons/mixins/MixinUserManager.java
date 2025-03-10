@@ -35,7 +35,7 @@ final class MixinUserManager {
 
             whitelistedUsersField.setAccessible(false);
         } catch (final NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Reflective operation inside mixin MixinUserManager failed", e);
         }
     }
 }

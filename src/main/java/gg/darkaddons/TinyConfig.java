@@ -42,7 +42,7 @@ final class TinyConfig {
                     throw new IOException("cannot create new file");
                 }
             } catch (final IOException ioException) {
-                throw new RuntimeException("Unable to create TinyConfig", ioException);
+                throw new IllegalStateException("Unable to create TinyConfig", ioException);
             }
         }
     }
@@ -55,7 +55,7 @@ final class TinyConfig {
                 TinyConfig.tinyConfigSettings.load(inputStreamReader);
             }
         } catch (final IOException ioException) {
-            throw new RuntimeException("Unable to load TinyConfig", ioException);
+            throw new IllegalStateException("Unable to load TinyConfig", ioException);
         }
     }
 
@@ -67,7 +67,7 @@ final class TinyConfig {
                 TinyConfig.tinyConfigSettings.store(outputStreamWriter, null);
             }
         } catch (final IOException ioException) {
-            throw new RuntimeException("Unable to save TinyConfig", ioException);
+            throw new IllegalStateException("Unable to save TinyConfig", ioException);
         }
     }
 
@@ -125,7 +125,7 @@ final class TinyConfig {
         try {
             return Double.parseDouble(value);
         } catch (final NumberFormatException numberFormatException) {
-            throw new RuntimeException("Unable to parse \"" + value + "\" as double", numberFormatException);
+            throw new IllegalArgumentException("Unable to parse \"" + value + "\" as double", numberFormatException);
         }
     }
 
@@ -148,7 +148,7 @@ final class TinyConfig {
         try {
             return Long.parseLong(value);
         } catch (final NumberFormatException numberFormatException) {
-            throw new RuntimeException("Unable to parse \"" + value + "\" as long", numberFormatException);
+            throw new IllegalArgumentException("Unable to parse \"" + value + "\" as long", numberFormatException);
         }
     }
 
@@ -171,7 +171,7 @@ final class TinyConfig {
         try {
             return Integer.parseInt(value);
         } catch (final NumberFormatException numberFormatException) {
-            throw new RuntimeException("Unable to parse \"" + value + "\" as int", numberFormatException);
+            throw new IllegalArgumentException("Unable to parse \"" + value + "\" as int", numberFormatException);
         }
     }
 }
