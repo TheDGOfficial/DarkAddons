@@ -131,7 +131,7 @@ dependencies {
 
     implementation("gg.essential:vigilance:306")
     api("gg.essential:elementa:695")
-    implementation("gg.essential:universalcraft-1.8.9-forge:373")
+    implementation("gg.essential:universalcraft-1.8.9-forge:375")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20-RC2")
 
