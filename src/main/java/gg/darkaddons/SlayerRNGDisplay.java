@@ -49,7 +49,6 @@ final class SlayerRNGDisplay extends GuiElement {
     }
 
     private static final long getAVGBossKillTime() {
-        // Now, finally calculate the average.
         var sum = 0L;
 
         for (final long killTime : SlayerRNGDisplay.bossTimes) {
@@ -66,7 +65,6 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private static final long getETATime(@NotNull final SlayerRNGDisplay.SlayerDrop drop, final long avgBossKillTime, final int highestOdds, final int startingMeterXp, final int xpPerBoss) {
         // Simulates the increasing drop chances with each boss killed.
-
         var time = 0L;
         var xp = startingMeterXp;
 
@@ -103,40 +101,53 @@ final class SlayerRNGDisplay extends GuiElement {
         return enumName;
     }
 
+    private static final void clearLines() {
+        SlayerRNGDisplay.linesToRender.clear();
+    }
+
+    private static final void addEmptyLine() {
+        SlayerRNGDisplay.addLine("");
+    }
+
+    private static final void addLine(@NotNull final String line) {
+        SlayerRNGDisplay.linesToRender.add(line);
+    }
+
     private static final void header(@NotNull final SlayerRNGDisplay.Slayer slayer, @NotNull final SlayerRNGDisplay.SlayerDrop drop, final int selectedDropPrice) {
-        SlayerRNGDisplay.linesToRender.add("§a⚔ Slayer: §5" + slayer.enumName + " §7- §d⚂ RNG: §6" + drop.getDisplayName() + (SlayerRNGDisplay.SellingMethod.NONE == drop.sellingMethod ? "" : " (" + Utils.formatNumber(selectedDropPrice) + " coins)"));
-        SlayerRNGDisplay.linesToRender.add("");
+        SlayerRNGDisplay.addLine("§a⚔ Slayer: §5" + slayer.enumName + " §7- §d⚂ RNG: §6" + drop.getDisplayName() + (SlayerRNGDisplay.SellingMethod.NONE == drop.sellingMethod ? "" : " (" + Utils.formatNumber(selectedDropPrice) + " coins)"));
+        SlayerRNGDisplay.addEmptyLine();
     }
 
     private static final void dataNotAvailable() {
-        SlayerRNGDisplay.linesToRender.add("§cPlease do a few bosses till the RNG Meter &");
-        SlayerRNGDisplay.linesToRender.add("§cAVG Boss Kill Time data is available, and");
-        SlayerRNGDisplay.linesToRender.add("§cdrop at least 1 rare drop to let the mod");
-        SlayerRNGDisplay.linesToRender.add("§cknow your Magic Find!");
+        SlayerRNGDisplay.addLine("§cPlease do a few bosses till the RNG Meter &");
+        SlayerRNGDisplay.addLine("§cAVG Boss Kill Time data is available, and");
+        SlayerRNGDisplay.addLine("§cdrop at least 1 rare drop to let the mod");
+        SlayerRNGDisplay.addLine("§cknow your Magic Find!");
     }
 
     private static final void missingSlayerQuest() {
-        SlayerRNGDisplay.linesToRender.add("§cPlease start a Slayer Quest to let the mod");
-        SlayerRNGDisplay.linesToRender.add("§cknow what slayer you are doing!");
+        SlayerRNGDisplay.addLine("§cPlease start a Slayer Quest to let the mod");
+        SlayerRNGDisplay.addLine("§cknow what slayer you are doing!");
     }
 
     private static final void missingSlayerDrop() {
-        SlayerRNGDisplay.linesToRender.add("§cThe mod couldn't determine the optimal drop");
-        SlayerRNGDisplay.linesToRender.add("§cfor this slayer. This should not happen.");
-        SlayerRNGDisplay.linesToRender.add("§cPlease report this as a bug!");
+        SlayerRNGDisplay.addLine("§cThe mod couldn't determine the optimal drop");
+        SlayerRNGDisplay.addLine("§cfor this slayer. This should not happen.");
+        SlayerRNGDisplay.addLine("§cPlease report this as a bug!");
     }
 
     private static final void stats(final double meterProgressPercent, final double dropChance, final int odds, final long etaTime, final long avgBossKillTime, final int moneyPerHour, @NotNull final SlayerRNGDisplay.SlayerDrop drop) {
-        SlayerRNGDisplay.linesToRender.add("§b✯ Magic Find: " + SlayerRNGDisplay.lastMagicFind);
-        SlayerRNGDisplay.linesToRender.add("");
-        SlayerRNGDisplay.linesToRender.add("§d⌛ RNG Meter: " + String.format(Locale.ROOT, "%.2f", Math.min(100.0D, meterProgressPercent)) + "% (" + Utils.formatNumber(SlayerRNGDisplay.lastMeterXP) + '/' + Utils.formatNumber(drop.requiredMeterXP) + ')');
-        SlayerRNGDisplay.linesToRender.add("");
-        SlayerRNGDisplay.linesToRender.add("§6♠ Odds: 1/" + odds + " (" + String.format(Locale.ROOT, "%.2f", dropChance) + "%)");
-        SlayerRNGDisplay.linesToRender.add("");
-        SlayerRNGDisplay.linesToRender.add("§e⌚ ETA: " + SlayerRNGDisplay.formatETA(etaTime) + " (" + SlayerRNGDisplay.getAVGBossKillTimeFormatted(avgBossKillTime) + " per boss on avg)");
+        SlayerRNGDisplay.addLine("§b✯ Magic Find: " + SlayerRNGDisplay.lastMagicFind);
+        SlayerRNGDisplay.addEmptyLine();
+        SlayerRNGDisplay.addLine("§d⌛ RNG Meter: " + String.format(Locale.ROOT, "%.2f", Math.min(100.0D, meterProgressPercent)) + "% (" + Utils.formatNumber(SlayerRNGDisplay.lastMeterXP) + '/' + Utils.formatNumber(drop.requiredMeterXP) + ')');
+        SlayerRNGDisplay.addEmptyLine();
+        final var startingOdds = SlayerRNGDisplay.getOdds(SlayerRNGDisplay.getDropChance(drop, SlayerRNGDisplay.getMeterProgress(drop, SlayerRNGDisplay.lastMeterXPGain)));
+        SlayerRNGDisplay.addLine("§6♠ Odds: 1/" + startingOdds + "->" + odds + " (" + String.format(Locale.ROOT, "%.2f", dropChance) + "%)" + " (done since last: " + SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop + ')');
+        SlayerRNGDisplay.addEmptyLine();
+        SlayerRNGDisplay.addLine("§e⌚ ETA: " + SlayerRNGDisplay.formatETA(etaTime) + " (" + SlayerRNGDisplay.getAVGBossKillTimeFormatted(avgBossKillTime) + " per boss on avg)");
         if (SlayerRNGDisplay.SellingMethod.NONE != drop.sellingMethod) {
-            SlayerRNGDisplay.linesToRender.add("");
-            SlayerRNGDisplay.linesToRender.add("§6$ Money/Hour: " + Utils.formatNumber(moneyPerHour) + " coins");
+            SlayerRNGDisplay.addEmptyLine();
+            SlayerRNGDisplay.addLine("§6$ Money/Hour: " + Utils.formatNumber(moneyPerHour) + " coins");
         }
     }
 
@@ -144,16 +155,17 @@ final class SlayerRNGDisplay extends GuiElement {
         final var slayer = SlayerRNGDisplay.currentSlayer;
 
         if (null == slayer || !slayer.hasActiveQuest) {
-            SlayerRNGDisplay.linesToRender.clear();
+            SlayerRNGDisplay.clearLines();
             SlayerRNGDisplay.missingSlayerQuest();
             SlayerRNGDisplay.updateWidthHeightSize();
             return;
         }
 
         final var drop = SlayerRNGDisplay.selectedDrop.get();
+        SlayerRNGDisplay.lastSelectedDrop = drop;
 
         if (null == drop) {
-            SlayerRNGDisplay.linesToRender.clear();
+            SlayerRNGDisplay.clearLines();
             SlayerRNGDisplay.missingSlayerDrop();
             SlayerRNGDisplay.updateWidthHeightSize();
             return;
@@ -173,7 +185,7 @@ final class SlayerRNGDisplay extends GuiElement {
         // Calculates money per hour with RNG meter after reset to be more realistic. If we calculate with current meter, it will be higher than actual.
         final var moneyPerHour = SlayerRNGDisplay.getMoneyPerHour(SlayerRNGDisplay.getETATime(drop, avgBossKillTime, SlayerRNGDisplay.getOdds(SlayerRNGDisplay.getDropChance(drop, SlayerRNGDisplay.getMeterProgress(drop, SlayerRNGDisplay.lastMeterXPGain))), SlayerRNGDisplay.lastMeterXPGain, SlayerRNGDisplay.lastMeterXPGain), selectedDropPrice);
 
-        SlayerRNGDisplay.linesToRender.clear();
+        SlayerRNGDisplay.clearLines();
 
         SlayerRNGDisplay.header(slayer, drop, selectedDropPrice);
 
@@ -182,15 +194,15 @@ final class SlayerRNGDisplay extends GuiElement {
         } else {
             if (!drop.isEligibleToDrop()) {
                 if (drop.isEligibleTier()) {
-                    SlayerRNGDisplay.linesToRender.add("§cYou are not eligible to drop this RNG,");
-                    SlayerRNGDisplay.linesToRender.add("§cbecause you are not at the required");
-                    SlayerRNGDisplay.linesToRender.add("§clevel for this drop from this slayer yet.");
-                    SlayerRNGDisplay.linesToRender.add("");
+                    SlayerRNGDisplay.addLine("§cYou are not eligible to drop this RNG,");
+                    SlayerRNGDisplay.addLine("§cbecause you are not at the required");
+                    SlayerRNGDisplay.addLine("§clevel for this drop from this slayer yet.");
+                    SlayerRNGDisplay.addEmptyLine();
                 } else {
-                    SlayerRNGDisplay.linesToRender.add("§cYou are not eligible to drop this RNG,");
-                    SlayerRNGDisplay.linesToRender.add("§cbecause you are not doing the required");
-                    SlayerRNGDisplay.linesToRender.add("§ctier of the boss for this drop at the moment.");
-                    SlayerRNGDisplay.linesToRender.add("");
+                    SlayerRNGDisplay.addLine("§cYou are not eligible to drop this RNG,");
+                    SlayerRNGDisplay.addLine("§cbecause you are not doing the required");
+                    SlayerRNGDisplay.addLine("§ctier of the boss for this drop at the moment.");
+                    SlayerRNGDisplay.addEmptyLine();
                 }
             }
             SlayerRNGDisplay.stats(meterProgressPercent, dropChance, odds, etaTime, avgBossKillTime, moneyPerHour, drop);
@@ -240,7 +252,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
     static final void forcePriceUpdateIfNecessary() {
         for (final var slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
-            if (/*SlayerRNGDisplay.SellingMethod.AUCTION_HOUSE == slayerDrop.sellingMethod*/SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
+            if (SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
                 if (0 == slayerDrop.price) {
                     // This will cancel the previous registered task and register a new one, set to run with 0 delay for the first time and 1 minute intervals on subsequent ones.
                     SlayerRNGDisplay.registerPriceUpdateTask();
@@ -267,7 +279,7 @@ final class SlayerRNGDisplay extends GuiElement {
                 var updateNeeded = false;
 
                 for (final var slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
-                    if (/*SlayerRNGDisplay.SellingMethod.AUCTION_HOUSE == slayerDrop.sellingMethod*/SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
+                    if (SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
                         if (0 == slayerDrop.price) {
                             // If any of the slayer drops that supposed to have a AH/BZ price has none, we need to update the display so that it does not keep showing 0 coins till the next time you kill a boss.
                             // Otherwise, no need to unnecessarily update the display - it will be updated the next time a slayer boss is done.
@@ -280,36 +292,6 @@ final class SlayerRNGDisplay extends GuiElement {
                 if (updateNeeded) {
                     SlayerRNGDisplay.updateNeeded = true;
                 }
-
-                /*final String bzResp = Utils.sendWebRequest("https://api.hypixel.net/skyblock/bazaar");
-
-                if (null == bzResp) {
-                    // Likely no internet connection, bail out.
-                    return;
-                }
-
-                final JsonObject bazaarProducts = Utils.parseJsonObjectFromString(bzResp);
-
-                for (final SlayerRNGDisplay.SlayerDrop slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
-                    if (SlayerRNGDisplay.SellingMethod.BAZAAR == slayerDrop.sellingMethod) {
-                        final JsonElement products = bazaarProducts.get("products");
-                        if (null != products) {
-                            final JsonElement product = products.getAsJsonObject().get(slayerDrop.getItemId());
-                            if (null != product) {
-                                final JsonElement sellSummary = product.getAsJsonObject().get("sell_summary");
-                                if (null != sellSummary) {
-                                    final JsonElement topOrder = sellSummary.getAsJsonArray().get(0);
-                                    if (null != topOrder) {
-                                        final JsonElement pricePerUnit = topOrder.getAsJsonObject().get("pricePerUnit");
-                                        if (null != pricePerUnit) {
-                                            slayerDrop.price = (int) Math.round(pricePerUnit.getAsDouble());
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }*/
             } catch (final Throwable error) {
                 DarkAddons.modError(error);
             }
@@ -412,6 +394,9 @@ final class SlayerRNGDisplay extends GuiElement {
         SlayerRNGDisplay.registerQuestDetectionTask();
 
         this.registerHUDUpdateTask();
+
+        SlayerRNGDisplay.syncFromDisk();
+        DarkAddons.addShutdownTask(SlayerRNGDisplay::syncToDisk);
     }
 
     @Override
@@ -521,7 +506,7 @@ final class SlayerRNGDisplay extends GuiElement {
     private static SlayerRNGDisplay.Slayer currentSlayer;
 
     static final boolean isDoingInfernoDemonlordSlayer() {
-        return Slayer.BLAZE == SlayerRNGDisplay.currentSlayer && SlayerRNGDisplay.currentSlayer.hasActiveQuest && SlayerRNGDisplay.currentSlayer.isInSlayerArea();
+        return SlayerRNGDisplay.Slayer.BLAZE == SlayerRNGDisplay.currentSlayer && SlayerRNGDisplay.Slayer.BLAZE.hasActiveQuest && SlayerRNGDisplay.Slayer.BLAZE.isInSlayerArea();
     }
 
     private enum SellingMethod {
@@ -537,7 +522,7 @@ final class SlayerRNGDisplay extends GuiElement {
         OVERFLUX_CAPACITOR(1_232_700, 0.040_6D, SlayerRNGDisplay.Slayer.WOLF, 7, 4),
         JUDGEMENT_CORE(885_562, 0.056_5D, SlayerRNGDisplay.Slayer.ENDERMAN, 7, 4),
 
-        DUPLEX_I_BOOK(/*"ENCHANTMENT_ULTIMATE_REITERATE_1"*/"ENCHANTED_BOOK-ULTIMATE_REITERATE-1", 23_220, 2.153_3D, SlayerRNGDisplay.Slayer.BLAZE, 6, 4, 3, SlayerRNGDisplay.SellingMethod.BAZAAR),
+        DUPLEX_I_BOOK("ENCHANTED_BOOK-ULTIMATE_REITERATE-1", 23_220, 2.153_3D, SlayerRNGDisplay.Slayer.BLAZE, 6, 4, 3, SlayerRNGDisplay.SellingMethod.BAZAAR),
 
         HIGH_CLASS_ARCHFIEND_DICE(194_939, 0.256_5D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 5 : "Aatrox".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 2),
 
@@ -546,7 +531,7 @@ final class SlayerRNGDisplay extends GuiElement {
         MC_GRUBBERS_BURGER(18_450, 1.219_5D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 4, () -> Config.isBurgersDone() ? 1 : 4, SlayerRNGDisplay.SellingMethod.NONE, "McGrubber's Burger"),
 
         UNFANGED_VAMPIRE_PART("VAMPIRE_DENTIST_RELIC", 18_450, 1.219_5D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 4, 2),
-        THE_ONE_IV_BOOK(/*"ENCHANTMENT_ULTIMATE_THE_ONE_4"*/"ENCHANTED_BOOK-ULTIMATE_THE_ONE-4", 12_525, 1.796_4D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 5, 3, SlayerRNGDisplay.SellingMethod.BAZAAR);
+        THE_ONE_IV_BOOK("ENCHANTED_BOOK-ULTIMATE_THE_ONE-4", 12_525, 1.796_4D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 5, 3, SlayerRNGDisplay.SellingMethod.BAZAAR);
 
         @Nullable
         private final String itemId;
@@ -656,6 +641,9 @@ final class SlayerRNGDisplay extends GuiElement {
         }
     }
 
+    @Nullable
+    private static SlayerRNGDisplay.SlayerDrop lastSelectedDrop = null;
+
     @NotNull
     private static final Supplier<SlayerRNGDisplay.SlayerDrop> selectedDrop = () -> {
         final var slayer = SlayerRNGDisplay.currentSlayer;
@@ -715,6 +703,45 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private static boolean updateNeeded = true;
 
+    private static int bossesDoneSinceLastRNGMeterDrop;
+
+    private static final void syncFromDisk() {
+        final var bossesDoneSinceLastRNGMeterDrop = TinyConfig.getInt("bossesDoneSinceLastRNGMeterDrop");
+        if (null != bossesDoneSinceLastRNGMeterDrop) {
+            SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop = bossesDoneSinceLastRNGMeterDrop;
+        }
+        final var lastMagicFind = TinyConfig.getInt("lastMagicFind");
+        if (null != lastMagicFind) {
+            SlayerRNGDisplay.lastMagicFind = lastMagicFind;
+        }
+        final var lastMeterXP = TinyConfig.getInt("lastMeterXP");
+        if (null != lastMeterXP) {
+            SlayerRNGDisplay.lastMeterXP = lastMeterXP;
+        }
+        final var lastMeterXPGain = TinyConfig.getInt("lastMeterXPGain");
+        if (null != lastMeterXPGain) {
+            SlayerRNGDisplay.lastMeterXPGain = lastMeterXPGain;
+        }
+        for (var i = 1; i <= 5; ++i) {
+            final var killTime = TinyConfig.getLong("bossTime" + i);
+            if (null != killTime) {
+                bossTimes.add(killTime);
+            }
+        }
+    }
+
+    private static final void syncToDisk() {
+        TinyConfig.setInt("bossesDoneSinceLastRNGMeterDrop", SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop);
+        TinyConfig.setInt("lastMagicFind", SlayerRNGDisplay.lastMagicFind);
+        TinyConfig.setInt("lastMeterXP", SlayerRNGDisplay.lastMeterXP);
+        TinyConfig.setInt("lastMeterXPGain", SlayerRNGDisplay.lastMeterXPGain);
+        int i = 0;
+        for (final long killTime : SlayerRNGDisplay.bossTimes) {
+            ++i;
+            TinyConfig.setLong("bossTime" + i, killTime);
+        }
+    }
+
     static final void markUpdateNeeded() {
         SlayerRNGDisplay.updateNeeded = true;
     }
@@ -729,16 +756,43 @@ final class SlayerRNGDisplay extends GuiElement {
             final var xpNow = Utils.safeParseIntFast(StringUtils.remove(StringUtils.remove(StringUtils.remove(message, "RNG Meter - "), " Stored XP"), ","));
 
             if (0 != xpBefore) {
-                // If the meter got reset, the current XP will be lower than previous XP and the current XP will be our XP per boss. Instead of a hardcoded value like 625 / 500 and checking if the mayor is Aatrox, this is a simpler calculation that will work for all Slayer tiers since they all give different XP (and some slayers like Vampire give different XP than others in each tier).
-                SlayerRNGDisplay.lastMeterXPGain = xpNow > xpBefore ? xpNow - xpBefore : xpNow;
+                if (xpNow > xpBefore) {
+                    SlayerRNGDisplay.lastMeterXPGain = xpNow - xpBefore;
+                } else {
+                    // If the meter got reset, the current XP will be lower than previous XP and the current XP will be our XP per boss. Instead of a hardcoded value like 625 / 500 and checking if the mayor is Aatrox, this is a simpler calculation that will work for all Slayer tiers since they all give different XP (and some slayers like Vampire give different XP than others in each tier).
+                    var xpGain = xpNow;
+
+                    // There is an edge case with setting xpGain = xpNow, if we have more than enough XP for 100% meter and our meter gets reset, instead of it going to XP per boss value, it will just cut down the XP of the meter item from xpBefore, then it will add the XP we gained from the boss. So if we don't have checks for this edge case xpNow would be a high value that we don't want to assign as xp per boss gain.
+                    final var drop = SlayerRNGDisplay.lastSelectedDrop;
+                    if (null != drop) {
+                        // Result of xpNow - xpBefore will be a negative value in this case, and adding the required meter XP of the drop will give us the xp per boss value, unless the lastSelectedDrop is inaccurate detecting user's selected slayer drop.
+                        final var possibleXpGain = (xpNow - xpBefore) + drop.requiredMeterXP;
+
+                        // If the result is negative, it likely means that lastSelectedDrop is not user's selected drop, but a more common one. If it is not user's selected drop and user selected a more rare drop, we have no way of detecting that, so this a best-effort to avoid assigning and incorrect value to xpPerBoss.
+                        if (possibleXpGain > 0) {
+                            xpGain = possibleXpGain;
+                        }
+                    }
+
+                    SlayerRNGDisplay.lastMeterXPGain = xpGain;
+
+                    final var tookBosses = SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop;
+                    SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop = 0;
+
+                    DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 5, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop!"));
+                }
             }
 
             SlayerRNGDisplay.lastMeterXP = xpNow;
             SlayerRNGDisplay.updateNeeded = true;
         } else if (message.startsWith("SLAYER QUEST STARTED!") && originalMessage.contains("§5§lSLAYER QUEST STARTED!")) {
             SlayerRNGDisplay.lastBossStartTime = System.currentTimeMillis();
-        } else if (0L != SlayerRNGDisplay.lastBossStartTime && message.startsWith("SLAYER QUEST COMPLETE!") && originalMessage.contains("§a§lSLAYER QUEST COMPLETE!")) {
-            SlayerRNGDisplay.bossTimes.add(System.currentTimeMillis() - SlayerRNGDisplay.lastBossStartTime);
+        } else if (message.startsWith("SLAYER QUEST COMPLETE!") && originalMessage.contains("§a§lSLAYER QUEST COMPLETE!")) {
+            if (0L != SlayerRNGDisplay.lastBossStartTime) {
+                SlayerRNGDisplay.bossTimes.add(System.currentTimeMillis() - SlayerRNGDisplay.lastBossStartTime);
+            }
+            ++SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop;
+
             SlayerRNGDisplay.updateNeeded = true;
         } else {
             SlayerRNGDisplay.parseMessage0(originalMessage, message);
