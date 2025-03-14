@@ -39,14 +39,14 @@ final class MixinASMEventHandler {
     @Inject(method = "<init>", at = @At("RETURN"), remap = false)
     private final void init$darkaddons(@NotNull final Object target, @NotNull final Method method, @NotNull final ModContainer ownerIn, @NotNull final CallbackInfo ci) {
         if (DarkAddons.isProfilerMode()) {
-            this.listenerMethodName = method.getName();
+            this.listenerMethodName = this.owner.getModId() + '_' + method.getName();
         }
     }
 
     @Inject(method = "invoke", at = @At("HEAD"), remap = false)
     private final void beforeInvoke$darkaddons(@NotNull final Event event, @NotNull final CallbackInfo ci) {
         if (DarkAddons.isProfilerMode() && null != this.listenerMethodName && DarkAddons.shouldProfile() && Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
-            PublicUtils.startProfilingSection(this.owner.getModId() + '_' + this.listenerMethodName);
+            PublicUtils.startProfilingSection(this.listenerMethodName);
             this.startedProfiling = true;
         }
     }

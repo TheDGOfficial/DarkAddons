@@ -98,8 +98,7 @@ final class ArmorStandOptimizer {
     static final boolean checkRemoveArmorStand(@NotNull final EntityArmorStand entityArmorStand) {
         final var dungeonTimerInstance = DungeonTimer.INSTANCE;
         final var bossEntryTime = dungeonTimerInstance.getBossEntryTime();
-        final var name = entityArmorStand.getCustomNameTag();
-        return AdditionalM7Features.canHideArmorstands(dungeonTimerInstance, bossEntryTime) && (ArmorStandOptimizer.isInM7P5() || AdditionalM7Features.isInM6OrF6Boss(bossEntryTime) && ArmorStandOptimizer.isNotOnSadanWhitelist(name, true));
+        return AdditionalM7Features.canHideArmorstands(dungeonTimerInstance, bossEntryTime) && (ArmorStandOptimizer.isInM7P5() || AdditionalM7Features.isInM6OrF6Boss(bossEntryTime) && ArmorStandOptimizer.isNotOnSadanWhitelist(entityArmorStand.getCustomNameTag(), true));
     }
 
     // This method will be called very frequently unless updateInterval is raised a lot,
@@ -132,8 +131,7 @@ final class ArmorStandOptimizer {
                     final var dist = ArmorStandOptimizer.getDistanceToArmorStandFromCoords(x, y, z, entity);
 
                     if (ArmorStandOptimizer.MAX_DISTANCE > dist) {
-                        final var squareRoot = Math.sqrt(dist);
-                        final var distInt = ArmorStandOptimizer.convertDistToInt(squareRoot);
+                        final var distInt = ArmorStandOptimizer.convertDistToInt(Math.sqrt(dist));
 
                         if (distInt >= multidimensionalEntitiesArraySize) {
                             final var minSize = distInt + 1;
@@ -227,9 +225,7 @@ final class ArmorStandOptimizer {
                     break;
                 }
 
-                final var first = ent[0];
-
-                if (first instanceof final EntityArmorStand entityArmorStand) {
+                if (ent[0] instanceof final EntityArmorStand entityArmorStand) {
                     final var uuid = entityArmorStand.getUniqueID();
 
                     if (entityCount > maxEntitiesToRender && ArmorStandOptimizer.isNotOnAnyWhitelist(entityArmorStand)) {
