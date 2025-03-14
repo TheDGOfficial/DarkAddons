@@ -87,7 +87,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
             BlazeEffectTimer.syncToDisk();
         }
 
-        if (message.startsWith("SLAYER QUEST COMPLETE!")) {
+        if (message.startsWith("SLAYER QUEST COMPLETE!") && SlayerRNGDisplay.isDoingInfernoDemonlordSlayer()) {
             ++BlazeEffectTimer.bossesDone;
         }
     }
