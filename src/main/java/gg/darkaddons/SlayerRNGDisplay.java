@@ -142,7 +142,7 @@ final class SlayerRNGDisplay extends GuiElement {
         SlayerRNGDisplay.addLine("§d⌛ RNG Meter: " + String.format(Locale.ROOT, "%.2f", Math.min(100.0D, meterProgressPercent)) + "% (" + Utils.formatNumber(SlayerRNGDisplay.lastMeterXP) + '/' + Utils.formatNumber(drop.requiredMeterXP) + ')');
         SlayerRNGDisplay.addEmptyLine();
         final var startingOdds = SlayerRNGDisplay.getOdds(SlayerRNGDisplay.getDropChance(drop, SlayerRNGDisplay.getMeterProgress(drop, SlayerRNGDisplay.lastMeterXPGain)));
-        SlayerRNGDisplay.addLine("§6♠ Odds: 1/" + startingOdds + "->" + odds + " (" + String.format(Locale.ROOT, "%.2f", dropChance) + "%)" + " (done since last: " + SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop + ')');
+        SlayerRNGDisplay.addLine("§6♠ Odds: 1/" + startingOdds + "->" + odds + " (" + String.format(Locale.ROOT, "%.2f", dropChance) + "%)" + " (done since last: " + drop.bossesDoneSinceLastRNGMeterDrop + ')');
         SlayerRNGDisplay.addEmptyLine();
         SlayerRNGDisplay.addLine("§e⌚ ETA: " + SlayerRNGDisplay.formatETA(etaTime) + " (" + SlayerRNGDisplay.getAVGBossKillTimeFormatted(avgBossKillTime) + " per boss on avg)");
         if (SlayerRNGDisplay.SellingMethod.NONE != drop.sellingMethod) {
@@ -548,6 +548,7 @@ final class SlayerRNGDisplay extends GuiElement {
         @Nullable
         private final String displayName;
         private int price;
+        private int bossesDoneSinceLastRNGMeterDrop;
         @NotNull
         private final String enumName = SlayerRNGDisplay.enumName(this.name());
         @NotNull
@@ -621,6 +622,23 @@ final class SlayerRNGDisplay extends GuiElement {
             final var nullableDisplayName = this.displayName;
 
             return null == nullableDisplayName ? this.enumName : nullableDisplayName;
+        }
+
+        @NotNull
+        private final String getInternalName() {
+            final var result = new StringBuilder(32);
+            var toUpperCase = false;
+
+            for (final var c : this.enumName.toCharArray()) {
+                if (c == '_') {
+                    toUpperCase = true;
+                } else {
+                    result.append(toUpperCase ? Character.toUpperCase(c) : Character.toLowerCase(c));
+                    toUpperCase = false;
+                }
+            }
+
+            return result.toString();
         }
 
         @Override
@@ -703,12 +721,12 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private static boolean updateNeeded = true;
 
-    private static int bossesDoneSinceLastRNGMeterDrop;
-
     private static final void syncFromDisk() {
-        final var bossesDoneSinceLastRNGMeterDrop = TinyConfig.getInt("bossesDoneSinceLastRNGMeterDrop");
-        if (null != bossesDoneSinceLastRNGMeterDrop) {
-            SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop = bossesDoneSinceLastRNGMeterDrop;
+        for (final SlayerRNGDisplay.SlayerDrop drop : SlayerRNGDisplay.SlayerDrop.values) {
+            final var bossesDoneSinceLastRNGMeterDrop = TinyConfig.getInt("bossesDoneSinceLastRNGMeterDropFor" + StringUtils.capitalize(drop.getInternalName()));
+            if (null != bossesDoneSinceLastRNGMeterDrop) {
+                drop.bossesDoneSinceLastRNGMeterDrop = bossesDoneSinceLastRNGMeterDrop;
+            }
         }
         final var lastMagicFind = TinyConfig.getInt("lastMagicFind");
         if (null != lastMagicFind) {
@@ -737,7 +755,9 @@ final class SlayerRNGDisplay extends GuiElement {
     }
 
     private static final void syncToDisk() {
-        TinyConfig.setInt("bossesDoneSinceLastRNGMeterDrop", SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop);
+        for (final SlayerRNGDisplay.SlayerDrop drop : SlayerRNGDisplay.SlayerDrop.values) {
+            TinyConfig.setInt("bossesDoneSinceLastRNGMeterDropFor" + StringUtils.capitalize(drop.getInternalName()), drop.bossesDoneSinceLastRNGMeterDrop);
+        }
         TinyConfig.setInt("lastMagicFind", SlayerRNGDisplay.lastMagicFind);
         TinyConfig.setInt("lastMeterXP", SlayerRNGDisplay.lastMeterXP);
         TinyConfig.setInt("lastMeterXPGain", SlayerRNGDisplay.lastMeterXPGain);
@@ -785,10 +805,12 @@ final class SlayerRNGDisplay extends GuiElement {
 
                     SlayerRNGDisplay.lastMeterXPGain = xpGain;
 
-                    final var tookBosses = SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop;
-                    SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop = 0;
+                    if (null != drop) {
+                        final var tookBosses = drop.bossesDoneSinceLastRNGMeterDrop;
+                        drop.bossesDoneSinceLastRNGMeterDrop = 0;
 
-                    DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 5, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop!"));
+                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 5, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop!"));
+                    }
                 }
             }
 
@@ -800,7 +822,11 @@ final class SlayerRNGDisplay extends GuiElement {
             if (0L != SlayerRNGDisplay.lastBossStartTime) {
                 SlayerRNGDisplay.bossTimes.add(System.currentTimeMillis() - SlayerRNGDisplay.lastBossStartTime);
             }
-            ++SlayerRNGDisplay.bossesDoneSinceLastRNGMeterDrop;
+
+            final var drop = SlayerRNGDisplay.lastSelectedDrop;
+            if (null != drop) {
+                ++drop.bossesDoneSinceLastRNGMeterDrop;
+            }
 
             SlayerRNGDisplay.updateNeeded = true;
         } else {
