@@ -728,6 +728,12 @@ final class SlayerRNGDisplay extends GuiElement {
                 bossTimes.add(killTime);
             }
         }
+        for (final SlayerRNGDisplay.Slayer slayer : SlayerRNGDisplay.Slayer.values) {
+            final var level = TinyConfig.getInt(slayer.name().toLowerCase(Locale.ROOT) + "Level");
+            if (null != level) {
+                slayer.level = level;
+            }
+        }
     }
 
     private static final void syncToDisk() {
@@ -739,6 +745,9 @@ final class SlayerRNGDisplay extends GuiElement {
         for (final long killTime : SlayerRNGDisplay.bossTimes) {
             ++i;
             TinyConfig.setLong("bossTime" + i, killTime);
+        }
+        for (final SlayerRNGDisplay.Slayer slayer : SlayerRNGDisplay.Slayer.values) {
+            TinyConfig.setInt(slayer.name().toLowerCase(Locale.ROOT) + "Level", slayer.level);
         }
     }
 
