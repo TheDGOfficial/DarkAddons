@@ -2,7 +2,6 @@ package gg.darkaddons.mixins;
 
 import gg.darkaddons.annotations.bytecode.Bridge;
 import gg.darkaddons.annotations.bytecode.Synthetic;
-import gg.darkaddons.DarkAddons;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.client.C19PacketResourcePackStatus;
@@ -76,7 +75,7 @@ final class MixinNetHandlerPlayClient {
 
     @Redirect(method = "handleUpdateTileEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/tileentity/TileEntity;onDataPacket(Lnet/minecraft/network/NetworkManager;Lnet/minecraft/network/play/server/S35PacketUpdateTileEntity;)V", remap = false))
     private final void onDataPacket$darkaddons(@Nullable final TileEntity tileEntity, @NotNull final NetworkManager networkManager, @NotNull final S35PacketUpdateTileEntity packet) {
-        if (!DarkAddons.isOptimizeExceptions() || null != tileEntity) {
+        if (null != tileEntity) {
             tileEntity.onDataPacket(networkManager, packet);
         }
     }

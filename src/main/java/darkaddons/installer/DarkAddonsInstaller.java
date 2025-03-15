@@ -519,7 +519,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
             }
 
             var deletingFailure = false;
-            if (modsFolder.isDirectory()) { // Delete in this current folder.
+            if (modsFolder.isDirectory()) { // Delete it in this current folder.
                 final var failed = DarkAddonsInstaller.findDarkAddonsAndDelete(modsFolder.listFiles());
                 if (failed) {
                     deletingFailure = true;
@@ -533,7 +533,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
                         deletingFailure = true;
                     }
                 }
-            } else { // We are in the main mods folder, but the 1.8.9 subfolder exists... delete in there too.
+            } else { // We are in the main mods folder, but the 1.8.9 subfolder exists... delete it in there too.
                 final var subFolder = new File(modsFolder, "1.8.9");
                 if (subFolder.exists() && subFolder.isDirectory()) {
                     final var failed = DarkAddonsInstaller.findDarkAddonsAndDelete(subFolder.listFiles());
@@ -626,16 +626,21 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     private static final File getFile(@NotNull final String userHome, @NotNull final String minecraftPath) {
         final var os = DarkAddonsInstaller.getOperatingSystem();
 
-        if (DarkAddonsInstaller.OperatingSystem.LINUX == os || DarkAddonsInstaller.OperatingSystem.SOLARIS == os) {
-            return new File(userHome, '.' + minecraftPath + '/');
+        switch (os) {
+            case LINUX, SOLARIS -> {
+                return new File(userHome, '.' + minecraftPath + '/');
+            }
+            case WINDOWS -> {
+                final var applicationData = System.getenv("APPDATA");
+                return new File(null == applicationData ? userHome : applicationData, '.' + minecraftPath + '/');
+            }
+            case MACOS -> {
+                return new File(userHome, "Library/Application Support/" + minecraftPath);
+            }
+            default -> {
+                return new File(userHome, minecraftPath + '/');
+            }
         }
-
-        if (DarkAddonsInstaller.OperatingSystem.WINDOWS == os) {
-            final var applicationData = System.getenv("APPDATA");
-            return new File(null == applicationData ? userHome : applicationData, '.' + minecraftPath + '/');
-        }
-
-        return new File(userHome, DarkAddonsInstaller.OperatingSystem.MACOS == os ? "Library/Application Support/" + minecraftPath : minecraftPath + '/');
     }
 
     @NotNull
@@ -725,13 +730,14 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
     @NotNull
     private final String getVersionFromMcmodInfo() {
         var version = "";
-        try (final var inputStreamReader = new InputStreamReader(Objects.requireNonNull(this.getClass().
-                getClassLoader().getResourceAsStream("mcmod.info"), "mcmod.info not found."), StandardCharsets.UTF_8)) {
-            try (final var bufferedReader = new BufferedReader(inputStreamReader)) {
-                while (null != (version = bufferedReader.readLine())) {
-                    if (version.contains("\"version\": \"")) {
-                        version = version.split(Pattern.quote("\"version\": \""))[1];
-                        return version.substring(0, version.length() - 2);
+        try (final var inputStream = Objects.requireNonNull(this.getClass().getClassLoader().getResourceAsStream("mcmod.info"), "mcmod.info not found.")) {
+            try (final var inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+                try (final var bufferedReader = new BufferedReader(inputStreamReader)) {
+                    while (null != (version = bufferedReader.readLine())) {
+                        if (version.contains("\"version\": \"")) {
+                            version = version.split(Pattern.quote("\"version\": \""))[1];
+                            return version.substring(0, version.length() - 2);
+                        }
                     }
                 }
             }

@@ -2,7 +2,6 @@ package gg.darkaddons.mixins;
 
 import gg.darkaddons.DarkAddons;
 import gg.darkaddons.PublicUtils;
-import gg.darkaddons.mixin.MixinUtils;
 import gg.darkaddons.annotations.bytecode.Name;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.ModContainer;

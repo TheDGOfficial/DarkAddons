@@ -252,64 +252,62 @@ final class SlayerRNGDisplay extends GuiElement {
 
     static final void forcePriceUpdateIfNecessary() {
         for (final var slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
-            if (SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
-                if (0 == slayerDrop.price) {
-                    // This will cancel the previous registered task and register a new one, set to run with 0 delay for the first time and 1 minute intervals on subsequent ones.
-                    SlayerRNGDisplay.registerPriceUpdateTask();
-                    break;
-                }
+            if (SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod && 0 == slayerDrop.price) {
+                // This will cancel the previous registered task and register a new one, set to run with 0 delay for the first time and 1-minute intervals on subsequent ones.
+                SlayerRNGDisplay.registerPriceUpdateTask();
+                break;
             }
         }
     }
 
     private static final Runnable priceUpdateTask = () -> {
-            if (!Config.isSlayerRngDisplay() || DarkAddons.isInDungeons()) {
+        if (!Config.isSlayerRngDisplay() || DarkAddons.isInDungeons()) {
+            return;
+        }
+
+        try {
+            final var lbResp = Utils.sendWebRequest("https://lb.tricked.pro/lowestbins", "application/json", false);
+
+            if (null == lbResp) {
+                // Likely no internet connection, bail out.
                 return;
             }
 
-            try {
-                final var lbResp = Utils.sendWebRequest("https://lb.tricked.pro/lowestbins", "application/json", false);
+            final var lowestBINPrices = Utils.parseJsonObjectFromString(lbResp);
+            var updateNeeded = false;
 
-                if (null == lbResp) {
-                    // Likely no internet connection, bail out.
-                    return;
-                }
-
-                final var lowestBINPrices = Utils.parseJsonObjectFromString(lbResp);
-                var updateNeeded = false;
-
-                for (final var slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
-                    if (SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
-                        if (0 == slayerDrop.price) {
-                            // If any of the slayer drops that supposed to have a AH/BZ price has none, we need to update the display so that it does not keep showing 0 coins till the next time you kill a boss.
-                            // Otherwise, no need to unnecessarily update the display - it will be updated the next time a slayer boss is done.
-                            updateNeeded = true;
-                        }
-                        slayerDrop.price = lowestBINPrices.get(slayerDrop.getItemId()).getAsInt();
+            for (final var slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
+                if (SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
+                    if (0 == slayerDrop.price) {
+                        // If any of the slayer drops that supposed to have a AH/BZ price has none, we need to update the display so that it does not keep showing 0 coins till the next time you kill a boss.
+                        // Otherwise, no need to unnecessarily update the display - it will be updated the next time a slayer boss is done.
+                        updateNeeded = true;
                     }
+                    slayerDrop.price = lowestBINPrices.get(slayerDrop.getItemId()).getAsInt();
                 }
-
-                if (updateNeeded) {
-                    SlayerRNGDisplay.updateNeeded = true;
-                }
-            } catch (final Throwable error) {
-                DarkAddons.modError(error);
             }
+
+            if (updateNeeded) {
+                SlayerRNGDisplay.updateNeeded = true;
+            }
+        } catch (final Throwable error) {
+            DarkAddons.modError(error);
+        }
     };
 
     @Nullable
     private static ScheduledFuture<?> scheduledPriceUpdateTask;
 
     private static final void registerPriceUpdateTask() {
-        if (SlayerRNGDisplay.scheduledPriceUpdateTask != null) {
+        if (null != SlayerRNGDisplay.scheduledPriceUpdateTask) {
             SlayerRNGDisplay.scheduledPriceUpdateTask.cancel(false);
         }
-        SlayerRNGDisplay.scheduledPriceUpdateTask = SlayerRNGDisplay.scheduler.scheduleWithFixedDelay(priceUpdateTask, 0L, 1L, TimeUnit.MINUTES);
+        SlayerRNGDisplay.scheduledPriceUpdateTask = SlayerRNGDisplay.scheduler.scheduleWithFixedDelay(SlayerRNGDisplay.priceUpdateTask, 0L, 1L, TimeUnit.MINUTES);
     }
 
     private static final void registerQuestDetectionTask() {
         DarkAddons.registerTickTask("update_slayer_quest_detection", 4, true, () -> {
-            if ((!Config.isSlayerRngDisplay() && !Config.isBlazeEffectTimer()) || DarkAddons.isInDungeons()) {
+            if (!Config.isSlayerRngDisplay() && !Config.isBlazeEffectTimer() || DarkAddons.isInDungeons()) {
                 return;
             }
 
@@ -630,7 +628,7 @@ final class SlayerRNGDisplay extends GuiElement {
             var toUpperCase = false;
 
             for (final var c : this.enumName.toCharArray()) {
-                if (c == '_') {
+                if ('_' == c) {
                     toUpperCase = true;
                 } else {
                     result.append(toUpperCase ? Character.toUpperCase(c) : Character.toLowerCase(c));
@@ -654,13 +652,14 @@ final class SlayerRNGDisplay extends GuiElement {
                 ", sellingMethod=" + this.sellingMethod +
                 ", displayName='" + this.displayName + '\'' +
                 ", price=" + this.price +
+                ", bossesDoneSinceLastRNGMeterDrop=" + this.bossesDoneSinceLastRNGMeterDrop +
                 ", enumName='" + this.enumName + '\'' +
                 '}';
         }
     }
 
     @Nullable
-    private static SlayerRNGDisplay.SlayerDrop lastSelectedDrop = null;
+    private static SlayerRNGDisplay.SlayerDrop lastSelectedDrop;
 
     @NotNull
     private static final Supplier<SlayerRNGDisplay.SlayerDrop> selectedDrop = () -> {
@@ -722,7 +721,7 @@ final class SlayerRNGDisplay extends GuiElement {
     private static boolean updateNeeded = true;
 
     private static final void syncFromDisk() {
-        for (final SlayerRNGDisplay.SlayerDrop drop : SlayerRNGDisplay.SlayerDrop.values) {
+        for (final var drop : SlayerRNGDisplay.SlayerDrop.values) {
             final var bossesDoneSinceLastRNGMeterDrop = TinyConfig.getInt("bossesDoneSinceLastRNGMeterDropFor" + StringUtils.capitalize(drop.getInternalName()));
             if (null != bossesDoneSinceLastRNGMeterDrop) {
                 drop.bossesDoneSinceLastRNGMeterDrop = bossesDoneSinceLastRNGMeterDrop;
@@ -740,13 +739,13 @@ final class SlayerRNGDisplay extends GuiElement {
         if (null != lastMeterXPGain) {
             SlayerRNGDisplay.lastMeterXPGain = lastMeterXPGain;
         }
-        for (var i = 1; i <= 5; ++i) {
+        for (var i = 1; 5 >= i; ++i) {
             final var killTime = TinyConfig.getLong("bossTime" + i);
             if (null != killTime) {
-                bossTimes.add(killTime);
+                SlayerRNGDisplay.bossTimes.add(killTime);
             }
         }
-        for (final SlayerRNGDisplay.Slayer slayer : SlayerRNGDisplay.Slayer.values) {
+        for (final var slayer : SlayerRNGDisplay.Slayer.values) {
             final var level = TinyConfig.getInt(slayer.name().toLowerCase(Locale.ROOT) + "Level");
             if (null != level) {
                 slayer.level = level;
@@ -755,18 +754,18 @@ final class SlayerRNGDisplay extends GuiElement {
     }
 
     private static final void syncToDisk() {
-        for (final SlayerRNGDisplay.SlayerDrop drop : SlayerRNGDisplay.SlayerDrop.values) {
+        for (final var drop : SlayerRNGDisplay.SlayerDrop.values) {
             TinyConfig.setInt("bossesDoneSinceLastRNGMeterDropFor" + StringUtils.capitalize(drop.getInternalName()), drop.bossesDoneSinceLastRNGMeterDrop);
         }
         TinyConfig.setInt("lastMagicFind", SlayerRNGDisplay.lastMagicFind);
         TinyConfig.setInt("lastMeterXP", SlayerRNGDisplay.lastMeterXP);
         TinyConfig.setInt("lastMeterXPGain", SlayerRNGDisplay.lastMeterXPGain);
-        int i = 0;
+        var i = 0;
         for (final long killTime : SlayerRNGDisplay.bossTimes) {
             ++i;
             TinyConfig.setLong("bossTime" + i, killTime);
         }
-        for (final SlayerRNGDisplay.Slayer slayer : SlayerRNGDisplay.Slayer.values) {
+        for (final var slayer : SlayerRNGDisplay.Slayer.values) {
             TinyConfig.setInt(slayer.name().toLowerCase(Locale.ROOT) + "Level", slayer.level);
         }
     }
@@ -791,14 +790,14 @@ final class SlayerRNGDisplay extends GuiElement {
                     // If the meter got reset, the current XP will be lower than previous XP and the current XP will be our XP per boss. Instead of a hardcoded value like 625 / 500 and checking if the mayor is Aatrox, this is a simpler calculation that will work for all Slayer tiers since they all give different XP (and some slayers like Vampire give different XP than others in each tier).
                     var xpGain = xpNow;
 
-                    // There is an edge case with setting xpGain = xpNow, if we have more than enough XP for 100% meter and our meter gets reset, instead of it going to XP per boss value, it will just cut down the XP of the meter item from xpBefore, then it will add the XP we gained from the boss. So if we don't have checks for this edge case xpNow would be a high value that we don't want to assign as xp per boss gain.
+                    // There is an edge case with setting xpGain = xpNow, if we have more than enough XP for 100% meter and our meter gets reset, instead of it going to XP per boss value, it will just cut down the XP of the meter item from xpBefore, then it will add the XP we gained from the boss. So if we don't have checks for this edge case, xpNow would be a high value that we don't want to assign as xp per boss gain.
                     final var drop = SlayerRNGDisplay.lastSelectedDrop;
                     if (null != drop) {
-                        // Result of xpNow - xpBefore will be a negative value in this case, and adding the required meter XP of the drop will give us the xp per boss value, unless the lastSelectedDrop is inaccurate detecting user's selected slayer drop.
-                        final var possibleXpGain = (xpNow - xpBefore) + drop.requiredMeterXP;
+                        // The result of xpNow - xpBefore will be a negative value in this case, and adding the required meter XP of the drop will give us the xp per boss value, unless the lastSelectedDrop is inaccurate detecting user's selected slayer drop.
+                        final var possibleXpGain = xpNow - xpBefore + drop.requiredMeterXP;
 
-                        // If the result is negative, it likely means that lastSelectedDrop is not user's selected drop, but a more common one. If it is not user's selected drop and user selected a more rare drop, we have no way of detecting that, so this a best-effort to avoid assigning and incorrect value to xpPerBoss.
-                        if (possibleXpGain > 0) {
+                        // If the result is negative, it likely means that lastSelectedDrop is not the user's selected drop, but a more common one. If it is not user's selected drop and user selected a rarer drop, we have no way of detecting that, so this is a best-effort to avoid assigning and incorrect value to xpPerBoss.
+                        if (0 < possibleXpGain) {
                             xpGain = possibleXpGain;
                         }
                     }

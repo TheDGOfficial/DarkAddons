@@ -18,40 +18,38 @@ final class CenturyRaffleTicketTimer extends GuiElement {
     private static boolean ptTicketWasNegative;
 
     private static final void updateTimer(@Nullable final String chatText) {
-        if (null != chatText) {
-            if ("PLAYTIME! You gained +1 Raffle Ticket!".equals(Utils.removeControlCodes(chatText))) {
-                CenturyRaffleTicketTimer.ptTicketExpireTime = System.currentTimeMillis() + CenturyRaffleTicketTimer.RAFFLE_READY_TIME_MS;
+        if (null != chatText && "PLAYTIME! You gained +1 Raffle Ticket!".equals(Utils.removeControlCodes(chatText))) {
+            CenturyRaffleTicketTimer.ptTicketExpireTime = System.currentTimeMillis() + CenturyRaffleTicketTimer.RAFFLE_READY_TIME_MS;
 
-                CenturyRaffleTicketTimer.ptTicketWasNotInit = false;
-                CenturyRaffleTicketTimer.ptTicketWasNegative = false;
-            }
+            CenturyRaffleTicketTimer.ptTicketWasNotInit = false;
+            CenturyRaffleTicketTimer.ptTicketWasNegative = false;
         }
     }
 
     private static final long getTimeLeftForPtTicketInMs() {
-        final var expireTime = CenturyRaffleTicketTimer.ptTicketExpireTime;
+        while (true) {
+            final var expireTime = CenturyRaffleTicketTimer.ptTicketExpireTime;
 
-        if (-1L == expireTime) {
-            CenturyRaffleTicketTimer.resetTimer(true); // Not initialized, assume 30min. If this was wrong, the message will update it later to the correct value.
+            if (-1L == expireTime) {
+                CenturyRaffleTicketTimer.resetTimer(true); // Not initialized, assume 30min. If this was wrong, the message will update it later to the correct value.
 
-            return CenturyRaffleTicketTimer.getTimeLeftForPtTicketInMs();
+                continue;
+            }
+
+            final var timeLeftInMs = expireTime - System.currentTimeMillis();
+
+            if (0L > timeLeftInMs) {
+                CenturyRaffleTicketTimer.resetTimer(false); // Negative value, reset to 30min. If this was wrong, the message will update it later to the correct value.
+
+                continue;
+            }
+
+            return timeLeftInMs;
         }
-
-        final var timeLeftInMs = expireTime - System.currentTimeMillis();
-
-        if (0L > timeLeftInMs) {
-            CenturyRaffleTicketTimer.resetTimer(false); // Negative value, reset to 30min. If this was wrong, the message will update it later to the correct value.
-
-            return CenturyRaffleTicketTimer.getTimeLeftForPtTicketInMs();
-        }
-
-        return timeLeftInMs;
     }
 
     private static final void resetTimer(final boolean notInit) {
-        final var resetTime = System.currentTimeMillis() + CenturyRaffleTicketTimer.RAFFLE_READY_TIME_MS;
-
-        CenturyRaffleTicketTimer.ptTicketExpireTime = resetTime;
+        CenturyRaffleTicketTimer.ptTicketExpireTime = System.currentTimeMillis() + CenturyRaffleTicketTimer.RAFFLE_READY_TIME_MS;
 
         if (notInit) {
             CenturyRaffleTicketTimer.ptTicketWasNotInit = true;
@@ -79,13 +77,7 @@ final class CenturyRaffleTicketTimer extends GuiElement {
 
     @NotNull
     private static final String getExtraInfo() {
-        if (CenturyRaffleTicketTimer.ptTicketWasNotInit) {
-            return " §9(Unknown)";
-        }
-        if (CenturyRaffleTicketTimer.ptTicketWasNegative) {
-            return " §a(Was Ready)";
-        }
-        return "";
+        return CenturyRaffleTicketTimer.ptTicketWasNotInit ? " §9(Unknown)" : CenturyRaffleTicketTimer.ptTicketWasNegative ? " §a(Was Ready)" : "";
     }
 
     private static final char getColor(final long timeInMillis) {
@@ -101,11 +93,9 @@ final class CenturyRaffleTicketTimer extends GuiElement {
 
             var changedPt = false;
 
-            if (demo) {
-                if (!CenturyRaffleTicketTimer.ptTicketWasNegative) {
-                    CenturyRaffleTicketTimer.ptTicketWasNegative = true;
-                    changedPt = true;
-                }
+            if (demo && !CenturyRaffleTicketTimer.ptTicketWasNegative) {
+                CenturyRaffleTicketTimer.ptTicketWasNegative = true;
+                changedPt = true;
             }
 
             GuiElement.drawString(

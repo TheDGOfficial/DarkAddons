@@ -30,7 +30,6 @@ import java.lang.management.ThreadInfo;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -38,7 +37,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -148,7 +149,7 @@ final class Diagnostics {
             final var mainChatRenderer = Diagnostics.getPrivateFieldValue(chat.getClass(), chat, "chatMain");
 
             // Return type is ArrayList<ChatLine> but use List<?> since we don't care about specific list implementation and content type, we only need it for calling .size() - NOTE: The ChatLine class in the ArrayList<ChatLine> is different from vanillas when the chat implementation is LabyMod.
-            return Diagnostics.getPrivateFieldValue(mainChatRenderer.getClass().getSuperclass() /* This returns the base chat class which both the main and second chats extend from */, mainChatRenderer, "chatLines" /* And that base class has this field that stores the lines */);
+            return Diagnostics.getPrivateFieldValue(Objects.requireNonNull(mainChatRenderer, "var mainChatRenderer from field chatMain should not be null").getClass().getSuperclass() /* This returns the base chat class which both the main and second chats extend from */, mainChatRenderer, "chatLines" /* And that base class has this field that stores the lines */);
         }
 
         // Return type is ArrayList<ChatLine> but use List<?> since we don't care about the specific list implementation and the content type, we only need it for calling .size()

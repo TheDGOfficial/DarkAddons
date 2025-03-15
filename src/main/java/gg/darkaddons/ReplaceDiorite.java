@@ -33,9 +33,9 @@ final class ReplaceDiorite {
     }
 
     @NotNull
-    private static final BlockPos[] pillars = new BlockPos[]{new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
+    private static final BlockPos[] pillars = {new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
 
-    private static final int @NotNull [] pillarColors = new int[]{5, 4, 10, 14};
+    private static final int @NotNull [] pillarColors = {5, 4, 10, 14};
 
     @NotNull
     private static final HashSet<BlockPos>[] coordinates = ReplaceDiorite.createPillarSets();

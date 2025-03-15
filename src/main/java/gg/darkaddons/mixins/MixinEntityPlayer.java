@@ -1,6 +1,5 @@
 package gg.darkaddons.mixins;
 
-import gg.darkaddons.mixin.MixinUtils;
 import gg.darkaddons.annotations.bytecode.Name;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

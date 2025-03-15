@@ -40,10 +40,10 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         final var lastInSkyblockTimeLocal = TinyConfig.getLong("lastInSkyblockTime");
         final var bossesDone = TinyConfig.getInt("bossesDone");
 
-        // Require all values to exist (if a config value does not exist the TinyConfig methods will return null), since we save all at the same time. If one of them exists while other(s) do not it means something got corrupted or interrupted during save, or the config got edited manually, regardless, we do not care nor support those edge cases.
+        // Require all values to exist (if a config value does not exist, the TinyConfig methods will return null), since we save all at the same time. If one of them exists while other(s) do not it means something got corrupted or interrupted during save, or the config got edited manually, regardless, we do not care nor support those edge cases.
         if (null != polarizationEndLocal && null != icePotionEndLocal && null != lastInSkyblockTimeLocal) {
-            BlazeEffectTimer.polarizationEnd = System.currentTimeMillis() + (polarizationEndLocal - lastInSkyblockTimeLocal);
-            BlazeEffectTimer.icePotionEnd = System.currentTimeMillis() + (icePotionEndLocal - lastInSkyblockTimeLocal);
+            BlazeEffectTimer.polarizationEnd = System.currentTimeMillis() + polarizationEndLocal - lastInSkyblockTimeLocal;
+            BlazeEffectTimer.icePotionEnd = System.currentTimeMillis() + icePotionEndLocal - lastInSkyblockTimeLocal;
 
             BlazeEffectTimer.lastInSkyblockTime = System.currentTimeMillis();
         }
@@ -70,7 +70,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
             case "You ate a Re-heated Gummy Polar Bear!" -> {
                 // Re-heated Gummy Polar Bear's can be stacked after a previous game update a while ago.
                 // Only the ones stacked after mod was installed will be taken into account.
-                // Data will not be saved to the disk in a un-clean exit of the game so that will also make the timer inaccurate.
+                // Data will not be saved to the disk in an unclean exit of the game so that will also make the timer inaccurate.
                 BlazeEffectTimer.polarizationEnd = BlazeEffectTimer.polarizationEnd > System.currentTimeMillis() ? BlazeEffectTimer.polarizationEnd + BlazeEffectTimer.SMOLDERING_POLARIZATION_DURATION_MS : System.currentTimeMillis() + BlazeEffectTimer.SMOLDERING_POLARIZATION_DURATION_MS;
                 BlazeEffectTimer.bossesDone = 0;
                 BlazeEffectTimer.syncToDisk();
@@ -81,7 +81,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
             }
         }
 
-        // If someone else splashes you, the message is different and has a player name in it, so we can't check for the exact message, but check if start and end part of the message is correct. We do not care about the in-between part which is name of the player splashing the potion, which is irrelevant.
+        // If someone else splashes you, the message is different and has a player name in it, so we can't check for the exact message, but check if start and end parts of the message is correct. We do not care about the in-between part which is the name of the player splashing the potion, which is irrelevant.
         if (message.startsWith("BUFF! You were splashed by") && message.endsWith("with Wisp's Ice-Flavored Water I! Press TAB or type /effects to view your active effects!")) {
             BlazeEffectTimer.icePotionEnd = System.currentTimeMillis() + BlazeEffectTimer.WISPS_ICE_FLAVORED_SPLASH_POTION_DURATION_MS;
             BlazeEffectTimer.syncToDisk();
@@ -139,7 +139,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         }
 
         // We lose the millisecond precision, but it doesn't matter anyway as we only update every second at most.
-        // This needed to ensure proper cache - if it was millisecond precision, lastTimeLeft would basically change every call and caching would be pointless.
+        // This needed to ensure proper cache - if it was millisecond precision, lastTimeLeft would basically change every call, and caching would be pointless.
         final var polarizationTimeLeftSecondsLocal = Math.max(0L, TimeUnit.MILLISECONDS.toSeconds(BlazeEffectTimer.polarizationEnd - BlazeEffectTimer.lastInSkyblockTime));
         final var icePotionTimeLeftSecondsLocal = Math.max(0L, TimeUnit.MILLISECONDS.toSeconds(BlazeEffectTimer.icePotionEnd - BlazeEffectTimer.lastInSkyblockTime));
 

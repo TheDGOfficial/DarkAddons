@@ -238,7 +238,7 @@ final class AutoClassAbilities {
                     }
                     case MAGE -> {
                         final var isDupeMage = 1 < DungeonListener.INSTANCE.getTeam().values().stream().filter(t -> DungeonClass.MAGE == t.getDungeonClass()).count();
-                        var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) / 2;
+                        var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) >> 1;
                         if (!isDupeMage) {
                             lvlExtraCdReduc <<= 1;
                         }
