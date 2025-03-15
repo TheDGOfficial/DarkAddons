@@ -284,7 +284,7 @@ final class SlayerRNGDisplay extends GuiElement {
                         updateNeeded = true;
                     }
 
-                    final var oldPrice = slayerDrop.price
+                    final var oldPrice = slayerDrop.price;
                     slayerDrop.price = lowestBINPrices.get(slayerDrop.getItemId()).getAsInt();
 
                     if (!Utils.formatNumber(oldPrice).equals(Utils.formatNumber(newPrice))) {
