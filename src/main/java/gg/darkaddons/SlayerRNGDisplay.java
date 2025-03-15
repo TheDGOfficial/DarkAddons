@@ -285,7 +285,9 @@ final class SlayerRNGDisplay extends GuiElement {
                     }
 
                     final var oldPrice = slayerDrop.price;
-                    slayerDrop.price = lowestBINPrices.get(slayerDrop.getItemId()).getAsInt();
+                    final var newPrice = lowestBINPrices.get(slayerDrop.getItemId()).getAsInt();
+
+                    slayerDrop.price = newPrice;
 
                     if (!Utils.formatNumber(oldPrice).equals(Utils.formatNumber(newPrice))) {
                         // The price changed enough to be worth updating the display, i.e it gone up or down a million coins. This check is necessary to not unnecessarily update it for insignificiiant price changes, like 0.1 coins more/less than the old value (very common for BZ undercut).
