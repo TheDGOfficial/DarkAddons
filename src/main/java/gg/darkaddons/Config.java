@@ -1123,7 +1123,7 @@ final class Config extends Vigilant {
 
     // TODO use this.hidePropertyIf to hide chroma related settings if SBA is not installed
     Config() {
-        // TODO this super call calls the super on WindowScreen with ElementaVersion.V2 instead of V5
+        // TODO this super call calls the super on WindowScreen with ElementaVersion.V2 instead of latest
         super(Config.CONFIG_FILE, "DarkAddons v" + Reference.VERSION, new JVMAnnotationPropertyCollector(), new Config.ConfigSorting());
 
         this.addDependencyAndListeners();

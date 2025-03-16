@@ -24,21 +24,21 @@ final class BlazeEffectTimer extends SimpleGuiElement {
 
     private static long lastInSkyblockTime;
 
-    private static int bossesDone;
+    private static int bossesDoneSinceSmolderingPolarization;
 
     private static final void syncToDisk() {
         // No need to save timeLeft or lastTimeLeftSeconds since those are calculated on the fly.
         TinyConfig.setLong("polarizationEnd", BlazeEffectTimer.polarizationEnd);
         TinyConfig.setLong("icePotionEnd", BlazeEffectTimer.icePotionEnd);
         TinyConfig.setLong("lastInSkyblockTime", BlazeEffectTimer.lastInSkyblockTime);
-        TinyConfig.setInt("bossesDone", BlazeEffectTimer.bossesDone);
+        TinyConfig.setInt("bossesDoneSinceSmolderingPolarization", BlazeEffectTimer.bossesDoneSinceSmolderingPolarization);
     }
 
     private static final void syncFromDisk() {
         final var polarizationEndLocal = TinyConfig.getLong("polarizationEnd");
         final var icePotionEndLocal = TinyConfig.getLong("icePotionEnd");
         final var lastInSkyblockTimeLocal = TinyConfig.getLong("lastInSkyblockTime");
-        final var bossesDone = TinyConfig.getInt("bossesDone");
+        final var bossesDoneSinceSmolderingPolarization = TinyConfig.getInt("bossesDoneSinceSmolderingPolarization");
 
         // Require all values to exist (if a config value does not exist, the TinyConfig methods will return null), since we save all at the same time. If one of them exists while other(s) do not it means something got corrupted or interrupted during save, or the config got edited manually, regardless, we do not care nor support those edge cases.
         if (null != polarizationEndLocal && null != icePotionEndLocal && null != lastInSkyblockTimeLocal) {
@@ -48,8 +48,8 @@ final class BlazeEffectTimer extends SimpleGuiElement {
             BlazeEffectTimer.lastInSkyblockTime = System.currentTimeMillis();
         }
 
-        if (null != bossesDone) {
-            BlazeEffectTimer.bossesDone = bossesDone;
+        if (null != bossesDoneSinceSmolderingPolarization) {
+            BlazeEffectTimer.bossesDoneSinceSmolderingPolarization = bossesDoneSinceSmolderingPolarization;
         }
     }
 
@@ -72,7 +72,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
                 // Only the ones stacked after mod was installed will be taken into account.
                 // Data will not be saved to the disk in an unclean exit of the game so that will also make the timer inaccurate.
                 BlazeEffectTimer.polarizationEnd = BlazeEffectTimer.polarizationEnd > System.currentTimeMillis() ? BlazeEffectTimer.polarizationEnd + BlazeEffectTimer.SMOLDERING_POLARIZATION_DURATION_MS : System.currentTimeMillis() + BlazeEffectTimer.SMOLDERING_POLARIZATION_DURATION_MS;
-                BlazeEffectTimer.bossesDone = 0;
+                BlazeEffectTimer.bossesDoneSinceSmolderingPolarization = 0;
                 BlazeEffectTimer.syncToDisk();
             }
             case "BUFF! You splashed yourself with Wisp's Ice-Flavored Water I! Press TAB or type /effects to view your active effects!" -> {
@@ -88,7 +88,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         }
 
         if (message.startsWith("SLAYER QUEST COMPLETE!") && SlayerRNGDisplay.isDoingInfernoDemonlordSlayer()) {
-            ++BlazeEffectTimer.bossesDone;
+            ++BlazeEffectTimer.bossesDoneSinceSmolderingPolarization;
         }
     }
 
@@ -175,6 +175,6 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         lines.add(0L == BlazeEffectTimer.polarizationTimeLeftSeconds ? "§cSmoldering Polarization Expired!" : "§aSmoldering Polarization: " + Utils.formatTime(TimeUnit.SECONDS.toMillis(BlazeEffectTimer.polarizationTimeLeftSeconds), true));
         lines.add(0L == BlazeEffectTimer.icePotionTimeLeftSeconds ? "§cWisp's Ice Flavored Splash Potion Expired!" : "§aWisp's Ice Flavored Splash Potion: " + Utils.formatTime(TimeUnit.SECONDS.toMillis(BlazeEffectTimer.icePotionTimeLeftSeconds), true));
         lines.add("");
-        lines.add("§eBosses Done Since Smoldering Polarization: §6" + BlazeEffectTimer.bossesDone);
+        lines.add("§eBosses Done Since Smoldering Polarization: §6" + BlazeEffectTimer.bossesDoneSinceSmolderingPolarization);
     }
 }

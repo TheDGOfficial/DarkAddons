@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.io.UncheckedIOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,12 +51,15 @@ public final class MethodMapping {
          */
         @NotNull
         private static final HashMap<String, MethodMapping> loadMappings() {
-            final var mappingsFile = new File(new File(new File("config"), "darkaddons"), "methods.v2.csv");
+            final var darkaddonsFolder = new File(new File("config"), "darkaddons");
+
+            final var oldMappingsFile = new File(darkaddonsFolder, "methods.csv");
+            final var mappingsFile = new File(darkaddonsFolder, "methods.v2.csv");
 
             try {
-                //if (mappingsFile.exists()) {
-                //    Files.delete(mappingsFile.toPath()); // Delete the file if it already exists, so we can update mappings later if we want
-                //}
+                if (oldMappingsFile.exists()) {
+                    Files.delete(oldMappingsFile.toPath()); // Delete old version of the file if it exists.
+                }
 
                 // Copy the file to the location on the disk.
                 if (!mappingsFile.exists()) {

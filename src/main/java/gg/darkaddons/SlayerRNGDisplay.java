@@ -636,7 +636,7 @@ final class SlayerRNGDisplay extends GuiElement {
             final var result = new StringBuilder(32);
             var toUpperCase = false;
 
-            for (final var c : this.enumName.toCharArray()) {
+            for (final var c : this.name().toCharArray()) {
                 if ('_' == c) {
                     toUpperCase = true;
                 } else {
@@ -796,28 +796,14 @@ final class SlayerRNGDisplay extends GuiElement {
                 if (xpNow > xpBefore) {
                     SlayerRNGDisplay.lastMeterXPGain = xpNow - xpBefore;
                 } else {
-                    // If the meter got reset, the current XP will be lower than previous XP and the current XP will be our XP per boss. Instead of a hardcoded value like 625 / 500 and checking if the mayor is Aatrox, this is a simpler calculation that will work for all Slayer tiers since they all give different XP (and some slayers like Vampire give different XP than others in each tier).
-                    var xpGain = xpNow;
-
-                    // There is an edge case with setting xpGain = xpNow, if we have more than enough XP for 100% meter and our meter gets reset, instead of it going to XP per boss value, it will just cut down the XP of the meter item from xpBefore, then it will add the XP we gained from the boss. So if we don't have checks for this edge case, xpNow would be a high value that we don't want to assign as xp per boss gain.
+                    // If the user used meter XP to drop an rng, the current XP will be lower than previous XP.
                     final var drop = SlayerRNGDisplay.lastSelectedDrop;
-                    if (null != drop) {
-                        // The result of xpNow - xpBefore will be a negative value in this case, and adding the required meter XP of the drop will give us the xp per boss value, unless the lastSelectedDrop is inaccurate detecting user's selected slayer drop.
-                        final var possibleXpGain = xpNow - xpBefore + drop.requiredMeterXP;
-
-                        // If the result is negative, it likely means that lastSelectedDrop is not the user's selected drop, but a more common one. If it is not user's selected drop and user selected a rarer drop, we have no way of detecting that, so this is a best-effort to avoid assigning and incorrect value to xpPerBoss.
-                        if (0 < possibleXpGain) {
-                            xpGain = possibleXpGain;
-                        }
-                    }
-
-                    SlayerRNGDisplay.lastMeterXPGain = xpGain;
 
                     if (null != drop) {
                         final var tookBosses = drop.bossesDoneSinceLastRNGMeterDrop;
                         drop.bossesDoneSinceLastRNGMeterDrop = 0;
 
-                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 5, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop!"));
+                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 6, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop!"));
                     }
                 }
             }
