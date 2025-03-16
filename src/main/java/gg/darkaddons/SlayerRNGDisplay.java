@@ -278,19 +278,19 @@ final class SlayerRNGDisplay extends GuiElement {
 
             for (final var slayerDrop : SlayerRNGDisplay.SlayerDrop.values) {
                 if (SlayerRNGDisplay.SellingMethod.NONE != slayerDrop.sellingMethod) {
-                    if (0 == slayerDrop.price) {
+                    final var oldPrice = slayerDrop.price;
+
+                    if (0 == oldPrice) {
                         // If any of the slayer drops that supposed to have a AH/BZ price has none, we need to update the display so that it does not keep showing 0 coins till the next time you kill a boss.
                         // Otherwise, no need to unnecessarily update the display - it will be updated the next time a slayer boss is done.
                         updateNeeded = true;
                     }
 
-                    final var oldPrice = slayerDrop.price;
                     final var newPrice = lowestBINPrices.get(slayerDrop.getItemId()).getAsInt();
 
                     slayerDrop.price = newPrice;
 
-                    if (!Utils.formatNumber(oldPrice).equals(Utils.formatNumber(newPrice))) {
-                        // The price changed enough to be worth updating the display, i.e it gone up or down a million coins. This check is necessary to not unnecessarily update it for insignificiiant price changes, like 0.1 coins more/less than the old value (very common for BZ undercut).
+                    if (oldPrice != newPrice) {
                         updateNeeded = true;
                     }
                 }
