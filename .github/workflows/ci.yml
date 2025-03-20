@@ -86,7 +86,7 @@ jobs:
       ./build.sh
 
    - name: Upload Artifact
-     uses: actions/upload-artifact@v4.6.1
+     uses: actions/upload-artifact@v4.6.2
      with:
       name: DarkAddons
       path: build/libs/*-opt.jar
