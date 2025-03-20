@@ -96,7 +96,7 @@ loom {
     forge {
         pack200Provider = Pack200Adapter()
         mixinConfig("mixins.darkaddons.json")
-        //accessTransformer("src/main/resources/META-INF/darkaddons_at.cfg")
+        accessTransformer("src/main/resources/META-INF/darkaddons_at.cfg")
     }
     mixin {
         useLegacyMixinAp = true
@@ -238,7 +238,7 @@ tasks {
                     //"TweakClass" to "gg.darkaddons.tweaker.DarkAddonsTweaker",
                     "TweakClass" to "org.spongepowered.asm.launch.MixinTweaker",
                     "TweakOrder" to "0",
-                    //"FMLAT" to "darkaddons_at.cfg"
+                    "FMLAT" to "darkaddons_at.cfg"
                 )
             )
         }
