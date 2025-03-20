@@ -330,6 +330,9 @@ tasks {
         options.compilerArgs.add("-parameters")
         options.compilerArgs.add("-Xlint:all,-options,-classfile,-processing,-overrides")
     }
+    withType<Test>() {
+        jvmArgs("-Xmx2G -XX:+UnlockExperimentalVMOptions -XX:+IgnoreUnrecognizedVMOptions -XX:+EnableDynamicAgentLoading")
+    }
     /*withType<KotlinCompilationTask<KotlinJvmCompilerOptions>> {
         compilerOptions {
             javaParameters = true
