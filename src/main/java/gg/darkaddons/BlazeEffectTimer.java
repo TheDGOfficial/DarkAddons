@@ -25,6 +25,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
     private static long lastInSkyblockTime;
 
     private static int bossesDoneSinceSmolderingPolarization;
+    private static int lastBossesDoneSinceSmolderingPolarization;
 
     private static final void syncToDisk() {
         // No need to save timeLeft or lastTimeLeftSeconds since those are calculated on the fly.
@@ -119,6 +120,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         BlazeEffectTimer.lastIcePotionTimeLeftSeconds = 0L;
 
         BlazeEffectTimer.lastInSkyblockTime = 0L;
+        BlazeEffectTimer.lastBossesDoneSinceSmolderingPolarization = 0;
 
         super.clear();
     }
@@ -161,9 +163,10 @@ final class BlazeEffectTimer extends SimpleGuiElement {
         BlazeEffectTimer.polarizationTimeLeftSeconds = polarizationTimeLeftSecondsLocal;
         BlazeEffectTimer.icePotionTimeLeftSeconds = icePotionTimeLeftSecondsLocal;
 
-        if (isDemoRenderBypass || BlazeEffectTimer.lastPolarizationTimeLeftSeconds != BlazeEffectTimer.polarizationTimeLeftSeconds || BlazeEffectTimer.lastIcePotionTimeLeftSeconds != BlazeEffectTimer.icePotionTimeLeftSeconds || this.isEmpty()) {
+        if (isDemoRenderBypass || BlazeEffectTimer.lastPolarizationTimeLeftSeconds != BlazeEffectTimer.polarizationTimeLeftSeconds || BlazeEffectTimer.lastIcePotionTimeLeftSeconds != BlazeEffectTimer.icePotionTimeLeftSeconds || BlazeEffectTimer.lastBossesDoneSinceSmolderingPolarization != BlazeEffectTimer.bossesDoneSinceSmolderingPolarization || this.isEmpty()) {
             BlazeEffectTimer.lastPolarizationTimeLeftSeconds = BlazeEffectTimer.polarizationTimeLeftSeconds;
             BlazeEffectTimer.lastIcePotionTimeLeftSeconds = BlazeEffectTimer.icePotionTimeLeftSeconds;
+            BlazeEffectTimer.lastBossesDoneSinceSmolderingPolarization = BlazeEffectTimer.bossesDoneSinceSmolderingPolarization;
 
             super.update();
         }
