@@ -64,11 +64,19 @@ final class ScoreboardUtil {
         }
 
         final var scores = scoreboard.getSortedScores(objective);
-        final var lines = new ArrayList<String>(scores.size());
+        final var maxSize = Math.min(limit, scores.size());
 
-        var i = 0;
+        if (maxSize == 0) {
+            return ScoreboardUtil.EMPTY_STRING_ARRAY;
+        }
+
+        final var lines = new String[maxSize];
+
+        var index = maxSize - 1; // Fill array in reverse order
+        var count = 0; // Track number of valid elements
+
         for (final var score : scores) {
-            if (i >= limit) {
+            if (index < 0) {
                 break;
             }
 
@@ -76,15 +84,13 @@ final class ScoreboardUtil {
                 final var playerName = score.getPlayerName();
 
                 if (null != playerName && !(!playerName.isEmpty() && '#' == playerName.charAt(0))) {
-                    lines.add(ScoreboardUtil.cleanSB(ScorePlayerTeam.formatPlayerName(scoreboard.getPlayersTeam(playerName), playerName)));
+                    lines[index--] = ScoreboardUtil.cleanSB(ScorePlayerTeam.formatPlayerName(scoreboard.getPlayersTeam(playerName), playerName));
+                    ++count; // Count only valid elements
                 }
             }
-
-            ++i;
         }
 
-        Collections.reverse(lines);
-
-        return lines.toArray(ScoreboardUtil.EMPTY_STRING_ARRAY);
+        // If we added fewer than maxSize elements, trim the array
+        return (count == maxSize) ? lines : Arrays.copyOfRange(lines, index + 1, maxSize);
     }
 }
