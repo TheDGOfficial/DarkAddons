@@ -277,33 +277,6 @@ final class Utils {
     }
 
     /**
-     * Holds suffix values used internally in the {@link Utils#formatNumber(float)} method.
-     */
-    @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened", "StaticCollection"})
-    @NotNull
-    private static final TreeMap<Long, String> suffixes = new TreeMap<>();
-
-    static {
-        Utils.suffixes.put(1_000L, "k"); // A thousand
-        Utils.suffixes.put(1_000_000L, "M"); // A million
-        Utils.suffixes.put(1_000_000_000L, "B"); // A billion
-        Utils.suffixes.put(1_000_000_000_000L, "T"); // A trillion
-        Utils.suffixes.put(1_000_000_000_000_000L, "q"); // A quadrillion
-        Utils.suffixes.put(1_000_000_000_000_000_000L, "Q"); // A quintillion
-    }
-
-    /**
-     * Formats a number.
-     *
-     * @param number The number.
-     * @return The number formatted with the {@link Utils#suffixes}.
-     */
-    @NotNull
-    static final String formatNumber(final float number) {
-        return Utils.formatNumber0((long) number);
-    }
-
-    /**
      * Returns the first element that matches the given predicate, or null if no matches.
      *
      * @param elements The elements.
@@ -590,6 +563,33 @@ final class Utils {
                 Utils.awaitCondition(condition, continuation); // No StackOverflowError since its called 1 times each tick (50ms) at most with a lot of other methods in the stack in between calls.
             }
         });
+    }
+
+    /**
+     * Holds suffix values used internally in the {@link Utils#formatNumber(float)} method.
+     */
+    @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened", "StaticCollection"})
+    @NotNull
+    private static final TreeMap<Long, String> suffixes = new TreeMap<>();
+
+    static {
+        Utils.suffixes.put(1_000L, "k"); // A thousand
+        Utils.suffixes.put(1_000_000L, "M"); // A million
+        Utils.suffixes.put(1_000_000_000L, "B"); // A billion
+        Utils.suffixes.put(1_000_000_000_000L, "T"); // A trillion
+        Utils.suffixes.put(1_000_000_000_000_000L, "q"); // A quadrillion
+        Utils.suffixes.put(1_000_000_000_000_000_000L, "Q"); // A quintillion
+    }
+
+    /**
+     * Formats a number.
+     *
+     * @param number The number.
+     * @return The number formatted with the {@link Utils#suffixes}.
+     */
+    @NotNull
+    static final String formatNumber(final float number) {
+        return Utils.formatNumber0((long) number);
     }
 
     /**
