@@ -45,7 +45,6 @@
         "MixinItemResolutionQuery",
         "MixinCullTask",
         "MixinWaypoints",
-        "MixinApiUtil",
         "MixinUserManager",
         "MixinLayerArmorBase",
         "MixinWaterSolverMod",
