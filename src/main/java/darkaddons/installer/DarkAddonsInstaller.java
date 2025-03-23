@@ -165,6 +165,7 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
         } catch (final Throwable tw) {
             // Continue sharing the same WM_CLASS for every Java app, I guess...
         }
+
         return xToolkit;
     }
 
