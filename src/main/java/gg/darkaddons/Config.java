@@ -1653,7 +1653,7 @@ final class Config extends Vigilant {
         return Config.autoFishingRod;
     }
 
-    static final int getAutoFishingRodRecast() {
+    static final boolean isAutoFishingRodRecast() {
         Config.checkUninit();
 
         return Config.autoFishingRodRecast;
