@@ -803,7 +803,7 @@ final class SlayerRNGDisplay extends GuiElement {
                         final var tookBosses = drop.bossesDoneSinceLastRNGMeterDrop;
                         drop.bossesDoneSinceLastRNGMeterDrop = 0;
 
-                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 6, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop!"));
+                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 7, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop!"));
                     }
                 }
             }
