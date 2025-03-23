@@ -225,8 +225,14 @@ final class AutoFishingRod {
                 final var customNameTag = armorStand.getCustomNameTag();
                 final var ready = AutoFishingRod.READY.equals(customNameTag);
                 if (ready && (!Config.isAutoFishingRodSlugfishMode() || 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime)) {
-                    AutoFishingRod.hooking = true;
-                    AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
+                    if (Config.isAutoFishingRodRecast()) {
+                        // Right-clicks 2 times one after other with set delay, one for getting the catch and one for recasting the rod.
+                        AutoFishingRod.hooking = true;
+                        AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
+                    } else {
+                        // Right-clicks 1 time with set delay to get the catch. Does not recast as per the configuration setting.
+                        AutoFishingRod.throwBobber();
+                    }
                 } else {
                     if (Config.isAutoFishingRodSlugfishMode() && ready) {
                         if (null != AutoFishingRod.countdownArmorStand) {

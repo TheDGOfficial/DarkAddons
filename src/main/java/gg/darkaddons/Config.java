@@ -712,6 +712,13 @@ final class Config extends Vigilant {
     private static boolean autoFishingRod;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Auto Fishing Rod Recast",
+        description = "After getting the catch, the mod will automatically recast the rod. This works very well for trophy fish, treasure and junk since those does not require you to kill anything, it will also work to some extent on low HP sea creatures since your rod throw hitting them will kill them. For higher HP mobs, if you want to avoid recasting and spending bait, you should disable this and kill & re-cast manually.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean autoFishingRodRecast = true;
+
+    @Property(
         type = PropertyType.NUMBER, name = "Auto Fishing Rod Starting Delay Ticks",
         description = "Starting delay in ticks before hooking/re-throwing the rod. The actual delay will be random amount of ticks in the range of starting and maximum delay ticks. Note: Too high delay value will make you miss the catch.",
         category = "QOL", subcategory = "General",
@@ -1085,6 +1092,7 @@ final class Config extends Vigilant {
         this.addDependency("keepHoldingToCreateMoreGhostBlocks", "createGhostBlockWithKey");
         this.addDependency("allowGhostBlockingBedrockAndBarrier", "createGhostBlockWithKey");
 
+        this.addDependency("autoFishingRodRecast", "autoFishingRod");
         this.addDependency("autoFishingRodStartingDelay", "autoFishingRod");
         this.addDependency("autoFishingRodMaximumDelay", "autoFishingRod");
         this.addDependency("autoFishingRodSlugfishMode", "autoFishingRod");
@@ -1643,6 +1651,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.autoFishingRod;
+    }
+
+    static final int getAutoFishingRodRecast() {
+        Config.checkUninit();
+
+        return Config.autoFishingRodRecast;
     }
 
     static final int getAutoFishingRodStartingDelay() {
