@@ -149,7 +149,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.13.0-M2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.0-M2") 
 
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.0-M2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.0-SNAPSHOT")
 
     compileOnly("gg.skytils:skytilsmod:$skytilsVersion") {
         exclude(module = "kotlin-stdlib")
