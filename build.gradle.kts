@@ -166,26 +166,26 @@ dependencies {
     compileOnly("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
 
     // This only here so that we are notified of dependency updates, because we are not notified for version updates in the constraints block. If we are overriding the version, we should override it with the latest version.
-    api("net.bytebuddy:byte-buddy:1.17.2")
+    api("net.bytebuddy:byte-buddy:1.17.4")
 
     constraints {
         configurations.forEach { configuration ->
             if ((!configuration.isCanBeConsumed() && !configuration.isCanBeResolved()) || configuration.name.equals("annotationProcessor")) {
                 add(configuration.name, "net.bytebuddy:byte-buddy-parent") {
                     version {
-                        strictly("1.17.2")
+                        strictly("1.17.4")
                         because("Older version doesn't have Java 23 support")
                     }
                 }
                 add(configuration.name, "net.bytebuddy:byte-buddy") {
                     version {
-                        strictly("1.17.2")
+                        strictly("1.17.4")
                         because("Older version doesn't have Java 23 support")
                     }
                 }
                 add(configuration.name, "net.bytebuddy:byte-buddy-agent") {
                     version {
-                        strictly("1.17.2")
+                        strictly("1.17.4")
                         because("Older version doesn't have Java 23 support")
                     }
                 }
