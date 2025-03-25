@@ -83,7 +83,7 @@ final class RemoveBlankArmorStands {
                     if (nonNullCount > 1) {
                         return;
                     }
-                    singleITem = item;
+                    singleItem = item;
                 }
             }
 
