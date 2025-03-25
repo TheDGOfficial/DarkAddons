@@ -47,7 +47,7 @@ final class TickTask {
         private static final ConcurrentLinkedQueue<TickTask> tasks = new ConcurrentLinkedQueue<>();
 
         private static final void handleTick(@NotNull final TickEvent.ClientTickEvent event) {
-            if (TickEvent.Phase.START == event.phase && !TickTask.TickTaskManager.tasks.isEmpty()) {
+            if (TickEvent.Phase.START == event.phase) {
                 TickTask.TickTaskManager.tasks.removeIf((@NotNull final TickTask task) -> {
                     //noinspection DataFlowIssue,ValueOfIncrementOrDecrementUsed
                     if (0 >= task.remainingTicks--) {
