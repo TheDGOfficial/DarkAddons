@@ -73,13 +73,21 @@ final class RemoveBlankArmorStands {
 
         if (Config.isRemoveBlankArmorStands() && entity instanceof EntityArmorStand && entity.isInvisible()) {
             final var inventory = entity.getInventory();
-            final var list = new ArrayList<ItemStack>(inventory.length);
+
+            ItemStack singleItem = null;
+            var nonNullCount = 0;
+
             for (final var item : inventory) {
                 if (null != item) {
-                    list.add(item);
+                    ++nonNullCount;
+                    if (nonNullCount > 1) {
+                        return;
+                    }
+                    singleITem = item;
                 }
             }
-            if (1 == list.size() && list.get(0).getItem() instanceof ItemBlock) {
+
+            if (1 == nonNullCount && singleItem.getItem() instanceof ItemBlock) {
                 entity.setDead();
             }
         }
