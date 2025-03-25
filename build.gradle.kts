@@ -26,7 +26,7 @@ plugins {
     signing
     `maven-publish`
     id("io.github.sgtsilvio.gradle.proguard") version "0.8.0"
-    id("com.autonomousapps.dependency-analysis") version "2.13.0"
+    id("com.autonomousapps.dependency-analysis") version "2.13.1"
 }
 
 java {
@@ -130,7 +130,7 @@ dependencies {
     }
 
     implementation("gg.essential:vigilance:306")
-    api("gg.essential:elementa:695")
+    api("gg.essential:elementa:700")
     implementation("gg.essential:universalcraft-1.8.9-forge:389")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
