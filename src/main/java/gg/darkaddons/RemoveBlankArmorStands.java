@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemBlock;
 
@@ -25,7 +26,7 @@ final class RemoveBlankArmorStands {
 
     static final boolean removeIfBlankArmorStand(@NotNull final WorldClient world, @NotNull final Entity entity) {
         //noinspection ObjectEquality
-        if ((!AdditionalM7Features.isInM7OrF7() || AdditionalM7Features.phase5Started) && AdditionalM7Features.canRemoveBlankArmorStands() && 0.0D == entity.motionX && 0.0D == entity.motionY && 0.0D == entity.motionZ && Minecraft.getMinecraft().thePlayer.ridingEntity != entity) {
+        if ((!AdditionalM7Features.isInM7OrF7() || AdditionalM7Features.phase5Started) && AdditionalM7Features.canRemoveBlankArmorStands() && 0.0D == entity.motionX && 0.0D == entity.motionY && 0.0D == entity.motionZ && Minecraft.getMinecraft().thePlayer.ridingEntity != entity && !(entity.riddenByEntity instanceof EntityGuardian)) {
             final var nameTag = entity.getCustomNameTag();
             NameTagCache.setLastNameTag(nameTag);
 
