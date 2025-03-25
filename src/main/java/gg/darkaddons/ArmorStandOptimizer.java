@@ -75,6 +75,8 @@ final class ArmorStandOptimizer {
                 !name.contains("damage") && !name.contains("Inquisitor") && !name.contains("Champion") &&
                 // Enderman Slayer
                 !name.contains("Voidgloom") && !name.contains("Voidling") && !name.contains("Voidcrazed") &&
+                // Blaze Slayer
+                !name.contains("Demonlord") && !name.contains("Kindleheart") && !name.contains("Burningsoul") && !name.contains("Smoldering") && !name.contains("Millennia-Aged") && !name.contains("Spawned by:") && !name.contains("ⓆⓊⒶⓏⒾⒾ") && !name.contains("ⓉⓎⓅⒽⓄⒺⓊⓈ") && !name.contains("IMMUNE") && !name.contains("SPIRIT") && !name.contains("ASHEN") && !name.contains("CRYSTAL") && !name.contains("AURIC") && !name.contains("Vanquisher") && !name.contains("hits") && !name.contains("Plasmaflux") &&
                 // The Matriarch
                 !name.contains("COLLECT!") && !name.contains("Heavy Pearl") && !name.contains("Hits Remaining: ") && !name.contains("Punch!") && !name.contains("The Matriarch") && !name.contains("Heavy Pearls Available: ") && !name.contains("Attempt Cooldown: ");
     }
