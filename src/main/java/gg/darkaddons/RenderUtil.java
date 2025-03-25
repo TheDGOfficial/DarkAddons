@@ -63,6 +63,7 @@ final class RenderUtil {
         GlStateManager.popMatrix();
     }
 
+    @SuppressWarnings("deprecation")
     static final void drawNametag(final double x, final double y, final double z, @NotNull final String str, @NotNull final Color color, final float partialTicks, @NotNull final UMatrixStack matrixStack, final boolean shadow, final float scale, final boolean background) {
         final var mc = Minecraft.getMinecraft();
 
@@ -100,6 +101,7 @@ final class RenderUtil {
         matrixStack.pop();
     }
 
+    @SuppressWarnings("deprecation")
     private static final void drawBackground(@NotNull final UMatrixStack matrixStack, final int width) {
         final var worldRenderer = UGraphics.getFromTessellator();
         worldRenderer.beginWithDefaultShader(UGraphics.DrawMode.QUADS, DefaultVertexFormats.POSITION_COLOR);
