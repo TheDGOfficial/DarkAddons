@@ -31,7 +31,7 @@ final class AutoMelody {
     static final void handleTick(@NotNull final TickEvent.ClientTickEvent event) {
         McProfilerHelper.startSection("automelody_handle_tick");
 
-        if (Config.isAutoMelody() && TickEvent.Phase.END == event.phase) {
+        if (Config.isAutoMelody()) {
             final var mc = Minecraft.getMinecraft();
             final var currentScreen = mc.currentScreen;
             if (currentScreen instanceof final GuiChest guiChest) {

@@ -207,12 +207,10 @@ final class AutoFishingRod {
             AutoFishingRod.lastMouseMoveTime = now;
 
             if (AutoFishingRod.lastMouseMoveWasAddition) {
-                Minecraft.getMinecraft().thePlayer.rotationYaw -= 3.2F;
-                Minecraft.getMinecraft().thePlayer.rotationPitch -= 1.2F;
+                SmoothLookHelper.setTarget(Minecraft.getMinecraft().thePlayer.rotationYaw - 3.2F, Minecraft.getMinecraft().thePlayer.rotationPitch - 1.2F);
                 AutoFishingRod.lastMouseMoveWasAddition = false;
             } else {
-                Minecraft.getMinecraft().thePlayer.rotationYaw += 3.2F;
-                Minecraft.getMinecraft().thePlayer.rotationPitch += 1.2F;
+                SmoothLookHelper.setTarget(Minecraft.getMinecraft().thePlayer.rotationYaw + 3.2F, Minecraft.getMinecraft().thePlayer.rotationPitch + 1.2F);
                 AutoFishingRod.lastMouseMoveWasAddition = true;
             }
         }

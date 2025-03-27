@@ -948,8 +948,10 @@ public final class DarkAddons {
      * @param event The client tick event.
      */
     public static final void handleClientTick(@NotNull final TickEvent.ClientTickEvent event) {
-        AutoMelody.handleTick(event);
-        if (TickEvent.Phase.START == event.phase) {
+        if (TickEvent.Phase.END == event.phase) {
+            AutoMelody.handleTick(event);
+            SmoothLookHelper.update();
+        } else {
             AutoClassAbilities.tick();
         }
     }

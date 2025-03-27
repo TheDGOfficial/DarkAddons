@@ -719,6 +719,14 @@ final class Config extends Vigilant {
     private static boolean autoFishingRodRecast = true;
 
     @Property(
+        type = PropertyType.SELECTOR, name = "Auto Fishing Rod AFK Bypass Algorithm",
+        description = "As you might know, Hypixel stops you from getting any catches if you don't move your head for a while. To counter this the mod automatically moves your head very slightly. To move your head, the mod can use 4 different algorithms: Instantaneous, Lerp, Ease In-Out and Gradual Mouse Movement (Default). Leave at default setting if in doubt.",
+        category = "QOL", subcategory = "General",
+        options = {"Instantaneous", "Lerp", "Ease In-Out", "Gradual Mouse Movement"}
+    )
+    private static int autoFishingRodAFKBypassAlgorithm = 3;
+
+    @Property(
         type = PropertyType.NUMBER, name = "Auto Fishing Rod Starting Delay Ticks",
         description = "Starting delay in ticks before hooking/re-throwing the rod. The actual delay will be random amount of ticks in the range of starting and maximum delay ticks. Note: Too high delay value will make you miss the catch.",
         category = "QOL", subcategory = "General",
@@ -1097,6 +1105,7 @@ final class Config extends Vigilant {
         this.addDependency("autoFishingRodMaximumDelay", "autoFishingRod");
         this.addDependency("autoFishingRodSlugfishMode", "autoFishingRod");
         this.addDependency("autoFishingRodGoldenFishMode", "autoFishingRod");
+        this.addDependency("autoFishingRodAFKBypassAlgorithm", "autoFishingRod");
 
         this.addDependency("sendMessageOnRagAxeOnlyInDungeons", "sendMessageOnRagAxe");
     }
@@ -1657,6 +1666,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.autoFishingRodRecast;
+    }
+
+    static final int getAutoFishingRodAFKBypassAlgorithm() {
+        Config.checkUninit();
+
+        return Config.autoFishingRodAFKBypassAlgorithm;
     }
 
     static final int getAutoFishingRodStartingDelay() {
