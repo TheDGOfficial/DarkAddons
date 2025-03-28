@@ -21,28 +21,16 @@ final class MixinFontRenderer {
         super();
     }
 
-    @Unique
-    @Nullable
-    private static String cachedLowerCaseText;
-
-    @Inject(method = "renderStringAtPos", at = @At("HEAD"))
-    private final void renderStringAtPosStart$darkaddons(@NotNull final String text, final boolean shadow, @NotNull final CallbackInfo ci) {
-        MixinFontRenderer.cachedLowerCaseText = text.toLowerCase(Locale.ROOT);
-    }
-
     @Redirect(method = "renderStringAtPos", at = @At(value = "INVOKE", target = "Ljava/lang/String;toLowerCase(Ljava/util/Locale;)Ljava/lang/String;", remap = false))
     @NotNull
     private final String toLowerCase$darkaddons(@NotNull final String text, @NotNull final Locale locale) {
-        // Optimization: Normally, the toLowerCase method is called inside the loop.
-        // We make it so that we only call toLowerCase 1 time out of loop and save it to a variable,
-        // use the variable when a lower case is necessary and then clear the variable at method exit points.
-
-        // We also use Locale.ROOT instead of Locale.ENGLISH which should skip any localization so even more performance.
-        return MixinFontRenderer.cachedLowerCaseText;
+        return text;
     }
 
-    @Inject(method = "renderStringAtPos", at = @At("RETURN"))
-    private final void renderStringAtPosEnd$darkaddons(@NotNull final String text, final boolean shadow, @NotNull final CallbackInfo ci) {
-        MixinFontRenderer.cachedLowerCaseText = null;
+    @Redirect(method = "renderStringAtPos", at = @At(value = "INVOKE", target = "Ljava/lang/String;charAt(I)C", ordinal = 1, remap = false))
+    private final char charAt$darkaddons(@NotNull final String text, @NotNull final int index) {
+        final var character = text.charAt(index);
+
+        return (character >= 'A' && character <= 'Z') ? (char) (character + 32) : character;
     }
 }

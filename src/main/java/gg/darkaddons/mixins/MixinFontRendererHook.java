@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Pseudo
@@ -23,5 +25,10 @@ final class MixinFontRendererHook {
             cir.cancel();
             cir.setReturnValue(false);
         }
+    }
+
+    @ModifyConstant(method = "getStringWidth", constant = @Constant(intValue = 5_000))
+    private final int getStringWidthCacheLimit$darkaddons(final int originalMaxRetries) {
+        return 10_000;
     }
 }
