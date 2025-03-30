@@ -735,7 +735,6 @@ public final class DarkAddons {
             new FPSLimitDisplay(),
             new RemoveBlankArmorStands(),
             new HideXPOrbs(),
-            new TablistUtil(),
             new UnopenedChestsDisplay(),
             new FPSDisplay(),
             new GhostBlock(),

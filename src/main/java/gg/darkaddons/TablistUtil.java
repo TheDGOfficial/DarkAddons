@@ -11,20 +11,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 final class TablistUtil {
-    TablistUtil() {
+    private TablistUtil() {
         super();
+
+        throw Utils.staticClassException();
     }
 
     @NotNull
     private static ArrayList<String> tabEntries = new ArrayList<>(0);
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
-        if (TickEvent.Phase.START != event.phase || !DarkAddons.isPlayerInDungeonHub()) {
-            return;
-        }
-
-        TablistUtil.tabEntries = TablistUtil.fetchTabEntries();
+    static {
+        DarkAddons.registerTickTask("darkaddons_fetch_tablist", 20, true, () -> {
+            if (DarkAddons.isPlayerInDungeonHub()) {
+                TablistUtil.tabEntries = TablistUtil.fetchTabEntries();
+            }
+        });
     }
 
     @NotNull
