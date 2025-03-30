@@ -622,7 +622,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Title On 301/302 Score",
-        description = "Sends a title along with a sound effect when 301 score with 0 deaths or 302 score with 1+ deaths has been reached. Mainly useful for M7.",
+        description = "Sends a title along with a sound effect when 301 score with 0 deaths or 302 score with 1+ deaths has been reached on M7 and F7. For other floors, it sends on 300 flat score no matter deaths instead.",
         category = "Dungeons", subcategory = "Helpers"
     )
     private static boolean sendTitleOn301Score;

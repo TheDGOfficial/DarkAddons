@@ -82,7 +82,7 @@ final class ScoreFromScoreboard {
         final var stScore = sc.getTotalScore().get();
         final var highestScore = Math.max(score, stScore);
         final var deaths = sc.getDeaths().get();
-        final var scoreReq = 1 <= deaths ? 302 : 301;
+        final var scoreReq = AdditionalM7Features.isInM7OrF7() ? 1 <= deaths ? 302 : 301 : 300;
 
         if (highestScore >= scoreReq && !ScoreFromScoreboard.sentTitleOn301Score) {
             ScoreFromScoreboard.sentTitleOn301Score = true;
