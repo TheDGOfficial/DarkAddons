@@ -232,6 +232,16 @@ final class MarkCompilerGeneratedMethodsFinal {
                             shouldProc = true;
                             break;
                         }
+
+                        if ("gg.darkaddons.mixins.MixinTabListUtils".equals(clazz.getName()) && method.getName().startsWith("sortedCopy$darkaddons$")) {
+                            shouldProc = true;
+                            break;
+                        }
+
+                        if ("gg.darkaddons.mixins.MixinTabListParser".equals(clazz.getName()) && method.getName().startsWith("sortedCopy$darkaddons$")) {
+                            shouldProc = true;
+                            break;
+                        }
                     }
                     if ((synthetic || clazz.getName().contains("Kt")) && (synthetic && !verbose || Modifier.isPublic(classMod))) {
                         if (verbose) {
@@ -361,6 +371,16 @@ final class MarkCompilerGeneratedMethodsFinal {
                 if ("gg/darkaddons/mixins/MixinItemModelGenerator".equals(className) && mn.name.startsWith("func_178397_a$")) {
                     mn.name = StringUtils.substringBefore(mn.name, "$");
                     mn.desc = StringUtils.replace(mn.desc, "ArrayList", "List");
+                }
+
+                if ("gg/darkaddons/mixins/MixinTabListUtils".equals(className) && mn.name.startsWith("sortedCopy$darkaddons$")) {
+                    mn.name = StringUtils.substringBeforeLast(mn.name, "$");
+                    mn.desc = StringUtils.replace(mn.desc, "com/google/common/collect/ImmutableList", "java/util/List");
+                }
+
+                if ("gg/darkaddons/mixins/MixinTabListParser".equals(className) && mn.name.startsWith("sortedCopy$darkaddons$")) {
+                    mn.name = StringUtils.substringBeforeLast(mn.name, "$");
+                    mn.desc = StringUtils.replace(mn.desc, "com/google/common/collect/ImmutableList", "java/util/List");
                 }
 
                 if ("gg/darkaddons/SubCommand$StopCodeflowException".equals(className)) {

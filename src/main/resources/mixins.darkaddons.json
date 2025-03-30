@@ -90,7 +90,9 @@
         "MixinSlayerPacket",
         "MixinFontRendererHook",
         "MixinSlayerFeatures",
-        "MixinRomanNumeralParser"
+        "MixinRomanNumeralParser",
+        "MixinTabListUtils",
+        "MixinTabListParser"
     ],
     "server": [
     ],
