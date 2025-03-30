@@ -5,7 +5,6 @@ import gg.darkaddons.annotations.bytecode.Synthetic;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.AccessibleObject;
-import java.lang.reflect.Field;
 
 /**
  * A wrapper of {@link AccessibleObject}s, allowing you to grant access
@@ -19,20 +18,22 @@ public final class AccessibleObjectResource<T extends AccessibleObject> implemen
     @NotNull
     private final T accessibleObject;
 
+    private boolean accessibilityModified;
+
     /**
-     * Creates a new wrapper resource for the given {@link Field}.
+     * Creates a new wrapper resource for the given {@link AccessibleObject}.
      *
-     * @param field The {@link Field} to create the wrapper for.
+     * @param field The {@link AccessibleObject} to create the wrapper for.
      */
     @SuppressWarnings("unchecked")
-    public AccessibleObjectResource(@NotNull final Field field) {
+    public AccessibleObjectResource(@NotNull final AccessibleObject accessibleObject) {
         super();
 
-        this.accessibleObject = (T) field;
+        this.accessibleObject = (T) accessibleObject;
     }
 
     /**
-     * Grants access to the {@link AccessibleObject} this object represents.
+     * Grants access to the {@link AccessibleObject} this object represents, if it wasn't accessible.
      * <p>
      * The access will be revoked when the {@link AccessibleObjectResource#close()}
      * method is called, including automatic calls from the compiler via try-with
@@ -42,19 +43,24 @@ public final class AccessibleObjectResource<T extends AccessibleObject> implemen
     @Bridge
     @SuppressWarnings("PublicMethodNotExposedInInterface")
     public final void grantAccess() {
-        this.modifyAccessibility(true);
+        if (!this.accessibleObject.isAccessible()) {
+            this.modifyAccessibility(true);
+        }
     }
 
     @Synthetic
     @Bridge
     private final void restoreAccess() {
-        this.modifyAccessibility(false);
+        if (accessibilityModified) {
+            this.modifyAccessibility(false);
+        }
     }
 
     @Synthetic
     @Bridge
     private final void modifyAccessibility(final boolean accessible) {
         this.accessibleObject.setAccessible(accessible);
+        this.accessibilityModified = true;
     }
 
     @Synthetic

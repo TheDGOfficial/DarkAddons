@@ -159,11 +159,34 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
         try {
             final var awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
             try (final var accessibleObjectResource = new AccessibleObjectResource<>(awtAppClassNameField)) {
-                accessibleObjectResource.grantAccess(); // TODO fails on Java >= 16
-                awtAppClassNameField.set(xToolkit, "DarkAddons Installer");
+                accessibleObjectResource.grantAccess(); // Will give InaccessibleObjectException in Java 16
+                awtAppClassNameField.set(null, "DarkAddons Installer");
             }
-        } catch (final Throwable tw) {
-            // Continue sharing the same WM_CLASS for every Java app, I guess...
+        } catch (final Throwable tw) { // Catch Throwable since we can't catch the new exception added in Java 9, the InaccessibleObjectException. (It got added in Java 9 but it will only be thrown in Java 16 and above because of Strong Encapsulation only being the default for non-modularized projects starting with Java 16.)
+            // Use Unsafe for Java 16 and above which works with a warning.
+            try {
+                final var unsafeClass = Class.forName("sun.misc.Unsafe");
+                final var theUnsafeField = unsafeClass.getDeclaredField("theUnsafe");
+                try (final var accessibleObjectResource = new AccessibleObjectResource<>(theUnsafeField)) {
+                    accessibleObjectResource.grantAccess();
+                    final var unsafe = theUnsafeField.get(null);
+                    final var awtAppClassNameField = xToolkit.getClass().getDeclaredField("awtAppClassName");
+                    final var staticFieldOffsetMethod = unsafeClass.getDeclaredMethod("staticFieldOffset", java.lang.reflect.Field.class);
+                    try (final var accessibleObjectResourceForStaticFieldOffset = new AccessibleObjectResource<>(staticFieldOffsetMethod)) {
+                        accessibleObjectResourceForStaticFieldOffset.grantAccess();
+                        final var fieldOffset = staticFieldOffsetMethod.invoke(unsafe, awtAppClassNameField);
+                        final var putObjectVolatileMethod = unsafeClass.getDeclaredMethod("putObjectVolatile", Object.class, long.class, Object.class);
+                        try (final var accessibleObjectResourceForPutObjectVolatileMethod = new AccessibleObjectResource<>(putObjectVolatileMethod)) {
+                            accessibleObjectResourceForPutObjectVolatileMethod.grantAccess();
+                            putObjectVolatileMethod.invoke(unsafe, xToolkit.getClass(), fieldOffset, "DarkAddons Installer");
+                        }
+                    }
+                }
+            } catch (final Throwable iBegYouDontError) {
+                // Works with a warning at the moment, check each new Java release seperately, when it stops working we have to find an alternative and hide the error, fallbacking to the alternative.
+                // Hopefully official API to set awtAppClassName is added before Unsafe methods to modify fields goes away (it will not happen because everything that can go wrong will go wrong so we will be left with unbreakable encapsulation and no official API).
+                iBegYouDontError.printStackTrace(); // We are cooked
+            }
         }
 
         return xToolkit;
