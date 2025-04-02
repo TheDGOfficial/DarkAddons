@@ -56,7 +56,6 @@ echo Finished setting up environment
 cd SkytilsMod || { echo "cd failed"; exit 1; }
 git stash &> /dev/null
 git stash drop &> /dev/null || true
-git apply ../SkytilsMod.patch &> /dev/null
 cd .. || { echo "cd failed"; exit 1; } 
 
 git submodule init
@@ -75,6 +74,10 @@ git add darkaddons-site &> /dev/null
 if [ "${1:-default}" != "--offline" ]; then
   git submodule update
 fi
+
+cd SkytilsMod || { echo "cd failed"; exit 1; }
+git apply ../SkytilsMod.patch &> /dev/null
+cd .. || { echo "cd failed"; exit 1; } 
 
 cd darkaddons-site || { echo "cd failed"; exit 1; }
 
