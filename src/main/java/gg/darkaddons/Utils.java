@@ -321,16 +321,16 @@ final class Utils {
      */
     @Nullable
     static final <T> T minValue(@NotNull final T[] elements, @NotNull final ToDoubleFunction<? super T> doubleFunction) {
-        final var lastIndex = elements.length;
+        final var length = elements.length;
 
-        if (0 == lastIndex) {
+        if (0 == length) {
             return null;
         }
 
         var minElem = elements[0];
         var minValue = doubleFunction.applyAsDouble(minElem);
 
-        for (var i = 1; i < lastIndex; ++i) {
+        for (var i = 1; i < length; ++i) {
             final var elem = elements[i];
             final var value = doubleFunction.applyAsDouble(elem);
 
