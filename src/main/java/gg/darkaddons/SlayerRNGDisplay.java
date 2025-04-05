@@ -239,7 +239,7 @@ final class SlayerRNGDisplay extends GuiElement {
     }
 
     @NotNull
-    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    private static final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Slayer RNG Display Price Fetch Thread"));
 
     private static final int getMoneyPerHour(final long etaTime, final int coins) {
         // Calculates decimal hours, this allows for better accuracy, even if the result is rounded anyway.

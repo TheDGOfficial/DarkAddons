@@ -1,5 +1,9 @@
 package gg.darkaddons.mixins;
 
+import org.jetbrains.annotations.NotNull;
+
+import gg.darkaddons.PublicUtils;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,6 +21,6 @@ final class MixinWaterSolverMod {
 
     @Redirect(method = "<clinit>", remap = false, at = @At(value = "INVOKE", target = "Ljava/util/concurrent/Executors;newFixedThreadPool(I)Ljava/util/concurrent/ExecutorService;", remap = false))
     private static final ExecutorService newFixedThreadPool$darkaddons(final int originalPoolSize) {
-        return Executors.newFixedThreadPool(1);
+        return Executors.newFixedThreadPool(1, (@NotNull final Runnable r) -> PublicUtils.newThread(r, "Desco WaterSolver Thread"));
     }
 }

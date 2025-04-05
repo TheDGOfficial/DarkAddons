@@ -108,4 +108,16 @@ public final class PublicUtils {
     public static final long threadId(@NotNull final Thread thread) {
         return Utils.threadId(thread);
     }
+
+    /**
+     * Creates a new daemon thread with minimum priority and uncaught exception handler set to mod error handler. Does not start the thread.
+     *
+     * @param r The Runnable that would run when {@link java.lang.Thread#start()} is called, although the mod does not call the {@link java.lang.Thread#start()} method so you have to call it afterwards.
+     0 @param name The name of the Thread. This method does not ensure that the name is unique.
+     * @return The created thread, you should call {@link java.lang.Thread#start()} on it, unless it is managed by an {@link java.util.concurrent.ExecutorService}, in that case it will be handled automatically.
+     */
+    @NotNull
+    public static final Thread newThread(@NotNull final Runnable r, @NotNull final String name) {
+        return Utils.newThread(r, name);
+    }
 }

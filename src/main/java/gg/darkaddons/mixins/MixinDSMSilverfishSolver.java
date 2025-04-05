@@ -1,5 +1,6 @@
 package gg.darkaddons.mixins;
 
+import gg.darkaddons.PublicUtils;
 import gg.darkaddons.mixin.MixinUtils;
 
 import java.util.concurrent.Executors;
@@ -29,7 +30,7 @@ final class MixinDSMSilverfishSolver {
     }
 
     @Unique
-    private static final ExecutorService solverTaskExecutor = Executors.newSingleThreadExecutor();
+    private static final ExecutorService solverTaskExecutor = Executors.newSingleThreadExecutor((@NotNull final Runnable r) -> PublicUtils.newThread(r, "Danker's Skyblock Mod Silverfish Solver Thread"));
 
     @Inject(method = "onTick", remap = false, cancellable = true, at = @At(value = "NEW", target = "java/lang/Thread", remap = false))
     private final void onTickBeforeNewThread$darkaddons(@NotNull final CallbackInfo ci) {

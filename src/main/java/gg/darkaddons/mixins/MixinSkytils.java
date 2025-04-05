@@ -1,6 +1,10 @@
 package gg.darkaddons.mixins;
 
+import org.jetbrains.annotations.NotNull;
+
 import gg.darkaddons.DarkAddons;
+import gg.darkaddons.PublicUtils;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,6 +22,6 @@ final class MixinSkytils {
 
     @Redirect(method = "<clinit>", remap = false, at = @At(value = "INVOKE", target = "Ljava/util/concurrent/Executors;newFixedThreadPool(I)Ljava/util/concurrent/ExecutorService;", remap = false))
     private static final ExecutorService newFixedThreadPool$darkaddons(final int originalPoolSize) {
-        return Executors.newFixedThreadPool(DarkAddons.isReduceBackgroundThreads() ? Math.min(10, Runtime.getRuntime().availableProcessors() << 1) : 10);
+        return Executors.newFixedThreadPool(DarkAddons.isReduceBackgroundThreads() ? Math.min(10, Runtime.getRuntime().availableProcessors() << 1) : 10, (@NotNull final Runnable r) -> PublicUtils.newThread(r, "Skytils Thread"));
     }
 }
