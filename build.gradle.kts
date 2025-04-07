@@ -68,6 +68,11 @@ repositories {
     maven("https://repo.hypixel.net/repository/Hypixel/")
     maven("https://repo.spongepowered.org/maven/")
     //maven("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev/")
+    maven("https://maven.dediamondpro.dev/releases/") {
+        mavenContent {
+            includeGroup("dev.dediamondpro")
+        }
+    }
 }
 
 loom {

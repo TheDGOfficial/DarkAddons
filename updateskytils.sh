@@ -69,3 +69,4 @@ git diff > ../../ws-shared.patch
 cd .. || { echo "cd failed"; exit 1; } 
 cd .. || { echo "cd failed"; exit 1; } 
 
+git add SkytilsMod
