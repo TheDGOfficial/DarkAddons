@@ -47,6 +47,8 @@ final strictfp class SmoothLookHelper {
         targetPitch = pitch;
 
         done = false; // Reset to allow updates
+
+        SmoothLookHelper.update(); // Run first update immediately this tick, otherwise would only start from the next tick after method is called. This would make the instantenous algorithm not instantenous in the literal sense, so we do a update here.
     }
 
     static final void update() {
