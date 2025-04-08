@@ -33,6 +33,11 @@ final class SlayerRNGDisplay extends GuiElement {
         return (double) meterXp / drop.requiredMeterXP * 100.0D;
     }
 
+    @NotNull
+    private static final String formatMeterProgressPercent(@NotNull final double meterProgressPercent) {
+        return String.format(Locale.ROOT, "%.2f", Math.min(100.0D, meterProgressPercent)) + '%';
+    }
+
     private static final double getDropChance(@NotNull final SlayerRNGDisplay.SlayerDrop drop, final double meterProgressPercent) {
         if (100.0D <= meterProgressPercent) {
             return 100.0D;
@@ -139,7 +144,7 @@ final class SlayerRNGDisplay extends GuiElement {
     private static final void stats(final double meterProgressPercent, final double dropChance, final int odds, final long etaTime, final long avgBossKillTime, final int moneyPerHour, @NotNull final SlayerRNGDisplay.SlayerDrop drop) {
         SlayerRNGDisplay.addLine("§b✯ Magic Find: " + SlayerRNGDisplay.lastMagicFind);
         SlayerRNGDisplay.addEmptyLine();
-        SlayerRNGDisplay.addLine("§d⌛ RNG Meter: " + String.format(Locale.ROOT, "%.2f", Math.min(100.0D, meterProgressPercent)) + "% (" + Utils.formatNumber(SlayerRNGDisplay.lastMeterXP) + '/' + Utils.formatNumber(drop.requiredMeterXP) + ')');
+        SlayerRNGDisplay.addLine("§d⌛ RNG Meter: " + SlayerRNGDisplay.formatMeterProgressPercent(meterProgressPercent) + " (" + Utils.formatNumber(SlayerRNGDisplay.lastMeterXP) + '/' + Utils.formatNumber(drop.requiredMeterXP) + ')');
         SlayerRNGDisplay.addEmptyLine();
         final var startingOdds = SlayerRNGDisplay.getOdds(SlayerRNGDisplay.getDropChance(drop, SlayerRNGDisplay.getMeterProgress(drop, SlayerRNGDisplay.lastMeterXPGain)));
         SlayerRNGDisplay.addLine("§6♠ Odds: 1/" + startingOdds + "->" + odds + " (" + String.format(Locale.ROOT, "%.2f", dropChance) + "%)" + " (done since last: " + drop.bossesDoneSinceLastRNGMeterDrop + ')');
@@ -803,7 +808,9 @@ final class SlayerRNGDisplay extends GuiElement {
                         final var tookBosses = drop.bossesDoneSinceLastRNGMeterDrop;
                         drop.bossesDoneSinceLastRNGMeterDrop = 0;
 
-                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 7, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop!"));
+                        final var meterProgressPercent = SlayerRNGDisplay.formatMeterProgressPercent(SlayerRNGDisplay.getMeterProgress(drop, xpBefore));
+
+                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 7, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop! (at " + meterProgressPercent + " meter)"));
                     }
                 }
             }
