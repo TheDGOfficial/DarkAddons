@@ -169,7 +169,7 @@ final class AutoFishingRod {
                     AutoFishingRod.throwBobber();
                 } else if (!AutoFishingRod.hasActiveBobber() && "The Golden Fish swims back beneath the lava...".equals(unformattedMessage)) {
                     AutoFishingRod.throwBobber();
-                } else if (Config.isAutoFishingRodGoldenFishMode() && unformattedMessage.startsWith("TROPHY FISH! You caught a Golden Fish ")) {
+                } else if (Config.isAutoFishingRodGoldenFishMode() && unformattedMessage.startsWith("♔ TROPHY FISH! You caught a Golden Fish ")) {
                     Utils.awaitCondition(() -> !AutoFishingRod.hasActiveBobber(), AutoFishingRod::throwBobber);
                 }
             }
