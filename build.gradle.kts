@@ -30,13 +30,13 @@ plugins {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(23)
+    toolchain.languageVersion = JavaLanguageVersion.of(24)
 
     withSourcesJar()
 }
 
 tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
-    languageVersion = JavaLanguageVersion.of(23)
+    languageVersion = JavaLanguageVersion.of(24)
 }
 
 private val versionProperties = loadVersionProperties()
@@ -183,19 +183,19 @@ dependencies {
                 add(configuration.name, "net.bytebuddy:byte-buddy-parent") {
                     version {
                         strictly("1.17.5")
-                        because("Older version doesn't have Java 23 support")
+                        because("Older version doesn't have Java 24 support")
                     }
                 }
                 add(configuration.name, "net.bytebuddy:byte-buddy") {
                     version {
                         strictly("1.17.5")
-                        because("Older version doesn't have Java 23 support")
+                        because("Older version doesn't have Java 24 support")
                     }
                 }
                 add(configuration.name, "net.bytebuddy:byte-buddy-agent") {
                     version {
                         strictly("1.17.5")
-                        because("Older version doesn't have Java 23 support")
+                        because("Older version doesn't have Java 24 support")
                     }
                 }
             }
@@ -331,7 +331,7 @@ tasks {
 
         //options.deprecation = true
         options.release = 8
-        sourceCompatibility = "23"
+        sourceCompatibility = "24"
 
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
@@ -339,6 +339,7 @@ tasks {
         options.forkOptions.jvmArgs!!.add("-XX:+UnlockExperimentalVMOptions")
         options.forkOptions.jvmArgs!!.add("-XX:+IgnoreUnrecognizedVMOptions")
         options.forkOptions.jvmArgs!!.add("-XX:+EnableDynamicAgentLoading")
+        options.forkOptions.jvmArgs!!.add("--enable-native-access=ALL-UNNAMED")
         options.compilerArgs.add("-parameters")
         options.compilerArgs.add("-Xlint:all,-options,-classfile,-processing,-overrides")
     }
