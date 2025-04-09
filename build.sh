@@ -184,7 +184,7 @@ if [ "${1:-default}" != "--skip-build" ]; then
     if [ "${1:-default}" == "--info" ]; then
      ./gradlew build test remapJar --info
     else
-     ./gradlew build test remapJar
+     ./gradlew build test remapJar --stacktrace
     fi
   else
     if [ "${2:-default}" == "--info" ]; then
