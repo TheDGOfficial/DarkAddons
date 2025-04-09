@@ -35,6 +35,10 @@ java {
     withSourcesJar()
 }
 
+tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
+    languageVersion = JavaLanguageVersion.of(23)
+}
+
 private val versionProperties = loadVersionProperties()
 
 fun loadVersionProperties(): Properties {

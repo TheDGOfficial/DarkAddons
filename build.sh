@@ -142,6 +142,12 @@ if [ "${1:-default}" == "--check-updates" ]; then
   exit
 fi
 
+if [ "${1:-default}" == "--regen-daemon-jvm-config" ]; then
+  echo Regenerating Daemon JVM Config
+  ./gradlew updateDaemonJvm
+  exit
+fi
+
 if [ "${1:-default}" == "--build-health" ]; then
   echo Checking Gradle build health
   ./gradlew buildHealth
