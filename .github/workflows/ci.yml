@@ -40,7 +40,7 @@ jobs:
    - name: Install Java
      uses: actions/setup-java@v4.7.1
      with:
-      distribution: microsoft
+      distribution: corretto
       java-version: 24
 
    - name: Cache Gradle wrapper
