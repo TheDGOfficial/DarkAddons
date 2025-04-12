@@ -810,7 +810,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
                         final var meterProgressPercent = SlayerRNGDisplay.formatMeterProgressPercent(SlayerRNGDisplay.getMeterProgress(drop, xpBefore));
 
-                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 7, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop! (at " + meterProgressPercent + " meter)"));
+                        DarkAddons.registerTickTask("send_rng_meter_item_took_X_bosses_to_drop_message", 8, false, () -> DarkAddons.queueWarning("RNG Meter item took " + tookBosses + " bosses to drop! (at " + meterProgressPercent + " meter)"));
                     }
                 }
             }
