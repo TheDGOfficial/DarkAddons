@@ -8,10 +8,53 @@ import net.minecraft.entity.player.EntityPlayer;
 @SuppressWarnings("strictfp")
 final strictfp class SmoothLookHelper {
     private enum Algorithm {
-        INSTANTANEOUS,
-        LERP,
-        EASE_IN_OUT,
-        GRADUAL_MOUSE_MOVEMENT;
+        INSTANTANEOUS() {
+            @Override
+            final float applyForYaw(final float currentYaw, final float targetYaw) {
+                return targetYaw;
+            }
+
+            @Override
+            final float applyForPitch(final float currentPitch, final float targetPitch) {
+                return targetPitch;
+            }
+        },
+        LERP() {
+            @Override
+            final float applyForYaw(final float currentYaw, final float targetYaw) {
+                return SmoothLookHelper.lerp(currentYaw, targetYaw, SmoothLookHelper.LERP_SPEED);
+            }
+
+            @Override
+            final float applyForPitch(final float currentPitch, final float targetPitch) {
+                return SmoothLookHelper.lerp(currentPitch, targetPitch, SmoothLookHelper.LERP_SPEED);
+            }
+        },
+        EASE_IN_OUT() {
+            @Override
+            final float applyForYaw(final float currentYaw, final float targetYaw) {
+                return SmoothLookHelper.easeInOut(currentYaw, targetYaw, SmoothLookHelper.LERP_SPEED);
+            }
+
+            @Override
+            final float applyForPitch(final float currentPitch, final float targetPitch) {
+                return SmoothLookHelper.easeInOut(currentPitch, targetPitch, SmoothLookHelper.LERP_SPEED);
+            }
+        },
+        GRADUAL_MOUSE_MOVEMENT() {
+            @Override
+            final float applyForYaw(final float currentYaw, final float targetYaw) {
+                return SmoothLookHelper.gradualAdjust(currentYaw, targetYaw, SmoothLookHelper.GRADUAL_SPEED);
+            }
+
+            @Override
+            final float applyForPitch(final float currentPitch, final float targetPitch) {
+                return SmoothLookHelper.gradualAdjust(currentPitch, targetPitch, SmoothLookHelper.GRADUAL_SPEED);
+            }
+        };
+
+        abstract float applyForYaw(final float currentYaw, final float targetYaw);
+        abstract float applyForPitch(final float currentPitch, final float targetPitch);
     }
 
     // Allows changing the algorithm on the fly via mod's settings menu (saved to and loaded from the config file)
@@ -37,6 +80,9 @@ final strictfp class SmoothLookHelper {
     private static final float LERP_SPEED = 0.1F;
     private static final float GRADUAL_SPEED = 0.05F; // Can be adjusted for smoothness
 
+    private static float lastYaw = Float.NaN;
+    private static float lastPitch = Float.NaN;
+
     private static float targetYaw;
     private static float targetPitch;
 
@@ -46,41 +92,35 @@ final strictfp class SmoothLookHelper {
         targetYaw = yaw;
         targetPitch = pitch;
 
-        done = false; // Reset to allow updates
+        SmoothLookHelper.lastYaw = Float.NaN;
+        SmoothLookHelper.lastPitch = Float.NaN;
 
-        SmoothLookHelper.update(); // Run first update immediately this tick, otherwise would only start from the next tick after method is called. This would make the instantenous algorithm not instantenous in the literal sense, so we do a update here.
+        done = false; // Reset to allow updates
     }
 
     static final void update() {
         if (!done) {
             final var player = Minecraft.getMinecraft().thePlayer;
             if (null != player) {
-                // Save initial yaw and pitch before modifying them
-                final var lastYaw = player.rotationYaw;
-                final var lastPitch = player.rotationPitch;
-
-                switch (SmoothLookHelper.getAlgorithm()) {
-                    case INSTANTANEOUS:
-                        player.rotationYaw = SmoothLookHelper.targetYaw;
-                        player.rotationPitch = SmoothLookHelper.targetPitch;
-                        break;
-                    case LERP:
-                        player.rotationYaw = SmoothLookHelper.lerp(player.rotationYaw, SmoothLookHelper.targetYaw, SmoothLookHelper.LERP_SPEED);
-                        player.rotationPitch = SmoothLookHelper.lerp(player.rotationPitch, SmoothLookHelper.targetPitch, SmoothLookHelper.LERP_SPEED);
-                        break;
-                    case EASE_IN_OUT:
-                        player.rotationYaw = SmoothLookHelper.easeInOut(player.rotationYaw, SmoothLookHelper.targetYaw, SmoothLookHelper.LERP_SPEED);
-                        player.rotationPitch = SmoothLookHelper.easeInOut(player.rotationPitch, SmoothLookHelper.targetPitch, SmoothLookHelper.LERP_SPEED);
-                        break;
-                    case GRADUAL_MOUSE_MOVEMENT:
-                        SmoothLookHelper.gradualAdjust(player, SmoothLookHelper.GRADUAL_SPEED);
-                        break;
+                // If player manually moved their head, we cancel the entire process and bail out. Player input should always override automatic control.
+                if (!Float.isNaN(SmoothLookHelper.lastYaw) && !Float.isNaN(SmoothLookHelper.lastPitch) && (player.rotationYaw != SmoothLookHelper.lastYaw || player.rotationPitch != SmoothLookHelper.lastPitch)) {
+                    SmoothLookHelper.done = true;
+                    return;
                 }
 
-                // If yaw and pitch didn't change after applying the algorithm, we're done
-                if (player.rotationYaw == lastYaw && player.rotationPitch == lastPitch) {
+                // Apply algorithm to yaw and pitch of the player
+                final var algorithm = SmoothLookHelper.getAlgorithm();
+
+                player.rotationYaw = algorithm.applyForYaw(player.rotationYaw, SmoothLookHelper.targetYaw);
+                player.rotationPitch = algorithm.applyForPitch(player.rotationPitch, SmoothLookHelper.targetPitch);
+
+                // If yaw and pitch doesn't change after applying the algorithm anymore, we're done
+                if (algorithm.applyForYaw(player.rotationYaw, SmoothLookHelper.targetYaw) == player.rotationYaw && algorithm.applyForPitch(player.rotationPitch, SmoothLookHelper.targetPitch) == player.rotationPitch) {
                     SmoothLookHelper.done = true;
                 }
+
+                SmoothLookHelper.lastYaw = player.rotationYaw;
+                SmoothLookHelper.lastPitch = player.rotationPitch;
             }
         }
     }
@@ -90,18 +130,17 @@ final strictfp class SmoothLookHelper {
     }
 
     private static final float easeInOut(final float start, final float end, final float progress) {
-        float t = progress * progress * (3.0F - 2.0F * progress); // Smoothstep easing
-        return start + t * (end - start);
+        float smoothStep = progress * progress * (3.0F - 2.0F * progress); // Smoothstep easing
+        return start + smoothStep * (end - start);
     }
 
-    private static final void gradualAdjust(@NotNull final EntityPlayer player, final float speed) {
-        var deltaYaw = (targetYaw - player.rotationYaw) * speed;
-        var deltaPitch = (targetPitch - player.rotationPitch) * speed;
+    private static final float gradualAdjust(final float start, final float end, final float speed) {
+        var delta = (end - start) * speed;
 
-        if (Math.abs(deltaYaw) < 0.1F) deltaYaw = 0.0F;
-        if (Math.abs(deltaPitch) < 0.1F) deltaPitch = 0.0F;
+        if (Math.abs(delta) < 0.1F) {
+            delta = 0.0F;
+        }
 
-        player.rotationYaw += deltaYaw;
-        player.rotationPitch += deltaPitch;
+        return start + delta;
     }
 }

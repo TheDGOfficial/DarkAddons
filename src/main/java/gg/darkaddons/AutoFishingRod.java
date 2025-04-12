@@ -15,6 +15,7 @@ import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Items;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -178,9 +179,10 @@ final class AutoFishingRod {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public final void onEntityJoinWorld(@NotNull final EntityJoinWorldEvent event) {
-        if (Config.isAutoFishingRod() && event.entity instanceof final EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler && AutoFishingRod.isHoldingRod()) {
+        final var player = Minecraft.getMinecraft().thePlayer;
+        if (Config.isAutoFishingRod() && null != player && event.entity instanceof final EntityFishHook bobber && player == bobber.angler && AutoFishingRod.isHoldingRod()) {
             AutoFishingRod.lastRodThrowTime = System.currentTimeMillis();
-            AutoFishingRod.moveMouse();
+            AutoFishingRod.moveMouse(player);
 
             if (null != AutoFishingRod.countdownArmorStand) {
                 AutoFishingRod.countdownArmorStand.clear();
@@ -200,17 +202,34 @@ final class AutoFishingRod {
         AutoFishingRod.lastMouseMoveWasAddition = false;
     }
 
-    private static final void moveMouse() {
-        final var now = System.currentTimeMillis();
+    private static float lastYaw = Float.NaN;
+    private static float lastPitch = Float.NaN;
 
-        if (now - AutoFishingRod.lastMouseMoveTime >= TimeUnit.SECONDS.toMillis(19L)) { // Anti AFK seems to trigger about every 20 seconds
+    private static final void moveMouse(@NotNull final EntityPlayerSP player) {
+        final var now = System.currentTimeMillis();
+ 
+        if (!Float.isNaN(AutoFishingRod.lastYaw) && !Float.isNaN(AutoFishingRod.lastPitch) && (player.rotationYaw != AutoFishingRod.lastYaw || player.rotationPitch != AutoFishingRod.lastPitch)) {
+            // Head moved since the last time fishing rod bobber was thrown - restart the timer
+            AutoFishingRod.lastMouseMoveTime = now;
+
+            // Update values so that the if will be false if its not moved another time in the next check when the rod is thrown again
+            AutoFishingRod.lastYaw = player.rotationYaw;
+            AutoFishingRod.lastPitch = player.rotationPitch;
+
+            return;
+        }
+ 
+        AutoFishingRod.lastYaw = player.rotationYaw;
+        AutoFishingRod.lastPitch = player.rotationPitch;
+
+        if (now - AutoFishingRod.lastMouseMoveTime >= TimeUnit.SECONDS.toMillis(14L)) { // Anti AFK seems to trigger about every 15 seconds
             AutoFishingRod.lastMouseMoveTime = now;
 
             if (AutoFishingRod.lastMouseMoveWasAddition) {
-                SmoothLookHelper.setTarget(Minecraft.getMinecraft().thePlayer.rotationYaw - 3.2F, Minecraft.getMinecraft().thePlayer.rotationPitch - 1.2F);
+                SmoothLookHelper.setTarget(player.rotationYaw - 3.2F, player.rotationPitch - 1.2F);
                 AutoFishingRod.lastMouseMoveWasAddition = false;
             } else {
-                SmoothLookHelper.setTarget(Minecraft.getMinecraft().thePlayer.rotationYaw + 3.2F, Minecraft.getMinecraft().thePlayer.rotationPitch + 1.2F);
+                SmoothLookHelper.setTarget(player.rotationYaw + 3.2F, player.rotationPitch + 1.2F);
                 AutoFishingRod.lastMouseMoveWasAddition = true;
             }
         }
