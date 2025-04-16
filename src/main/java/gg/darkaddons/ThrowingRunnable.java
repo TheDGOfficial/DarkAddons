@@ -11,13 +11,13 @@ import gg.darkaddons.annotations.bytecode.Private;
  * <p>
  * This a {@link FunctionalInterface}, thus can be used as a lambda
  * or method reference. This is recommended over using anonymous classes
- * implementing this interface for memory reasons, because if the lambda
+ * when implementing this interface for memory reasons, because if the lambda
  * or method reference doesn't capture anything, the JVM only uses one
  * instance, so the Garbage Collector's job is easier.
  * <p>
  * This interface extends {@link Runnable} for convenience, so you can pass
  * your lambdas/method references implementing this type to methods
- * accepting a {@link Runnable} only.
+ * accepting a {@link Runnable} easily.
  */
 @FunctionalInterface
 interface ThrowingRunnable extends Runnable {
