@@ -44,6 +44,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -102,7 +103,7 @@ final class Diagnostics {
         Utils.newThread(Diagnostics::watchdogLoop, "DarkAddons Watchdog Thread").start();
 
         Diagnostics.calculatorThread.scheduleWithFixedDelay(() -> {
-            final var framessThisSecond = Diagnostics.frameCount.getAndSet(0);
+            final var framesThisSecond = Diagnostics.frameCount.getAndSet(0);
             Diagnostics.lastFPS = framesThisSecond;
         }, 1L, 1L, TimeUnit.SECONDS);
     }
