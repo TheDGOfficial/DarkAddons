@@ -271,7 +271,7 @@ final class MarkCompilerGeneratedMethodsFinal {
                 } catch (final NoClassDefFoundError ncdfe) {
                     if (verbose) {
                         ++notFoundAmount;
-                        MarkCompilerGeneratedMethodsFinal.err("Can't find " + ncdfe.getMessage() + ", please check class path!");
+                        MarkCompilerGeneratedMethodsFinal.err("Can't find " + ncdfe.getMessage() + " (used inside " + info.getName() + "), please check class path!");
                     }
                 }
             }

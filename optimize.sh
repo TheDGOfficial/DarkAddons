@@ -12,8 +12,6 @@ done < versions.properties
 
 MAVEN_DEPENDENCY_PLUGIN_VERSION=3.8.1
 
-#KOTLIN_VERSION=2.1.20-dev-6370
-
 GUAVA_VERSION=${versionProperties["guava.version"]}
 
 JETBRAINS_ANNOTATIONS_VERSION=${versionProperties["jetbrains.annotations.version"]}
@@ -38,6 +36,9 @@ GSON_VERSION=2.2.4
 ASM_VERSION=9.7.1
 
 ERRORPRONE_VERSION=2.38.0
+
+KOTLIN_VERSION=2.1.20
+KOTLIN_COROUTINES_VERISON=1.10.2
 
 DARKADDONS_VERSION=${versionProperties["darkaddons.version"]}
 SKYTILS_VERSION=${versionProperties["skytils.version"]}
@@ -133,6 +134,9 @@ add_m2_artifact_to_classpath org.lwjgl.lwjgl lwjgl "$LWJGL_VERSION"
 
 add_m2_artifact_to_classpath org.apache.logging.log4j log4j-api "$LOG4J_VERSION"
 add_m2_artifact_to_classpath com.google.errorprone error_prone_annotations "$ERRORPRONE_VERSION"
+
+add_m2_artifact_to_classpath org.jetbrains.kotlin kotlin-stdlib "$KOTLIN_VERSION"
+add_m2_artifact_to_classpath org.jetbrains.kotlinx kotlinx-coroutines-core "$KOTLIN_COROUTINES_VERISON"
 
 CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SKYTILS_VERSION.jar
 
