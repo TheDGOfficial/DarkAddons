@@ -979,9 +979,9 @@ final class Config extends Vigilant {
         if (state) {
             // Delay needed because the listener runs before the value is actually changed, resulting in tweakPriorities method
             // doing nothing.
-            DarkAddons.runOnceInNextTick("config_hook_tweak_thread_priorities", ThreadPriorityTweaker::tweakPriorities);
+            DarkAddons.runOnceInNextTick("config_hook_schedule_tweak_thread_priorities_task", ThreadPriorityTweaker::scheduleTweakTask);
         } else {
-            ThreadPriorityTweaker.restorePriorities();
+            ThreadPriorityTweaker.cancelTweakTaskAndRestorePriorities();
         }
     }
 

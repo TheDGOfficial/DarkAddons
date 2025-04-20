@@ -1265,7 +1265,9 @@ public final class DarkAddons {
             DarkAddons.preloadConfig(); // Preloads config & vigilant class and gui screen, otherwise it causes multiple second delay before first opening
             DarkAddons.LoggerHolder.LOGGER.info("Done preloading config.");
 
-            ThreadPriorityTweaker.init();
+            if (Config.isThreadPriorityTweaker()) {
+                ThreadPriorityTweaker.scheduleTweakTask();
+            }
 
             DarkAddons.checkForSBA();
 
