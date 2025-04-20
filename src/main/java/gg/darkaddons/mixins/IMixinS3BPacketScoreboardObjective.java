@@ -1,8 +1,11 @@
 package gg.darkaddons.mixins;
 
 import net.minecraft.network.play.server.S3BPacketScoreboardObjective;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Accessor mixin to allow accessing and modifying some private fields in {@link S3BPacketScoreboardObjective} class.

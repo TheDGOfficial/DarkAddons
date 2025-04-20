@@ -4,7 +4,7 @@ import gg.essential.elementa.font.DefaultFonts;
 import gg.essential.elementa.font.ElementaFonts;
 import gg.essential.universal.UGraphics;
 import gg.essential.universal.UMatrixStack;
-import gg.darkadddons.mixins.IMixinMinecraft;
+import gg.darkaddons.mixins.IMixinMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
