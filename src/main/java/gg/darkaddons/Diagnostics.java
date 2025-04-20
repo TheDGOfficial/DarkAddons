@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
@@ -76,6 +77,8 @@ final class Diagnostics {
     @NotNull
     private static final ExecutorService diagnosticsExecutor = Executors.newSingleThreadExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Diagnostics Thread"));
 
+    private static final ScheduledExecutorService calculatorThread = Executors.newSingleThreadScheduledExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons FPS Calculator Thread"));
+
     static final void init() {
         if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
             throw new IllegalStateException("not allowed to run static initializer from thread " + Thread.currentThread().getName() + " which is not the client thread");
@@ -91,8 +94,17 @@ final class Diagnostics {
         throw new IllegalStateException("not allowed to run static initializer from thread " + Thread.currentThread().getName() + " which is not the client thread");
     }
 
+    private static final AtomicInteger frameCount = new AtomicInteger(0);
+
+    static volatile int lastFPS = 60;
+
     static {
         Utils.newThread(Diagnostics::watchdogLoop, "DarkAddons Watchdog Thread").start();
+
+        Diagnostics.calculatorThread.scheduleWithFixedDelay(() -> {
+            final var framessThisSecond = Diagnostics.frameCount.getAndSet(0);
+            Diagnostics.lastFPS = framesThisSecond;
+        }, 1L, 1L, TimeUnit.SECONDS);
     }
 
     private static final void diag(@NotNull final String name, @NotNull final String value) {
@@ -203,7 +215,7 @@ final class Diagnostics {
 
     @NotNull
     static final long getFPSWithNanosecondPrecision() {
-        return TimeUnit.SECONDS.toNanos(1L) / Math.max(1L, Diagnostics.getLastGameLoopTimeNs());
+        return Diagnostics.lastFPS;
     }
 
     @NotNull
@@ -506,6 +518,7 @@ final class Diagnostics {
 
     static final void handleGameLoopPost() {
         Diagnostics.gameLoopEnd = System.nanoTime();
+        Diagnostics.frameCount.incrementAndGet();
 
         // Maths.abs technically not necessary anymore after the switch from System#currentTimeMillis into System#nanoTime,
         // but leave it as a hardening measure or in case we swap back to System#currentTimeMillis again.

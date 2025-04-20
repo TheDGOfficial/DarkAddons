@@ -228,7 +228,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "FPS Display",
-        description = "Shows your FPS on the screen, updating every second. Accurate to the millisecond precision. Shows in green if equal or above 60 FPS, yellow if equal or above 30 FPS, and red otherwise. Note: The displayed FPS will be different than what's shown on F3 because that takes average FPS, and this is the FPS according to time took to render last frame.",
+        description = "Shows your FPS on the screen, updating every second. Accurate to the nanosecond precision. Shows in green if equal or above 60 FPS, yellow if equal or above 30 FPS, and red otherwise. The displayed FPS will be the amount of frames rendered in the last second.",
         category = "Misc", subcategory = "HUD"
     )
     private static boolean fpsDisplay;
