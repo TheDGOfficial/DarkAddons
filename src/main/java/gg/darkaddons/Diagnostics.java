@@ -40,6 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
@@ -197,7 +198,7 @@ final class Diagnostics {
 
         Diagnostics.diagChat();
 
-        Diagnostics.diag("Last Game Loop Time", Diagnostics.getLastGameLoopTimeString() + " (" + 1_000L / Diagnostics.getLastGameLoopTime() + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
+        Diagnostics.diag("Last Game Loop Time", Diagnostics.getLastGameLoopTimeString() + " (" + TimeUnit.SECONDS.toNanos(1L) / Math.max(1L, Diagnostics.getLastGameLoopTimeNs()) + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
     }
 
     @NotNull
@@ -456,6 +457,7 @@ final class Diagnostics {
     private static long gameLoopEnd;
 
     private static long lastGameLoopTime;
+    private static long lastGameLoopTimeNs;
 
     private static long lagThreshold;
 
@@ -472,7 +474,7 @@ final class Diagnostics {
     }
 
     static final void handleGameLoopPre() {
-        Diagnostics.gameLoopStart = System.currentTimeMillis();
+        Diagnostics.gameLoopStart = System.nanoTime();
     }
 
     private static final void watchdogLoop() {
@@ -498,8 +500,15 @@ final class Diagnostics {
     }
 
     static final void handleGameLoopPost() {
-        Diagnostics.gameLoopEnd = System.currentTimeMillis();
-        Diagnostics.lastGameLoopTime = Math.abs(Diagnostics.gameLoopEnd - Diagnostics.gameLoopStart);
+        Diagnostics.gameLoopEnd = System.nanoTime();
+
+        // Maths.abs technically not necessary anymore after the switch from System#currentTimeMillis into System#nanoTime,
+        // but leave it as a hardening measure or in case we swap back to System#currentTimeMillis again.
+
+        // The reason it was necessary with System#currentTimeMillis is that it uses system time which can return a result that is smaller than the value from the previous calls because of system time changes (NTP sync, daylight saving adjustments, manual change by user or timezone change, etc.)
+        Diagnostics.lastGameLoopTimeNs = Math.abs(Diagnostics.gameLoopEnd - Diagnostics.gameLoopStart);
+
+        Diagnostics.lastGameLoopTime = TimeUnit.NANOSECONDS.toMillis(Diagnostics.lastGameLoopTimeNs);
 
         if (Diagnostics.isLagTracking() && Diagnostics.lagThreshold <= Diagnostics.lastGameLoopTime) {
             DarkAddons.queueWarning("Game loop took " + Diagnostics.getLastGameLoopTimeString() + " (" + 1_000L / Diagnostics.getLastGameLoopTime() + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
@@ -508,6 +517,10 @@ final class Diagnostics {
 
     static final long getLastGameLoopTime() {
         return Diagnostics.lastGameLoopTime;
+    }
+
+    static final long getLastGameLoopTimeNs() {
+        return Diagnostics.lastGameLoopTimeNs;
     }
 
     @NotNull
