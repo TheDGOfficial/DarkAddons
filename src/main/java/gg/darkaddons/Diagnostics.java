@@ -198,7 +198,12 @@ final class Diagnostics {
 
         Diagnostics.diagChat();
 
-        Diagnostics.diag("Last Game Loop Time", Diagnostics.getLastGameLoopTimeString() + " (" + TimeUnit.SECONDS.toNanos(1L) / Math.max(1L, Diagnostics.getLastGameLoopTimeNs()) + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
+        Diagnostics.diag("Last Game Loop Time", Diagnostics.getLastGameLoopTimeString() + " (" + Diagnostics.getFPSWithNanosecondPrecision() + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
+    }
+
+    @NotNull
+    static final long getFPSWithNanosecondPrecision() {
+        return TimeUnit.SECONDS.toNanos(1L) / Math.max(1L, Diagnostics.getLastGameLoopTimeNs());
     }
 
     @NotNull
