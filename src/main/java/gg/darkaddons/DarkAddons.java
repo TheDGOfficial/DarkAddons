@@ -139,6 +139,10 @@ public final class DarkAddons {
      */
     private static boolean usingSBA;
     /**
+     * Becomes true after the load complete event if LabyMod is installed and loaded.
+     */
+    private static boolean usingLabyMod;
+    /**
      * Holds the prefix, usually added to the start of messages sent by mod; however,
      * not all messages necessarily need to have it.
      */
@@ -879,6 +883,10 @@ public final class DarkAddons {
         return DarkAddons.usingSBA;
     }
 
+    static final boolean isUsingLabyMod() {
+        return DarkAddons.usingLabyMod;
+    }
+
     /**
      * Called when a packet is received on the client.
      *
@@ -1159,8 +1167,9 @@ public final class DarkAddons {
         return isNotCallingFromClientThread;
     }
 
-    private static final void checkForSBA() {
+    private static final void checkForOtherMods() {
         DarkAddons.usingSBA = Loader.isModLoaded("skyblockaddons") || Loader.isModLoaded("sbaunofficial");
+        DarkAddons.usingLabyMod = Loader.isModLoaded("labymod");
     }
 
     /*private static final void preloadMixinClasses() {
@@ -1192,7 +1201,6 @@ public final class DarkAddons {
         DarkAddons.blackholeConsumeNonConstant(true,
             "gg.essential.api.utils.Multithreading",
             "gg.essential.util.Multithreading",
-            "gg.skytils.skytilsmod.Skytils"
         );
     }
 
@@ -1282,7 +1290,7 @@ public final class DarkAddons {
                 ThreadPriorityTweaker.scheduleTweakTask();
             }
 
-            DarkAddons.checkForSBA();
+            DarkAddons.checkForOtherMods();
 
             DarkAddons.reducePatcherBackgroundThreads();
             //DarkAddons.checkElementaVersion();

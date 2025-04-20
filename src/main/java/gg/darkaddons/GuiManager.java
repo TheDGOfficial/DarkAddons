@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import com.google.gson.JsonObject;
-import gg.skytils.skytilsmod.Skytils;
 import gg.skytils.skytilsmod.core.SoundQueue;
 import gg.skytils.skytilsmod.utils.GlState;
 import net.minecraft.client.Minecraft;
@@ -57,7 +56,7 @@ final class GuiManager {
     }
 
     private static final void handleRender(@NotNull final RenderGameOverlayEvent.Post event) {
-        if (Skytils.usingLabymod && !(Minecraft.getMinecraft().ingameGUI instanceof GuiIngameForge)) {
+        if (DarkAddons.isUsingLabyMod() && !(Minecraft.getMinecraft().ingameGUI instanceof GuiIngameForge)) {
             return;
         }
 
@@ -82,7 +81,7 @@ final class GuiManager {
     }
 
     private static final void handleRenderLabyMod(@NotNull final RenderGameOverlayEvent event) {
-        if (!Skytils.usingLabymod) {
+        if (!DarkAddons.isUsingLabyMod()) {
             return;
         }
 
