@@ -233,6 +233,13 @@ final class Config extends Vigilant {
     )
     private static boolean fpsDisplay;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "TPS Display",
+        description = "Shows server's TPS on the screen, updating every second. Shows in green if equal or above 18 TPS, yellow if equal or above 15 TPS, and red otherwise. The displayed TPS will be the amount of ticks the server has done in the last second. The TPS can be at most 20. It will display \"Loading...\" when you change worlds till the TPS is determined.",
+        category = "Misc", subcategory = "HUD"
+    )
+    private static boolean tpsDisplay;
+
     /*@Property(
         type = PropertyType.SWITCH, name = "Dimensional Slash Alert",
         description = "Creates a title when you are in range of dimensional slash.",
@@ -1366,6 +1373,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.fpsDisplay;
+    }
+
+    static final boolean isTpsDisplay() {
+        Config.checkUninit();
+
+        return Config.tpsDisplay;
     }
 
     static final boolean isSharperDragonBoundingBox() {

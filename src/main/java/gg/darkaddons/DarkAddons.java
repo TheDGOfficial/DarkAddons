@@ -737,6 +737,7 @@ public final class DarkAddons {
             new HideXPOrbs(),
             new UnopenedChestsDisplay(),
             new FPSDisplay(),
+            new TPSDisplay(),
             new GhostBlock(),
             new ScoreFromScoreboard(),
             new RequeueKey(),
@@ -883,6 +884,8 @@ public final class DarkAddons {
         ChromaScoreboard.handlePacket(packet);
         RagAxeStrengthGained.handlePacket(packet);
 
+        ServerTPSCalculator.handlePacket(packet);
+
         return true;
     }
 
@@ -1028,6 +1031,7 @@ public final class DarkAddons {
      */
     public static final void handleWorldUnload() {
         AutoClassAbilities.onWorldUnload();
+        ServerTPSCalculator.onWorldUnload();
     }
 
     /**
