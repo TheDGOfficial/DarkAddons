@@ -3,6 +3,9 @@ package gg.darkaddons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Locale;
+
+import java.util.concurrent.TimeUnit;
 
 final class FPSDisplay extends SimpleGuiElement {
     private static long fps;
@@ -30,7 +33,7 @@ final class FPSDisplay extends SimpleGuiElement {
 
         final var isDemoRenderBypass = this.isDemoRenderBypass();
 
-        FPSDisplay.fps = 1_000L / Math.max(1L, Diagnostics.getLastGameLoopTime());
+        FPSDisplay.fps = Diagnostics.getFPSWithNanosecondPrecision();
 
         if (isDemoRenderBypass || FPSDisplay.lastFps != FPSDisplay.fps || this.isEmpty()) {
             FPSDisplay.lastFps = FPSDisplay.fps;
