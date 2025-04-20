@@ -195,7 +195,7 @@ final class AutoClassAbilities {
         }
     }
 
-    static final void worldLoad() {
+    static final void onWorldUnload() {
         AutoClassAbilities.regularClassAbility = null;
         AutoClassAbilities.ultimateClassAbility = null;
 

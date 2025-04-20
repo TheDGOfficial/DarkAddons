@@ -283,7 +283,7 @@ final class M7Features {
         }
     }
 
-    private static final void handleLoad() {
+    private static final void handleWorldUnload() {
         M7Features.spawningDragons.clear();
         M7Features.killedDragons.clear();
         M7Features.dragonMap.clear();
@@ -301,15 +301,15 @@ final class M7Features {
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public final void onWorldLoad(@NotNull final WorldEvent.Unload event) {
+    public final void onWorldUnload(@NotNull final WorldEvent.Unload event) {
         if (DarkAddons.checkClientEvent()) {
             return;
         }
 
         if (DarkAddons.shouldProfile()) {
-            DarkAddons.handleEvent("m7features_handle_load", M7Features::handleLoad);
+            DarkAddons.handleEvent("m7features_handle_load", M7Features::handleWorldUnload);
         } else {
-            M7Features.handleLoad();
+            M7Features.handleWorldUnload();
         }
     }
 

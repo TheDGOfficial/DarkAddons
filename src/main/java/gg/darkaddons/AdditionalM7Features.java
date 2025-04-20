@@ -176,7 +176,7 @@ final class AdditionalM7Features {
         }
     }
 
-    private static final void handleLoad() {
+    private static final void handleWorldUnload() {
         AdditionalM7Features.firstLaserNotDone = true;
         AdditionalM7Features.witherKingDefeated = false;
         AdditionalM7Features.firstGolemWoken = false;
@@ -191,15 +191,15 @@ final class AdditionalM7Features {
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
-    public final void onWorldLoad(@NotNull final WorldEvent.Unload event) {
+    public final void onWorldUnload(@NotNull final WorldEvent.Unload event) {
         if (DarkAddons.checkClientEvent()) {
             return;
         }
 
         if (DarkAddons.shouldProfile()) {
-            DarkAddons.handleEvent("additionalm7features_handle_worldload", AdditionalM7Features::handleLoad);
+            DarkAddons.handleEvent("additionalm7features_handle_worldload", AdditionalM7Features::handleWorldUnload);
         } else {
-            AdditionalM7Features.handleLoad();
+            AdditionalM7Features.handleWorldUnload();
         }
     }
 

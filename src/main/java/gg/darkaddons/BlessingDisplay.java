@@ -334,7 +334,7 @@ final class BlessingDisplay extends GuiElement {
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public final void onWorldLoad(@NotNull final WorldEvent.Unload ignoredEvent) {
+    public final void onWorldUnload(@NotNull final WorldEvent.Unload ignoredEvent) {
         if (DarkAddons.checkClientEvent()) {
             return;
         }
