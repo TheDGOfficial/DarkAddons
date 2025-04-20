@@ -1,6 +1,6 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.mixins.transformers.accessors.AccessorS3BPacketScoreboardObjective;
+import gg.darkaddons.mixins.IMixinS3BPacketScoreboardObjective;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S3BPacketScoreboardObjective;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ final class ChromaScoreboard {
         if (Config.isChromaToggle() && Config.isChromaSkyblock() && DarkAddons.isUsingSBA() && packet instanceof S3BPacketScoreboardObjective) {
             final var currentObjective = ScoreboardUtil.cleanSB(((S3BPacketScoreboardObjective) packet).func_149337_d());
             if (null != currentObjective && (currentObjective.contains("SKYBLOCK") || currentObjective.contains("SKIBLOCK"))) {
-                ((AccessorS3BPacketScoreboardObjective) packet).setObjectiveValue("§z§lSKYBLOCK");
+                ((IMixinS3BPacketScoreboardObjective) packet).setObjectiveValue("§z§lSKYBLOCK");
             }
         }
     }

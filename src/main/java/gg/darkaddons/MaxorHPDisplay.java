@@ -1,7 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.Skytils;
-
 import net.minecraft.client.Minecraft;
 
 import org.jetbrains.annotations.NotNull;
@@ -121,7 +119,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
         if (Config.isSendEnrageSkipHelperMessage() && !MaxorHPDisplay.saidEnrageSkipHelperMessage && 74.0D >= hp && !DarkAddons.isInLocationEditingGui()) {
             MaxorHPDisplay.saidEnrageSkipHelperMessage = true;
-            Skytils.sendMessageQueue.add("/pc Maxor HP: " + hpText + " | Enough damage dealt for first DPS phase!");
+            DarkAddons.queueUserSentMessageOrCommand("/pc Maxor HP: " + hpText + " | Enough damage dealt for first DPS phase!");
         }
     }
 }

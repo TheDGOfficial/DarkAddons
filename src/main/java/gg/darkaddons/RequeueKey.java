@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.Skytils;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -25,10 +24,9 @@ final class RequeueKey {
     public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
         if (Config.isPressKeyToRequeue() && TickEvent.Phase.END == event.phase && RequeueKey.REQUEUE_KEY.isPressed()) {
             final var requeueCommand = "/instancerequeue";
-            final var commandQueue = Skytils.sendMessageQueue;
 
-            if (!commandQueue.contains(requeueCommand)) {
-                commandQueue.add(requeueCommand);
+            if (!DarkAddons.isMessageOrCommandQueuedToBeSentByUser(requeueCommand)) {
+                DarkAddons.queueUserSentMessageOrCommand(requeueCommand);
             }
         }
     }

@@ -1,7 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.Skytils;
-
 import gg.essential.universal.UChat;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
@@ -229,7 +227,7 @@ final class AdditionalM7Features {
                         flag = true;
                     }
                     if (Config.isSendMessageForWishAndCastleOfStone()) {
-                        Skytils.sendMessageQueue.add("/pc Wish and castle of stone!");
+                        DarkAddons.queueUserSentMessageOrCommand("/pc Wish and castle of stone!");
                         flag = true;
                     }
                     if (flag) {
@@ -253,7 +251,7 @@ final class AdditionalM7Features {
                     AdditionalM7Features.sendUseUltTitle();
                 }
                 if (Config.isSendMessageForWishAndCastleOfStone()) {
-                    Skytils.sendMessageQueue.add("/pc Wish and castle of stone!");
+                    DarkAddons.queueUserSentMessageOrCommand("/pc Wish and castle of stone!");
                 }
             }
             default -> AdditionalM7Features.handleMessage3(message);

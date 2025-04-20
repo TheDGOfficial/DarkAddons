@@ -3,7 +3,6 @@ package gg.darkaddons;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
-import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -98,9 +97,7 @@ final class EHPDisplay extends GuiElement {
                 EHPDisplay.getEhpDisplayText(demo ? EHPDisplay.DEMO_EHP : EHPDisplay.ehp, demo),
                 leftAlign ? 0.0F : this.getWidth(demo),
                 0.0F,
-                CommonColors.Companion.getWHITE(),
-                leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT,
-                SmartFontRenderer.TextShadow.NONE
+                leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT
             );
         }
     }

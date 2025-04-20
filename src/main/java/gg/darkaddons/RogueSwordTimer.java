@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
-import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,9 +52,7 @@ final class RogueSwordTimer extends GuiElement {
                     RogueSwordTimer.getDisplayText(demo ? RogueSwordTimer.DEMO_TIME : timeLeftInMs),
                     leftAlign ? 0.0F : this.getWidth(demo),
                     0.0F,
-                    CommonColors.Companion.getWHITE(),
-                    leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT,
-                    SmartFontRenderer.TextShadow.NONE
+                    leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT
                 );
             }
         }

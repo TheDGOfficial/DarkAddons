@@ -154,14 +154,6 @@ enum WitherKingDragons {
         return this.enumOrdinal;
     }
 
-    //@NotNull
-    //private final ResourceLocation texture = new ResourceLocation("skytils", "textures/dungeons/m7/dragon_" + this.enumName.toLowerCase(Locale.ROOT) + ".png"); // TODO change skytils to darkaddons after full split
-
-    /*@NotNull
-    final ResourceLocation getTexture() {
-        return this.texture;
-    }*/
-
     @NotNull
     private static final AxisAlignedBB getAxis(@NotNull final BlockPos pos) {
         final double x = pos.getX();

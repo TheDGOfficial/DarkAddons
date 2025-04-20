@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.Skytils;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.features.impl.dungeons.ScoreCalculation;
 import gg.skytils.skytilsmod.listeners.DungeonListener;
@@ -73,10 +72,10 @@ final class ScoreFromScoreboard {
 
         if (300 <= score && !sc.getHasSaid300()) {
             sc.setHasSaid300(true);
-            Skytils.sendMessageQueue.add("/pc 300 score");
+            DarkAddons.queueUserSentMessageOrCommand("/pc 300 score");
         } else if (270 <= score && !sc.getHasSaid270()) {
             sc.setHasSaid270(true);
-            Skytils.sendMessageQueue.add("/pc 270 score");
+            DarkAddons.queueUserSentMessageOrCommand("/pc 270 score");
         }
 
         final var stScore = sc.getTotalScore().get();
@@ -115,7 +114,7 @@ final class ScoreFromScoreboard {
             }
 
             ScoreFromScoreboard.hasSaidScoreAtBossEntry = true;
-            Skytils.sendMessageQueue.add("/pc Score At Boss Entry: " + score + " | " + (300 <= score ? "Affordable Deaths For S+: " + affordableDeaths : "No S+"));
+            DarkAddons.queueUserSentMessageOrCommand("/pc Score At Boss Entry: " + score + " | " + (300 <= score ? "Affordable Deaths For S+: " + affordableDeaths : "No S+"));
         }
     }
 }

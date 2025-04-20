@@ -4,6 +4,7 @@ import gg.darkaddons.annotations.bytecode.Bridge;
 import gg.darkaddons.annotations.bytecode.Synthetic;
 import gg.essential.elementa.ElementaVersion;
 import gg.essential.universal.UChat;
+import gg.skytils.skytilsmod.Skytils;
 import gg.skytils.skytilsmod.utils.SBInfo;
 import gg.skytils.skytilsmod.utils.SkyblockIsland;
 import gg.skytils.skytilsmod.features.impl.handlers.MayorInfo;
@@ -202,6 +203,14 @@ public final class DarkAddons {
         //noinspection StringConcatenationMissingWhitespace
         final var msg = "§3" + DarkAddons.MESSAGE_PREFIX + message;
         DarkAddons.sendOrQueue(msg);
+    }
+
+    static final boolean isMessageOrCommandQueuedToBeSentByUser(@NotNull final String messageOrCommand) {
+        return Skytils.sendMessageQueue.contains(messageOrCommand);
+    }
+ 
+    static final void queueUserSentMessageOrCommand(@NotNull final String messageOrCommand) {
+        Skytils.sendMessageQueue.add(messageOrCommand);
     }
 
     public static final void addShutdownTask(@NotNull final Runnable task) {

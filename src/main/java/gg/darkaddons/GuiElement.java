@@ -94,6 +94,10 @@ abstract class GuiElement {
         return this.getScaleX() < UResolution.getScaledWidth() / 2.0F;
     }
 
+    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final SmartFontRenderer.TextAlignment alignment) {
+        GuiElement.drawString(text, xPos, yPos, CommonColors.Companion.getWHITE(), alignment);
+    }
+
     static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final CommonColors color, @NotNull final SmartFontRenderer.TextAlignment alignment) {
         GuiElement.drawString(text, xPos, yPos, color, alignment, SmartFontRenderer.TextShadow.NONE);
     }

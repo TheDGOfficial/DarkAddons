@@ -1,12 +1,13 @@
 package gg.darkaddons.mixins;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.Timer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 /**
- * Invoker mixin to allow invoking some private methods in {@link Minecraft} class.
+ * Invoker and accessor mixin to allow invoking and accessing some private methods/fields in {@link Minecraft} class.
  */
 @Mixin(value = Minecraft.class, priority = 999)
 public interface IMixinMinecraft {
@@ -31,4 +32,12 @@ public interface IMixinMinecraft {
      */
     @Accessor
     int getRightClickDelayTimer();
+
+    /**
+     * Gets the {@link Timer}, stored in a private field in {@link Minecraft} class.
+     *
+     * @return The {@link Timer}, stored in a private field in {@link Minecraft} class.
+     */
+    @Accessor
+    Timer getTimer();
 }

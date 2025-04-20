@@ -1,7 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.Skytils;
-
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,7 +38,7 @@ final class MelodyMessage {
             MelodyMessage.halfway = false;
             MelodyMessage.almost = false;
         } else if (Config.isSendMessageOnMelodyTerminal() && !MelodyMessage.saidMelody && DarkAddons.isInDungeons() && gui instanceof final GuiChest chest && chest.inventorySlots instanceof final ContainerChest container && "Click the button on time!".equals(container.getLowerChestInventory().getDisplayName().getUnformattedText())) {
-            Skytils.sendMessageQueue.add("/pc Melody Terminal start!");
+            DarkAddons.queueUserSentMessageOrCommand("/pc Melody Terminal start!");
             MelodyMessage.saidMelody = true;
 
             MelodyMessage.quarter = false;
@@ -64,15 +62,15 @@ final class MelodyMessage {
 
         if (openContainer instanceof final ContainerChest containerChest && "Click the button on time!".equals(containerChest.getLowerChestInventory().getDisplayName().getUnformattedText())) {
             if (!MelodyMessage.quarter && MelodyMessage.checkSlot(containerChest.getSlot(25))) {
-                Skytils.sendMessageQueue.add("/pc Melody terminal is at 25%");
+                DarkAddons.queueUserSentMessageOrCommand("/pc Melody terminal is at 25%");
                 MelodyMessage.quarter = true;
             }
             if (!MelodyMessage.halfway && MelodyMessage.checkSlot(containerChest.getSlot(34))) {
-                Skytils.sendMessageQueue.add("/pc Melody terminal is at 50%");
+                DarkAddons.queueUserSentMessageOrCommand("/pc Melody terminal is at 50%");
                 MelodyMessage.halfway = true;
             }
             if (!MelodyMessage.almost && MelodyMessage.checkSlot(containerChest.getSlot(43))) {
-                Skytils.sendMessageQueue.add("/pc Melody terminal is at 75%");
+                DarkAddons.queueUserSentMessageOrCommand("/pc Melody terminal is at 75%");
                 MelodyMessage.almost = true;
             }
         }

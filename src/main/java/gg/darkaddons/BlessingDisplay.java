@@ -1,7 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.Skytils;
-
 import gg.darkaddons.mixins.IMixinGuiPlayerTabOverlay;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
@@ -75,7 +73,7 @@ final class BlessingDisplay extends GuiElement {
                         final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.WISDOM, 0);
                         final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
 
-                        Skytils.sendMessageQueue.add("/pc Detailed Blessings: Power " + power + (0 == time ? "" : " - Time " + time) + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
+                        DarkAddons.queueUserSentMessageOrCommand("/pc Detailed Blessings: Power " + power + (0 == time ? "" : " - Time " + time) + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
                     })
                 );
             }

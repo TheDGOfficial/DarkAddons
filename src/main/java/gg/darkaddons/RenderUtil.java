@@ -4,7 +4,7 @@ import gg.essential.elementa.font.DefaultFonts;
 import gg.essential.elementa.font.ElementaFonts;
 import gg.essential.universal.UGraphics;
 import gg.essential.universal.UMatrixStack;
-import gg.skytils.skytilsmod.mixins.transformers.accessors.AccessorMinecraft;
+import gg.darkadddons.mixins.IMixinMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
@@ -30,7 +30,7 @@ final class RenderUtil {
     }
 
     static final float getPartialTicks() {
-        return ((AccessorMinecraft) Minecraft.getMinecraft()).getTimer().renderPartialTicks;
+        return ((IMixinMinecraft) Minecraft.getMinecraft()).getTimer().renderPartialTicks;
     }
 
     private static final double interpolate(final double currentValue, final double lastValue, final float multiplier) {

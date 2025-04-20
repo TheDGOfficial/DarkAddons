@@ -1,7 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.Skytils;
-
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.Minecraft;
@@ -44,7 +42,7 @@ final class RagAxeStrengthGained {
                                         final var amount = StringUtils.substringBefore(StringUtils.substringAfter(line, "Strength: +"), " ");
                                         try {
                                             final var parsed = Double.parseDouble(amount);
-                                            Skytils.sendMessageQueue.add("/pc Gained strength from rag axe: " + (int) Math.floor(parsed * 1.5));
+                                            DarkAddons.queueUserSentMessageOrCommand("/pc Gained strength from rag axe: " + (int) Math.floor(parsed * 1.5));
                                         } catch (final NumberFormatException nfe) {
                                             DarkAddons.modError(nfe);
                                         }

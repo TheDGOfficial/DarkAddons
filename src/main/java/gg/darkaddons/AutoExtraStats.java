@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.Skytils;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,7 +17,7 @@ final class AutoExtraStats {
             final var unformattedMessage = Utils.removeControlCodes(event.message.getUnformattedText()).trim();
 
             if (formattedMessage.contains("§") && "> EXTRA STATS <".equals(unformattedMessage)) {
-                Skytils.sendMessageQueue.add("/showextrastats");
+                DarkAddons.queueUserSentMessageOrCommand("/showextrastats");
             }
         }
     }

@@ -4,7 +4,6 @@ import com.sun.management.GarbageCollectionNotificationInfo;
 import com.sun.management.HotSpotDiagnosticMXBean;
 import com.sun.management.ThreadMXBean;
 import gg.darkaddons.mixin.MixinUtils;
-import gg.skytils.skytilsmod.Skytils;
 import gg.essential.elementa.ElementaVersion;
 import kotlin.KotlinVersion;
 import net.minecraft.client.Minecraft;
@@ -114,13 +113,16 @@ final class Diagnostics {
 
     @NotNull
     private static final String getSkytilsVersion() {
-        // TODO remove or update this to catch NoClassDefFoundError once no longer depending on Skytils
         try {
             // Since the field is a static final, if we use it directly without reflection, it gets inlined and the version
             // is always the version we use as a dependency on DarkAddons. To get the actual runtime version the user is using,
             // we have to access the field via reflection. Thankfully, even after inlining the string value of the field, the Java
             // compiler still keeps the field around, so we can do this.
-            return Skytils.class.getField("VERSION").get(null).toString();
+            return Class.forName("gg.skytils.skytilsmod.Skytils").getField("VERSION").get(null).toString();
+        } catch (final ClassNotFoundException cnfe) {
+            // The Skytils mod is either not installed or we are living in a future where Skytils devs changed the main class name.
+            // In either case, return not found, since even if Skytils is installed but the class name is changed, we technically did not find it hence not found is correct here.
+            return "not found";
         } catch (final NoSuchFieldException | IllegalAccessException ignored) {
             // The field is public and exists at nearly all versions, if this happens we are probably in a future where Skytils devs changed
             // the visibility or name of the field, return unknown.
