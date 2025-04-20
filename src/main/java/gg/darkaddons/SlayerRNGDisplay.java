@@ -315,6 +315,7 @@ final class SlayerRNGDisplay extends GuiElement {
     private static final void registerPriceUpdateTask() {
         if (null != SlayerRNGDisplay.scheduledPriceUpdateTask) {
             SlayerRNGDisplay.scheduledPriceUpdateTask.cancel(false);
+            SlayerRNGDisplay.scheduledPriceUpdateTask = null;
         }
         SlayerRNGDisplay.scheduledPriceUpdateTask = SlayerRNGDisplay.scheduler.scheduleWithFixedDelay(SlayerRNGDisplay.priceUpdateTask, 0L, 1L, TimeUnit.MINUTES);
     }
