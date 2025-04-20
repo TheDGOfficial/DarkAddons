@@ -20,6 +20,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 final class GuiManager {
     GuiManager() {
@@ -31,7 +32,7 @@ final class GuiManager {
 
     @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"})
     @NotNull
-    private static final ArrayList<String> titleQueue = new ArrayList<>(1);
+    private static final ConcurrentLinkedQueue<String> titleQueue = new ConcurrentLinkedQueue<>();
 
     @Nullable
     private static String title;
