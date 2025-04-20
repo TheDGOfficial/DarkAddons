@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
-import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -117,7 +116,6 @@ abstract class SimpleGuiElement extends GuiElement {
             };
 
             final var fontHeight = GuiElement.getFontHeight();
-            final var color = CommonColors.Companion.getWHITE();
 
             final var length = this.linesToRenderSize;
 
@@ -126,7 +124,6 @@ abstract class SimpleGuiElement extends GuiElement {
                     this.linesToRender.get(i),
                     xPos,
                     i * fontHeight,
-                    color,
                     alignment,
                     shadow
                 );

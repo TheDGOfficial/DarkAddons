@@ -490,7 +490,7 @@ public final class DarkAddons {
         return gg.skytils.skytilsmod.utils.Utils.INSTANCE.getInSkyblock();
     }
 
-    static final boolean isInDungeons() {
+    public static final boolean isInDungeons() {
         return gg.skytils.skytilsmod.utils.Utils.INSTANCE.getInDungeons();
     }
 
@@ -537,6 +537,17 @@ public final class DarkAddons {
 
         // We don't need to check for perks if Paul is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
         return null != jerryMayor && "Paul".equals(jerryMayor.getName());
+    }
+
+    static final boolean isAatroxRareDropPerkActive() {
+        if (MayorInfo.INSTANCE.getAllPerks().contains("Pathfinder")) {
+            return true;
+        }
+
+        final var jerryMayor = MayorInfo.INSTANCE.getJerryMayor();
+
+        // We don't need to check for perks if Aatrox is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
+        return null != jerryMayor && "Aatrox".equals(jerryMayor.getName());
     }
 
     /**

@@ -2,7 +2,6 @@ package gg.darkaddons;
 
 import com.google.common.collect.EvictingQueue;
 import gg.skytils.skytilsmod.utils.SBInfo;
-import gg.skytils.skytilsmod.features.impl.handlers.MayorInfo;
 import gg.skytils.skytilsmod.utils.SkyblockIsland;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
@@ -421,10 +420,7 @@ final class SlayerRNGDisplay extends GuiElement {
             final var alignment = leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT;
             final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
-            final var shadow = SmartFontRenderer.TextShadow.NONE;
-
             final var fontHeight = GuiElement.getFontHeight();
-            final var color = CommonColors.Companion.getWHITE();
 
             final var length = SlayerRNGDisplay.linesToRenderSize;
 
@@ -433,9 +429,7 @@ final class SlayerRNGDisplay extends GuiElement {
                     SlayerRNGDisplay.linesToRender.get(i),
                     xPos,
                     i * fontHeight,
-                    color,
-                    alignment,
-                    shadow
+                    alignment
                 );
             }
 
@@ -537,9 +531,9 @@ final class SlayerRNGDisplay extends GuiElement {
 
         DUPLEX_I_BOOK("ENCHANTED_BOOK-ULTIMATE_REITERATE-1", 23_220, 2.153_3D, SlayerRNGDisplay.Slayer.BLAZE, 6, 4, 3, SlayerRNGDisplay.SellingMethod.BAZAAR),
 
-        HIGH_CLASS_ARCHFIEND_DICE(194_939, 0.256_5D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 5 : "Aatrox".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 2),
+        HIGH_CLASS_ARCHFIEND_DICE(194_939, 0.256_5D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 5 : DarkAddons.isAatroxRareDropPerkActive() ? 4 : 2),
 
-        GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 10_649, 4.695_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor()) ? 4 : 1, SlayerRNGDisplay.SellingMethod.BAZAAR),
+        GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 10_649, 4.695_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> DarkAddons.isDerpy() ? 4 : 1, SlayerRNGDisplay.SellingMethod.BAZAAR),
 
         MC_GRUBBERS_BURGER(18_450, 1.219_5D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 4, () -> Config.isBurgersDone() ? 1 : 4, SlayerRNGDisplay.SellingMethod.NONE, "McGrubber's Burger"),
 

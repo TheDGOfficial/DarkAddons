@@ -169,7 +169,7 @@ final class RunsTillCA50 {
         private final DungeonData catacombs;
 
         @NotNull
-        private final Map<gg.skytils.skytilsmod.utils.DungeonClass, Double> classExperiencesMap;
+        private final Map<RunsTillCA50.DungeonClass, Double> classExperiencesMap;
 
         private final long currentCompletions;
 
@@ -179,7 +179,7 @@ final class RunsTillCA50 {
         final double archerXp;
         final double tankXp;
 
-        private PlayerDataHolder(@NotNull final DungeonData catacombsIn, @NotNull final Map<gg.skytils.skytilsmod.utils.DungeonClass, Double> classExperiencesMapIn, final long currentCompletionsIn, final double healerXpIn, final double mageXpIn, final double berserkerXpIn, final double archerXpIn, final double tankXpIn) {
+        private PlayerDataHolder(@NotNull final DungeonData catacombsIn, @NotNull final Map<RunsTillCA50.DungeonClass, Double> classExperiencesMapIn, final long currentCompletionsIn, final double healerXpIn, final double mageXpIn, final double berserkerXpIn, final double archerXpIn, final double tankXpIn) {
             super();
 
             this.catacombs = catacombsIn;
@@ -277,13 +277,13 @@ final class RunsTillCA50 {
                 return null;
             }
 
-            final var classExperiences = new EnumMap<gg.skytils.skytilsmod.utils.DungeonClass, Double>(gg.skytils.skytilsmod.utils.DungeonClass.class);
+            final var classExperiences = new EnumMap<RunsTillCA50.DungeonClass, Double>(RunsTillCA50.DungeonClass.class);
 
-            classExperiences.put(gg.skytils.skytilsmod.utils.DungeonClass.ARCHER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("archer").getExperience(), 0.0D));
-            classExperiences.put(gg.skytils.skytilsmod.utils.DungeonClass.BERSERK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("berserk").getExperience(), 0.0D));
-            classExperiences.put(gg.skytils.skytilsmod.utils.DungeonClass.HEALER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("healer").getExperience(), 0.0D));
-            classExperiences.put(gg.skytils.skytilsmod.utils.DungeonClass.MAGE, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("mage").getExperience(), 0.0D));
-            classExperiences.put(gg.skytils.skytilsmod.utils.DungeonClass.TANK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("tank").getExperience(), 0.0D));
+            classExperiences.put(RunsTillCA50.DungeonClass.ARCHER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("archer").getExperience(), 0.0D));
+            classExperiences.put(RunsTillCA50.DungeonClass.BERSERK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("berserk").getExperience(), 0.0D));
+            classExperiences.put(RunsTillCA50.DungeonClass.HEALER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("healer").getExperience(), 0.0D));
+            classExperiences.put(RunsTillCA50.DungeonClass.MAGE, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("mage").getExperience(), 0.0D));
+            classExperiences.put(RunsTillCA50.DungeonClass.TANK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("tank").getExperience(), 0.0D));
 
             return RunsTillCA50.extractCompletionsAndCreateDataHolder(uuid, m7, catacombs, classExperiences);
         } catch (final Throwable t) {
@@ -293,7 +293,7 @@ final class RunsTillCA50 {
         return null;
     }
 
-    private static final boolean calculateUUID1(@Nullable final UUID uuid, final boolean m7, final boolean derpy, final DungeonData catacombs, @NotNull final Map<gg.skytils.skytilsmod.utils.DungeonClass, Double> classExperiences, @NotNull final RunsTillCA50.Mode mode, final long currentCompletions) {
+    private static final boolean calculateUUID1(@Nullable final UUID uuid, final boolean m7, final boolean derpy, final DungeonData catacombs, @NotNull final Map<RunsTillCA50.DungeonClass, Double> classExperiences, @NotNull final RunsTillCA50.Mode mode, final long currentCompletions) {
         var formattedRankAndName = RunsTillCA50.rankCache.getIfPresent(uuid);
 
         if (null == formattedRankAndName) {
@@ -308,7 +308,7 @@ final class RunsTillCA50 {
             RunsTillCA50.rankCache.put(uuid, formattedRankAndName);
         }
 
-        return RunsTillCA50.calculateDirect(RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.TANK), 0.0D), catacombs.getExperience(), m7, currentCompletions, formattedRankAndName, derpy, mode);
+        return RunsTillCA50.calculateDirect(RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.TANK), 0.0D), catacombs.getExperience(), m7, currentCompletions, formattedRankAndName, derpy, mode);
     }
 
     @NotNull
@@ -326,13 +326,13 @@ final class RunsTillCA50 {
         }
     }
 
-    private static final @NotNull RunsTillCA50.PlayerDataHolder extractCompletionsAndCreateDataHolder(@NotNull final UUID uuid, final boolean m7, final DungeonData catacombs, @NotNull final Map<gg.skytils.skytilsmod.utils.DungeonClass, Double> classExperiences) {
+    private static final @NotNull RunsTillCA50.PlayerDataHolder extractCompletionsAndCreateDataHolder(@NotNull final UUID uuid, final boolean m7, final DungeonData catacombs, @NotNull final Map<RunsTillCA50.DungeonClass, Double> classExperiences) {
         final var master = catacombs.getMaster();
         final var masterCompletions = null == master ? null : RunsTillCA50.extractCompletionsCatching(master);
 
         final var currentCompletions = null == masterCompletions ? 0.0D : RunsTillCA50.defaultIfNull(masterCompletions.get(m7 ? "7" : "6"), 0.0D);
 
-        final var data = new RunsTillCA50.PlayerDataHolder(catacombs, classExperiences, (long) currentCompletions, RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(gg.skytils.skytilsmod.utils.DungeonClass.TANK), 0.0D));
+        final var data = new RunsTillCA50.PlayerDataHolder(catacombs, classExperiences, (long) currentCompletions, RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.TANK), 0.0D));
 
         if (Minecraft.getMinecraft().thePlayer.getUniqueID().equals(uuid)) {
             RunsTillCA50.lastData = data;

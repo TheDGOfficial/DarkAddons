@@ -98,6 +98,10 @@ abstract class GuiElement {
         GuiElement.drawString(text, xPos, yPos, CommonColors.Companion.getWHITE(), alignment);
     }
 
+    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final SmartFontRenderer.TextAlignment alignment, @NotNull final SmartFontRenderer.TextShadow shadow) {
+        GuiElement.drawString(text, xPos, yPos, CommonColors.Companion.getWHITE(), alignment, shadow);
+    }
+
     static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final CommonColors color, @NotNull final SmartFontRenderer.TextAlignment alignment) {
         GuiElement.drawString(text, xPos, yPos, color, alignment, SmartFontRenderer.TextShadow.NONE);
     }

@@ -4,7 +4,6 @@ import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import gg.skytils.skytilsmod.listeners.DungeonListener;
-import gg.skytils.skytilsmod.utils.DungeonClass;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +26,7 @@ final class ClassAverage50Display extends GuiElement {
     private static ClassAverage50Display.DungeonFloor lastDoneFloor;
 
     @Nullable
-    private static DungeonClass lastPlayedClass;
+    private static RunsTillCA50.DungeonClass lastPlayedClass;
 
     private static double healerExperience;
 
@@ -258,12 +257,18 @@ final class ClassAverage50Display extends GuiElement {
     }
 
     @Nullable
-    private static final DungeonClass findClass(@NotNull final EnumMap<DungeonClass, Integer> classes) {
+    private static final RunsTillCA50.DungeonClass findClass(@NotNull final EnumMap<RunsTillCA50.DungeonClass, Integer> classes) {
         final var self = Minecraft.getMinecraft().thePlayer;
         for (final var teammate : DungeonListener.INSTANCE.getTeam().values()) {
             //noinspection ObjectEquality
             if (self == teammate.getPlayer()) {
-                return ClassAverage50Display.lastPlayedClass = teammate.getDungeonClass();
+                final var dungeonClass = teammate.getDungeonClass();
+                if (null != dungeonClass) {
+                    final var name  = dungeonClass.name();
+                    if (!"EMPTY".equals(name)) {
+                        return ClassAverage50Display.lastPlayedClass = RunsTillCA50.DungeonClass.valueOf(name);
+                    }
+                }
             }
         }
 
@@ -271,10 +276,10 @@ final class ClassAverage50Display extends GuiElement {
     }
 
     @Nullable
-    private static final DungeonClass findMinRunsLeftClass(@SuppressWarnings("CollectionDeclaredAsConcreteClass") @NotNull final EnumMap<DungeonClass, Integer> classes) {
+    private static final RunsTillCA50.DungeonClass findMinRunsLeftClass(@SuppressWarnings("CollectionDeclaredAsConcreteClass") @NotNull final EnumMap<RunsTillCA50.DungeonClass, Integer> classes) {
         final var entrySet = classes.entrySet();
 
-        DungeonClass minRunsLeftClass = null;
+        RunsTillCA50.DungeonClass minRunsLeftClass = null;
         var minRunsLeft = Integer.MAX_VALUE;
 
         for (final var entry : entrySet) {
@@ -291,14 +296,14 @@ final class ClassAverage50Display extends GuiElement {
     }
 
     @NotNull
-    private static final EnumMap<DungeonClass, Integer> createRunsMap(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns) {
-        final var classes = new EnumMap<DungeonClass, Integer>(DungeonClass.class);
+    private static final EnumMap<RunsTillCA50.DungeonClass, Integer> createRunsMap(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns) {
+        final var classes = new EnumMap<RunsTillCA50.DungeonClass, Integer>(RunsTillCA50.DungeonClass.class);
 
-        classes.put(DungeonClass.HEALER, healerRuns);
-        classes.put(DungeonClass.MAGE, mageRuns);
-        classes.put(DungeonClass.BERSERK, berserkRuns);
-        classes.put(DungeonClass.ARCHER, archerRuns);
-        classes.put(DungeonClass.TANK, tankRuns);
+        classes.put(RunsTillCA50.DungeonClass.HEALER, healerRuns);
+        classes.put(RunsTillCA50.DungeonClass.MAGE, mageRuns);
+        classes.put(RunsTillCA50.DungeonClass.BERSERK, berserkRuns);
+        classes.put(RunsTillCA50.DungeonClass.ARCHER, archerRuns);
+        classes.put(RunsTillCA50.DungeonClass.TANK, tankRuns);
 
         return classes;
     }
@@ -323,7 +328,7 @@ final class ClassAverage50Display extends GuiElement {
         return DarkAddons.isDerpy() ? "Derpy " : "";
     }
 
-    private static final void classes0(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns, @Nullable final DungeonClass preferred, final int compactness, @NotNull final String floorName) {
+    private static final void classes0(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns, @Nullable final RunsTillCA50.DungeonClass preferred, final int compactness, @NotNull final String floorName) {
         final var showZeroRuns = 1 >= compactness;
         final var showNonPreferred = 2 >= compactness;
 
@@ -331,23 +336,23 @@ final class ClassAverage50Display extends GuiElement {
 
         final var suffix = ' ' + ClassAverage50Display.getDerpyText() + floorName + " Runs";
 
-        if ((0 < healerRuns || showZeroRuns) && (showNonPreferred || DungeonClass.HEALER == preferred)) {
+        if ((0 < healerRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.HEALER == preferred)) {
             hud.add("§a❤ Healer: " + healerRuns + suffix);
         }
 
-        if ((0 < mageRuns || showZeroRuns) && (showNonPreferred || DungeonClass.MAGE == preferred)) {
+        if ((0 < mageRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.MAGE == preferred)) {
             hud.add("§b✎ Mage: " + mageRuns + suffix);
         }
 
-        if ((0 < berserkRuns || showZeroRuns) && (showNonPreferred || DungeonClass.BERSERK == preferred)) {
+        if ((0 < berserkRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.BERSERK == preferred)) {
             hud.add("§c⚔ Berserk: " + berserkRuns + suffix);
         }
 
-        if ((0 < archerRuns || showZeroRuns) && (showNonPreferred || DungeonClass.ARCHER == preferred)) {
+        if ((0 < archerRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.ARCHER == preferred)) {
             hud.add("§6➶ Archer: " + archerRuns + suffix);
         }
 
-        if ((0 < tankRuns || showZeroRuns) && (showNonPreferred || DungeonClass.TANK == preferred)) {
+        if ((0 < tankRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.TANK == preferred)) {
             hud.add("§7❈ Tank: " + tankRuns + suffix);
         }
     }
@@ -432,7 +437,6 @@ final class ClassAverage50Display extends GuiElement {
                 };
 
                 final var fontHeight = GuiElement.getFontHeight();
-                final var color = CommonColors.Companion.getWHITE();
 
                 final var length = ClassAverage50Display.linesToRenderSize;
 
@@ -441,7 +445,6 @@ final class ClassAverage50Display extends GuiElement {
                         ClassAverage50Display.linesToRender.get(i),
                         xPos,
                         i * fontHeight,
-                        color,
                         alignment,
                         shadow
                     );

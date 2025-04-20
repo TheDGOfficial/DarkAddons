@@ -2,7 +2,6 @@ package gg.darkaddons;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
-import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.event.world.WorldEvent;
@@ -202,8 +201,6 @@ final class M7DragonDisplay extends GuiElement {
 
             final var fontHeight = GuiElement.getFontHeight();
 
-            final var color = CommonColors.Companion.getWHITE();
-
             final var drags = WitherKingDragons.getValues();
             final var length = WitherKingDragons.getValuesLength();
             for (var i = 0; i < length; ++i) {
@@ -211,7 +208,6 @@ final class M7DragonDisplay extends GuiElement {
                     M7DragonDisplay.getDragonInfoText(drags[i], demo),
                     xPos,
                     i * fontHeight,
-                    color,
                     alignment,
                     shadow
                 );
