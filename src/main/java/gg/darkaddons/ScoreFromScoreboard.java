@@ -60,7 +60,7 @@ final class ScoreFromScoreboard {
             fixedScore += 28;
         }
 
-        if (ScoreFromScoreboard.blazeDoneReceived && DungeonListener.INSTANCE.getMissingPuzzles().contains("Higher Or Lower")) {
+        if (ScoreFromScoreboard.blazeDoneReceived && DungeonListener.INSTANCE.getIncompletePuzzles().contains("Higher Or Lower")) {
             fixedScore += 14;
         }
 
