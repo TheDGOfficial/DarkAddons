@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import gg.skytils.skytilsmod.utils.Utils;
+import gg.darkaddons.DarkAddons;
 
 @Pseudo
 @Mixin(targets = "gg.skytils.skytilsmod.features.impl.misc.MiscFeatures$WorldAgeDisplay", priority = 999)
@@ -19,7 +19,7 @@ final class MixinWorldAgeDisplay {
     @Inject(method = "getToggled", at = @At("RETURN"), remap = false, cancellable = true)
     private final void getToggled$darkaddons(@NotNull final CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) {
-            cir.setReturnValue(!Utils.INSTANCE.getInDungeons());
+            cir.setReturnValue(!DarkAddons.isInDungeons());
         }
     }
 }

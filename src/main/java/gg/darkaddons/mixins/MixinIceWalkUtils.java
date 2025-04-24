@@ -11,7 +11,8 @@ import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
-import gg.skytils.skytilsmod.utils.Utils;
+
+import gg.darkaddons.DarkAddons;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ final class MixinIceWalkUtils {
 
     @Inject(method = "findSolution", remap = false, at = @At("HEAD"))
     private static final void findSolution$darkaddons(final char[] @NotNull [] board, @NotNull @Coerce final Object startPos, @NotNull @Coerce final Object endPos, @NotNull final List<Object> route, @NotNull final CallbackInfoReturnable<List<Object>> cir) {
-        if (-1L != DungeonTimer.INSTANCE.getBossEntryTime() || !Utils.INSTANCE.getInDungeons()) {
+        if (-1L != DungeonTimer.INSTANCE.getBossEntryTime() || !DarkAddons.isInDungeons()) {
             cir.setReturnValue(new ArrayList<>(0));
         }
     }
