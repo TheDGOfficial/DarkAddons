@@ -417,7 +417,6 @@ final class SlayerRNGDisplay extends GuiElement {
 
         if (demo || this.isEnabled() && !DarkAddons.isInLocationEditingGui() && null != slayer && slayer.hasActiveQuest && slayer.isInSlayerArea()) {
             final var leftAlign = this.shouldLeftAlign();
-            final var alignment = leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT;
             final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
             final var fontHeight = GuiElement.getFontHeight();
@@ -429,7 +428,7 @@ final class SlayerRNGDisplay extends GuiElement {
                     SlayerRNGDisplay.linesToRender.get(i),
                     xPos,
                     i * fontHeight,
-                    alignment
+                    leftAlign
                 );
             }
 

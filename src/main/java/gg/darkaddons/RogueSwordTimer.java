@@ -52,7 +52,7 @@ final class RogueSwordTimer extends GuiElement {
                     RogueSwordTimer.getDisplayText(demo ? RogueSwordTimer.DEMO_TIME : timeLeftInMs),
                     leftAlign ? 0.0F : this.getWidth(demo),
                     0.0F,
-                    leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT
+                    leftAlign
                 );
             }
         }

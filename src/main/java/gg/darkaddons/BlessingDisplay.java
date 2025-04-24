@@ -228,7 +228,6 @@ final class BlessingDisplay extends GuiElement {
     final void render(final boolean demo) {
         if (demo || this.isEnabled() && DarkAddons.isInSkyblock() && DarkAddons.isInDungeons() && !DarkAddons.isInLocationEditingGui()) {
             final var leftAlign = this.shouldLeftAlign();
-            final var alignment = leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT;
             final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
             final var fontHeight = GuiElement.getFontHeight();
@@ -267,7 +266,7 @@ final class BlessingDisplay extends GuiElement {
                         xPos,
                         filteredIndex * fontHeight,
                         color,
-                        alignment
+                        leftAlign
                     );
 
                     ++filteredIndex;

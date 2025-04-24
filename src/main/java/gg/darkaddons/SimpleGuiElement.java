@@ -106,7 +106,6 @@ abstract class SimpleGuiElement extends GuiElement {
     final void render(final boolean demo) {
         if (demo || this.isEnabled() && !DarkAddons.isInLocationEditingGui() && this.renderPreconditions.getAsBoolean()) {
             final var leftAlign = this.shouldLeftAlign();
-            final var alignment = leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT;
             final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
             final var shadow = switch (this.shadowSelection.getAsInt()) {
@@ -124,7 +123,7 @@ abstract class SimpleGuiElement extends GuiElement {
                     this.linesToRender.get(i),
                     xPos,
                     i * fontHeight,
-                    alignment,
+                    leftAlign,
                     shadow
                 );
             }

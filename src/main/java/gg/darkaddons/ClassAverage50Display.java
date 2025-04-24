@@ -427,7 +427,6 @@ final class ClassAverage50Display extends GuiElement {
 
             if (demo || shouldRender) {
                 final var leftAlign = this.shouldLeftAlign();
-                final var alignment = leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT;
                 final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
                 final var shadow = switch (Config.getClassAverage50DisplayShadow()) {
@@ -445,7 +444,7 @@ final class ClassAverage50Display extends GuiElement {
                         ClassAverage50Display.linesToRender.get(i),
                         xPos,
                         i * fontHeight,
-                        alignment,
+                        leftAlign,
                         shadow
                     );
                 }

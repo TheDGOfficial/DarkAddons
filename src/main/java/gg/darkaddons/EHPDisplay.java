@@ -97,7 +97,7 @@ final class EHPDisplay extends GuiElement {
                 EHPDisplay.getEhpDisplayText(demo ? EHPDisplay.DEMO_EHP : EHPDisplay.ehp, demo),
                 leftAlign ? 0.0F : this.getWidth(demo),
                 0.0F,
-                leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT
+                leftAlign
             );
         }
     }

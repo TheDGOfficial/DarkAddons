@@ -101,7 +101,7 @@ final class CenturyRaffleTicketTimer extends GuiElement {
                 CenturyRaffleTicketTimer.getDisplayTextForPtTicket(demo ? CenturyRaffleTicketTimer.DEMO_TIME : ptTimeLeftInMs),
                 leftAlign ? 0.0F : this.getWidth(demo),
                 0.0F,
-                leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT
+                leftAlign
             );
 
             if (changedPt) {

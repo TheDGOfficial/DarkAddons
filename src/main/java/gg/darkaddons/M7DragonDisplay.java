@@ -190,7 +190,6 @@ final class M7DragonDisplay extends GuiElement {
     final void render(final boolean demo) {
         if (demo || this.isEnabled() && DarkAddons.isInSkyblock() && DarkAddons.isInDungeons() && -1L != DungeonTimer.INSTANCE.getPhase4ClearTime() && AdditionalM7Features.isInM7() && !DarkAddons.isInLocationEditingGui()) {
             final var leftAlign = this.shouldLeftAlign();
-            final var alignment = leftAlign ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT;
             final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
             final var shadow = switch (Config.getDragonHudShadow()) {
@@ -208,7 +207,7 @@ final class M7DragonDisplay extends GuiElement {
                     M7DragonDisplay.getDragonInfoText(drags[i], demo),
                     xPos,
                     i * fontHeight,
-                    alignment,
+                    leftAlign,
                     shadow
                 );
             }
