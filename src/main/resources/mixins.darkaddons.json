@@ -93,7 +93,8 @@
         "MixinRomanNumeralParser",
         "MixinTabListUtils",
         "MixinTabListParser",
-        "IMixinS3BPacketScoreboardObjective"
+        "IMixinS3BPacketScoreboardObjective",
+        "MixinSBInfo"
     ],
     "server": [
     ],
