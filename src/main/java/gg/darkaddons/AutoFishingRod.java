@@ -75,11 +75,13 @@ final class AutoFishingRod {
 
     @Nullable
     private static final EntityArmorStand findAndAssignCountdownArmorStand() {
-        for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-            if (entity instanceof final EntityArmorStand armorStand && AutoFishingRod.isCountdownArmorStand(armorStand)) {
-                AutoFishingRod.countdownArmorStand = new WeakReference<>(armorStand);
+        if (AutoFishingRod.hasActiveBobber()) {
+            for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+                if (entity instanceof final EntityArmorStand armorStand && AutoFishingRod.isCountdownArmorStand(armorStand)) {
+                    AutoFishingRod.countdownArmorStand = new WeakReference<>(armorStand);
 
-                return armorStand;
+                    return armorStand;
+                }
             }
         }
 
@@ -142,9 +144,11 @@ final class AutoFishingRod {
     }
 
     private static final boolean hasActiveBobber() {
-        for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-            if (entity instanceof final EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler && AutoFishingRod.isHoldingRod()) {
-                return true;
+        if (AutoFishingRod.isHoldingRod()) {
+            for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+                if (entity instanceof final EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler) {
+                    return true;
+                }
             }
         }
         return false;
@@ -155,23 +159,32 @@ final class AutoFishingRod {
         AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false);
     }
 
+    private static final void throwBobberOnceNoBobber(final boolean initialBobber) {
+        if (!initialBobber) {
+            AutoFishingRod.throwBobber();
+        } else {
+            Utils.awaitCondition(() -> !AutoFishingRod.hasActiveBobber(), AutoFishingRod::throwBobber);
+        }
+    }
+
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public final void onClientChatReceived(@NotNull final ClientChatReceivedEvent event) {
         if (Config.isAutoFishingRod() && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type) && DarkAddons.isPlayerInCrimsonIsle() && AutoFishingRod.isHoldingRod()) {
             final var formattedMessage = event.message.getFormattedText();
-            final var unformattedMessage = Utils.removeControlCodes(event.message.getUnformattedText()).trim();
 
             if (formattedMessage.contains("§")) {
-                if (!AutoFishingRod.hasActiveBobber() && "You spot a Golden Fish surface from beneath the lava!".equals(unformattedMessage)) {
+                final var hasActiveBobber = AutoFishingRod.hasActiveBobber();
+                final var unformattedMessage = Utils.removeControlCodes(event.message.getUnformattedText()).trim();
+                if (!hasActiveBobber && "You spot a Golden Fish surface from beneath the lava!".equals(unformattedMessage)) {
                     AutoFishingRod.throwBobber();
                 } else if (Config.isAutoFishingRodGoldenFishMode() && ("The Golden Fish escapes your hook.".equals(unformattedMessage) || "The Golden Fish escapes your hook but looks weakened.".equals(unformattedMessage))) {
-                    Utils.awaitCondition(() -> !AutoFishingRod.hasActiveBobber(), AutoFishingRod::throwBobber);
+                    AutoFishingRod.throwBobberOnceNoBobber(hasActiveBobber);
                 } else if (Config.isAutoFishingRodGoldenFishMode() && "The Golden Fish is weak!".equals(unformattedMessage)) {
                     AutoFishingRod.throwBobber();
-                } else if (!AutoFishingRod.hasActiveBobber() && "The Golden Fish swims back beneath the lava...".equals(unformattedMessage)) {
+                } else if (!hasActiveBobber && "The Golden Fish swims back beneath the lava...".equals(unformattedMessage)) {
                     AutoFishingRod.throwBobber();
                 } else if (Config.isAutoFishingRodGoldenFishMode() && unformattedMessage.startsWith("♔ TROPHY FISH! You caught a Golden Fish ")) {
-                    Utils.awaitCondition(() -> !AutoFishingRod.hasActiveBobber(), AutoFishingRod::throwBobber);
+                    AutoFishingRod.throwBobberOnceNoBobber(hasActiveBobber);
                 }
             }
         }
