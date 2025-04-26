@@ -275,7 +275,7 @@ final class AutoFishingRod {
                         AutoFishingRod.countdownArmorStand = null;
                     }
                 }
-            } else if (!Config.isAutoFishingRodSlugfishMode() && Config.isAutoFishingRodGoldenFishMode() && 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime && DarkAddons.isPlayerInCrimsonIsle() && (bobber = AutoFishingRod.getActiveBobber()) != null) {
+            } else if (!Config.isAutoFishingRodSlugfishMode() && Config.isAutoFishingRodGoldenFishMode() && 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime && DarkAddons.isPlayerInCrimsonIsle() && AutoFishingRod.hasActiveBobber()) {
                 AutoFishingRod.lastRodThrowTime = System.currentTimeMillis();
                 AutoFishingRod.reThrowBobber();
             }
