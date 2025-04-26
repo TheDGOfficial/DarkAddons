@@ -154,6 +154,11 @@ final class AutoFishingRod {
         return false;
     }
 
+    private static final void reThrowBobber() {
+        AutoFishingRod.hooking = true;
+        AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
+    }
+
     private static final void throwBobber() {
         AutoFishingRod.hooking = true;
         AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false);
@@ -257,8 +262,7 @@ final class AutoFishingRod {
                 if (ready && (!Config.isAutoFishingRodSlugfishMode() || 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime)) {
                     if (Config.isAutoFishingRodRecast()) {
                         // Right-clicks 2 times one after other with set delay, one for getting the catch and one for recasting the rod.
-                        AutoFishingRod.hooking = true;
-                        AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
+                        AutoFishingRod.reThrowBobber();
                     } else {
                         // Right-clicks 1 time with set delay to get the catch. Does not recast as per the configuration setting.
                         AutoFishingRod.throwBobber();
@@ -271,11 +275,9 @@ final class AutoFishingRod {
                         AutoFishingRod.countdownArmorStand = null;
                     }
                 }
-            } else if (!Config.isAutoFishingRodSlugfishMode() && Config.isAutoFishingRodGoldenFishMode() && 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime && DarkAddons.isPlayerInCrimsonIsle() && AutoFishingRod.hasActiveBobber()) {
-                AutoFishingRod.hooking = true;
+            } else if (!Config.isAutoFishingRodSlugfishMode() && Config.isAutoFishingRodGoldenFishMode() && 10_000L <= System.currentTimeMillis() - AutoFishingRod.lastRodThrowTime && DarkAddons.isPlayerInCrimsonIsle() && (bobber = AutoFishingRod.getActiveBobber()) != null) {
                 AutoFishingRod.lastRodThrowTime = System.currentTimeMillis();
-
-                AutoFishingRod.queueRightClick(() -> AutoFishingRod.queueRightClick(() -> AutoFishingRod.hooking = false));
+                AutoFishingRod.reThrowBobber();
             }
         }
     }
