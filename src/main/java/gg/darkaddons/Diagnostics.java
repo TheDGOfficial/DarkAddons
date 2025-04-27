@@ -102,8 +102,10 @@ final class Diagnostics {
         Utils.newThread(Diagnostics::watchdogLoop, "DarkAddons Watchdog Thread").start();
 
         Diagnostics.calculatorThread.scheduleWithFixedDelay(() -> {
-            final var framesThisSecond = Diagnostics.frameCount.getAndSet(0);
-            Diagnostics.lastFPS = framesThisSecond;
+            if (Config.isFpsDisplay()) {
+                final var framesThisSecond = Diagnostics.frameCount.getAndSet(0);
+                Diagnostics.lastFPS = framesThisSecond;
+            }
         }, 1L, 1L, TimeUnit.SECONDS);
     }
 
@@ -521,7 +523,9 @@ final class Diagnostics {
 
     static final void handleGameLoopPost() {
         Diagnostics.gameLoopEnd = System.nanoTime();
-        Diagnostics.frameCount.incrementAndGet();
+        if (Config.isFpsDisplay()) {
+            Diagnostics.frameCount.incrementAndGet();
+        }
 
         // Maths.abs technically not necessary anymore after the switch from System#currentTimeMillis into System#nanoTime,
         // but leave it as a hardening measure or in case we swap back to System#currentTimeMillis again.

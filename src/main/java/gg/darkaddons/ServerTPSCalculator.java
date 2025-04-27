@@ -34,11 +34,13 @@ final class ServerTPSCalculator {
 
     static {
         ServerTPSCalculator.calculatorThread.scheduleWithFixedDelay(() -> {
-            final var ticksThisSecond = ServerTPSCalculator.tickCount.getAndSet(0);
-            ServerTPSCalculator.lastTPS = Math.min(20, ticksThisSecond);
+            if (Config.isTpsDisplay()) {
+                final var ticksThisSecond = ServerTPSCalculator.tickCount.getAndSet(0);
+                ServerTPSCalculator.lastTPS = Math.min(20, ticksThisSecond);
 
-            if (!ServerTPSCalculator.initialized && ticksThisSecond > 0) {
-                ServerTPSCalculator.initialized = true;
+                if (!ServerTPSCalculator.initialized && ticksThisSecond > 0) {
+                    ServerTPSCalculator.initialized = true;
+                }
             }
         }, 1L, 1L, TimeUnit.SECONDS);
     }
@@ -50,9 +52,11 @@ final class ServerTPSCalculator {
      * and if we do we can assume the tps is correct, otherwise we will show the TPS as loading.
      */
     static final void onWorldUnload() {
-        ServerTPSCalculator.initialized = false;
-        ServerTPSCalculator.lastTPS = 0;
-        ServerTPSCalculator.tickCount.set(0);
+        if (Config.isTpsDisplay()) {
+            ServerTPSCalculator.initialized = false;
+            ServerTPSCalculator.lastTPS = 0;
+            ServerTPSCalculator.tickCount.set(0);
+        }
     }
 
     /**
@@ -63,7 +67,7 @@ final class ServerTPSCalculator {
      * (e.g the integrated server in single player worlds).
      */
     static final void handlePacket(@NotNull final Packet<?> packet) {
-        if (packet instanceof final S32PacketConfirmTransaction pct) {
+        if (Config.isTpsDisplay() && packet instanceof final S32PacketConfirmTransaction pct) {
             if (pct.getActionNumber() < 1) {
                 ServerTPSCalculator.tickCount.incrementAndGet();
             }

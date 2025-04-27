@@ -81,9 +81,4 @@ final class MixinNetHandlerPlayClient {
             tileEntity.onDataPacket(networkManager, packet);
         }
     }
-
-    @Inject(method = "addToSendQueue", at = @At("HEAD"))
-    private final void onSendPacket(@NotNull final Packet<?> packet, @NotNull final CallbackInfo ci) {
-        DarkAddons.onPacketSent(packet);
-    }
 }
