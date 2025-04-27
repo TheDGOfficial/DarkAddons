@@ -23,6 +23,18 @@ final class RemoveBlankArmorStands {
         super();
     }
 
+    private static final boolean isInventoryEmpty(@NotNull final Entity entity) {
+        var hasNoItems = true;
+        for (final var item : entity.getInventory()) {
+            //noinspection VariableNotUsedInsideIf
+            if (null != item) {
+                hasNoItems = false;
+                break;
+            }
+        }
+        return hasNoItems;
+    }
+
     static final boolean removeIfBlankArmorStand(@NotNull final WorldClient world, @NotNull final Entity entity) {
         //noinspection ObjectEquality
         if ((!AdditionalM7Features.isInM7OrF7() || AdditionalM7Features.phase5Started) && AdditionalM7Features.canRemoveBlankArmorStands() && 0.0D == entity.motionX && 0.0D == entity.motionY && 0.0D == entity.motionZ && Minecraft.getMinecraft().thePlayer.ridingEntity != entity) {
@@ -30,21 +42,20 @@ final class RemoveBlankArmorStands {
             NameTagCache.setLastNameTag(nameTag);
 
             if (nameTag.isEmpty()) {
-                var hasNoItems = true;
-                for (final var item : entity.getInventory()) {
-                    //noinspection VariableNotUsedInsideIf
-                    if (null != item) {
-                        hasNoItems = false;
-                        break;
-                    }
-                }
-                if (hasNoItems) {
+                if (RemoveBlankArmorStands.isInventoryEmpty(entity)) {
                     world.removeEntityFromWorld(entity.getEntityId());
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    static final boolean checkRender(@NotNull final Entity entity) {
+        if (Config.isRemoveBlankArmorStands() && entity.ticksExisted < 10 && entity.getCustomNameTag().isEmpty() && RemoveBlankArmorStands.isInventoryEmpty(entity)) {
+            return false;
+        }
+        return true;
     }
 
     private static final void removeBlankArmorStands() {

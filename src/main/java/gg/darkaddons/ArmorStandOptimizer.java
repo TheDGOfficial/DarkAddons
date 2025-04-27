@@ -290,14 +290,15 @@ final class ArmorStandOptimizer {
         return entity.getUniqueID();
     }
 
-    private static final void doCheckRender0(@NotNull final Entity entity, @SuppressWarnings("BoundedWildcard") @NotNull final CallbackInfoReturnable<Boolean> cir) {
+    private static final boolean doCheckRender0(@NotNull final Entity entity) {
         if (AdditionalM7Features.canHideArmorstands() && ArmorStandOptimizer.shouldHide(ArmorStandOptimizer.getUUID(entity))) {
-            cir.setReturnValue(false);
+            return false;
         }
+        return true;
     }
 
-    static final void checkRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        ArmorStandOptimizer.doCheckRender0(entity, cir);
+    static final boolean checkRender(@NotNull final Entity entity) {
+        return ArmorStandOptimizer.doCheckRender0(entity);
     }
 
     private static final void clearRenderingEntities(@SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"}) @NotNull final HashMap<UUID, Boolean> paramRenderingEntities) {

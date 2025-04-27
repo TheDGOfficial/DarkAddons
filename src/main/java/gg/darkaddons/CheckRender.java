@@ -31,11 +31,20 @@ final class CheckRender {
 
     private static final void forwardCheckRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
         if (Config.isArmorStandOptimizer() && entity instanceof EntityArmorStand) {
-            ArmorStandOptimizer.checkRender(entity, cir);
-        } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntitySkeleton) {
-            HideWitherSkeletons.checkRender((EntitySkeleton) entity, cir);
-        } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntityWitherSkull) {
-            HideWitherSkeletons.checkRenderSkull((EntityWitherSkull) entity, cir);
+            if (!ArmorStandOptimizer.checkRender(entity)) {
+                cir.setReturnValue(false);
+                return;
+            }
+            if (!RemoveBlankArmorStands.checkRender(entity)) {
+                cir.setReturnValue(false);
+                return;
+            }
+        } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntitySkeleton && !HideWitherSkeletons.checkRender((EntitySkeleton) entity)) {
+            cir.setReturnValue(false);
+            return;
+        } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntityWitherSkull && !HideWitherSkeletons.checkRenderSkull((EntityWitherSkull) entity)) {
+            cir.setReturnValue(false);
+            return;
         }
     }
 }
