@@ -20,6 +20,8 @@ final class PingTracker {
     private static final AtomicLong lastSentPacket = new AtomicLong(-1L);
     private static final AtomicLong lastPingNanos = new AtomicLong(-1L);
 
+    private static final AtomicLong cleanupPending = new AtomicLong(-1L);
+
     private static final ScheduledExecutorService trackerThread = Executors.newSingleThreadScheduledExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Ping Tracker Thread"));
 
     static {
@@ -31,14 +33,34 @@ final class PingTracker {
                 }
             }
         }, 1L, 1L, TimeUnit.SECONDS);
+
+        PingTracker.trackerThread.scheduleWithFixedDelay(() -> {
+            if (Config.isPingDisplay()) {
+                final var last = PingTracker.lastSentPacket.get();
+                if (-1L != last) {
+                    final var pending = PingTracker.cleanupPending.get();
+                    if (pending == last) {
+                        PingTracker.reset();
+                        return;
+                    }
+                    PingTracker.cleanupPending.set(last);
+                } else {
+                    PingTracker.cleanupPending.set(-1L);
+                }
+            }
+        }, 5L, 5L, TimeUnit.SECONDS);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public final void onClientDisconnect(@NotNull final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         if (Config.isPingDisplay()) {
-            PingTracker.lastSentPacket.set(-1L);
-            PingTracker.lastPingNanos.set(-1L);
+            PingTracker.reset();
         }
+    }
+
+    static final void reset() {
+        PingTracker.lastSentPacket.set(-1L);
+        PingTracker.lastPingNanos.set(-1L);
     }
 
     static final void onPacketSent(@NotNull final Packet<?> packet) {

@@ -243,7 +243,7 @@ final class Config extends Vigilant {
     @Property(
         type = PropertyType.SWITCH, name = "Ping Display",
         description = "Shows ping on the screen, updating every second. Shows in green if equal or less than 75 Ping, orange if equal or less than 150 Ping, yellow if equal or less than 250 ping, and red otherwise. It will display \"Loading...\" till the Ping is determined when you join a server. This sends a dummy packet to server to determine the ping just like the Skytils implementation, and Skytils implementation notes that there is a slight chance of getting a punishment for the packet, so although unlikely, the same applies to DarkAddons.",
-        category = "Misc", subcategory = "HUD"
+        category = "Misc", subcategory = "HUD", triggerActionOnInitialization = false
     )
     private static boolean pingDisplay;
 
@@ -1058,6 +1058,10 @@ final class Config extends Vigilant {
         TinyConfig.setBoolean("itemModelTransparencyFix", state);
     }
 
+    private static final void resetPingTracker(final boolean state) {
+        PingTracker.reset();
+    }
+
     private final void addDependencies() {
         this.addDependency("sharperDragonBoundingBox", Config.SHOW_STATUE_BOX);
         this.addDependency("dragonBoundingBoxWidth", Config.SHOW_STATUE_BOX);
@@ -1145,6 +1149,7 @@ final class Config extends Vigilant {
         this.registerListener("nullStreamOptimizer", Config::updateNullStreamOptimizer);
 
         this.registerListener("itemModelTransparencyFix", Config::updateItemModelTransparencyFix);
+        this.registerListener("pingDisplay", Config::resetPingTracker);
     }
 
     private final void addDependencyAndListeners() {
