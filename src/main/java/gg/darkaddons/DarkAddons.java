@@ -28,6 +28,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -734,6 +735,33 @@ public final class DarkAddons {
         AutoFishingRod.registerTick();
     }
 
+    private static final void registerAllGuiElements() {
+        // GuiElement's that are also registered to the Forge Event Bus.
+        DarkAddons.registerGuiElements(
+            true,
+            M7DragonDisplay::new,
+            BlessingDisplay::new,
+            GoldenFishTimer::new,
+            TPSDisplay::new
+        );
+
+        // Other GuiElement's that don't need to be registered to the Forge Event Bus.
+        DarkAddons.registerGuiElements(
+            false,
+            EHPDisplay::new,
+            RogueSwordTimer::new,
+            CenturyRaffleTicketTimer::new,
+            ClassAverage50Display::new,
+            SlayerRNGDisplay::new,
+            RejoinCooldownDisplay::new,
+            FPSLimitDisplay::new,
+            UnopenedChestsDisplay::new,
+            FPSDisplay::new,
+            MaxorHPDisplay::new,
+            BlazeEffectTimer::new
+        );
+    }
+
     /**
      * Registers all {@link GuiElement}s and {@link Event}s.
      * <p>
@@ -743,47 +771,82 @@ public final class DarkAddons {
     private static final void registerAll() {
         DarkAddons.registerStatic();
 
-        DarkAddons.register(
-            TickTask.newManager(),
-            new GuiManager(),
-            new M7Features(),
-            new AdditionalM7Features(),
-            new M7DragonDisplay(),
-            new BlessingDisplay(),
-            new EHPDisplay(),
-            new RogueSwordTimer(),
-            new CenturyRaffleTicketTimer(),
-            new ClassAverage50Display(),
-            new SlayerRNGDisplay(),
-            new RejoinCooldownDisplay(),
-            new FPSLimitDisplay(),
-            new RemoveBlankArmorStands(),
-            new HideXPOrbs(),
-            new UnopenedChestsDisplay(),
-            new FPSDisplay(),
-            new TPSDisplay(),
-            new GhostBlock(),
-            new ScoreFromScoreboard(),
-            new RequeueKey(),
-            new AutoExtraStats(),
-            new MaxorHPDisplay(),
-            new GoldenFishTimer(),
-            new AutoFishingRod(),
-            new MelodyMessage(),
-            new ReplaceDiorite(),
-            new BlazeEffectTimer()
+        // GuiElement's don't go here. See above the registerAllGuiElements() method.
+        DarkAddons.registerEventListeners(
+            TickTask::newManager,
+            GuiManager::new,
+            M7Features::new,
+            AdditionalM7Features::new,
+            RemoveBlankArmorStands::new,
+            HideXPOrbs::new,
+            GhostBlock::new,
+            ScoreFromScoreboard::new,
+            RequeueKey::new,
+            AutoExtraStats::new,
+            AutoFishingRod::new,
+            MelodyMessage::new,
+            ReplaceDiorite::new
         );
 
-        DarkAddons.initGuiManager();
+        DarkAddons.registerAllGuiElements();
     }
 
-    private static final void register(@NotNull final Object... all) {
-        for (final var object : all) {
-            if (object instanceof GuiElement) {
-                GuiManager.registerElement((GuiElement) object);
+    @SafeVarargs
+    private static final void registerGuiElements(final boolean hasEvents, @NotNull final Supplier<GuiElement>... guiElements) {
+        for (final var guiElement : guiElements) {
+            // Try-catch: If an event listener can't be registered due to errors, still try to register the next event listeners in the array.
+            try {
+                DarkAddons.registerGuiElement(hasEvents, guiElement.get());
+            } catch (final Throwable error) {
+                DarkAddons.modError(error);
             }
-            MinecraftForge.EVENT_BUS.register(object);
         }
+    }
+
+    private static final void registerGuiElement(final boolean hasEvents, @NotNull final GuiElement guiElement) {
+        if (!hasEvents) {
+            // Sanity-check if the class contains any @SubscribeEvent, if so error out
+            if (DarkAddons.hasAtLeastOneEventListener(guiElement.getClass())) {
+                throw new IllegalArgumentException("Class " + guiElement.getClass().getName() + " has @SubscribeEvent methods and thus should be registered to the Forge Event Bus. Use the registerGuiElement with hasEvents parameter true while registering it.");
+            }
+        }
+
+        GuiManager.registerElement(guiElement);
+
+        if (hasEvents) {
+            DarkAddons.registerEventListener(guiElement);
+        }
+    }
+
+    @SafeVarargs
+    private static final void registerEventListeners(@NotNull final Supplier<Object>... eventListeners) {
+        for (final var eventListener : eventListeners) {
+            // Try-catch: If an event listener can't be registered due to errors, still try to register the next event listeners in the array.
+            try {
+                DarkAddons.registerEventListener(eventListener.get());
+            } catch (final Throwable error) {
+                DarkAddons.modError(error);
+            }
+        }
+    }
+
+    private static final void registerEventListener(@NotNull final Object eventListener) {
+        // Sanity check that class has at least one @SubscribeEvent, otherwise error out
+        if (!DarkAddons.hasAtLeastOneEventListener(eventListener.getClass())) {
+            throw new IllegalArgumentException("Class " + eventListener.getClass().getName() + " has 0 @SubscribeEvent methods and thus should not be registered to the Forge Event Bus.");
+        }
+
+        MinecraftForge.EVENT_BUS.register(eventListener);
+    }
+
+    private static final boolean hasAtLeastOneEventListener(@NotNull final Class<?> clazz) {
+        for (final var method : clazz.getMethods()) {
+            final var annotation = method.getAnnotation(SubscribeEvent.class);
+            if (null != annotation) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static final long getLastGameLoopTime() {
@@ -1279,6 +1342,7 @@ public final class DarkAddons {
             }
             //DarkAddons.runPreDisplayHooks();
             DarkAddons.registerAll();
+            DarkAddons.initGuiManager();
         }).runHandling(DarkAddons::modError);
     }
 
