@@ -53,7 +53,7 @@ final class PingDisplay extends SimpleGuiElement {
 
     @NotNull
     private static final String getPingWithColor(final int pingToColor) {
-        final var color = -1 == pingToColor ? "6" : 75 > pingToColor ? "a" : 150 > pingToColor ? "e" : 250 > pingToColor ? "6" : "c";
+        final var color = -1 == pingToColor ? "6" : 75 > pingToColor ? "a" : 150 > pingToColor ? "6" : 250 > pingToColor ? "e" : "c";
 
         return color + (-1 == pingToColor ? PingDisplay.getLoadingText() : pingToColor);
     }
