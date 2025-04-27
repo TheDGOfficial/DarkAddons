@@ -1100,7 +1100,6 @@ public final class DarkAddons {
      */
     public static final void handleRenderWorldLast(@NotNull final RenderWorldLastEvent event) {
         M7Features.handleRenderWorld(event);
-        ArmorStandOptimizer.renderWorld();
     }
 
     /**
