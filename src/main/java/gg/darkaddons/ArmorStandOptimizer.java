@@ -127,6 +127,8 @@ final class ArmorStandOptimizer {
 
         final var normalStands = new ArrayList<EntityArmorStand>(64);
 
+        ArmorStandOptimizer.armorStandRenderSet.clear();
+
         for (final var entity : world.loadedEntityList) {
             if (entity instanceof final EntityArmorStand stand) {
                 if (shouldDoBlankRemoval && ArmorStandOptimizer.removeBlankArmorStand(world, entity)) {
@@ -142,8 +144,6 @@ final class ArmorStandOptimizer {
                 }
             }
         }
-
-        ArmorStandOptimizer.armorStandRenderSet.clear();
 
         final var limit = Config.getArmorStandLimit();
 
