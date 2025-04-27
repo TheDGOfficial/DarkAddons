@@ -235,7 +235,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "TPS Display",
-        description = "Shows server's TPS on the screen, updating every second. Shows in green if equal or above 18 TPS, yellow if equal or above 15 TPS, and red otherwise. The displayed TPS will be the amount of ticks the server has done in the last second. The TPS can be at most 20. It will display \"Loading...\" when you change worlds till the TPS is determined.",
+        description = "Shows server's TPS on the screen, updating every second. Shows in green if equal or above 18 TPS, yellow if equal or above 15 TPS, and red otherwise. The displayed TPS will be the amount of ticks the server has done in the last second. The TPS can be at most 20. It will display \"Loading...\" when you change worlds till the TPS is determined. It will forever display \"Loading...\" while in Limbo due to the inner workings of how Limbo is implemented in Hypixel.",
         category = "Misc", subcategory = "HUD"
     )
     private static boolean tpsDisplay;
