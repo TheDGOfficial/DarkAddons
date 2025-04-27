@@ -1,9 +1,11 @@
 package gg.darkaddons.mixins;
 
+import gg.darkaddons.DarkAddons;
 import gg.darkaddons.annotations.bytecode.Bridge;
 import gg.darkaddons.annotations.bytecode.Synthetic;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.C19PacketResourcePackStatus;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.network.play.server.S48PacketResourcePackSend;
@@ -78,5 +80,10 @@ final class MixinNetHandlerPlayClient {
         if (null != tileEntity) {
             tileEntity.onDataPacket(networkManager, packet);
         }
+    }
+
+    @Inject(method = "addToSendQueue", at = @At("HEAD"))
+    private final void onSendPacket(@NotNull final Packet<?> packet, @NotNull final CallbackInfo ci) {
+        DarkAddons.onPacketSent(packet);
     }
 }

@@ -962,9 +962,18 @@ public final class DarkAddons {
     }
 
     /**
+     * Called when a packet is sent by the client.
+     *
+     * @param packet The packet.
+     */
+    public static final void onPacketSent(@NotNull final Packet<?> packet) {
+    }
+
+    /**
      * Called when a packet is received on the client.
      *
      * @param packet The packet.
+     * @return Whether the packet should go through to be handled by vanilla or not. A false return value cancels the packet.
      */
     public static final boolean onClientPacketReceive(@NotNull final Packet<?> packet) {
         if (!HideFallingBlocks.handlePacket(packet) || !HideParticles.handlePacket(packet) || !AutoCloseChests.handlePacket(packet)) {
