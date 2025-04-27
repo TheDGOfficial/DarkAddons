@@ -757,6 +757,7 @@ public final class DarkAddons {
             FPSLimitDisplay::new,
             UnopenedChestsDisplay::new,
             FPSDisplay::new,
+            PingDisplay::new,
             MaxorHPDisplay::new,
             BlazeEffectTimer::new
         );
@@ -779,6 +780,7 @@ public final class DarkAddons {
             AdditionalM7Features::new,
             RemoveBlankArmorStands::new,
             HideXPOrbs::new,
+            PingTracker::new,
             GhostBlock::new,
             ScoreFromScoreboard::new,
             RequeueKey::new,
@@ -967,6 +969,7 @@ public final class DarkAddons {
      * @param packet The packet.
      */
     public static final void onPacketSent(@NotNull final Packet<?> packet) {
+        PingTracker.onPacketSent(packet);
     }
 
     /**
@@ -985,6 +988,7 @@ public final class DarkAddons {
         RagAxeStrengthGained.handlePacket(packet);
 
         ServerTPSCalculator.handlePacket(packet);
+        PingTracker.onPacketReceived(packet);
 
         return true;
     }

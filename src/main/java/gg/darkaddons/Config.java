@@ -240,6 +240,13 @@ final class Config extends Vigilant {
     )
     private static boolean tpsDisplay;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "Ping Display",
+        description = "Shows ping on the screen, updating every second. Shows in green if equal or less than 75 Ping, yellow if equal or less than 150 Ping, orange if equal or less than 250 ping, and red otherwise. It will display \"Loading...\" till the Ping is determined when you join a server. This sends a dummy packet to server to determine the ping just like the Skytils implementation, and Skytils implementation notes that there is a slight chance of getting a punishment for the packet, so although unlikely, the same applies to DarkAddons.",
+        category = "Misc", subcategory = "HUD"
+    )
+    private static boolean pingDisplay;
+
     /*@Property(
         type = PropertyType.SWITCH, name = "Dimensional Slash Alert",
         description = "Creates a title when you are in range of dimensional slash.",
@@ -1379,6 +1386,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.tpsDisplay;
+    }
+
+    static final boolean isPingDisplay() {
+        Config.checkUninit();
+
+        return Config.pingDisplay;
     }
 
     static final boolean isSharperDragonBoundingBox() {
