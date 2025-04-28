@@ -110,6 +110,7 @@ final class ArmorStandOptimizer {
 
     private static final void refreshArmorStands() {
         if (!Config.isArmorStandOptimizer()) {
+            ArmorStandOptimizer.armorStandRenderSet.clear();
             return;
         }
 
@@ -163,6 +164,6 @@ final class ArmorStandOptimizer {
     }
 
     static final boolean checkRender(@NotNull final Entity entity) {
-        return !AdditionalM7Features.canHideArmorstands() || ArmorStandOptimizer.armorStandRenderSet.contains(entity);
+        return !Config.isArmorStandOptimizer() || !AdditionalM7Features.canHideArmorstands() || ArmorStandOptimizer.armorStandRenderSet.contains(entity);
     }
 }
