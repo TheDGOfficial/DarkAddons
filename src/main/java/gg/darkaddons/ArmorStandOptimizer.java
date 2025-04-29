@@ -14,6 +14,7 @@ import java.util.Comparator;
 
 final class ArmorStandOptimizer {
     private static final HashSet<EntityArmorStand> armorStandRenderSet = new HashSet<>(Utils.calculateHashMapCapacity(128));
+    private static final ArrayList<EntityArmorStand> reusableStands = new ArrayList<>(128);
     private static int passes;
 
     /**
@@ -126,8 +127,7 @@ final class ArmorStandOptimizer {
 
         final var shouldDoBlankRemoval = ArmorStandOptimizer.shouldDoBlankRemoval();
 
-        final var normalStands = new ArrayList<EntityArmorStand>(64);
-
+        ArmorStandOptimizer.reusableStands.clear();
         ArmorStandOptimizer.armorStandRenderSet.clear();
 
         for (final var entity : world.loadedEntityList) {
@@ -141,18 +141,18 @@ final class ArmorStandOptimizer {
                 if (!ArmorStandOptimizer.isNotOnAnyWhitelist(stand, name)) {
                     ArmorStandOptimizer.armorStandRenderSet.add(stand);
                 } else {
-                    normalStands.add(stand);
+                    ArmorStandOptimizer.reusableStands.add(stand);
                 }
             }
         }
 
         final var limit = Config.getArmorStandLimit();
 
-        if (normalStands.size() <= limit) {
-            ArmorStandOptimizer.armorStandRenderSet.addAll(normalStands);
+        if (ArmorStandOptimizer.reusableStands.size() <= limit) {
+            ArmorStandOptimizer.armorStandRenderSet.addAll(ArmorStandOptimizer.reusableStands);
         } else {
-            normalStands.sort(Comparator.comparingDouble(player::getDistanceSqToEntity));
-            ArmorStandOptimizer.armorStandRenderSet.addAll(normalStands.subList(0, limit));
+            ArmorStandOptimizer.reusableStands.sort(Comparator.comparingDouble(player::getDistanceSqToEntity));
+            ArmorStandOptimizer.armorStandRenderSet.addAll(ArmorStandOptimizer.reusableStands.subList(0, limit));
         }
     }
 
