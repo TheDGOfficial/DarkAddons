@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import com.google.common.collect.Ordering;
+
 final class ArmorStandOptimizer {
     private static final HashSet<EntityArmorStand> armorStandRenderSet = new HashSet<>(Utils.calculateHashMapCapacity(128));
     private static final ArrayList<EntityArmorStand> reusableStands = new ArrayList<>(128);
@@ -151,8 +153,11 @@ final class ArmorStandOptimizer {
         if (ArmorStandOptimizer.reusableStands.size() <= limit) {
             ArmorStandOptimizer.armorStandRenderSet.addAll(ArmorStandOptimizer.reusableStands);
         } else {
-            ArmorStandOptimizer.reusableStands.sort(Comparator.comparingDouble(player::getDistanceSqToEntity));
-            ArmorStandOptimizer.armorStandRenderSet.addAll(ArmorStandOptimizer.reusableStands.subList(0, limit));
+            final var closest = Ordering
+                .from(Comparator.comparingDouble(player::getDistanceSqToEntity))
+                .leastOf(ArmorStandOptimizer.reusableStands, limit);
+
+            ArmorStandOptimizer.armorStandRenderSet.addAll(closest);
         }
     }
 
