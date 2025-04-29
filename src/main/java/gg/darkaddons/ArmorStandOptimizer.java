@@ -152,10 +152,7 @@ final class ArmorStandOptimizer {
             ArmorStandOptimizer.armorStandRenderSet.addAll(normalStands);
         } else {
             normalStands.sort(Comparator.comparingDouble(player::getDistanceSqToEntity));
-
-            for (var i = 0; i < limit; ++i) {
-                ArmorStandOptimizer.armorStandRenderSet.add(normalStands.get(i));
-            }
+            ArmorStandOptimizer.armorStandRenderSet.addAll(normalStands.subList(0, limit));
         }
     }
 
