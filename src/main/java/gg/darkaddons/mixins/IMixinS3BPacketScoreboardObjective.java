@@ -13,6 +13,13 @@ import org.jetbrains.annotations.NotNull;
 @Mixin(value = S3BPacketScoreboardObjective.class, priority = 999)
 public interface IMixinS3BPacketScoreboardObjective {
     /**
+     * Gets the objective value, a private field in {@link S3BPacketScoreboardObjective} class.
+     */
+    @Accessor
+    @NotNull
+    String getObjectiveValue();
+
+    /**
      * Sets the objective value, a private field in {@link S3BPacketScoreboardObjective} class.
      */
     @Accessor

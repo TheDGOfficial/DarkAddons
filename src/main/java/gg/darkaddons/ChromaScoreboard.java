@@ -21,11 +21,28 @@ final class ChromaScoreboard {
         throw Utils.staticClassException();
     }
 
+    // This required for ProGuard to not optimize out the calls as the interface is only implemented in runtime.
+    // A hacky workaround but works for now without having to disable optimizations.
+    private static final class Dummy implements IMixinS3BPacketScoreboardObjective {
+        @Override
+        @NotNull
+        public final String getObjectiveValue() {
+            throw new UnsupportedOperationException(this.getClass().getName());
+        }
+
+        @Override
+        public final void setObjectiveValue(@NotNull final String objectiveValue) {
+            throw new UnsupportedOperationException(this.getClass().getName());
+        }
+    }
+
     static final void handlePacket(@NotNull final Packet<?> packet) {
-        if (Config.isChromaToggle() && Config.isChromaSkyblock() && DarkAddons.isUsingSBA() && packet instanceof S3BPacketScoreboardObjective) {
-            final var currentObjective = ScoreboardUtil.cleanSB(((S3BPacketScoreboardObjective) packet).func_149337_d());
+        if (Config.isChromaToggle() && Config.isChromaSkyblock() && DarkAddons.isUsingSBA() && packet instanceof final S3BPacketScoreboardObjective packetScoreboardObjective) {
+            final var packetScoreboardObjectiveAccessor = (IMixinS3BPacketScoreboardObjective) packetScoreboardObjective;
+            final var currentObjective = ScoreboardUtil.cleanSB(packetScoreboardObjectiveAccessor.getObjectiveValue());
+
             if (null != currentObjective && (currentObjective.contains("SKYBLOCK") || currentObjective.contains("SKIBLOCK"))) {
-                ((IMixinS3BPacketScoreboardObjective) packet).setObjectiveValue("§z§lSKYBLOCK");
+                packetScoreboardObjectiveAccessor.setObjectiveValue("§z§lSKYBLOCK");
             }
         }
     }
