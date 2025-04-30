@@ -825,6 +825,9 @@ public final class DarkAddons {
         for (final var eventListener : eventListeners) {
             // Try-catch: If an event listener can't be registered due to errors, still try to register the next event listeners in the array.
             try {
+                if (eventListener instanceof GuiElement) {
+                    throw new IllegalArgumentException("Class " + eventListener.getClass().getName() + "passed to registerEventListeners() extends GuiElement, which is not supported. Use the registerGuiElement() method with hasEvents parameter set to true instead to register this GuiElement properly.");
+                }
                 DarkAddons.registerEventListener(eventListener.get());
             } catch (final Throwable error) {
                 DarkAddons.modError(error);
