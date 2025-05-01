@@ -228,6 +228,8 @@ if [ -f "$BUILD_OUTPUT_JAR_PATH" ] && [ "$EXIT_CODE" == "0" ]; then
   jar uf "$BUILD_OUTPUT_JAR_PATH" pack.mcmeta
   rm pack.mcmeta
 
+  zip -q -d "$BUILD_OUTPUT_JAR_PATH" "gg/darkaddons/ChromaScoreboard\$Dummy.class"
+
   if [ "${1:-default}" != "--skip-install" ]; then
     echo Placing JAR in mod folder
     # shellcheck disable=SC2206
