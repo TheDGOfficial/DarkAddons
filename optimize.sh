@@ -45,8 +45,6 @@ SKYTILS_VERSION=${versionProperties["skytils.version"]}
 
 MIXIN_VERSION=${versionProperties["mixin.version"]}
 
-rm -rf "\${project.basedir}"
-
 export MAVEN_OPTS="--enable-native-access=ALL-UNNAMED"
 
 ensure_m2_artifact_exists() {
