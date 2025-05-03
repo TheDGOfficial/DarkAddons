@@ -3,7 +3,6 @@ package gg.darkaddons;
 import gg.essential.universal.UResolution;
 import gg.skytils.skytilsmod.utils.graphics.ScreenRenderer;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
-import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import org.jetbrains.annotations.NotNull;
 
 abstract class GuiElement {
@@ -95,26 +94,48 @@ abstract class GuiElement {
     }
 
     static final void drawString(@NotNull final String text, final float xPos, final float yPos, final boolean leftAligned) {
-        GuiElement.drawString(text, xPos, yPos, CommonColors.Companion.getWHITE(), leftAligned);
+        GuiElement.drawString(text, xPos, yPos, GuiElement.CommonColors.WHITE, leftAligned);
     }
 
-    static final void drawString(@NotNull final String text, final float xPos, final float yPos, final boolean leftAligned, @NotNull final SmartFontRenderer.TextShadow shadow) {
-        GuiElement.drawString(text, xPos, yPos, CommonColors.Companion.getWHITE(), leftAligned, shadow);
+    static final void drawString(@NotNull final String text, final float xPos, final float yPos, final boolean leftAligned, @NotNull final GuiElement.TextShadow shadow) {
+        GuiElement.drawString(text, xPos, yPos, GuiElement.CommonColors.WHITE, leftAligned, shadow);
     }
 
-    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final CommonColors color, final boolean leftAligned) {
-        GuiElement.drawString(text, xPos, yPos, color, leftAligned, SmartFontRenderer.TextShadow.NONE);
+    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final GuiElement.CommonColors color, final boolean leftAligned) {
+        GuiElement.drawString(text, xPos, yPos, color, leftAligned, GuiElement.TextShadow.NONE);
     }
 
-    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final CommonColors color, final boolean leftAligned, @NotNull final SmartFontRenderer.TextShadow shadow) {
+    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final GuiElement.CommonColors color, final boolean leftAligned, @NotNull final GuiElement.TextShadow shadow) {
         ScreenRenderer.Companion.getFontRenderer().drawString(
             text,
             xPos,
             yPos,
-            color,
+            color.color,
             leftAligned ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT,
-            shadow
+            shadow.shadow
         );
+    }
+
+    enum TextShadow {
+        NORMAL(SmartFontRenderer.TextShadow.NORMAL), OUTLINE(SmartFontRenderer.TextShadow.OUTLINE), NONE(SmartFontRenderer.TextShadow.NONE);
+
+        @NotNull
+        private final SmartFontRenderer.TextShadow shadow;
+
+        private TextShadow(@NotNull final SmartFontRenderer.TextShadow shadow) {
+            this.shadow = shadow;
+        }
+    }
+
+    enum CommonColors {
+        WHITE(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getWHITE()), RED(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getRED()), YELLOW(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getYELLOW()), GREEN(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getGREEN()), RAINBOW(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getRAINBOW());
+
+        @NotNull
+        private final gg.skytils.skytilsmod.utils.graphics.colors.CommonColors color;
+
+        private CommonColors(@NotNull final gg.skytils.skytilsmod.utils.graphics.colors.CommonColors color) {
+            this.color = color;
+        }
     }
 
     abstract boolean isEnabled();

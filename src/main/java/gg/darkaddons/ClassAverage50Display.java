@@ -1,8 +1,6 @@
 package gg.darkaddons;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
-import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
-import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import gg.skytils.skytilsmod.listeners.DungeonListener;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -430,9 +428,9 @@ final class ClassAverage50Display extends GuiElement {
                 final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
                 final var shadow = switch (Config.getClassAverage50DisplayShadow()) {
-                    case 1 -> SmartFontRenderer.TextShadow.NORMAL;
-                    case 2 -> SmartFontRenderer.TextShadow.OUTLINE;
-                    default -> SmartFontRenderer.TextShadow.NONE;
+                    case 1 -> GuiElement.TextShadow.NORMAL;
+                    case 2 -> GuiElement.TextShadow.OUTLINE;
+                    default -> GuiElement.TextShadow.NONE;
                 };
 
                 final var fontHeight = GuiElement.getFontHeight();

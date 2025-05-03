@@ -2,7 +2,6 @@ package gg.darkaddons;
 
 import gg.darkaddons.mixins.IMixinGuiPlayerTabOverlay;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
-import gg.skytils.skytilsmod.utils.graphics.colors.CommonColors;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -232,11 +231,11 @@ final class BlessingDisplay extends GuiElement {
 
             final var fontHeight = GuiElement.getFontHeight();
 
-            final var white = CommonColors.Companion.getWHITE();
-            final var red = CommonColors.Companion.getRED();
-            final var yellow = CommonColors.Companion.getYELLOW();
-            final var green = CommonColors.Companion.getGREEN();
-            final var rainbow = CommonColors.Companion.getRAINBOW();
+            final var white = GuiElement.CommonColors.WHITE;
+            final var red = GuiElement.CommonColors.RED;
+            final var yellow = GuiElement.CommonColors.YELLOW;
+            final var green = GuiElement.CommonColors.GREEN;
+            final var rainbow = GuiElement.CommonColors.RAINBOW;
 
             final var hideBlessingWhenZero = Config.isHideBlessingWhenZero();
 
@@ -292,7 +291,7 @@ final class BlessingDisplay extends GuiElement {
     }
 
     @NotNull
-    private static final CommonColors getColorFromThreshold(@NotNull final CommonColors white, @NotNull final CommonColors red, @NotNull final CommonColors yellow, @NotNull final CommonColors green, @NotNull final CommonColors rainbow, final int threshold) {
+    private static final GuiElement.CommonColors getColorFromThreshold(@NotNull final GuiElement.CommonColors white, @NotNull final GuiElement.CommonColors red, @NotNull final GuiElement.CommonColors yellow, @NotNull final GuiElement.CommonColors green, @NotNull final GuiElement.CommonColors rainbow, final int threshold) {
         return switch (threshold) {
             case 4 -> rainbow;
             case 3 -> green;
