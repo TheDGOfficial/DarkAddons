@@ -343,6 +343,9 @@ tasks {
         options.compilerArgs.add("-parameters")
         options.compilerArgs.add("-Xlint:all,-options,-classfile,-processing,-overrides")
     }
+    named<JavaCompile>("compileTestJava") {
+        options.release.set(24)
+    }
     /*withType<KotlinCompilationTask<KotlinJvmCompilerOptions>> {
         compilerOptions {
             javaParameters = true
