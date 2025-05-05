@@ -156,7 +156,7 @@ dependencies {
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.13.0-SNAPSHOT")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.13.0-SNAPSHOT") 
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0-SNAPSHOT") 
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.13.0-SNAPSHOT")
 
