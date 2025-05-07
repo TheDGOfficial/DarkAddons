@@ -36,41 +36,6 @@ final class ArmorStandOptimizer {
         return !isInF6OrM6 || !name.contains("Giant") && !name.contains("Sadan") && !name.contains("Bigfoot") && !name.contains("L.A.S.R");
     }
 
-    private static final boolean isNotOnGoldorWhitelist(@NotNull final String name, final boolean isInF7OrM7) {
-        // P3 Active/Inactive Terms, Devices and Levers
-        return !isInF7OrM7 || !name.contains("Inactive Terminal") && !name.contains("CLICK HERE") && !name.contains("Not Activated") && !name.contains("Inactive") && !name.contains("Device") && !name.contains("Activated") && !name.contains("Active");
-    }
-
-    private static final boolean isNotOnDungeonWhitelist(@NotNull final String name, final boolean isInDungeons) {
-        // Quiz Puzzle
-        return !isInDungeons || !name.contains("ⓐ") && !name.contains("ⓑ") && !name.contains("ⓒ") && !name.contains("Question #") && !(!name.isEmpty() && '?' == name.charAt(name.length() - 1)) && !name.contains("Which of these");
-    }
-
-    private static final boolean isNotOnGeneralWhitelist(@NotNull final String name) {
-        return // Barbarian Duke X
-            !name.contains("Duke") &&
-                // Diana
-                !name.contains("damage") && !name.contains("Inquisitor") && !name.contains("Champion") &&
-                // Enderman Slayer
-                !name.contains("Voidgloom") && !name.contains("Voidling") && !name.contains("Voidcrazed") &&
-                // Blaze Slayer
-                !name.contains("Demonlord") && !name.contains("Kindleheart") && !name.contains("Burningsoul") && !name.contains("Smoldering") && !name.contains("Millennia-Aged") && !name.contains("Spawned by:") && !name.contains("ⓆⓊⒶⓏⒾⒾ") && !name.contains("ⓉⓎⓅⒽⓄⒺⓊⓈ") && !name.contains("IMMUNE") && !name.contains("SPIRIT") && !name.contains("ASHEN") && !name.contains("CRYSTAL") && !name.contains("AURIC") && !name.contains("Vanquisher") && !name.contains("hits") && !name.contains("Plasmaflux") &&
-                // The Matriarch
-                !name.contains("COLLECT!") && !name.contains("Heavy Pearl") && !name.contains("Hits Remaining: ") && !name.contains("Punch!") && !name.contains("The Matriarch") && !name.contains("Heavy Pearls Available: ") && !name.contains("Attempt Cooldown: ");
-    }
-
-    private static final boolean isNotOnAnyWhitelist(@NotNull final EntityArmorStand entityArmorStand) {
-        return ArmorStandOptimizer.isNotOnAnyWhitelist(entityArmorStand, null);
-    }
-
-    private static final boolean isNotOnAnyWhitelist(@NotNull final EntityArmorStand entityArmorStand, @Nullable String name) {
-        if (null == name) {
-            //noinspection AssignmentToMethodParameter
-            name = entityArmorStand.getCustomNameTag();
-        }
-        return ArmorStandOptimizer.isNotOnGeneralWhitelist(name) && ArmorStandOptimizer.isNotOnDungeonWhitelist(name, DarkAddons.isInDungeons()) && ArmorStandOptimizer.isNotOnSadanWhitelist(name, AdditionalM7Features.isInM6OrF6Boss(DungeonTimer.INSTANCE.getBossEntryTime())) && ArmorStandOptimizer.isNotOnGoldorWhitelist(name, AdditionalM7Features.isInM7OrF7());
-    }
-
     private static final boolean isInM7P5() {
         return -1L != DungeonTimer.INSTANCE.getPhase4ClearTime() && AdditionalM7Features.isInM7();
     }
@@ -138,13 +103,8 @@ final class ArmorStandOptimizer {
                     continue;
                 }
 
-                final var name = ArmorStandOptimizer.getAndClearLastNameTag();
-
-                if (!ArmorStandOptimizer.isNotOnAnyWhitelist(stand, name)) {
-                    ArmorStandOptimizer.armorStandRenderSet.add(stand);
-                } else {
-                    ArmorStandOptimizer.reusableStands.add(stand);
-                }
+                NameTagCache.clearLastNameTag();
+                ArmorStandOptimizer.reusableStands.add(stand);
             }
         }
 
