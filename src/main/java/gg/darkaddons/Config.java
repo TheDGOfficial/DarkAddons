@@ -975,7 +975,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Prioritize Dice",
-        description = "Prioritizes High Class Archfiend Dice no matter the mayor for Blaze Slayer.",
+        description = "Prioritizes High Class Archfiend Dice no matter the prices of other drops for Blaze Slayer.",
         category = "Slayers", subcategory = "HUD", triggerActionOnInitialization = false
     )
     private static boolean prioritizeDice;

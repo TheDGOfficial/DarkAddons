@@ -186,7 +186,7 @@ final class SlayerRNGDisplay extends GuiElement {
         final var selectedDropPrice = drop.price;
 
         // Calculates money per hour with RNG meter after reset to be more realistic. If we calculate with current meter, it will be higher than actual.
-        final var moneyPerHour = SlayerRNGDisplay.getMoneyPerHour(SlayerRNGDisplay.getETATime(drop, avgBossKillTime, SlayerRNGDisplay.getOdds(SlayerRNGDisplay.getDropChance(drop, SlayerRNGDisplay.getMeterProgress(drop, SlayerRNGDisplay.lastMeterXPGain))), SlayerRNGDisplay.lastMeterXPGain, SlayerRNGDisplay.lastMeterXPGain), selectedDropPrice);
+        final var moneyPerHour = SlayerRNGDisplay.getMoneyPerHour(SlayerRNGDisplay.getETATime(drop, avgBossKillTime, SlayerRNGDisplay.getOdds(SlayerRNGDisplay.getDropChance(drop, SlayerRNGDisplay.getMeterProgress(drop, SlayerRNGDisplay.lastMeterXPGain))), SlayerRNGDisplay.lastMeterXPGain, SlayerRNGDisplay.lastMeterXPGain), selectedDropPrice) * drop.getQuantityRange().getAverage();
 
         SlayerRNGDisplay.clearLines();
 
@@ -521,22 +521,48 @@ final class SlayerRNGDisplay extends GuiElement {
         }
     }
 
+    private static final class QuantityRange {
+        @NotNull
+        private static final QuantityRange SINGLE = QuantityRange.of(1, 1);
+ 
+        private final int min;
+        private final int max;
+
+        private final int average;
+
+        private QuantityRange(final int min, final int max) {
+            this.min = min;
+            this.max = max;
+
+            this.average = (this.min + this.max) / 2;
+        }
+
+        @NotNull
+        private static final QuantityRange of(final int min, final int max) {
+            return new QuantityRange(min, max);
+        }
+
+        private final int getAverage() {
+            return this.average;
+        }
+    }
+
     private enum SlayerDrop {
         WARDEN_HEART(3_631_749, 0.013_8D, SlayerRNGDisplay.Slayer.ZOMBIE, 7, 5),
         TARANTULA_TALISMAN(300_550, 0.166_4D, SlayerRNGDisplay.Slayer.SPIDER, 6, 3),
         OVERFLUX_CAPACITOR(1_232_700, 0.040_6D, SlayerRNGDisplay.Slayer.WOLF, 7, 4),
         JUDGEMENT_CORE(885_562, 0.056_5D, SlayerRNGDisplay.Slayer.ENDERMAN, 7, 4),
 
-        DUPLEX_I_BOOK("ENCHANTED_BOOK-ULTIMATE_REITERATE-1", 23_220, 2.153_3D, SlayerRNGDisplay.Slayer.BLAZE, 6, 4, 3, SlayerRNGDisplay.SellingMethod.BAZAAR),
+        DUPLEX_I_BOOK("ENCHANTED_BOOK-ULTIMATE_REITERATE-1", 23_220, 2.153_3D, SlayerRNGDisplay.Slayer.BLAZE, 6, 4, 1, SlayerRNGDisplay.SellingMethod.BAZAAR),
 
-        HIGH_CLASS_ARCHFIEND_DICE(194_939, 0.256_5D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 5 : DarkAddons.isAatroxRareDropPerkActive() ? 4 : 2),
+        HIGH_CLASS_ARCHFIEND_DICE(194_939, 0.256_5D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 2 : 1),
 
-        GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 10_649, 4.695_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> DarkAddons.isDerpy() ? 4 : 1, SlayerRNGDisplay.SellingMethod.BAZAAR),
+        GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 10_649, 4.695_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> 1, SlayerRNGDisplay.SellingMethod.BAZAAR, null, QuantityRange.of(24, 32)),
 
         MC_GRUBBERS_BURGER(18_450, 1.219_5D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 4, () -> Config.isBurgersDone() ? 1 : 4, SlayerRNGDisplay.SellingMethod.NONE, "McGrubber's Burger"),
 
         UNFANGED_VAMPIRE_PART("VAMPIRE_DENTIST_RELIC", 18_450, 1.219_5D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 4, 2),
-        THE_ONE_IV_BOOK("ENCHANTED_BOOK-ULTIMATE_THE_ONE-4", 12_525, 1.796_4D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 5, 3, SlayerRNGDisplay.SellingMethod.BAZAAR);
+        THE_ONE_IV_BOOK("ENCHANTED_BOOK-ULTIMATE_THE_ONE-4", 12_525, 1.796_4D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 5, 2, SlayerRNGDisplay.SellingMethod.BAZAAR);
 
         @Nullable
         private final String itemId;
@@ -552,6 +578,8 @@ final class SlayerRNGDisplay extends GuiElement {
         private final SlayerRNGDisplay.SellingMethod sellingMethod;
         @Nullable
         private final String displayName;
+        @NotNull
+        private final QuantityRange quantityRange;
         private int price;
         private int bossesDoneSinceLastRNGMeterDrop;
         @NotNull
@@ -588,6 +616,10 @@ final class SlayerRNGDisplay extends GuiElement {
         }
 
         private SlayerDrop(@Nullable final String itemIdIn, final int requiredMeterXPIn, final double baseDropChanceIn, @NotNull final SlayerRNGDisplay.Slayer slayerIn, final int requiredLevelIn, final int requiredTierIn, @NotNull final IntSupplier profitWeightIn, @NotNull final SlayerRNGDisplay.SellingMethod sellingMethodIn, @Nullable final String displayNameIn) {
+            this(itemIdIn, requiredMeterXPIn, baseDropChanceIn, slayerIn, requiredLevelIn, requiredTierIn, profitWeightIn, sellingMethodIn, displayNameIn, QuantityRange.SINGLE);
+        }
+
+        private SlayerDrop(@Nullable final String itemIdIn, final int requiredMeterXPIn, final double baseDropChanceIn, @NotNull final SlayerRNGDisplay.Slayer slayerIn, final int requiredLevelIn, final int requiredTierIn, @NotNull final IntSupplier profitWeightIn, @NotNull final SlayerRNGDisplay.SellingMethod sellingMethodIn, @Nullable final String displayNameIn, @NotNull final QuantityRange quantityRange) {
             this.itemId = itemIdIn;
             this.requiredMeterXP = requiredMeterXPIn;
             this.baseDropChance = baseDropChanceIn;
@@ -597,6 +629,7 @@ final class SlayerRNGDisplay extends GuiElement {
             this.profitWeight = profitWeightIn;
             this.sellingMethod = sellingMethodIn;
             this.displayName = displayNameIn;
+            this.quantityRange = quantityRange;
         }
 
         @NotNull
@@ -646,6 +679,17 @@ final class SlayerRNGDisplay extends GuiElement {
             return result.toString();
         }
 
+        @NotNull
+        private final QuantityRange getQuantityRange() {
+            return this.quantityRange;
+        }
+
+        private final int getDummyMoneyPerHour() {
+            // Calculate an inaccurate money per hour for this drop with dummy parameters (0 meter, 60s avg boss kill time) and use that as a comparable dummy money/hr in between drops, to determine the one making best money/hr, without needing the accurate parameters (or money/hr), as changing the dummy parameters to real ones will change money/hr but not the drop, and the returned value is only used for comparision between drops and is not displayed to the end user.
+            // Do not pass 0 as avg boss kill time for safety to not overflow the money per hr returned.
+            return SlayerRNGDisplay.getMoneyPerHour(SlayerRNGDisplay.getETATime(this, TimeUnit.SECONDS.toMillis(60L), SlayerRNGDisplay.getOdds(SlayerRNGDisplay.getDropChance(this, SlayerRNGDisplay.getMeterProgress(this, 0))), 0, 0), this.price) * this.quantityRange.getAverage();
+        }
+
         @Override
         public final String toString() {
             return "SlayerDrop{" +
@@ -693,7 +737,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
             SlayerRNGDisplay.SlayerDrop highest = null;
             for (final var drop : eligibleDrops) {
-                if (null == highest || highest.profitWeight.getAsInt() < drop.profitWeight.getAsInt()) {
+                if (null == highest || highest.profitWeight.getAsInt() < drop.profitWeight.getAsInt() || (highest.profitWeight.getAsInt() == drop.profitWeight.getAsInt() && highest.getDummyMoneyPerHour() < drop.getDummyMoneyPerHour())) {
                     highest = drop;
                 }
             }
@@ -704,7 +748,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
             // If no drops are eligible, default to a non-eligible most-profit drop. Even if they can't drop it yet, they can see their RNG meter progress, better than showing nothing, I guess.
             for (final var drop : drops) {
-                if (null == highest || highest.profitWeight.getAsInt() < drop.profitWeight.getAsInt()) {
+                if (null == highest || highest.profitWeight.getAsInt() < drop.profitWeight.getAsInt() || (highest.profitWeight.getAsInt() == drop.profitWeight.getAsInt() && highest.getDummyMoneyPerHour() < drop.getDummyMoneyPerHour())) {
                     highest = drop;
                 }
             }
