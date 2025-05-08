@@ -208,11 +208,11 @@ public final class DarkAddons {
     }
 
     static final boolean isMessageOrCommandQueuedToBeSentByUser(@NotNull final String messageOrCommand) {
-        return Skytils.sendMessageQueue.contains(messageOrCommand);
+        return SendMessageQueue.isMessageOrCommandQueuedToBeSentByUser(messageOrCommand);
     }
  
     static final void queueUserSentMessageOrCommand(@NotNull final String messageOrCommand) {
-        Skytils.sendMessageQueue.add(messageOrCommand);
+        SendMessageQueue.queueUserSentMessageOrCommand(messageOrCommand);
     }
 
     public static final void addShutdownTask(@NotNull final Runnable task) {
