@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.ScoreCalculation;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -66,19 +65,17 @@ final class ScoreFromScoreboard {
     }
 
     private static final void onScoreUpdate(final int score, final int rawScore) {
-        final var sc = ScoreCalculation.INSTANCE;
-
-        if (300 <= score && !sc.getHasSaid300()) {
-            sc.setHasSaid300(true);
+        if (300 <= score && !ScoreCalculation.getHasSaid300()) {
+            ScoreCalculation.setHasSaid300(true);
             DarkAddons.queueUserSentMessageOrCommand("/pc 300 score");
-        } else if (270 <= score && !sc.getHasSaid270()) {
-            sc.setHasSaid270(true);
+        } else if (270 <= score && !ScoreCalculation.getHasSaid270()) {
+            ScoreCalculation.setHasSaid270(true);
             DarkAddons.queueUserSentMessageOrCommand("/pc 270 score");
         }
 
-        final var stScore = sc.getTotalScore().get();
-        final var highestScore = Math.max(score, stScore);
-        final var deaths = sc.getDeaths().get();
+        final var calculatedScore = ScoreCalculation.getTotalScore().get();
+        final var highestScore = Math.max(score, calculatedScore);
+        final var deaths = ScoreCalculation.getDeaths().get();
         final var scoreReq = AdditionalM7Features.isInM7OrF7() ? 1 <= deaths ? 302 : 301 : 300;
 
         if (highestScore >= scoreReq && !ScoreFromScoreboard.sentTitleOn301Score) {
@@ -89,7 +86,7 @@ final class ScoreFromScoreboard {
         final var diff = rawScore - ScoreFromScoreboard.previousScore;
 
         if (28 <= diff || 300 <= rawScore) {
-            ScoreFromScoreboard.realScoreHook(Math.max(rawScore, stScore), deaths);
+            ScoreFromScoreboard.realScoreHook(Math.max(rawScore, calculatedScore), deaths);
         }
 
         ScoreFromScoreboard.previousScore = rawScore;
