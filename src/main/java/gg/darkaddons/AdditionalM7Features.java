@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import gg.essential.universal.UChat;
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import gg.skytils.skytilsmod.mixins.extensions.ExtensionEntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -43,7 +42,7 @@ final class AdditionalM7Features {
     }
 
     static final boolean isInM6OrF6Boss(final long bossEntryTime) {
-        final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloorNumber();
+        final var dungeonFloor = DungeonFeatures.getDungeonFloorNumber();
 
         return null != dungeonFloor && 6 == dungeonFloor && -1L != bossEntryTime;
     }
@@ -53,7 +52,7 @@ final class AdditionalM7Features {
     }
 
     static final boolean isInM7OrF7() {
-        final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloorNumber();
+        final var dungeonFloor = DungeonFeatures.getDungeonFloorNumber();
 
         return null != dungeonFloor && 7 == dungeonFloor;
     }
@@ -71,7 +70,7 @@ final class AdditionalM7Features {
     }
 
     static final boolean isInM7() {
-        return "M7".equals(DungeonFeatures.INSTANCE.getDungeonFloor());
+        return "M7".equals(DungeonFeatures.getDungeonFloor());
     }
 
     static final boolean isWitherKingDefeated() {

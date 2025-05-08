@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -146,7 +145,7 @@ final class EHPDisplay extends GuiElement {
         final float dmg;
 
         if (DarkAddons.isInDungeons()) {
-            final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloor();
+            final var dungeonFloor = DungeonFeatures.getDungeonFloor();
             final var entranceDmg = 800.0F;
 
             dmg = null == dungeonFloor ? entranceDmg : EHPDisplay.getHighestNonBossMobDmgForCurrentFloor0(dungeonFloor, entranceDmg);

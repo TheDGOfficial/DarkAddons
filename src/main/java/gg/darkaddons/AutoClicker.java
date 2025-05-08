@@ -2,7 +2,6 @@ package gg.darkaddons;
 
 import gg.darkaddons.mixin.MixinUtils;
 import gg.darkaddons.mixins.IMixinMinecraft;
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Items;
@@ -146,13 +145,13 @@ final class AutoClicker {
     }
 
     private static final boolean isInF4orM4() {
-        final var floor = DungeonFeatures.INSTANCE.getDungeonFloorNumber();
+        final var floor = DungeonFeatures.getDungeonFloorNumber();
 
         return null != floor && 4 == floor;
     }
 
     private static final boolean isInBoss() {
-        return DungeonFeatures.INSTANCE.getHasBossSpawned();
+        return DungeonFeatures.getHasBossSpawned();
     }
 
     private static final boolean handleLeftClick(@NotNull final Runnable leftClick, @NotNull final KeyBinding left, @NotNull final KeyBinding right, @NotNull final Minecraft mc) {

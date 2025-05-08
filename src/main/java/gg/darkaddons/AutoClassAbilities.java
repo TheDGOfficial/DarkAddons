@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
 import gg.skytils.skytilsmod.listeners.DungeonListener;
 import gg.skytils.skytilsmod.utils.DungeonClass;
 import net.minecraft.client.Minecraft;
@@ -103,7 +102,7 @@ final class AutoClassAbilities {
         WISH(TimeUnit.SECONDS, 120L) {
             @Override
             public final boolean forceCooldown() {
-                final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloor();
+                final var dungeonFloor = DungeonFeatures.getDungeonFloor();
                 return ("M6".equals(dungeonFloor) || "F6".equals(dungeonFloor) ||
                     "M7".equals(dungeonFloor)) && -1L != DungeonTimer.getBossEntryTime();
             }
@@ -112,7 +111,7 @@ final class AutoClassAbilities {
         RAGNAROK(TimeUnit.SECONDS, 60L) {
             @Override
             public final boolean forceCooldown() {
-                final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloor();
+                final var dungeonFloor = DungeonFeatures.getDungeonFloor();
                 return ("M6".equals(dungeonFloor) || "M5".equals(dungeonFloor) ||
                     "F6".equals(dungeonFloor)) && -1L != DungeonTimer.getBossEntryTime();
             }
@@ -120,14 +119,14 @@ final class AutoClassAbilities {
         RAPID_FIRE(TimeUnit.SECONDS, 100L) {
             @Override
             public final boolean forceCooldown() {
-                final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloor();
+                final var dungeonFloor = DungeonFeatures.getDungeonFloor();
                 return "M7".equals(dungeonFloor) && -1L != DungeonTimer.getBossEntryTime() || ("M6".equals(dungeonFloor) || "F6".equals(dungeonFloor)) && !AdditionalM7Features.isGiantsFalling() && -1L != DungeonTimer.getBossEntryTime();
             }
         },
         CASTLE_OF_STONE(TimeUnit.SECONDS, 150L) {
             @Override
             public final boolean forceCooldown() {
-                final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloorNumber();
+                final var dungeonFloor = DungeonFeatures.getDungeonFloorNumber();
                 if (null != dungeonFloor && -1L != DungeonTimer.getBossEntryTime()) {
                     switch (dungeonFloor) {
                         case 7 -> {
@@ -310,7 +309,7 @@ final class AutoClassAbilities {
             var shouldUse = AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE == AutoClassAbilities.ultimateClassAbility;
 
             if (AutoClassAbilities.UltimateClassAbility.WISH == AutoClassAbilities.ultimateClassAbility) {
-                shouldUse = 7 == DungeonFeatures.INSTANCE.getDungeonFloorNumber();
+                shouldUse = 7 == DungeonFeatures.getDungeonFloorNumber();
             }
 
             if (shouldUse && AutoClassAbilities.ultimateClassAbility.isCooldownReallyGone()) {
