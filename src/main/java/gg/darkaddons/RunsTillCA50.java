@@ -78,6 +78,13 @@ final class RunsTillCA50 {
     private static final double DERPY_MULTIPLIER = 1.5D;
 
     /**
+     * Represents the Max Catacombs and Class Levels before Overflow Levels start.
+     *
+     * See {@link RunsTillCA50#MAX_LEVEL_XP} for how much XP this max level requires.
+     */
+    private static final int MAX_LEVEL = 50;
+
+    /**
      * XP required for Maxed Catacombs and Class Levels.
      */
     private static final double MAX_LEVEL_XP = 569_809_640.0D;
@@ -460,7 +467,7 @@ final class RunsTillCA50 {
             final var endXp = xpMap.get(dungeonClass);
             final var overflowRunsDone = (int) ((endXp - RunsTillCA50.MAX_LEVEL_XP) / RunsTillCA50.xpGained(true, m7, derpy));
 
-            DarkAddons.queueWarning(dungeonClass.name().charAt(0) + dungeonClass.name().toLowerCase(Locale.ROOT).substring(1, dungeonClass.name().length()) + " | " + Objects.toString(result.runsAsClass.get(dungeonClass), "0") + " Runs." + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.Mode.EARLY == mode ? Math.max(50.0D, RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) : RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.xpToLevel(endXp)) + " | " + overflowRunsDone + " Runs.");
+            DarkAddons.queueWarning(dungeonClass.name().charAt(0) + dungeonClass.name().toLowerCase(Locale.ROOT).substring(1, dungeonClass.name().length()) + " | " + Objects.toString(result.runsAsClass.get(dungeonClass), "0") + " Runs." + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.Mode.EARLY == mode ? Math.max((double) RunsTillCA50.MAX_LEVEL, RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) : RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.xpToLevel(endXp)) + " | " + overflowRunsDone + " Runs.");
         }
 
         RunsTillCA50.outputResultsFooter(result, m7, currentCompletions, derpy);
@@ -544,7 +551,7 @@ final class RunsTillCA50 {
             }
 
             try {
-                @SuppressWarnings("StringConcatenationMissingWhitespace") final var toParse = 50 + overflowLevel + "." + StringUtils.remove(Double.toString(RunsTillCA50.padStart(String.format(Locale.ROOT, "%.0f", xp * 100.0D / RunsTillCA50.XP_TO_LVL_UP_OVERFLOW_LEVEL))), '.');
+                @SuppressWarnings("StringConcatenationMissingWhitespace") final var toParse = RunsTillCA50.MAX_LEVEL + overflowLevel + "." + StringUtils.remove(Double.toString(RunsTillCA50.padStart(String.format(Locale.ROOT, "%.0f", xp * 100.0D / RunsTillCA50.XP_TO_LVL_UP_OVERFLOW_LEVEL))), '.');
                 return Double.parseDouble(toParse);
             } catch (final NumberFormatException nfe) {
                 DarkAddons.modError(nfe);
