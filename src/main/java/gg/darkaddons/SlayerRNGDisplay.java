@@ -3,7 +3,6 @@ package gg.darkaddons;
 import com.google.common.collect.EvictingQueue;
 import gg.skytils.skytilsmod.utils.SBInfo;
 import gg.skytils.skytilsmod.utils.SkyblockIsland;
-import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;

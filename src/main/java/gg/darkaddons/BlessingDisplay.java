@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import gg.darkaddons.mixins.IMixinGuiPlayerTabOverlay;
-import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
