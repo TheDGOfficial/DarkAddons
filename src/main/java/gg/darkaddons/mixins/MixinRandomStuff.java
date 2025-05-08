@@ -1,13 +1,12 @@
 package gg.darkaddons.mixins;
 
-import gg.skytils.skytilsmod.events.impl.CheckRenderEntityEvent;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import gg.darkaddons.DungeonTimer;
 
@@ -18,10 +17,12 @@ final class MixinRandomStuff {
         super();
     }
 
-    @Inject(method = "onCheckRenderEvent", remap = false, at = @At("HEAD"), cancellable = true)
-    private final void onCheckRenderEvent$darkaddons(@NotNull final CheckRenderEntityEvent<?> event, @NotNull final CallbackInfo ci) {
-        if (-1L == DungeonTimer.getPhase1ClearTime() || -1L != DungeonTimer.getBossClearTime() || !(event.getEntity() instanceof EntityArmorStand)) {
-            ci.cancel();
+    @Redirect(method = "onCheckRenderEvent", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isInvisible()Z", remap = true))
+    private final boolean isInvisible$darkaddons(@NotNull final Entity entity) {
+        if (-1L == DungeonTimer.getPhase1ClearTime() || -1L != DungeonTimer.getBossClearTime() || !(entity instanceof EntityArmorStand)) {
+            return false;
         }
+
+        return entity.isInvisible();
     }
 }
