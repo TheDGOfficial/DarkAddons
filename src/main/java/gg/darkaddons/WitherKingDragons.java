@@ -250,20 +250,12 @@ enum WitherKingDragons {
         return this.enumName;
     }
 
-    // TODO remove these after full split
     @NotNull
     private static final WitherKingDragons[] ordinalToDrag = new WitherKingDragons[WitherKingDragons.VALUES_LENGTH];
-
-    @NotNull
-    private static final gg.skytils.skytilsmod.features.impl.dungeons.WitherKingDragons[] ordinalToSkytilsDrag = new gg.skytils.skytilsmod.features.impl.dungeons.WitherKingDragons[WitherKingDragons.VALUES_LENGTH];
 
     private static final void initOrdinalArrays() {
         for (final var drag : WitherKingDragons.values) {
             WitherKingDragons.ordinalToDrag[drag.enumOrdinal] = drag;
-        }
-
-        for (final var skytilsDrag : gg.skytils.skytilsmod.features.impl.dungeons.WitherKingDragons.values()) {
-            WitherKingDragons.ordinalToSkytilsDrag[skytilsDrag.ordinal()] = skytilsDrag;
         }
     }
 
@@ -271,13 +263,8 @@ enum WitherKingDragons {
         WitherKingDragons.initOrdinalArrays();
     }
 
-    @NotNull
-    final gg.skytils.skytilsmod.features.impl.dungeons.WitherKingDragons toSkytilsDragonType() {
-        return WitherKingDragons.ordinalToSkytilsDrag[this.enumOrdinal];
-    }
-
     @Nullable
-    static final WitherKingDragons from(@Nullable final gg.skytils.skytilsmod.features.impl.dungeons.WitherKingDragons skytilsDragonType) {
-        return null == skytilsDragonType ? null : WitherKingDragons.ordinalToDrag[skytilsDragonType.ordinal()];
+    static final WitherKingDragons from(final int ordinal) {
+        return WitherKingDragons.ordinalToDrag[ordinal];
     }
 }

@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import gg.essential.universal.UChat;
-import gg.skytils.skytilsmod.mixins.extensions.ExtensionEntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -150,8 +149,8 @@ final class AdditionalM7Features {
         }
 
         final var entity = event.entityLiving;
-        if (entity instanceof EntityDragon) {
-            final var type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
+        if (entity instanceof final EntityDragon dragon) {
+            final var type = WitherKingDragons.from(((EntityWitherKingDragon) dragon).getWitherKingDragonTypeOrdinal());
             if (null != type) {
                 AdditionalM7Features.lastKilledDragon = type;
             }

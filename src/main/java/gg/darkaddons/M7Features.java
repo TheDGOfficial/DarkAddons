@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.mixins.extensions.ExtensionEntityLivingBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -139,22 +138,20 @@ final class M7Features {
     }
 
     private static final void onMobSpawned(@NotNull final Entity entity) {
-        if (Config.isDragonHud() && -1L != DungeonTimer.getPhase4ClearTime() && entity instanceof EntityDragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
-            final var id = entity.getEntityId();
+        if (Config.isDragonHud() && -1L != DungeonTimer.getPhase4ClearTime() && entity instanceof final EntityDragon dragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
+            final var id = dragon.getEntityId();
 
             var type = M7Features.dragonMap.get(id);
 
             if (null == type) {
-                type = Utils.minValue(WitherKingDragons.getValues(), (final WitherKingDragons drag) -> M7Features.getXZDistSq(entity, drag.getBlockPos()));
+                type = Utils.minValue(WitherKingDragons.getValues(), (final WitherKingDragons drag) -> M7Features.getXZDistSq(dragon, drag.getBlockPos()));
 
                 if (null == type) {
                     return;
                 }
 
-                final var ext = (ExtensionEntityLivingBase) entity;
-
-                ext.getSkytilsHook().setColorMultiplier(type.getColor());
-                ext.getSkytilsHook().setMasterDragonType(type.toSkytilsDragonType());
+                final var entityWitherKingDragon = (EntityWitherKingDragon) dragon;
+                entityWitherKingDragon.setWitherKingDragonTypeOrdinal(type.getEnumOrdinal());
             }
 
             M7Features.dragonMap.put(id, type);
@@ -172,8 +169,8 @@ final class M7Features {
 
         final var entity = event.entity;
 
-        if (entity instanceof EntityDragon) {
-            final var type = WitherKingDragons.from(((ExtensionEntityLivingBase) entity).getSkytilsHook().getMasterDragonType());
+        if (entity instanceof final EntityDragon dragon) {
+            final var type = WitherKingDragons.from(((EntityWitherKingDragon) dragon).getWitherKingDragonTypeOrdinal());
 
             if (null == type) {
                 return;
@@ -181,7 +178,7 @@ final class M7Features {
 
             M7Features.killedDragons.add(type);
             M7Features.spawningDragons.remove(type);
-            M7Features.dragonMap.remove(entity.getEntityId());
+            M7Features.dragonMap.remove(dragon.getEntityId());
             M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
         }
     }
@@ -230,8 +227,8 @@ final class M7Features {
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final void handleRender(@NotNull final EntityLivingBase e) {
         final var showStatueBox = Config.isShowStatueBox();
-        if ((showStatueBox || Config.isKillNotification()) && -1L != DungeonTimer.getPhase4ClearTime() && e instanceof EntityDragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
-            final var drag = WitherKingDragons.from(((ExtensionEntityLivingBase) e).getSkytilsHook().getMasterDragonType());
+        if ((showStatueBox || Config.isKillNotification()) && -1L != DungeonTimer.getPhase4ClearTime() && e instanceof final EntityDragon dragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
+            final var drag = WitherKingDragons.from(((EntityWitherKingDragon) dragon).getWitherKingDragonTypeOrdinal());
 
             if (null != drag) {
                 M7Features.renderDragonInfo(e, drag);
