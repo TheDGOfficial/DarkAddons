@@ -14,7 +14,8 @@ enum SkyblockIsland {
     ThePark(gg.skytils.skytilsmod.utils.SkyblockIsland.ThePark),
     SpiderDen(gg.skytils.skytilsmod.utils.SkyblockIsland.SpiderDen),
     Hub(gg.skytils.skytilsmod.utils.SkyblockIsland.Hub),
-    GlaciteMineshafts(gg.skytils.skytilsmod.utils.SkyblockIsland.GlaciteMineshafts);
+    GlaciteMineshafts(gg.skytils.skytilsmod.utils.SkyblockIsland.GlaciteMineshafts),
+    Dungeon(gg.skytils.skytilsmod.utils.SkyblockIsland.Dungeon);
 
     @NotNull
     private final gg.skytils.skytilsmod.utils.SkyblockIsland island;
