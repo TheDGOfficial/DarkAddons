@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -37,13 +36,12 @@ final class ArmorStandOptimizer {
     }
 
     private static final boolean isInM7P5() {
-        return -1L != DungeonTimer.INSTANCE.getPhase4ClearTime() && AdditionalM7Features.isInM7();
+        return -1L != DungeonTimer.getPhase4ClearTime() && AdditionalM7Features.isInM7();
     }
 
     static final boolean checkRemoveArmorStand(@NotNull final EntityArmorStand entityArmorStand) {
-        final var dungeonTimerInstance = DungeonTimer.INSTANCE;
-        final var bossEntryTime = dungeonTimerInstance.getBossEntryTime();
-        return AdditionalM7Features.canHideArmorstands(dungeonTimerInstance, bossEntryTime) && (ArmorStandOptimizer.isInM7P5() || AdditionalM7Features.isInM6OrF6Boss(bossEntryTime) && ArmorStandOptimizer.isNotOnSadanWhitelist(entityArmorStand.getCustomNameTag(), true));
+        final var bossEntryTime = DungeonTimer.getBossEntryTime();
+        return AdditionalM7Features.canHideArmorstands(bossEntryTime) && (ArmorStandOptimizer.isInM7P5() || AdditionalM7Features.isInM6OrF6Boss(bossEntryTime) && ArmorStandOptimizer.isNotOnSadanWhitelist(entityArmorStand.getCustomNameTag(), true));
     }
 
     @Nullable

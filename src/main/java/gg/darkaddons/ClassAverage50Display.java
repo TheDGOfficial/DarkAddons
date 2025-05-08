@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.listeners.DungeonListener;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -406,9 +405,9 @@ final class ClassAverage50Display extends GuiElement {
     private static final boolean shouldRenderWithVisibility(final int visibility) {
         return switch (visibility) {
             case 0 -> DarkAddons.isInDungeons();
-            case 1 -> DarkAddons.isInDungeons() && -1L != DungeonTimer.INSTANCE.getBossClearTime();
+            case 1 -> DarkAddons.isInDungeons() && -1L != DungeonTimer.getBossClearTime();
             case 2 ->
-                DarkAddons.isInDungeons() && -1L != DungeonTimer.INSTANCE.getBossClearTime() || DarkAddons.isPlayerInDungeonHub();
+                DarkAddons.isInDungeons() && -1L != DungeonTimer.getBossClearTime() || DarkAddons.isPlayerInDungeonHub();
             case 3 -> DarkAddons.isInDungeons() || DarkAddons.isPlayerInDungeonHub();
             case 4 -> DarkAddons.isInSkyblock();
             case 5 -> true;

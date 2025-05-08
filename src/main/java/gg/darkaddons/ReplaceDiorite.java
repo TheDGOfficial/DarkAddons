@@ -16,8 +16,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
-
 final class ReplaceDiorite {
     ReplaceDiorite() {
         super();
@@ -64,7 +62,7 @@ final class ReplaceDiorite {
 
     @SubscribeEvent
     public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
-        if (Config.isReplaceDiorite() && TickEvent.Phase.END == event.phase && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && -1L == DungeonTimer.INSTANCE.getPhase2ClearTime()) {
+        if (Config.isReplaceDiorite() && TickEvent.Phase.END == event.phase && -1L != DungeonTimer.getBossEntryTime() && -1L == DungeonTimer.getPhase2ClearTime()) {
             ReplaceDiorite.replaceDiorite();
         }
     }

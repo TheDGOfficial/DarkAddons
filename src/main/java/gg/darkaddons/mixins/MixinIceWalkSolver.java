@@ -12,9 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
-
 import gg.darkaddons.DarkAddons;
+import gg.darkaddons.DungeonTimer;
 
 @Pseudo
 @Mixin(targets = "me.Danker.features.puzzlesolvers.IceWalkSolver", priority = 999)
@@ -33,7 +32,7 @@ final class MixinIceWalkSolver {
 
     @Inject(method = "onWorldRender", remap = false, at = @At("HEAD"), cancellable = true)
     private final void onWorldRender$darkaddons(@NotNull final RenderWorldLastEvent event, @NotNull final CallbackInfo ci) {
-        if (-1L != DungeonTimer.INSTANCE.getBossEntryTime() || !DarkAddons.isInDungeons()) {
+        if (-1L != DungeonTimer.getBossEntryTime() || !DarkAddons.isInDungeons()) {
             ci.cancel();
         }
     }

@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -119,7 +118,7 @@ final class EHPDisplay extends GuiElement {
 
     @NotNull
     private static final String getColor(final float effectiveHealth) {
-        final var threshold2 = EHPDisplay.getHighestNonBossMobDmgForCurrentFloor(-1L != DungeonTimer.INSTANCE.getBossEntryTime() && EHPDisplay.isPlayerPlayingTankClass());
+        final var threshold2 = EHPDisplay.getHighestNonBossMobDmgForCurrentFloor(-1L != DungeonTimer.getBossEntryTime() && EHPDisplay.isPlayerPlayingTankClass());
         final var threshold3 = threshold2 * 2.0F;
 
         if (effectiveHealth >= threshold3) {

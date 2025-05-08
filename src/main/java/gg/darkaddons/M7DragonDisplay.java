@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.event.world.WorldEvent;
@@ -32,7 +31,7 @@ final class M7DragonDisplay extends GuiElement {
         M7DragonDisplay.resetHPs();
 
         DarkAddons.registerTickTask("update_dragon_hps_scoreboard", 4, true, () -> {
-            if (!Config.isDragonHud() || !DarkAddons.isInSkyblock() || !DarkAddons.isInDungeons() || -1L == DungeonTimer.INSTANCE.getPhase4ClearTime() || !AdditionalM7Features.isInM7()) {
+            if (!Config.isDragonHud() || !DarkAddons.isInSkyblock() || !DarkAddons.isInDungeons() || -1L == DungeonTimer.getPhase4ClearTime() || !AdditionalM7Features.isInM7()) {
                 return;
             }
 
@@ -187,7 +186,7 @@ final class M7DragonDisplay extends GuiElement {
 
     @Override
     final void render(final boolean demo) {
-        if (demo || this.isEnabled() && DarkAddons.isInSkyblock() && DarkAddons.isInDungeons() && -1L != DungeonTimer.INSTANCE.getPhase4ClearTime() && AdditionalM7Features.isInM7() && !DarkAddons.isInLocationEditingGui()) {
+        if (demo || this.isEnabled() && DarkAddons.isInSkyblock() && DarkAddons.isInDungeons() && -1L != DungeonTimer.getPhase4ClearTime() && AdditionalM7Features.isInM7() && !DarkAddons.isInLocationEditingGui()) {
             final var leftAlign = this.shouldLeftAlign();
             final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 

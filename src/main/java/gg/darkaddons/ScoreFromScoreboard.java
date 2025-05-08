@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.features.impl.dungeons.ScoreCalculation;
 import gg.skytils.skytilsmod.listeners.DungeonListener;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -24,7 +23,7 @@ final class ScoreFromScoreboard {
                 return;
             }
 
-            for (final var line : ScoreboardUtil.fetchScoreboardLines(-1L == DungeonTimer.INSTANCE.getBossEntryTime() ? 10 : 9)) {
+            for (final var line : ScoreboardUtil.fetchScoreboardLines(-1L == DungeonTimer.getBossEntryTime() ? 10 : 9)) {
                 final var withoutColor = Utils.removeControlCodes(line);
                 if (withoutColor.startsWith("Cleared: ")) {
                     final var score = Utils.safeParseIntFast(StringUtils.removeEnd(StringUtils.substringAfter(withoutColor, "% ("), ")"));
@@ -56,7 +55,7 @@ final class ScoreFromScoreboard {
     private static final int fixScoreboardScore(final int scoreboardScore) {
         var fixedScore = scoreboardScore;
 
-        if (-1L == DungeonTimer.INSTANCE.getBossEntryTime()) {
+        if (-1L == DungeonTimer.getBossEntryTime()) {
             fixedScore += 28;
         }
 
@@ -98,7 +97,7 @@ final class ScoreFromScoreboard {
     }
 
     private static final void realScoreHook(final int score, final int deaths) {
-        if (Config.isSendMessageForScoreAtBossEntry() && (-1L != DungeonTimer.INSTANCE.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry) {
+        if (Config.isSendMessageForScoreAtBossEntry() && (-1L != DungeonTimer.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry) {
             var affordableDeaths = 0;
             var extraScore = score - 300;
 

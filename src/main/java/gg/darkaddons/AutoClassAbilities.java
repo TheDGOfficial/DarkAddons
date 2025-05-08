@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.listeners.DungeonListener;
 import gg.skytils.skytilsmod.utils.DungeonClass;
 import net.minecraft.client.Minecraft;
@@ -59,7 +58,7 @@ final class AutoClassAbilities {
         EXPLOSIVE_SHOT(TimeUnit.SECONDS, 40L) {
             @Override
             public final boolean forceCooldown() {
-                return -1L != DungeonTimer.INSTANCE.getTerraClearTime();
+                return -1L != DungeonTimer.getTerraClearTime();
             }
         },
         SEISMIC_WAVE(TimeUnit.SECONDS, 15L);
@@ -106,7 +105,7 @@ final class AutoClassAbilities {
             public final boolean forceCooldown() {
                 final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloor();
                 return ("M6".equals(dungeonFloor) || "F6".equals(dungeonFloor) ||
-                    "M7".equals(dungeonFloor)) && -1L != DungeonTimer.INSTANCE.getBossEntryTime();
+                    "M7".equals(dungeonFloor)) && -1L != DungeonTimer.getBossEntryTime();
             }
         },
         THUNDERSTORM(TimeUnit.SECONDS, 500L),
@@ -115,24 +114,24 @@ final class AutoClassAbilities {
             public final boolean forceCooldown() {
                 final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloor();
                 return ("M6".equals(dungeonFloor) || "M5".equals(dungeonFloor) ||
-                    "F6".equals(dungeonFloor)) && -1L != DungeonTimer.INSTANCE.getBossEntryTime();
+                    "F6".equals(dungeonFloor)) && -1L != DungeonTimer.getBossEntryTime();
             }
         },
         RAPID_FIRE(TimeUnit.SECONDS, 100L) {
             @Override
             public final boolean forceCooldown() {
                 final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloor();
-                return "M7".equals(dungeonFloor) && -1L != DungeonTimer.INSTANCE.getBossEntryTime() || ("M6".equals(dungeonFloor) || "F6".equals(dungeonFloor)) && !AdditionalM7Features.isGiantsFalling() && -1L != DungeonTimer.INSTANCE.getBossEntryTime();
+                return "M7".equals(dungeonFloor) && -1L != DungeonTimer.getBossEntryTime() || ("M6".equals(dungeonFloor) || "F6".equals(dungeonFloor)) && !AdditionalM7Features.isGiantsFalling() && -1L != DungeonTimer.getBossEntryTime();
             }
         },
         CASTLE_OF_STONE(TimeUnit.SECONDS, 150L) {
             @Override
             public final boolean forceCooldown() {
                 final var dungeonFloor = DungeonFeatures.INSTANCE.getDungeonFloorNumber();
-                if (null != dungeonFloor && -1L != DungeonTimer.INSTANCE.getBossEntryTime()) {
+                if (null != dungeonFloor && -1L != DungeonTimer.getBossEntryTime()) {
                     switch (dungeonFloor) {
                         case 7 -> {
-                            return -1L == DungeonTimer.INSTANCE.getPhase3ClearTime();
+                            return -1L == DungeonTimer.getPhase3ClearTime();
                         }
                         case 6 -> {
                             return !AdditionalM7Features.isGiantsFalling();
@@ -209,7 +208,7 @@ final class AutoClassAbilities {
     }
 
     private static final boolean checkPrePreconditions() {
-        return DarkAddons.isInDungeons() && -1L == DungeonTimer.INSTANCE.getBossClearTime() && -1L != DungeonTimer.INSTANCE.getDungeonStartTime();
+        return DarkAddons.isInDungeons() && -1L == DungeonTimer.getBossClearTime() && -1L != DungeonTimer.getDungeonStartTime();
     }
 
     private static final boolean checkPreconditions() {

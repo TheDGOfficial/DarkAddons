@@ -2,7 +2,6 @@ package gg.darkaddons;
 
 import gg.essential.universal.UChat;
 import gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures;
-import gg.skytils.skytilsmod.features.impl.dungeons.DungeonTimer;
 import gg.skytils.skytilsmod.mixins.extensions.ExtensionEntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -50,7 +49,7 @@ final class AdditionalM7Features {
     }
 
     static final boolean isAtPhase1() {
-        return -1L == DungeonTimer.INSTANCE.getPhase1ClearTime() && -1L != DungeonTimer.INSTANCE.getBossEntryTime() && AdditionalM7Features.isInM7OrF7();
+        return -1L == DungeonTimer.getPhase1ClearTime() && -1L != DungeonTimer.getBossEntryTime() && AdditionalM7Features.isInM7OrF7();
     }
 
     static final boolean isInM7OrF7() {
@@ -60,12 +59,11 @@ final class AdditionalM7Features {
     }
 
     static final boolean canHideArmorstands() {
-        final var dungeonTimerInstance = DungeonTimer.INSTANCE;
-        return AdditionalM7Features.canHideArmorstands(dungeonTimerInstance, dungeonTimerInstance.getBossEntryTime());
+        return AdditionalM7Features.canHideArmorstands(DungeonTimer.getBossEntryTime());
     }
 
-    static final boolean canHideArmorstands(@NotNull final DungeonTimer dungeonTimerInstance, final long bossEntryTime) {
-        return (AdditionalM7Features.phase5NotStarted && -1L == dungeonTimerInstance.getPhase3ClearTime() && -1L == dungeonTimerInstance.getPhase4ClearTime() || AdditionalM7Features.phase5Started) && AdditionalM7Features.notSaidFinalDialogue && -1L == dungeonTimerInstance.getBossClearTime() && (AdditionalM7Features.firstGolemWoken || -1L == bossEntryTime || !AdditionalM7Features.isInM6OrF6Boss(bossEntryTime)) && !DarkAddons.isPlayerInGarden() && !DarkAddons.isPlayerInMineshaft();
+    static final boolean canHideArmorstands(final long bossEntryTime) {
+        return (AdditionalM7Features.phase5NotStarted && -1L == DungeonTimer.getPhase3ClearTime() && -1L == DungeonTimer.getPhase4ClearTime() || AdditionalM7Features.phase5Started) && AdditionalM7Features.notSaidFinalDialogue && -1L == DungeonTimer.getBossClearTime() && (AdditionalM7Features.firstGolemWoken || -1L == bossEntryTime || !AdditionalM7Features.isInM6OrF6Boss(bossEntryTime)) && !DarkAddons.isPlayerInGarden() && !DarkAddons.isPlayerInMineshaft();
     }
 
     static final boolean canRemoveBlankArmorStands() {
