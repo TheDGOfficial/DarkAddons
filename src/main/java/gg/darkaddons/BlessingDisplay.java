@@ -230,11 +230,11 @@ final class BlessingDisplay extends GuiElement {
 
             final var fontHeight = GuiElement.getFontHeight();
 
-            final var white = GuiElement.CommonColors.WHITE;
-            final var red = GuiElement.CommonColors.RED;
-            final var yellow = GuiElement.CommonColors.YELLOW;
-            final var green = GuiElement.CommonColors.GREEN;
-            final var rainbow = GuiElement.CommonColors.RAINBOW;
+            final var white = SmartFontRenderer.CommonColors.WHITE;
+            final var red = SmartFontRenderer.CommonColors.RED;
+            final var yellow = SmartFontRenderer.CommonColors.YELLOW;
+            final var green = SmartFontRenderer.CommonColors.GREEN;
+            final var rainbow = SmartFontRenderer.CommonColors.RAINBOW;
 
             final var hideBlessingWhenZero = Config.isHideBlessingWhenZero();
 
@@ -290,7 +290,7 @@ final class BlessingDisplay extends GuiElement {
     }
 
     @NotNull
-    private static final GuiElement.CommonColors getColorFromThreshold(@NotNull final GuiElement.CommonColors white, @NotNull final GuiElement.CommonColors red, @NotNull final GuiElement.CommonColors yellow, @NotNull final GuiElement.CommonColors green, @NotNull final GuiElement.CommonColors rainbow, final int threshold) {
+    private static final SmartFontRenderer.CommonColors getColorFromThreshold(@NotNull final SmartFontRenderer.CommonColors white, @NotNull final SmartFontRenderer.CommonColors red, @NotNull final SmartFontRenderer.CommonColors yellow, @NotNull final SmartFontRenderer.CommonColors green, @NotNull final SmartFontRenderer.CommonColors rainbow, final int threshold) {
         return switch (threshold) {
             case 4 -> rainbow;
             case 3 -> green;

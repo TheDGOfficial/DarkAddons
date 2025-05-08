@@ -108,9 +108,9 @@ abstract class SimpleGuiElement extends GuiElement {
             final var xPos = leftAlign ? 0.0F : this.getWidth(demo);
 
             final var shadow = switch (this.shadowSelection.getAsInt()) {
-                case 1 -> GuiElement.TextShadow.NORMAL;
-                case 2 -> GuiElement.TextShadow.OUTLINE;
-                default -> GuiElement.TextShadow.NONE;
+                case 1 -> SmartFontRenderer.TextShadow.NORMAL;
+                case 2 -> SmartFontRenderer.TextShadow.OUTLINE;
+                default -> SmartFontRenderer.TextShadow.NONE;
             };
 
             final var fontHeight = GuiElement.getFontHeight();

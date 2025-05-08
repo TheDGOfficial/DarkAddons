@@ -4,7 +4,6 @@ import gg.darkaddons.annotations.bytecode.Bridge;
 import gg.darkaddons.annotations.bytecode.Synthetic;
 import gg.essential.elementa.ElementaVersion;
 import gg.essential.universal.UChat;
-import gg.skytils.skytilsmod.Skytils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
@@ -485,7 +484,7 @@ public final class DarkAddons {
 
     // TODO remove/change implementation of these after split
     static final boolean isInSkyblock() {
-        return gg.skytils.skytilsmod.utils.Utils.INSTANCE.getInSkyblock();
+        return SkyblockDedection.isInSkyblock();
     }
 
     public static final boolean isInDungeons() {

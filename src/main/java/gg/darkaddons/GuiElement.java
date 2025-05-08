@@ -1,8 +1,8 @@
 package gg.darkaddons;
 
+import net.minecraft.client.Minecraft;
+
 import gg.essential.universal.UResolution;
-import gg.skytils.skytilsmod.utils.graphics.ScreenRenderer;
-import gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer;
 import org.jetbrains.annotations.NotNull;
 
 abstract class GuiElement {
@@ -82,11 +82,11 @@ abstract class GuiElement {
     abstract void render(final boolean demo);
 
     static final int getFontHeight() {
-        return ScreenRenderer.Companion.getFontRenderer().FONT_HEIGHT;
+        return Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
     }
 
     static final int getTextWidth(@NotNull final String text) {
-        return ScreenRenderer.Companion.getFontRenderer().getStringWidth(text);
+        return Minecraft.getMinecraft().fontRendererObj.getStringWidth(text);
     }
 
     final boolean shouldLeftAlign() {
@@ -94,48 +94,26 @@ abstract class GuiElement {
     }
 
     static final void drawString(@NotNull final String text, final float xPos, final float yPos, final boolean leftAligned) {
-        GuiElement.drawString(text, xPos, yPos, GuiElement.CommonColors.WHITE, leftAligned);
+        GuiElement.drawString(text, xPos, yPos, SmartFontRenderer.CommonColors.WHITE, leftAligned);
     }
 
-    static final void drawString(@NotNull final String text, final float xPos, final float yPos, final boolean leftAligned, @NotNull final GuiElement.TextShadow shadow) {
-        GuiElement.drawString(text, xPos, yPos, GuiElement.CommonColors.WHITE, leftAligned, shadow);
+    static final void drawString(@NotNull final String text, final float xPos, final float yPos, final boolean leftAligned, @NotNull final SmartFontRenderer.TextShadow shadow) {
+        GuiElement.drawString(text, xPos, yPos, SmartFontRenderer.CommonColors.WHITE, leftAligned, shadow);
     }
 
-    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final GuiElement.CommonColors color, final boolean leftAligned) {
-        GuiElement.drawString(text, xPos, yPos, color, leftAligned, GuiElement.TextShadow.NONE);
+    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final SmartFontRenderer.CommonColors color, final boolean leftAligned) {
+        GuiElement.drawString(text, xPos, yPos, color, leftAligned, SmartFontRenderer.TextShadow.NONE);
     }
 
-    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final GuiElement.CommonColors color, final boolean leftAligned, @NotNull final GuiElement.TextShadow shadow) {
-        ScreenRenderer.Companion.getFontRenderer().drawString(
+    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final SmartFontRenderer.CommonColors color, final boolean leftAligned, @NotNull final SmartFontRenderer.TextShadow shadow) {
+        SmartFontRenderer.drawString(
             text,
             xPos,
             yPos,
-            color.color,
-            leftAligned ? SmartFontRenderer.TextAlignment.LEFT_RIGHT : SmartFontRenderer.TextAlignment.RIGHT_LEFT,
-            shadow.shadow
+            color,
+            leftAligned,
+            shadow
         );
-    }
-
-    enum TextShadow {
-        NORMAL(SmartFontRenderer.TextShadow.NORMAL), OUTLINE(SmartFontRenderer.TextShadow.OUTLINE), NONE(SmartFontRenderer.TextShadow.NONE);
-
-        @NotNull
-        private final SmartFontRenderer.TextShadow shadow;
-
-        private TextShadow(@NotNull final SmartFontRenderer.TextShadow shadow) {
-            this.shadow = shadow;
-        }
-    }
-
-    enum CommonColors {
-        WHITE(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getWHITE()), RED(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getRED()), YELLOW(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getYELLOW()), GREEN(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getGREEN()), RAINBOW(gg.skytils.skytilsmod.utils.graphics.colors.CommonColors.Companion.getRAINBOW());
-
-        @NotNull
-        private final gg.skytils.skytilsmod.utils.graphics.colors.CommonColors color;
-
-        private CommonColors(@NotNull final gg.skytils.skytilsmod.utils.graphics.colors.CommonColors color) {
-            this.color = color;
-        }
     }
 
     abstract boolean isEnabled();
