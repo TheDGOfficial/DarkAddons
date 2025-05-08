@@ -1,8 +1,6 @@
 package gg.darkaddons;
 
 import com.google.common.collect.EvictingQueue;
-import gg.skytils.skytilsmod.utils.SBInfo;
-import gg.skytils.skytilsmod.utils.SkyblockIsland;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -485,7 +483,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
         private final boolean isInSlayerArea() {
             for (final var slayerArea : this.slayerAreas) {
-                if (slayerArea.getMode().equals(SBInfo.INSTANCE.getMode())) {
+                if (slayerArea.isInIsland()) {
                     return true;
                 }
             }

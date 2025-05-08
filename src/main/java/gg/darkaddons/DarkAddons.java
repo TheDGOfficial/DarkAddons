@@ -5,8 +5,6 @@ import gg.darkaddons.annotations.bytecode.Synthetic;
 import gg.essential.elementa.ElementaVersion;
 import gg.essential.universal.UChat;
 import gg.skytils.skytilsmod.Skytils;
-import gg.skytils.skytilsmod.utils.SBInfo;
-import gg.skytils.skytilsmod.utils.SkyblockIsland;
 import gg.skytils.skytilsmod.features.impl.handlers.MayorInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -497,32 +495,32 @@ public final class DarkAddons {
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final boolean isPlayerInCrystalHollows() {
-        return SkyblockIsland.CrystalHollows.getMode().equals(SBInfo.INSTANCE.getMode());
+        return SkyblockIsland.CrystalHollows.isInIsland();
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final boolean isPlayerInDungeonHub() {
-        return SkyblockIsland.DungeonHub.getMode().equals(SBInfo.INSTANCE.getMode());
+        return SkyblockIsland.DungeonHub.isInIsland();
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final boolean isPlayerInGarden() {
-        return SkyblockIsland.TheGarden.getMode().equals(SBInfo.INSTANCE.getMode());
+        return SkyblockIsland.TheGarden.isInIsland();
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final boolean isPlayerInRift() {
-        return SkyblockIsland.TheRift.getMode().equals(SBInfo.INSTANCE.getMode());
+        return SkyblockIsland.TheRift.isInIsland();
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final boolean isPlayerInCrimsonIsle() {
-        return SkyblockIsland.CrimsonIsle.getMode().equals(SBInfo.INSTANCE.getMode());
+        return SkyblockIsland.CrimsonIsle.isInIsland();
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final boolean isPlayerInMineshaft() {
-        return "mineshaft".equals(SBInfo.INSTANCE.getMode());
+        return SkyblockIsland.GlaciteMineshafts.isInIsland();
     }
 
     static final boolean isDerpy() {
