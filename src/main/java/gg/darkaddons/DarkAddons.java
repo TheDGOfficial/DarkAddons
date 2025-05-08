@@ -5,7 +5,6 @@ import gg.darkaddons.annotations.bytecode.Synthetic;
 import gg.essential.elementa.ElementaVersion;
 import gg.essential.universal.UChat;
 import gg.skytils.skytilsmod.Skytils;
-import gg.skytils.skytilsmod.features.impl.handlers.MayorInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.settings.KeyBinding;
@@ -524,29 +523,29 @@ public final class DarkAddons {
     }
 
     static final boolean isDerpy() {
-        return "Derpy".equals(MayorInfo.INSTANCE.getCurrentMayor());
+        return "Derpy".equals(MayorInfo.getCurrentMayor());
     }
 
     static final boolean isPaulMoreEffectiveBlessingsActive() {
-        if (MayorInfo.INSTANCE.getAllPerks().contains("Benediction")) {
+        if (MayorInfo.getAllPerks().contains("Benediction")) {
             return true;
         }
 
-        final var jerryMayor = MayorInfo.INSTANCE.getJerryMayor();
+        final var jerryMayor = MayorInfo.getJerryMayor();
 
         // We don't need to check for perks if Paul is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
-        return null != jerryMayor && "Paul".equals(jerryMayor.getName());
+        return null != jerryMayor && "Paul".equals(jerryMayor);
     }
 
     static final boolean isAatroxRareDropPerkActive() {
-        if (MayorInfo.INSTANCE.getAllPerks().contains("Pathfinder")) {
+        if (MayorInfo.getAllPerks().contains("Pathfinder")) {
             return true;
         }
 
-        final var jerryMayor = MayorInfo.INSTANCE.getJerryMayor();
+        final var jerryMayor = MayorInfo.getJerryMayor();
 
         // We don't need to check for perks if Aatrox is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
-        return null != jerryMayor && "Aatrox".equals(jerryMayor.getName());
+        return null != jerryMayor && "Aatrox".equals(jerryMayor);
     }
 
     /**
