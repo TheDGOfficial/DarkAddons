@@ -1,7 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.listeners.DungeonListener;
-import gg.skytils.skytilsmod.utils.DungeonClass;
 import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -219,10 +217,14 @@ final class AutoClassAbilities {
 
     private static final void findClassAndAssignAbilities() {
         final var self = Minecraft.getMinecraft().thePlayer;
-        for (final var teammate : DungeonListener.INSTANCE.getTeam().values()) {
+        for (final var teammate : DungeonListener.getTeam()) {
             //noinspection ObjectEquality
             if (self == teammate.getPlayer()) {
                 final var dungeonClass = teammate.getDungeonClass();
+                if (null == dungeonClass) {
+                    // The dungeon probably did not start yet
+                    break;
+                }
                 switch (dungeonClass) {
                     case ARCHER -> {
                         AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT.cooldownInMs = TimeUnit.SECONDS.toMillis(40L - (Math.min(50, teammate.getClassLevel()) / 5L << 1L));
@@ -235,7 +237,7 @@ final class AutoClassAbilities {
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAGNAROK;
                     }
                     case MAGE -> {
-                        final var isDupeMage = 1 < DungeonListener.INSTANCE.getTeam().values().stream().filter(t -> DungeonClass.MAGE == t.getDungeonClass()).count();
+                        final var isDupeMage = 1 < DungeonListener.getTeam().stream().filter(t -> DungeonListener.DungeonClass.MAGE == t.getDungeonClass()).count();
                         var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) >> 1;
                         if (!isDupeMage) {
                             lvlExtraCdReduc <<= 1;
@@ -254,9 +256,6 @@ final class AutoClassAbilities {
                     case TANK -> {
                         AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.SEISMIC_WAVE;
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE;
-                    }
-                    case EMPTY -> {
-                        // the dungeon probably did not start yet
                     }
                 }
                 break;

@@ -94,7 +94,8 @@
         "MixinTabListUtils",
         "MixinTabListParser",
         "IMixinS3BPacketScoreboardObjective",
-        "MixinSBInfo"
+        "MixinSBInfo",
+        "MixinSoundManager"
     ],
     "server": [
     ],

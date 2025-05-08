@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.listeners.DungeonListener;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +22,7 @@ final class ClassAverage50Display extends GuiElement {
     private static ClassAverage50Display.DungeonFloor lastDoneFloor;
 
     @Nullable
-    private static RunsTillCA50.DungeonClass lastPlayedClass;
+    private static DungeonListener.DungeonClass lastPlayedClass;
 
     private static double healerExperience;
 
@@ -254,17 +253,14 @@ final class ClassAverage50Display extends GuiElement {
     }
 
     @Nullable
-    private static final RunsTillCA50.DungeonClass findClass(@NotNull final EnumMap<RunsTillCA50.DungeonClass, Integer> classes) {
+    private static final DungeonListener.DungeonClass findClass(@NotNull final EnumMap<DungeonListener.DungeonClass, Integer> classes) {
         final var self = Minecraft.getMinecraft().thePlayer;
-        for (final var teammate : DungeonListener.INSTANCE.getTeam().values()) {
+        for (final var teammate : DungeonListener.getTeam()) {
             //noinspection ObjectEquality
             if (self == teammate.getPlayer()) {
                 final var dungeonClass = teammate.getDungeonClass();
                 if (null != dungeonClass) {
-                    final var name  = dungeonClass.name();
-                    if (!"EMPTY".equals(name)) {
-                        return ClassAverage50Display.lastPlayedClass = RunsTillCA50.DungeonClass.valueOf(name);
-                    }
+                    return ClassAverage50Display.lastPlayedClass = dungeonClass;
                 }
             }
         }
@@ -273,10 +269,10 @@ final class ClassAverage50Display extends GuiElement {
     }
 
     @Nullable
-    private static final RunsTillCA50.DungeonClass findMinRunsLeftClass(@SuppressWarnings("CollectionDeclaredAsConcreteClass") @NotNull final EnumMap<RunsTillCA50.DungeonClass, Integer> classes) {
+    private static final DungeonListener.DungeonClass findMinRunsLeftClass(@SuppressWarnings("CollectionDeclaredAsConcreteClass") @NotNull final EnumMap<DungeonListener.DungeonClass, Integer> classes) {
         final var entrySet = classes.entrySet();
 
-        RunsTillCA50.DungeonClass minRunsLeftClass = null;
+        DungeonListener.DungeonClass minRunsLeftClass = null;
         var minRunsLeft = Integer.MAX_VALUE;
 
         for (final var entry : entrySet) {
@@ -293,24 +289,24 @@ final class ClassAverage50Display extends GuiElement {
     }
 
     @NotNull
-    private static final EnumMap<RunsTillCA50.DungeonClass, Integer> createRunsMap(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns) {
-        final var classes = new EnumMap<RunsTillCA50.DungeonClass, Integer>(RunsTillCA50.DungeonClass.class);
+    private static final EnumMap<DungeonListener.DungeonClass, Integer> createRunsMap(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns) {
+        final var classes = new EnumMap<DungeonListener.DungeonClass, Integer>(DungeonListener.DungeonClass.class);
 
-        classes.put(RunsTillCA50.DungeonClass.HEALER, healerRuns);
-        classes.put(RunsTillCA50.DungeonClass.MAGE, mageRuns);
-        classes.put(RunsTillCA50.DungeonClass.BERSERK, berserkRuns);
-        classes.put(RunsTillCA50.DungeonClass.ARCHER, archerRuns);
-        classes.put(RunsTillCA50.DungeonClass.TANK, tankRuns);
+        classes.put(DungeonListener.DungeonClass.HEALER, healerRuns);
+        classes.put(DungeonListener.DungeonClass.MAGE, mageRuns);
+        classes.put(DungeonListener.DungeonClass.BERSERK, berserkRuns);
+        classes.put(DungeonListener.DungeonClass.ARCHER, archerRuns);
+        classes.put(DungeonListener.DungeonClass.TANK, tankRuns);
 
         return classes;
     }
 
     private static final void classes(@NotNull final RunsTillCA50.ProgramResult result, @NotNull final String floorName) {
-        final var healerRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(RunsTillCA50.DungeonClass.HEALER), 0);
-        final var mageRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(RunsTillCA50.DungeonClass.MAGE), 0);
-        final var berserkRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(RunsTillCA50.DungeonClass.BERSERK), 0);
-        final var archerRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(RunsTillCA50.DungeonClass.ARCHER), 0);
-        final var tankRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(RunsTillCA50.DungeonClass.TANK), 0);
+        final var healerRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(DungeonListener.DungeonClass.HEALER), 0);
+        final var mageRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(DungeonListener.DungeonClass.MAGE), 0);
+        final var berserkRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(DungeonListener.DungeonClass.BERSERK), 0);
+        final var archerRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(DungeonListener.DungeonClass.ARCHER), 0);
+        final var tankRuns = ClassAverage50Display.defaultIfNull(result.runsAsClass.get(DungeonListener.DungeonClass.TANK), 0);
 
         final var classes = ClassAverage50Display.createRunsMap(healerRuns, mageRuns, berserkRuns, archerRuns, tankRuns);
 
@@ -325,7 +321,7 @@ final class ClassAverage50Display extends GuiElement {
         return DarkAddons.isDerpy() ? "Derpy " : "";
     }
 
-    private static final void classes0(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns, @Nullable final RunsTillCA50.DungeonClass preferred, final int compactness, @NotNull final String floorName) {
+    private static final void classes0(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns, @Nullable final DungeonListener.DungeonClass preferred, final int compactness, @NotNull final String floorName) {
         final var showZeroRuns = 1 >= compactness;
         final var showNonPreferred = 2 >= compactness;
 
@@ -333,23 +329,23 @@ final class ClassAverage50Display extends GuiElement {
 
         final var suffix = ' ' + ClassAverage50Display.getDerpyText() + floorName + " Runs";
 
-        if ((0 < healerRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.HEALER == preferred)) {
+        if ((0 < healerRuns || showZeroRuns) && (showNonPreferred || DungeonListener.DungeonClass.HEALER == preferred)) {
             hud.add("§a❤ Healer: " + healerRuns + suffix);
         }
 
-        if ((0 < mageRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.MAGE == preferred)) {
+        if ((0 < mageRuns || showZeroRuns) && (showNonPreferred || DungeonListener.DungeonClass.MAGE == preferred)) {
             hud.add("§b✎ Mage: " + mageRuns + suffix);
         }
 
-        if ((0 < berserkRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.BERSERK == preferred)) {
+        if ((0 < berserkRuns || showZeroRuns) && (showNonPreferred || DungeonListener.DungeonClass.BERSERK == preferred)) {
             hud.add("§c⚔ Berserk: " + berserkRuns + suffix);
         }
 
-        if ((0 < archerRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.ARCHER == preferred)) {
+        if ((0 < archerRuns || showZeroRuns) && (showNonPreferred || DungeonListener.DungeonClass.ARCHER == preferred)) {
             hud.add("§6➶ Archer: " + archerRuns + suffix);
         }
 
-        if ((0 < tankRuns || showZeroRuns) && (showNonPreferred || RunsTillCA50.DungeonClass.TANK == preferred)) {
+        if ((0 < tankRuns || showZeroRuns) && (showNonPreferred || DungeonListener.DungeonClass.TANK == preferred)) {
             hud.add("§7❈ Tank: " + tankRuns + suffix);
         }
     }
@@ -374,7 +370,7 @@ final class ClassAverage50Display extends GuiElement {
         };
     }
 
-    private static final void buildHudLines(@NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap, @NotNull final ClassAverage50Display.DungeonFloor floor, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> originalXpMap) {
+    private static final void buildHudLines(@NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap, @NotNull final ClassAverage50Display.DungeonFloor floor, @NotNull final EnumMap<DungeonListener.DungeonClass, Double> originalXpMap) {
         ClassAverage50Display.header();
 
         final var result = RunsTillCA50.simulateAllRuns(xpMap, new EnumMap<>(xpMap), 0.0D, ClassAverage50Display.DungeonFloor.M7 == floor, DarkAddons.isDerpy(), ClassAverage50Display.getMode());

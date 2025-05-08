@@ -1,7 +1,6 @@
 package gg.darkaddons;
 
 import gg.skytils.skytilsmod.features.impl.dungeons.ScoreCalculation;
-import gg.skytils.skytilsmod.listeners.DungeonListener;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -59,7 +58,7 @@ final class ScoreFromScoreboard {
             fixedScore += 28;
         }
 
-        if (ScoreFromScoreboard.blazeDoneReceived && DungeonListener.INSTANCE.getIncompletePuzzles().contains("Higher Or Lower")) {
+        if (ScoreFromScoreboard.blazeDoneReceived && DungeonListener.getIncompletePuzzles().contains("Higher Or Lower")) {
             fixedScore += 14;
         }
 

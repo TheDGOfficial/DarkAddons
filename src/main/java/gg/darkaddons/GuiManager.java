@@ -1,8 +1,6 @@
 package gg.darkaddons;
 
 import com.google.gson.JsonObject;
-import gg.skytils.skytilsmod.core.SoundQueue;
-import gg.skytils.skytilsmod.utils.GlState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -114,7 +112,7 @@ final class GuiManager {
 
         McProfilerHelper.startSection("dark_addons_render_hud");
 
-        GlState.Companion.pushState();
+        GlStateManager.pushAttrib();
 
         for (final var element : GuiManager.guiElements.values()) {
             McProfilerHelper.startSection(element.getName());
@@ -144,7 +142,7 @@ final class GuiManager {
 
         McProfilerHelper.endSection();
 
-        GlState.Companion.popState();
+        GlStateManager.popAttrib();
 
         McProfilerHelper.endSection();
     }
@@ -348,7 +346,7 @@ final class GuiManager {
 
     static final void createTitle(@Nullable final String titleText, @Nullable final String subtitleText, final int ticks, final int subtitleTicks, final boolean playsound, @NotNull final GuiManager.Sound sound) {
         if (playsound && GuiManager.Sound.NO_SOUND != sound) {
-            SoundQueue.INSTANCE.addToQueue(sound.getMcSound(), 0.5F, 1.0F, 0, true);
+            SoundManager.playSound(sound.getMcSound(), 0.5F, 1.0F, false);
         }
 
         GuiManager.title = titleText;

@@ -169,7 +169,7 @@ final class RunsTillCA50 {
         private final DungeonData catacombs;
 
         @NotNull
-        private final Map<RunsTillCA50.DungeonClass, Double> classExperiencesMap;
+        private final Map<DungeonListener.DungeonClass, Double> classExperiencesMap;
 
         private final long currentCompletions;
 
@@ -179,7 +179,7 @@ final class RunsTillCA50 {
         final double archerXp;
         final double tankXp;
 
-        private PlayerDataHolder(@NotNull final DungeonData catacombsIn, @NotNull final Map<RunsTillCA50.DungeonClass, Double> classExperiencesMapIn, final long currentCompletionsIn, final double healerXpIn, final double mageXpIn, final double berserkerXpIn, final double archerXpIn, final double tankXpIn) {
+        private PlayerDataHolder(@NotNull final DungeonData catacombsIn, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiencesMapIn, final long currentCompletionsIn, final double healerXpIn, final double mageXpIn, final double berserkerXpIn, final double archerXpIn, final double tankXpIn) {
             super();
 
             this.catacombs = catacombsIn;
@@ -277,13 +277,13 @@ final class RunsTillCA50 {
                 return null;
             }
 
-            final var classExperiences = new EnumMap<RunsTillCA50.DungeonClass, Double>(RunsTillCA50.DungeonClass.class);
+            final var classExperiences = new EnumMap<DungeonListener.DungeonClass, Double>(DungeonListener.DungeonClass.class);
 
-            classExperiences.put(RunsTillCA50.DungeonClass.ARCHER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("archer").getExperience(), 0.0D));
-            classExperiences.put(RunsTillCA50.DungeonClass.BERSERK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("berserk").getExperience(), 0.0D));
-            classExperiences.put(RunsTillCA50.DungeonClass.HEALER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("healer").getExperience(), 0.0D));
-            classExperiences.put(RunsTillCA50.DungeonClass.MAGE, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("mage").getExperience(), 0.0D));
-            classExperiences.put(RunsTillCA50.DungeonClass.TANK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("tank").getExperience(), 0.0D));
+            classExperiences.put(DungeonListener.DungeonClass.ARCHER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("archer").getExperience(), 0.0D));
+            classExperiences.put(DungeonListener.DungeonClass.BERSERK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("berserk").getExperience(), 0.0D));
+            classExperiences.put(DungeonListener.DungeonClass.HEALER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("healer").getExperience(), 0.0D));
+            classExperiences.put(DungeonListener.DungeonClass.MAGE, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("mage").getExperience(), 0.0D));
+            classExperiences.put(DungeonListener.DungeonClass.TANK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("tank").getExperience(), 0.0D));
 
             return RunsTillCA50.extractCompletionsAndCreateDataHolder(uuid, m7, catacombs, classExperiences);
         } catch (final Throwable t) {
@@ -293,7 +293,7 @@ final class RunsTillCA50 {
         return null;
     }
 
-    private static final boolean calculateUUID1(@Nullable final UUID uuid, final boolean m7, final boolean derpy, final DungeonData catacombs, @NotNull final Map<RunsTillCA50.DungeonClass, Double> classExperiences, @NotNull final RunsTillCA50.Mode mode, final long currentCompletions) {
+    private static final boolean calculateUUID1(@Nullable final UUID uuid, final boolean m7, final boolean derpy, final DungeonData catacombs, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiences, @NotNull final RunsTillCA50.Mode mode, final long currentCompletions) {
         var formattedRankAndName = RunsTillCA50.rankCache.getIfPresent(uuid);
 
         if (null == formattedRankAndName) {
@@ -308,7 +308,7 @@ final class RunsTillCA50 {
             RunsTillCA50.rankCache.put(uuid, formattedRankAndName);
         }
 
-        return RunsTillCA50.calculateDirect(RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.TANK), 0.0D), catacombs.getExperience(), m7, currentCompletions, formattedRankAndName, derpy, mode);
+        return RunsTillCA50.calculateDirect(RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.TANK), 0.0D), catacombs.getExperience(), m7, currentCompletions, formattedRankAndName, derpy, mode);
     }
 
     @NotNull
@@ -326,13 +326,13 @@ final class RunsTillCA50 {
         }
     }
 
-    private static final @NotNull RunsTillCA50.PlayerDataHolder extractCompletionsAndCreateDataHolder(@NotNull final UUID uuid, final boolean m7, final DungeonData catacombs, @NotNull final Map<RunsTillCA50.DungeonClass, Double> classExperiences) {
+    private static final @NotNull RunsTillCA50.PlayerDataHolder extractCompletionsAndCreateDataHolder(@NotNull final UUID uuid, final boolean m7, final DungeonData catacombs, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiences) {
         final var master = catacombs.getMaster();
         final var masterCompletions = null == master ? null : RunsTillCA50.extractCompletionsCatching(master);
 
         final var currentCompletions = null == masterCompletions ? 0.0D : RunsTillCA50.defaultIfNull(masterCompletions.get(m7 ? "7" : "6"), 0.0D);
 
-        final var data = new RunsTillCA50.PlayerDataHolder(catacombs, classExperiences, (long) currentCompletions, RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(RunsTillCA50.DungeonClass.TANK), 0.0D));
+        final var data = new RunsTillCA50.PlayerDataHolder(catacombs, classExperiences, (long) currentCompletions, RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.TANK), 0.0D));
 
         if (Minecraft.getMinecraft().thePlayer.getUniqueID().equals(uuid)) {
             RunsTillCA50.lastData = data;
@@ -399,7 +399,7 @@ final class RunsTillCA50 {
         return true;
     }
 
-    static final double getTotalExperiencesNoOverflow(@SuppressWarnings("CollectionDeclaredAsConcreteClass") @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap) {
+    static final double getTotalExperiencesNoOverflow(@SuppressWarnings("CollectionDeclaredAsConcreteClass") @NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap) {
         var result = 0.0D;
 
         for (final double v : xpMap.values()) {
@@ -415,19 +415,19 @@ final class RunsTillCA50 {
     }
 
     @NotNull
-    static final EnumMap<RunsTillCA50.DungeonClass, Double> generateXpMap(final double healerXp, final double mageXp, final double bersXp, final double archerXp, final double tankXp) {
-        final var xpMap = new EnumMap<RunsTillCA50.DungeonClass, Double>(RunsTillCA50.DungeonClass.class);
+    static final EnumMap<DungeonListener.DungeonClass, Double> generateXpMap(final double healerXp, final double mageXp, final double bersXp, final double archerXp, final double tankXp) {
+        final var xpMap = new EnumMap<DungeonListener.DungeonClass, Double>(DungeonListener.DungeonClass.class);
 
-        xpMap.put(RunsTillCA50.DungeonClass.HEALER, healerXp);
-        xpMap.put(RunsTillCA50.DungeonClass.MAGE, mageXp);
-        xpMap.put(RunsTillCA50.DungeonClass.BERSERK, bersXp);
-        xpMap.put(RunsTillCA50.DungeonClass.ARCHER, archerXp);
-        xpMap.put(RunsTillCA50.DungeonClass.TANK, tankXp);
+        xpMap.put(DungeonListener.DungeonClass.HEALER, healerXp);
+        xpMap.put(DungeonListener.DungeonClass.MAGE, mageXp);
+        xpMap.put(DungeonListener.DungeonClass.BERSERK, bersXp);
+        xpMap.put(DungeonListener.DungeonClass.ARCHER, archerXp);
+        xpMap.put(DungeonListener.DungeonClass.TANK, tankXp);
 
         return xpMap;
     }
 
-    private static final void outputResultsHeader(@NotNull final String formattedRankAndName, @NotNull final RunsTillCA50.ProgramResult result, final boolean m7, final boolean derpy, @NotNull final RunsTillCA50.Mode mode, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> originalXpMap, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap) {
+    private static final void outputResultsHeader(@NotNull final String formattedRankAndName, @NotNull final RunsTillCA50.ProgramResult result, final boolean m7, final boolean derpy, @NotNull final RunsTillCA50.Mode mode, @NotNull final EnumMap<DungeonListener.DungeonClass, Double> originalXpMap, @NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap) {
         DarkAddons.echoEmpty();
         RunsTillCA50.outputModeInfo(mode);
         DarkAddons.echoEmpty();
@@ -453,10 +453,10 @@ final class RunsTillCA50 {
         });
     }
 
-    private static final void outputResults(@NotNull final RunsTillCA50.ProgramResult result, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> originalXpMap, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap, final boolean m7, final long currentCompletions, @NotNull final String formattedRankAndName, final boolean derpy, @NotNull final RunsTillCA50.Mode mode) {
+    private static final void outputResults(@NotNull final RunsTillCA50.ProgramResult result, @NotNull final EnumMap<DungeonListener.DungeonClass, Double> originalXpMap, @NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap, final boolean m7, final long currentCompletions, @NotNull final String formattedRankAndName, final boolean derpy, @NotNull final RunsTillCA50.Mode mode) {
         RunsTillCA50.outputResultsHeader(formattedRankAndName, result, m7, derpy, mode, originalXpMap, xpMap);
 
-        for (final var dungeonClass : RunsTillCA50.DungeonClass.values()) {
+        for (final var dungeonClass : DungeonListener.DungeonClass.values()) {
             final var endXp = xpMap.get(dungeonClass);
             final var overflowRunsDone = (int) ((endXp - RunsTillCA50.MAX_LEVEL_XP) / RunsTillCA50.xpGained(true, m7, derpy));
 
@@ -708,15 +708,8 @@ final class RunsTillCA50 {
         }
     }
 
-    enum DungeonClass {
-        HEALER, MAGE, BERSERK, ARCHER, TANK;
-
-        private DungeonClass() {
-        }
-    }
-
     @SuppressWarnings("CollectionDeclaredAsConcreteClass")
-    static final boolean isCA50(@NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap) {
+    static final boolean isCA50(@NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap) {
         for (final var entry : xpMap.entrySet()) {
             if (RunsTillCA50.MAX_LEVEL_XP > entry.getValue()) {
                 return false;
@@ -728,7 +721,7 @@ final class RunsTillCA50 {
 
     @SuppressWarnings("CollectionDeclaredAsConcreteClass")
     @NotNull
-    private static final RunsTillCA50.DungeonClass findLowestXPClass(@NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap) {
+    private static final DungeonListener.DungeonClass findLowestXPClass(@NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap) {
         return Collections.min(xpMap.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 
@@ -736,13 +729,13 @@ final class RunsTillCA50 {
         final int totalRuns;
 
         @NotNull
-        final EnumMap<RunsTillCA50.DungeonClass, Integer> runsAsClass;
+        final EnumMap<DungeonListener.DungeonClass, Integer> runsAsClass;
         @NotNull
-        private final EnumMap<RunsTillCA50.DungeonClass, Double> finishXp;
+        private final EnumMap<DungeonListener.DungeonClass, Double> finishXp;
 
         private final double finishCataXp;
 
-        private ProgramResult(final int totalRunsIn, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Integer> runsAsClassIn, @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> finishXpIn, final double finishCataXpIn) {
+        private ProgramResult(final int totalRunsIn, @NotNull final EnumMap<DungeonListener.DungeonClass, Integer> runsAsClassIn, @NotNull final EnumMap<DungeonListener.DungeonClass, Double> finishXpIn, final double finishCataXpIn) {
             super();
 
             this.totalRuns = totalRunsIn;
@@ -765,15 +758,15 @@ final class RunsTillCA50 {
     }
 
     @NotNull
-    static final RunsTillCA50.ProgramResult simulateAllRuns(@NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap,
-                                                            @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMapWithoutSharedXp,
+    static final RunsTillCA50.ProgramResult simulateAllRuns(@NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap,
+                                                            @NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMapWithoutSharedXp,
                                                             final double startingCataXp,
                                                             final boolean m7,
                                                             final boolean derpy,
                                                             @NotNull final RunsTillCA50.Mode mode) {
         var totalRuns = 0;
 
-        final var runsAsClass = new EnumMap<RunsTillCA50.DungeonClass, Integer>(RunsTillCA50.DungeonClass.class);
+        final var runsAsClass = new EnumMap<DungeonListener.DungeonClass, Integer>(DungeonListener.DungeonClass.class);
         var cataXp = startingCataXp;
 
         while (!RunsTillCA50.isCA50(xpMap)) {
@@ -783,7 +776,7 @@ final class RunsTillCA50 {
             final var selectedClass = switch (mode) {
                 case OPTIMAL -> RunsTillCA50.findLowestXPClass(xpMap);
                 case EARLY ->
-                    xpMap.entrySet().parallelStream().filter((@NotNull final Map.Entry<RunsTillCA50.DungeonClass, Double> entry) -> RunsTillCA50.MAX_LEVEL_XP > entry.getValue()).max(Comparator.comparingDouble(Map.Entry::getValue)).orElseThrow(() -> new IllegalStateException("could not find a class that is not maxed and has the highest XP in a set of classes that are not maxed")).getKey();
+                    xpMap.entrySet().parallelStream().filter((@NotNull final Map.Entry<DungeonListener.DungeonClass, Double> entry) -> RunsTillCA50.MAX_LEVEL_XP > entry.getValue()).max(Comparator.comparingDouble(Map.Entry::getValue)).orElseThrow(() -> new IllegalStateException("could not find a class that is not maxed and has the highest XP in a set of classes that are not maxed")).getKey();
                 case SKULL -> Collections.max(xpMap.entrySet(), Map.Entry.comparingByValue()).getKey();
             };
 
@@ -798,8 +791,8 @@ final class RunsTillCA50 {
         return new RunsTillCA50.ProgramResult(totalRuns, runsAsClass, xpMapWithoutSharedXp, cataXp);
     }
 
-    private static final void simulateSingularRun(@SuppressWarnings("BoundedWildcard") @NotNull final EnumMap<RunsTillCA50.DungeonClass, Double> xpMap, @NotNull final RunsTillCA50.DungeonClass playingClass, final boolean m7, final boolean derpy) {
-        for (final var dungeonClass : RunsTillCA50.DungeonClass.values()) {
+    private static final void simulateSingularRun(@SuppressWarnings("BoundedWildcard") @NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap, @NotNull final DungeonListener.DungeonClass playingClass, final boolean m7, final boolean derpy) {
+        for (final var dungeonClass : DungeonListener.DungeonClass.values()) {
             xpMap.merge(dungeonClass, RunsTillCA50.xpGained(dungeonClass == playingClass, m7, derpy), Double::sum);
         }
     }
