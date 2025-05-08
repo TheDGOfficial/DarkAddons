@@ -490,7 +490,7 @@ public final class DarkAddons {
     }
 
     public static final boolean isInDungeons() {
-        return gg.skytils.skytilsmod.utils.Utils.INSTANCE.getInDungeons();
+        return SkyblockIsland.Dungeon.isInIsland();
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
