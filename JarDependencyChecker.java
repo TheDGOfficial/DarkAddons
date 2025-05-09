@@ -1,85 +1,112 @@
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import java.util.jar.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Set;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 
-public class JarDependencyChecker {
-    public static void main(String[] args) throws IOException {
+final class JarDependencyChecker {
+    private static final int ASM_API_VERSION = Opcodes.ASM9;
+    private static final int READER_ACCEPT_FLAGS = 0;
+
+    private JarDependencyChecker() {
+        super();
+
+        throw new UnsupportedOperationException("static class");
+    }
+
+    public static final void main(final String... args) throws IOException {
         if (args.length < 2) {
             System.out.println("Usage: java JarDependencyChecker <path-to-jar> <discouraged-package> [<discouraged-package> ...]");
             return;
         }
 
-        String jarPath = args[0];
-        Set<String> discouragedPackages = new HashSet<>();
-        for (int i = 1; i < args.length; i++) {
-            discouragedPackages.add(args[i].replace('.', '/') + "/");
+        final var jarPath = args[0];
+        final var discouragedPackages = new HashSet<String>();
+        for (var i = 1; i < args.length; ++i) {
+            discouragedPackages.add(args[i].replace('.', '/') + '/');
         }
 
-        final int[] totalMatches = {0};
+        final var totalMatches = new int[]{0};
 
-        try (JarFile jarFile = new JarFile(jarPath)) {
-            Enumeration<JarEntry> entries = jarFile.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
-                if (entry.getName().endsWith(".class")) {
-                    try {
-                        Map<String, List<String>> results = new LinkedHashMap<>();
-                        String currentClass = entry.getName();
+        try (final var jarFile = new JarFile(jarPath)) {
+            final var sortedEntries = Collections.list(jarFile.entries()).stream()
+                .filter(entry -> entry.getName().endsWith(".class"))
+                .sorted(Comparator.comparing(JarEntry::getName, (a, b) -> {
+                    final var nameA = a.replace(".class", "");
+                    final var nameB = b.replace(".class", "");
 
-                        ClassReader reader = new ClassReader(jarFile.getInputStream(entry));
-                        reader.accept(new ClassVisitor(Opcodes.ASM9) {
-                            @Override
-                            public MethodVisitor visitMethod(int access, String name, String descriptor, String signature, String[] exceptions) {
-                                return new MethodVisitor(Opcodes.ASM9) {
-                                    void record(String type, String ref) {
-                                        results.computeIfAbsent(currentClass, k -> new ArrayList<>())
-                                               .add(String.format("[%s] %s", type, ref));
-                                    }
+                    final var outerA = nameA.split("\\$")[0];
+                    final var outerB = nameB.split("\\$")[0];
+                    final var cmp = outerA.compareTo(outerB);
+                    return (0 != cmp) ? cmp : nameA.compareTo(nameB);
+                }))
+                .collect(Collectors.toList());
 
-                                    @Override
-                                    public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
-                                        discouragedPackages.stream()
-                                                .filter(owner::startsWith)
-                                                .findFirst()
-                                                .ifPresent(pkg -> record("Method", owner + "." + name));
-                                    }
-
-                                    @Override
-                                    public void visitFieldInsn(int opcode, String owner, String name, String descriptor) {
-                                        discouragedPackages.stream()
-                                                .filter(owner::startsWith)
-                                                .findFirst()
-                                                .ifPresent(pkg -> record("Field", owner + "." + name));
-                                    }
-
-                                    @Override
-                                    public void visitTypeInsn(int opcode, String type) {
-                                        discouragedPackages.stream()
-                                                .filter(type::startsWith)
-                                                .findFirst()
-                                                .ifPresent(pkg -> record("Type", type));
-                                    }
-                                };
-                            }
-
-                            @Override
-                            public void visitEnd() {
-                                List<String> classResults = results.get(currentClass);
-                                if (classResults != null && !classResults.isEmpty()) {
-                                    System.out.println(currentClass + ":");
-                                    classResults.forEach(line -> {
-                                        System.out.println("  " + line);
-                                        totalMatches[0]++;
-                                    });
+            for (final var entry : sortedEntries) {
+                final var currentClass = entry.getName();
+                try {
+                    final var results = new LinkedHashMap<String, List<String>>();
+                    final var reader = new ClassReader(jarFile.getInputStream(entry));
+                    reader.accept(new ClassVisitor(JarDependencyChecker.ASM_API_VERSION) {
+                        @Override
+                        public final MethodVisitor visitMethod(final int access, final String name, final String descriptor, final String signature, final String[] exceptions) {
+                            return new MethodVisitor(this.api) {
+                                final void recordEntry(final String type, final String ref) {
+                                    results.computeIfAbsent(currentClass, k -> new ArrayList<>())
+                                           .add("[" + type + "] " + ref);
                                 }
+
+                                @Override
+                                public final void visitMethodInsn(final int opcode, final String owner, final String name, final String descriptor, final boolean isInterface) {
+                                    discouragedPackages.stream()
+                                        .filter(owner::startsWith)
+                                        .findFirst()
+                                        .ifPresent(pkg -> recordEntry("Method", owner + '.' + name));
+                                }
+
+                                @Override
+                                public final void visitFieldInsn(final int opcode, final String owner, final String name, final String descriptor) {
+                                    discouragedPackages.stream()
+                                        .filter(owner::startsWith)
+                                        .findFirst()
+                                        .ifPresent(pkg -> recordEntry("Field", owner + '.' + name));
+                                }
+
+                                @Override
+                                public final void visitTypeInsn(final int opcode, final String type) {
+                                    discouragedPackages.stream()
+                                        .filter(type::startsWith)
+                                        .findFirst()
+                                        .ifPresent(pkg -> recordEntry("Type", type));
+                                }
+                            };
+                        }
+
+                        @Override
+                        public final void visitEnd() {
+                            final var classResults = results.get(currentClass);
+                            if (null != classResults && !classResults.isEmpty()) {
+                                System.out.println(currentClass + ':');
+                                classResults.forEach(line -> {
+                                    System.out.println("  " + line);
+                                    ++totalMatches[0];
+                                });
                             }
-                        }, 0);
-                    } catch (IOException e) {
-                        System.err.println("Failed to read class: " + entry.getName());
-                    }
+                        }
+                    }, READER_ACCEPT_FLAGS);
+                } catch (final IOException ioException) {
+                    System.err.println("Failed to read class: " + currentClass);
                 }
             }
         }
