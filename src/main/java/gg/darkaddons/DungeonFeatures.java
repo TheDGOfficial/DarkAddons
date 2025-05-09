@@ -1,31 +1,87 @@
 package gg.darkaddons;
 
+import net.minecraft.client.Minecraft;
+
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
+
+import org.apache.commons.lang3.StringUtils;
 
 public final class DungeonFeatures {
-    /**
-     * Private constructor since this class only contains static members.
-     * <p>
-     * Always throws {@link UnsupportedOperationException} (for when
-     * constructed via reflection).
-     */
-    private DungeonFeatures() {
+    DungeonFeatures() {
         super();
+    }
 
-        throw Utils.staticClassException();
+    @Nullable
+    private static String dungeonFloor;
+
+    @Nullable
+    private static Integer dungeonFloorNumber;
+
+    private static boolean hasBossSpawned;
+
+    @SubscribeEvent
+    public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
+        final var mc = Minecraft.getMinecraft();
+
+        if (event.phase != TickEvent.Phase.START || mc.thePlayer == null || mc.theWorld == null) {
+            return;
+        }
+
+        if (DarkAddons.isInDungeons()) {
+            if (null == DungeonFeatures.dungeonFloor) {
+                final var scoreboardLines = ScoreboardUtil.fetchScoreboardLines(7);
+                for (final var line : scoreboardLines) {
+                    if (line.contains("The Catacombs (")) {
+                        DungeonFeatures.dungeonFloor = StringUtils.substringBetween(line, "(", ")");
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
+    public final void onChat(@NotNull final ClientChatReceivedEvent event) {
+        if (!DarkAddons.isInDungeons() || !MessageType.STANDARD_TEXT_MESSAGE.matches(event.type)) {
+            return;
+        }
+
+        final var unformatted = Utils.removeControlCodes(event.message.getUnformattedText());
+
+        if (unformatted.startsWith("[BOSS]") && unformatted.contains(":")) {
+            final var bossName = StringUtils.substringBefore(StringUtils.substringAfter(unformatted, "[BOSS] "), ":").trim();
+            final Integer dungeonFloorNumber;
+
+            if (!DungeonFeatures.hasBossSpawned && !"The Watcher".equals(bossName) && null != (dungeonFloorNumber = DungeonFeatures.dungeonFloorNumber) && Utils.checkBossName(dungeonFloorNumber, bossName)) {
+                DungeonFeatures.hasBossSpawned = true;
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public final void onWorldChange(@NotNull final WorldEvent.Unload event) {
+        DungeonFeatures.dungeonFloor = null;
+        DungeonFeatures.hasBossSpawned = false;
     }
 
     @Nullable
     static final Integer getDungeonFloorNumber() {
-        return gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures.INSTANCE.getDungeonFloorNumber();
+        return DungeonFeatures.dungeonFloorNumber;
     }
 
     static final boolean getHasBossSpawned() {
-        return gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures.INSTANCE.getHasBossSpawned();
+        return DungeonFeatures.hasBossSpawned;
     }
 
     @Nullable
     static final String getDungeonFloor() {
-        return gg.skytils.skytilsmod.features.impl.dungeons.DungeonFeatures.INSTANCE.getDungeonFloor();
+        return DungeonFeatures.dungeonFloor;
     }
 }

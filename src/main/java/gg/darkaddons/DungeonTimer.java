@@ -60,22 +60,6 @@ public final class DungeonTimer {
         }
     }
 
-    private static final boolean checkBossName(@NotNull final int floor, @NotNull final String bossName) {
-        final var correctBoss = switch (floor) {
-            case 0 -> "The Watcher";
-            case 1 -> "Bonzo";
-            case 2 -> "Scarf";
-            case 3 -> "The Professor";
-            case 4 -> "Thorn";
-            case 5 -> "Livid";
-            case 6 -> "Sadan";
-            case 7 -> "Maxor";
-            default -> null;
-        };
-
-        return null != correctBoss && bossName.endsWith(correctBoss);
-    }
-
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public final void onChat(@NotNull final ClientChatReceivedEvent event) {
         if (!DarkAddons.isInDungeons() || !MessageType.STANDARD_TEXT_MESSAGE.matches(event.type)) {
@@ -90,7 +74,7 @@ public final class DungeonTimer {
 
         if (-1L == DungeonTimer.bossEntryTime && unformatted.startsWith("[BOSS] ") && unformatted.contains(":")) {
             final var bossName = StringUtils.substringBefore(StringUtils.substringAfter(unformatted, "[BOSS] "), ":").trim();
-            if (!"The Watcher".equals(bossName) && dungeonFloorNumber != null && checkBossName(dungeonFloorNumber, bossName)) {
+            if (!"The Watcher".equals(bossName) && dungeonFloorNumber != null && Utils.checkBossName(dungeonFloorNumber, bossName)) {
                 DungeonTimer.bossEntryTime = currentTime;
             }
         } else if (-1L != DungeonTimer.bossEntryTime && -1L == DungeonTimer.bossClearTime && message.contains("§r§c☠ §r§eDefeated §r")) {

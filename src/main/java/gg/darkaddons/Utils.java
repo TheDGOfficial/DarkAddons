@@ -1063,4 +1063,20 @@ final class Utils {
 
         return (int) Math.ceil(numMappings / 0.75D);
     }
+
+    static final boolean checkBossName(@NotNull final int floor, @NotNull final String bossName) {
+        final var correctBoss = switch (floor) {
+            case 0 -> "The Watcher";
+            case 1 -> "Bonzo";
+            case 2 -> "Scarf";
+            case 3 -> "The Professor";
+            case 4 -> "Thorn";
+            case 5 -> "Livid";
+            case 6 -> "Sadan";
+            case 7 -> "Maxor";
+            default -> null;
+        };
+
+        return null != correctBoss && bossName.endsWith(correctBoss);
+    }
 }

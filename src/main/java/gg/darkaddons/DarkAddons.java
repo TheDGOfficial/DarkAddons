@@ -772,6 +772,7 @@ public final class DarkAddons {
         DarkAddons.registerEventListeners(
             TickTask::newManager,
             GuiManager::new,
+            DungeonFeatures::new,
             DungeonTimer::new,
             M7Features::new,
             AdditionalM7Features::new,
