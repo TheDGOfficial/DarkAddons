@@ -436,6 +436,14 @@ final class Utils {
         return null == nullableBool ? defaultValue : nullableBool;
     }
 
+    static final double toPrimitive(@Nullable final Double nullableDouble) {
+        return Utils.toPrimitive(nullableDouble, 0.0D);
+    }
+
+    static final double toPrimitive(@Nullable final Double nullableDouble, final double defaultValue) {
+        return null == nullableDouble ? defaultValue : nullableDouble;
+    }
+
     @NotNull
     static final Thread newThread(@NotNull final Runnable r, @NotNull final String name) {
         final var thread = new Thread(r, name);

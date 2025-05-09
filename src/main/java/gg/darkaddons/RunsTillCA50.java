@@ -4,23 +4,13 @@ import net.minecraft.client.Minecraft;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import gg.skytils.hypixel.types.skyblock.DungeonData;
-import gg.skytils.hypixel.types.skyblock.DungeonModeData;
-import gg.skytils.hypixel.types.skyblock.Member;
-import gg.skytils.hypixel.types.skyblock.Profile;
-import gg.skytils.ktor.client.plugins.HttpRequestTimeoutException;
-import gg.skytils.skytilsmod.core.API;
-import gg.skytils.skytilsmod.utils.UtilsKt;
-import kotlin.Result;
-import kotlin.coroutines.Continuation;
-import kotlin.coroutines.CoroutineContext;
-import kotlin.coroutines.EmptyCoroutineContext;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,7 +27,6 @@ import java.util.function.Consumer;
 
 import java.lang.reflect.InvocationTargetException;
 
-import gg.skytils.skytilsmod.utils.MojangUtil;
 import org.jetbrains.annotations.Nullable;
 
 final class RunsTillCA50 {
@@ -105,11 +94,6 @@ final class RunsTillCA50 {
     @NotNull
     private static final Cache<UUID, String> rankCache = CacheBuilder.newBuilder().expireAfterAccess(1L, TimeUnit.MINUTES).build();
     /**
-     * Caches profiles up to 3 seconds to prevent API spam.
-     */
-    @NotNull
-    private static final Cache<UUID, Profile> profileCache = CacheBuilder.newBuilder().expireAfterAccess(3L, TimeUnit.SECONDS).build();
-    /**
      * Holds last created data to access it without sending a request again if needed. Should be cleared afterward to not create memory leaks, though.
      */
     @Nullable
@@ -125,10 +109,6 @@ final class RunsTillCA50 {
 
     private static final void invalidPlayer() {
         DarkAddons.queueWarning("Couldn't get UUID from this username, check if it is correct!");
-    }
-
-    private static final double defaultIfNull(@Nullable final Double d, final double def) {
-        return null == d ? def : d;
     }
 
     enum Mode {
@@ -153,7 +133,7 @@ final class RunsTillCA50 {
         final var cached = RunsTillCA50.uuidCache.getIfPresent(username);
         if (null == cached) {
             DarkAddons.queueWarning("Fetching UUID for " + username + "...");
-            RunsTillCA50.apiFetcher.execute(() -> MojangUtil.INSTANCE.getUUIDFromUsername(username, new RunsTillCA50.JavaContinuation<>((@Nullable final UUID uuid) -> {
+            RunsTillCA50.apiFetcher.execute(() -> MojangUtil.getUUIDFromUsername(username, (@Nullable final UUID uuid) -> {
                 if (null == uuid) {
                     RunsTillCA50.invalidPlayer();
                     return;
@@ -161,7 +141,7 @@ final class RunsTillCA50 {
 
                 RunsTillCA50.uuidCache.put(username, uuid);
                 RunsTillCA50.calculateUUID0(uuid, m7, callback, derpy, mode);
-            }, (@Nullable final Throwable t) -> RunsTillCA50.invalidPlayer())));
+            }, (@Nullable final Throwable t) -> RunsTillCA50.invalidPlayer()));
         } else {
             RunsTillCA50.apiFetcher.execute(() -> RunsTillCA50.calculateUUID(cached, m7, callback, derpy, mode));
         }
@@ -172,8 +152,7 @@ final class RunsTillCA50 {
     }
 
     static final class PlayerDataHolder {
-        @NotNull
-        private final DungeonData catacombs;
+        private final double cataXp;
 
         @NotNull
         private final Map<DungeonListener.DungeonClass, Double> classExperiencesMap;
@@ -186,10 +165,10 @@ final class RunsTillCA50 {
         final double archerXp;
         final double tankXp;
 
-        private PlayerDataHolder(@NotNull final DungeonData catacombsIn, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiencesMapIn, final long currentCompletionsIn, final double healerXpIn, final double mageXpIn, final double berserkerXpIn, final double archerXpIn, final double tankXpIn) {
+        private PlayerDataHolder(final double cataXpIn, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiencesMapIn, final long currentCompletionsIn, final double healerXpIn, final double mageXpIn, final double berserkerXpIn, final double archerXpIn, final double tankXpIn) {
             super();
 
-            this.catacombs = catacombsIn;
+            this.cataXp = cataXpIn;
 
             this.classExperiencesMap = classExperiencesMapIn;
 
@@ -203,13 +182,13 @@ final class RunsTillCA50 {
         }
 
         PlayerDataHolder(final double healerXpIn, final double mageXpIn, final double berserkerXpIn, final double archerXpIn, final double tankXpIn) {
-            this(null, null, 0L, healerXpIn, mageXpIn, berserkerXpIn, archerXpIn, tankXpIn);
+            this(0.0D, null, 0L, healerXpIn, mageXpIn, berserkerXpIn, archerXpIn, tankXpIn);
         }
 
         @Override
         public final String toString() {
             return "PlayerDataHolder{" +
-                "catacombs=" + this.catacombs +
+                "cataXp=" + this.cataXp +
                 ", classExperiencesMap=" + this.classExperiencesMap +
                 ", currentCompletions=" + this.currentCompletions +
                 ", healerXp=" + this.healerXp +
@@ -222,77 +201,31 @@ final class RunsTillCA50 {
     }
 
     @Nullable
-    private static final Profile getProfile(@NotNull final UUID uuid) {
-        var profile = RunsTillCA50.profileCache.getIfPresent(uuid);
-
-        if (null == profile) {
-            profile = API.INSTANCE.getSelectedSkyblockProfileSync(uuid);
-
-            if (null == profile) {
-                return null;
-            }
-
-            RunsTillCA50.profileCache.put(uuid, profile);
-        }
-
-        return profile;
-    }
-
-    @Nullable
-    private static final Member getMember(@NotNull final Profile profile, @NotNull final UUID uuid) {
-        return profile.getMembers().get(StringUtils.remove(uuid.toString(), '-'));
-    }
-
-    @Nullable
     static final RunsTillCA50.PlayerDataHolder extractDataFor(@NotNull final UUID uuid,
                                                               final boolean m7,
                                                               final boolean printWarnings) {
         try {
-            final var profile = RunsTillCA50.getProfile(uuid);
+            final var data = HypixelAPI.getDungeonStats(uuid);
 
-            if (null == profile) {
+            if (!data.isSuccessful()) {
                 if (printWarnings) {
-                    DarkAddons.queueWarning("Can't find API data for this player, no Skyblock profiles?");
-                }
-                return null;
-            }
-
-            final var member = RunsTillCA50.getMember(profile, uuid);
-
-            if (null == member) {
-                if (printWarnings) {
-                    DarkAddons.queueWarning("Can't find API data for this player, no Skyblock profiles?");
-                }
-                return null;
-            }
-
-            final var dungeonStats = member.getDungeons();
-
-            if (null == dungeonStats) {
-                if (printWarnings) {
-                    DarkAddons.queueWarning("This player didn't enter The Catacombs or earn any Catacombs XP, can't proceed. If you believe this incorrect, check if the player's last played profile is the correct profile.");
-                }
-                return null;
-            }
-
-            final var catacombs = dungeonStats.getDungeon_types().get("catacombs");
-
-            if (null == catacombs || 0.0D == catacombs.getExperience()) {
-                if (printWarnings) {
-                    DarkAddons.queueWarning("This player didn't enter The Catacombs or earn any Catacombs XP, can't proceed. If you believe this incorrect, check if the player's last played profile is the correct profile.");
+                    switch (data.getFailReason()) {
+                        case NO_API_DATA:
+                            DarkAddons.queueWarning("Can't find API data for this player, no Skyblock profiles?");
+                            break;
+                        case NO_DUNGEON_DATA:
+                            DarkAddons.queueWarning("This player didn't enter The Catacombs or earn any Catacombs XP, can't proceed. If you believe this incorrect, check if the player's last played profile is the correct profile.");
+                            break;
+                    }
                 }
                 return null;
             }
 
             final var classExperiences = new EnumMap<DungeonListener.DungeonClass, Double>(DungeonListener.DungeonClass.class);
 
-            classExperiences.put(DungeonListener.DungeonClass.ARCHER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("archer").getExperience(), 0.0D));
-            classExperiences.put(DungeonListener.DungeonClass.BERSERK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("berserk").getExperience(), 0.0D));
-            classExperiences.put(DungeonListener.DungeonClass.HEALER, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("healer").getExperience(), 0.0D));
-            classExperiences.put(DungeonListener.DungeonClass.MAGE, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("mage").getExperience(), 0.0D));
-            classExperiences.put(DungeonListener.DungeonClass.TANK, RunsTillCA50.defaultIfNull(dungeonStats.getPlayer_classes().get("tank").getExperience(), 0.0D));
+            Arrays.stream(DungeonListener.DungeonClass.values()).forEach(dungeonClass -> classExperiences.put(dungeonClass, data.getClassXpForClass(dungeonClass)));
 
-            return RunsTillCA50.extractCompletionsAndCreateDataHolder(uuid, m7, catacombs, classExperiences);
+            return RunsTillCA50.createDataHolder(uuid, data.getCataXp(), data.getMasterTierCompletionsForFloor(m7 ? 7 : 6), classExperiences);
         } catch (final Throwable t) {
             RunsTillCA50.handleError(t, printWarnings);
         }
@@ -300,46 +233,26 @@ final class RunsTillCA50 {
         return null;
     }
 
-    private static final boolean calculateUUID1(@Nullable final UUID uuid, final boolean m7, final boolean derpy, final DungeonData catacombs, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiences, @NotNull final RunsTillCA50.Mode mode, final long currentCompletions) {
+    private static final boolean calculateUUID1(@Nullable final UUID uuid, final boolean m7, final boolean derpy, final double cataXp, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiences, @NotNull final RunsTillCA50.Mode mode, final long currentCompletions) {
         var formattedRankAndName = RunsTillCA50.rankCache.getIfPresent(uuid);
 
         if (null == formattedRankAndName) {
-            final var player = API.INSTANCE.getPlayerSync(uuid);
+            final var formatted = HypixelAPI.getFormattedRankAndName(uuid);
 
-            if (null == player) {
+            if (null == formatted) {
                 DarkAddons.queueWarning("Error obtaining Hypixel player information; can't proceed.");
                 return false;
             }
 
-            formattedRankAndName = UtilsKt.getFormattedName(player);
+            formattedRankAndName = formatted;
             RunsTillCA50.rankCache.put(uuid, formattedRankAndName);
         }
 
-        return RunsTillCA50.calculateDirect(RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.TANK), 0.0D), catacombs.getExperience(), m7, currentCompletions, formattedRankAndName, derpy, mode);
+        return RunsTillCA50.calculateDirect(Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.HEALER)), Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.MAGE)), Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.BERSERK)), Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.ARCHER)), Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.TANK)), cataXp, m7, currentCompletions, formattedRankAndName, derpy, mode);
     }
 
-    @NotNull
-    private static final Map<String, Double> extractCompletionsCatching(final DungeonModeData dungeon) {
-        try {
-            return dungeon.getTier_completions();
-        } catch (final NumberFormatException nfe) {
-            @SuppressWarnings("TypeMayBeWeakened") final var map = new HashMap<String, Double>(Utils.calculateHashMapCapacity(7));
-
-            for (var i = 0; 7 > i; ++i) {
-                map.put(Integer.toString(i), 0.0D);
-            }
-
-            return map;
-        }
-    }
-
-    private static final @NotNull RunsTillCA50.PlayerDataHolder extractCompletionsAndCreateDataHolder(@NotNull final UUID uuid, final boolean m7, final DungeonData catacombs, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiences) {
-        final var master = catacombs.getMaster();
-        final var masterCompletions = null == master ? null : RunsTillCA50.extractCompletionsCatching(master);
-
-        final var currentCompletions = null == masterCompletions ? 0.0D : RunsTillCA50.defaultIfNull(masterCompletions.get(m7 ? "7" : "6"), 0.0D);
-
-        final var data = new RunsTillCA50.PlayerDataHolder(catacombs, classExperiences, (long) currentCompletions, RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.HEALER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.MAGE), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.BERSERK), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.ARCHER), 0.0D), RunsTillCA50.defaultIfNull(classExperiences.get(DungeonListener.DungeonClass.TANK), 0.0D));
+    private static final @NotNull RunsTillCA50.PlayerDataHolder createDataHolder(@NotNull final UUID uuid, final double cataXp, final long completions, @NotNull final Map<DungeonListener.DungeonClass, Double> classExperiences) {
+        final var data = new RunsTillCA50.PlayerDataHolder(cataXp, classExperiences, completions, Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.HEALER)), Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.MAGE)), Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.BERSERK)), Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.ARCHER)), Utils.toPrimitive(classExperiences.get(DungeonListener.DungeonClass.TANK)));
 
         if (Minecraft.getMinecraft().thePlayer.getUniqueID().equals(uuid)) {
             RunsTillCA50.lastData = data;
@@ -363,7 +276,7 @@ final class RunsTillCA50 {
             return;
         }
 
-        if (RunsTillCA50.calculateUUID1(uuid, m7, derpy, playerData.catacombs, playerData.classExperiencesMap, mode, playerData.currentCompletions)) {
+        if (RunsTillCA50.calculateUUID1(uuid, m7, derpy, playerData.cataXp, playerData.classExperiencesMap, mode, playerData.currentCompletions)) {
             callback.run();
         }
     }
@@ -375,7 +288,7 @@ final class RunsTillCA50 {
             return;
         }
 
-        if (t instanceof HttpRequestTimeoutException) {
+        if (t.getClass().getName().contains("Timeout")) {
             if (printWarnings) {
                 DarkAddons.queueWarning("Request timed out while fetching data, please retry at a later time!");
             }
@@ -480,53 +393,6 @@ final class RunsTillCA50 {
         DarkAddons.queueWarning("Note: It is assumed that you use a helmet with Hecatomb 10 for extra experience and that you have at least 25 Completions on the floor plus the Catacombs Expert Ring accessory and Essence Shop Class XP boost perks maxed for the max experience.");
         DarkAddons.echoEmpty();
         DarkAddons.queueWarning("Disclaimer: These runs does not take Daily XP bonus of %40 more XP" + (derpy ? "" : ", or 1.5x XP of Derpy") + " into account. It also assumes you get exactly 300 Score each run because any score above 300 will add some slight bonus XP to your runs. So Paul 317 Score is also more XP than 307 Score without Paul. All combined it will probably take you less runs than what the output says if you take advantage of Daily XP," + (derpy ? "" : " Derpy,") + " Paul and Extra Score.");
-    }
-
-    private static final class JavaContinuation<T> implements Continuation<T> {
-        @NotNull
-        private final Consumer<? super T> onSuccess;
-
-        @NotNull
-        private final Consumer<? super Throwable> onFailure;
-
-        private JavaContinuation(@NotNull final Consumer<? super T> onSuccessIn, @NotNull final Consumer<? super Throwable> onFailureIn) {
-            super();
-
-            this.onSuccess = onSuccessIn;
-            this.onFailure = onFailureIn;
-        }
-
-        @NotNull
-        @Override
-        public final CoroutineContext getContext() {
-            return EmptyCoroutineContext.INSTANCE;
-        }
-
-        @SuppressWarnings("unchecked")
-        @Override
-        public final void resumeWith(@NotNull final Object o) {
-            if (o instanceof Result.Failure) {
-                this.onFailure(((Result.Failure) o).exception);
-            } else {
-                this.onSuccess((T) o);
-            }
-        }
-
-        private final void onSuccess(@NotNull final T o) {
-            this.onSuccess.accept(o);
-        }
-
-        private final void onFailure(@NotNull final Throwable exception) {
-            this.onFailure.accept(exception);
-        }
-
-        @Override
-        public final String toString() {
-            return "JavaContinuation{" +
-                "onSuccess=" + this.onSuccess +
-                ", onFailure=" + this.onFailure +
-                '}';
-        }
     }
 
     private static final double padStart(@NotNull final String number) {
