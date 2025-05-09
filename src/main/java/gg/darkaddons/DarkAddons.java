@@ -772,6 +772,7 @@ public final class DarkAddons {
         DarkAddons.registerEventListeners(
             TickTask::newManager,
             GuiManager::new,
+            DungeonTimer::new,
             M7Features::new,
             AdditionalM7Features::new,
             RemoveBlankArmorStands::new,
@@ -988,6 +989,7 @@ public final class DarkAddons {
 
         ServerTPSCalculator.handlePacket(packet);
         PingTracker.onPacketReceived(packet);
+        DungeonTimer.onPacketReceived(packet);
 
         return true;
     }
