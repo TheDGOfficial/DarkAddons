@@ -146,6 +146,10 @@ dependencies {
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
+    compileOnly("net.hypixel:mod-api-forge:1.0.1.2") {
+        exclude(group = "me.djtheredstoner", module = "DevAuth-forge-legacy")
+    }
+
     compileOnly("org.spongepowered:mixin:$mixinVersion")
     annotationProcessor("org.spongepowered:mixin:$mixinVersion:processor")
 
@@ -156,7 +160,7 @@ dependencies {
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
 
     testImplementation("org.junit.jupiter:junit-jupiter:6.0.0-SNAPSHOT")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0-SNAPSHOT") 
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0-SNAPSHOT")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.0-SNAPSHOT")
 
@@ -274,6 +278,7 @@ tasks {
         relocate("dev.falsehonesty.asmhelper", "gg.skytils.asmhelper")
         relocate("com.llamalad7.mixinextras", "gg.skytils.mixinextras")
         relocate("kotlinx.coroutines", "gg.skytils.ktx-coroutines")
+        relocate("net.hypixel.modapi.tweaker", "gg.skytils.hypixel-net.modapi.tweaker")
 
         exclude(
             "**/LICENSE.md",

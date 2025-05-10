@@ -17,6 +17,8 @@ GUAVA_VERSION=${versionProperties["guava.version"]}
 JETBRAINS_ANNOTATIONS_VERSION=${versionProperties["jetbrains.annotations.version"]}
 COMMONS_LANG3_VERSION=${versionProperties["commons.lang3.version"]}
 
+HYPIXEL_MODAPI_VERSION=1.0.1.2
+
 VIGILANCE_VERSION=306
 ELEMENTA_VERSION=704
 UNIVERSALCRAFT_VERSION=401
@@ -60,21 +62,21 @@ ensure_m2_artifact_exists() {
  HAS_PROCESSOR=${10}
 
  if [ ! -f "$ARTIFACT_PATH" ]; then
-  ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+  ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
  fi
  if [ "$FETCH_SOURCE" = "true" ]; then
   if [ ! -f "$SOURCES_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:sources
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:sources
   fi
  fi
  if [ "$FETCH_JAVADOC" = "true" ]; then
   if [ ! -f "$JAVADOC_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:javadoc
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:javadoc
   fi
  fi
  if [ "$HAS_PROCESSOR" = "true" ]; then
   if [ ! -f "$PROCESSOR_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:processor
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:processor
   fi
  fi
 }
@@ -135,6 +137,8 @@ add_m2_artifact_to_classpath com.google.errorprone error_prone_annotations "$ERR
 
 add_m2_artifact_to_classpath org.jetbrains.kotlin kotlin-stdlib "$KOTLIN_VERSION"
 add_m2_artifact_to_classpath org.jetbrains.kotlinx kotlinx-coroutines-core "$KOTLIN_COROUTINES_VERISON"
+
+add_m2_artifact_to_classpath net.hypixel mod-api-forge "$HYPIXEL_MODAPI_VERSION"
 
 CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SKYTILS_VERSION.jar
 

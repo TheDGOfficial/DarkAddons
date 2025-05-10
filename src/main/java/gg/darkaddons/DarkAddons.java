@@ -761,9 +761,10 @@ public final class DarkAddons {
 
         // GuiElement's don't go here. See above the registerAllGuiElements() method.
         DarkAddons.registerEventListeners(
-            GuiManager::new,
+            SBInfo::new,
             DungeonFeatures::new,
             DungeonTimer::new,
+            GuiManager::new,
             M7Features::new,
             AdditionalM7Features::new,
             RemoveBlankArmorStands::new,

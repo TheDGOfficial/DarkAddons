@@ -1,30 +1,35 @@
 package gg.darkaddons;
 
-import gg.skytils.skytilsmod.utils.SBInfo;
-
 import org.jetbrains.annotations.NotNull;
 
 enum SkyblockIsland {
-    CrimsonIsle(gg.skytils.skytilsmod.utils.SkyblockIsland.CrimsonIsle),
-    TheRift(gg.skytils.skytilsmod.utils.SkyblockIsland.TheRift),
-    TheGarden(gg.skytils.skytilsmod.utils.SkyblockIsland.TheGarden),
-    DungeonHub(gg.skytils.skytilsmod.utils.SkyblockIsland.DungeonHub),
-    CrystalHollows(gg.skytils.skytilsmod.utils.SkyblockIsland.CrystalHollows),
-    TheEnd(gg.skytils.skytilsmod.utils.SkyblockIsland.TheEnd),
-    ThePark(gg.skytils.skytilsmod.utils.SkyblockIsland.ThePark),
-    SpiderDen(gg.skytils.skytilsmod.utils.SkyblockIsland.SpiderDen),
-    Hub(gg.skytils.skytilsmod.utils.SkyblockIsland.Hub),
-    GlaciteMineshafts(gg.skytils.skytilsmod.utils.SkyblockIsland.GlaciteMineshafts),
-    Dungeon(gg.skytils.skytilsmod.utils.SkyblockIsland.Dungeon);
+    CrimsonIsle("crimson_isle"),
+    TheRift("rift"),
+    TheGarden("garden"),
+    DungeonHub("dungeon_hub"),
+    CrystalHollows("crystal_hollows"),
+    TheEnd("combat_3"),
+    ThePark("foraging_1"),
+    SpiderDen("combat_1"),
+    Hub("hub"),
+    GlaciteMineshafts("mineshaft"),
+    Dungeon("dungeon");
 
     @NotNull
-    private final gg.skytils.skytilsmod.utils.SkyblockIsland island;
+    private final String mode;
 
-    private SkyblockIsland(@NotNull final gg.skytils.skytilsmod.utils.SkyblockIsland island) {
-        this.island = island;
+    private SkyblockIsland(@NotNull final String mode) {
+        this.mode = mode;
     }
 
     final boolean isInIsland() {
-        return this.island.getMode().equals(SBInfo.INSTANCE.getMode());
+        return this.mode.equals(SBInfo.getMode());
+    }
+
+    @Override
+    public final String toString() {
+        return "SkyblockIsland{" +
+            "mode='" + this.mode + '\'' +
+            '}';
     }
 }
