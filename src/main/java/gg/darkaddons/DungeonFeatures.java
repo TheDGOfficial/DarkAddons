@@ -40,7 +40,7 @@ public final class DungeonFeatures {
                 for (final var line : scoreboardLines) {
                     if (line.contains("The Catacombs (")) {
                         DungeonFeatures.dungeonFloor = StringUtils.substringBetween(line, "(", ")");
-                        DungeonFeatures.dungeonFloorNumber = Utils.safeParseIntFast(DungeonFeatures.dungeonFloor.substring(1, DungeonFeatures.dungeonFloor.length));
+                        DungeonFeatures.dungeonFloorNumber = Utils.safeParseIntFast(DungeonFeatures.dungeonFloor.substring(1, DungeonFeatures.dungeonFloor.length()));
                         break;
                     }
                 }
