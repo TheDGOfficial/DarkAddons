@@ -28,7 +28,7 @@ public final class PublicUtils {
      * <p>
      * Note that unlike other methods this doesn't utilize a
      * {@link java.util.regex.Pattern} or {@link java.util.regex.Matcher} and
-     * just uses simple {@link StringUtils#replace(String, String, String)}
+     * just uses simple {@link org.apache.commons.lang3.StringUtils#replace(String, String, String)}
      * against all known codes (0-9 a-f color codes plus formatting codes (k-r)
      * and z for chroma).
      *
@@ -112,9 +112,9 @@ public final class PublicUtils {
     /**
      * Creates a new daemon thread with minimum priority and uncaught exception handler set to mod error handler. Does not start the thread.
      *
-     * @param r The Runnable that would run when {@link java.lang.Thread#start()} is called, although the mod does not call the {@link java.lang.Thread#start()} method so you have to call it afterwards.
-     0 @param name The name of the Thread. This method does not ensure that the name is unique.
-     * @return The created thread, you should call {@link java.lang.Thread#start()} on it, unless it is managed by an {@link java.util.concurrent.ExecutorService}, in that case it will be handled automatically.
+     * @param r The Runnable that would run when {@link Thread#start()} is called, although the mod does not call the {@link Thread#start()} method so you have to call it afterward.
+     * @param name The name of the Thread. This method does not ensure that the name is unique.
+     * @return The created thread, you should call {@link Thread#start()} on it, unless it is managed by an {@link java.util.concurrent.ExecutorService}, in that case it will be handled automatically.
      */
     @NotNull
     public static final Thread newThread(@NotNull final Runnable r, @NotNull final String name) {

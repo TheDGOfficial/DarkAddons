@@ -25,7 +25,7 @@ final class UpdateChecker {
     private static final ExecutorService updateCheckerExecutor = Executors.newSingleThreadExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Update Checker Thread"));
 
     enum UpdateCheckerResult {
-        UP_TO_DATE, OUT_OF_DATE, COULDNT_CHECK;
+        UP_TO_DATE, OUT_OF_DATE, COULD_NOT_CHECK;
 
         private UpdateCheckerResult() {
 
@@ -42,7 +42,7 @@ final class UpdateChecker {
 
         if (null == latestVersion) {
             DarkAddons.queueWarning("Unable to check mod updates, please report if this keeps continuing and you are connected to the internet!");
-            return UpdateChecker.UpdateCheckerResult.COULDNT_CHECK;
+            return UpdateChecker.UpdateCheckerResult.COULD_NOT_CHECK;
         }
 
         final var currentVersion = Reference.VERSION;

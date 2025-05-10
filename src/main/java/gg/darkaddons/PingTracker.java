@@ -17,6 +17,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicLong;
 
 final class PingTracker {
+    PingTracker() {
+        super();
+    }
+
     private static final AtomicLong lastSentPacket = new AtomicLong(-1L);
     private static final AtomicLong lastPingNanos = new AtomicLong(-1L);
 
@@ -37,15 +41,15 @@ final class PingTracker {
         PingTracker.trackerThread.scheduleWithFixedDelay(() -> {
             if (Config.isPingDisplay()) {
                 final var last = PingTracker.lastSentPacket.get();
-                if (-1L != last) {
+                if (-1L == last) {
+                    PingTracker.cleanupPending.set(-1L);
+                } else {
                     final var pending = PingTracker.cleanupPending.get();
                     if (pending == last) {
                         PingTracker.reset();
                         return;
                     }
                     PingTracker.cleanupPending.set(last);
-                } else {
-                    PingTracker.cleanupPending.set(-1L);
                 }
             }
         }, 5L, 5L, TimeUnit.SECONDS);

@@ -209,7 +209,7 @@ public final class DarkAddons {
     static final boolean isMessageOrCommandQueuedToBeSentByUser(@NotNull final String messageOrCommand) {
         return SendMessageQueue.isMessageOrCommandQueuedToBeSentByUser(messageOrCommand);
     }
- 
+
     static final void queueUserSentMessageOrCommand(@NotNull final String messageOrCommand) {
         SendMessageQueue.queueUserSentMessageOrCommand(messageOrCommand);
     }
@@ -484,7 +484,7 @@ public final class DarkAddons {
 
     // TODO remove/change implementation of these after split
     static final boolean isInSkyblock() {
-        return SkyblockDedection.isInSkyblock();
+        return SkyblockDetection.isInSkyblock();
     }
 
     public static final boolean isInDungeons() {
@@ -533,18 +533,7 @@ public final class DarkAddons {
         final var jerryMayor = MayorInfo.getJerryMayor();
 
         // We don't need to check for perks if Paul is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
-        return null != jerryMayor && "Paul".equals(jerryMayor);
-    }
-
-    static final boolean isAatroxRareDropPerkActive() {
-        if (MayorInfo.getAllPerks().contains("Pathfinder")) {
-            return true;
-        }
-
-        final var jerryMayor = MayorInfo.getJerryMayor();
-
-        // We don't need to check for perks if Aatrox is the current rotation mayor for Jerry because Jerry rotation mayors always come with all their perks active.
-        return null != jerryMayor && "Aatrox".equals(jerryMayor);
+        return "Paul".equals(jerryMayor);
     }
 
     /**
@@ -768,9 +757,10 @@ public final class DarkAddons {
     private static final void registerAll() {
         DarkAddons.registerStatic();
 
+        TickTask.registerTickTaskManager(DarkAddons::registerEventListeners);
+
         // GuiElement's don't go here. See above the registerAllGuiElements() method.
         DarkAddons.registerEventListeners(
-            TickTask::newManager,
             GuiManager::new,
             DungeonFeatures::new,
             DungeonTimer::new,
@@ -805,7 +795,7 @@ public final class DarkAddons {
 
     private static final void registerGuiElement(final boolean hasEvents, @NotNull final GuiElement guiElement) {
         if (!hasEvents) {
-            // Sanity-check if the class contains any @SubscribeEvent, if so error out
+            // Sanity-check if the class contains any @SubscribeEvent and throw error if not
             if (DarkAddons.hasAtLeastOneEventListener(guiElement.getClass())) {
                 throw new IllegalArgumentException("Class " + guiElement.getClass().getName() + " has @SubscribeEvent methods and thus should be registered to the Forge Event Bus. Use the registerGuiElement with hasEvents parameter true while registering it.");
             }
@@ -984,13 +974,14 @@ public final class DarkAddons {
             return false;
         }
 
+        DungeonTimer.onPacketReceived(packet);
+
         M7Features.handlePacket(packet);
         ChromaScoreboard.handlePacket(packet);
         RagAxeStrengthGained.handlePacket(packet);
 
         ServerTPSCalculator.handlePacket(packet);
         PingTracker.onPacketReceived(packet);
-        DungeonTimer.onPacketReceived(packet);
 
         return true;
     }

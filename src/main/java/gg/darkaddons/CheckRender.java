@@ -37,14 +37,11 @@ final class CheckRender {
             }
             if (!RemoveBlankArmorStands.checkRender(entity)) {
                 cir.setReturnValue(false);
-                return;
             }
         } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntitySkeleton && !HideWitherSkeletons.checkRender((EntitySkeleton) entity)) {
             cir.setReturnValue(false);
-            return;
         } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntityWitherSkull && !HideWitherSkeletons.checkRenderSkull((EntityWitherSkull) entity)) {
             cir.setReturnValue(false);
-            return;
         }
     }
 }

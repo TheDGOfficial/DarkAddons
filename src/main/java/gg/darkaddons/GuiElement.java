@@ -105,7 +105,7 @@ abstract class GuiElement {
         GuiElement.drawString(text, xPos, yPos, color, leftAligned, SmartFontRenderer.TextShadow.NONE);
     }
 
-    static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final SmartFontRenderer.CommonColors color, final boolean leftAligned, @NotNull final SmartFontRenderer.TextShadow shadow) {
+    private static final void drawString(@NotNull final String text, final float xPos, final float yPos, @NotNull final SmartFontRenderer.CommonColors color, final boolean leftAligned, @NotNull final SmartFontRenderer.TextShadow shadow) {
         SmartFontRenderer.drawString(
             text,
             xPos,

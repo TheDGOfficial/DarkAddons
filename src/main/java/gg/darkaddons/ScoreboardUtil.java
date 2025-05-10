@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.Collections;
 
 final class ScoreboardUtil {
     @NotNull
@@ -67,17 +65,17 @@ final class ScoreboardUtil {
         final var scores = scoreboard.getSortedScores(objective);
         final var maxSize = Math.min(limit, scores.size());
 
-        if (maxSize == 0) {
+        if (0 == maxSize) {
             return ScoreboardUtil.EMPTY_STRING_ARRAY;
         }
 
         final var lines = new String[maxSize];
 
-        var index = maxSize - 1; // Fill array in reverse order
-        var count = 0; // Track number of valid elements
+        var index = maxSize - 1; // Fill the array in reverse order
+        var count = 0; // Track the number of valid elements
 
         for (final var score : scores) {
-            if (index < 0) {
+            if (0 > index) {
                 break;
             }
 
@@ -92,6 +90,6 @@ final class ScoreboardUtil {
         }
 
         // If we added fewer than maxSize elements, trim the array
-        return (count == maxSize) ? lines : Arrays.copyOfRange(lines, index + 1, maxSize);
+        return count == maxSize ? lines : Arrays.copyOfRange(lines, index + 1, maxSize);
     }
 }

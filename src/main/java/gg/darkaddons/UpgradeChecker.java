@@ -1,5 +1,6 @@
 package gg.darkaddons;
 
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.ArrayList;
 
@@ -78,6 +79,17 @@ final class UpgradeChecker {
             this.type = type;
             this.dependencies = dependencies;
         }
+
+        @Override
+        @NotNull
+        public String toString() {
+            return "Upgrade{" +
+                "source=" + this.source +
+                ", type=" + this.type +
+                ", dependencies=" + Arrays.toString(this.dependencies) +
+                ", found=" + this.found +
+                '}';
+        }
     }
 
     private static final class Accessory extends UpgradeChecker.Upgrade {
@@ -117,6 +129,17 @@ final class UpgradeChecker {
 
             this.loreCondition = loreCondition;
             this.loreExtractor = loreExtractor;
+        }
+
+        @Override
+        @NotNull
+        public final String toString() {
+            return "Accessory{" +
+                "internalName='" + this.internalName + '\'' +
+                ", description='" + this.description + '\'' +
+                ", loreCondition='" + this.loreCondition + '\'' +
+                ", loreExtractor=" + this.loreExtractor +
+                "} extends " + super.toString();
         }
     }
 
@@ -163,6 +186,21 @@ final class UpgradeChecker {
             this.maxLevel = maxLevel;
             this.optimalPetItem = optimalPetItem;
         }
+
+        @Override
+        @NotNull
+        public final String toString() {
+            return "Pet{" +
+                "internalName='" + this.internalName + '\'' +
+                ", currentRarity=" + this.currentRarity +
+                ", minimumWantedRarity=" + this.minimumWantedRarity +
+                ", maxRarity=" + this.maxRarity +
+                ", currentLevel=" + this.currentLevel +
+                ", minimumWantedLevel=" + this.minimumWantedLevel +
+                ", maxLevel=" + this.maxLevel +
+                ", optimalPetItem='" + this.optimalPetItem + '\'' +
+                "} extends " + super.toString();
+        }
     }
 
     private static final class EssenceShopPerk extends UpgradeChecker.Upgrade {
@@ -204,6 +242,17 @@ final class UpgradeChecker {
             this.internalName = internalName;
             this.maxLevel = maxLevel;
             this.descriptionAtLevel = descriptionAtLevel;
+        }
+
+        @Override
+        @NotNull
+        public final String toString() {
+            return "EssenceShopPerk{" +
+                "internalName='" + this.internalName + '\'' +
+                ", currentLevel=" + this.currentLevel +
+                ", maxLevel=" + this.maxLevel +
+                ", descriptionAtLevel=" + this.descriptionAtLevel +
+                "} extends " + super.toString();
         }
     }
 

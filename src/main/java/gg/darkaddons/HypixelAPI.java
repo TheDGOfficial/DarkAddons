@@ -44,39 +44,36 @@ final class HypixelAPI {
     @NotNull
     private static final Cache<UUID, Profile> profileCache = CacheBuilder.newBuilder().expireAfterAccess(3L, TimeUnit.SECONDS).build();
 
-    static final DungeonAPIResponse getDungeonStats(@NotNull final UUID uuid) {
+    static final HypixelAPI.DungeonAPIResponse getDungeonStats(@NotNull final UUID uuid) {
         final var profile = HypixelAPI.getProfile(uuid);
 
         if (null == profile) {
-            return new DungeonAPIResponse(DungeonAPIResponse.FailReason.NO_API_DATA);
+            return new HypixelAPI.DungeonAPIResponse(HypixelAPI.DungeonAPIResponse.FailReason.NO_API_DATA);
         }
 
         final var member = HypixelAPI.getMember(profile, uuid);
 
         if (null == member) {
-             return new DungeonAPIResponse(DungeonAPIResponse.FailReason.NO_API_DATA);
+            return new HypixelAPI.DungeonAPIResponse(HypixelAPI.DungeonAPIResponse.FailReason.NO_API_DATA);
         }
 
         final var stats = member.getDungeons();
 
         if (null == stats) {
-            return new DungeonAPIResponse(DungeonAPIResponse.FailReason.NO_DUNGEON_DATA);
+            return new HypixelAPI.DungeonAPIResponse(HypixelAPI.DungeonAPIResponse.FailReason.NO_DUNGEON_DATA);
         }
 
         final var data = stats.getDungeon_types().get("catacombs");
         final double cataXp;
 
-        if (null == data || 0.0D == (cataXp = data.getExperience())) {
-            return new DungeonAPIResponse(DungeonAPIResponse.FailReason.NO_DUNGEON_DATA);
-        }
+        return null == data || 0.0D == (cataXp = data.getExperience()) ? new HypixelAPI.DungeonAPIResponse(HypixelAPI.DungeonAPIResponse.FailReason.NO_DUNGEON_DATA) : new HypixelAPI.DungeonAPIResponse(cataXp, stats, data);
 
-        return new DungeonAPIResponse(cataXp, stats, data);
     }
 
     static final class DungeonAPIResponse {
         private final boolean successful;
         @Nullable
-        private final DungeonAPIResponse.FailReason failReason;
+        private final HypixelAPI.DungeonAPIResponse.FailReason failReason;
 
         private final double cataXp;
 
@@ -86,7 +83,9 @@ final class HypixelAPI {
         @Nullable
         private final DungeonData data;
 
-        private DungeonAPIResponse(@NotNull final DungeonAPIResponse.FailReason failReason) {
+        private DungeonAPIResponse(@NotNull final HypixelAPI.DungeonAPIResponse.FailReason failReason) {
+            super();
+
             this.successful = false;
             this.failReason = failReason;
             this.cataXp = -1.0D;
@@ -95,6 +94,8 @@ final class HypixelAPI {
         }
 
         private DungeonAPIResponse(final double cataXp, @NotNull final DungeonsData stats, @NotNull final DungeonData data) {
+            super();
+
             this.successful = true;
             this.failReason = null;
             this.cataXp = cataXp;
@@ -107,36 +108,47 @@ final class HypixelAPI {
         }
 
         @NotNull
-        final DungeonAPIResponse.FailReason getFailReason() {
-            if (this.isSuccessful()) {
+        final HypixelAPI.DungeonAPIResponse.FailReason getFailReason() {
+            if (this.successful) {
                 throw new IllegalStateException("request is successful");
             }
             return this.failReason;
         }
 
         final double getCataXp() {
-            if (!this.isSuccessful()) {
+            if (!this.successful) {
                 throw new IllegalStateException("request failed");
             }
             return this.cataXp;
         }
 
         final double getClassXpForClass(@NotNull final DungeonListener.DungeonClass dungeonClass) {
-            if (!this.isSuccessful()) {
+            if (!this.successful) {
                 throw new IllegalStateException("request failed");
             }
-            return Utils.toPrimitive(this.stats.getPlayer_classes().get(dungeonClass.name().toLowerCase(Locale.ROOT)).getExperience());
+            return this.stats.getPlayer_classes().get(dungeonClass.name().toLowerCase(Locale.ROOT)).getExperience();
         }
 
-        final long getMasterTierCompletionsForFloor(@NotNull final int floorNumber) {
-            if (!this.isSuccessful()) {
+        final long getMasterTierCompletionsForFloor(final int floorNumber) {
+            if (!this.successful) {
                 throw new IllegalStateException("request failed");
             }
             return (long) HypixelAPI.getMasterCompletions(this.data, floorNumber);
         }
 
         enum FailReason {
-            NO_API_DATA, NO_DUNGEON_DATA;
+            NO_API_DATA, NO_DUNGEON_DATA
+        }
+
+        @Override
+        public final String toString() {
+            return "DungeonAPIResponse{" +
+                "successful=" + this.successful +
+                ", failReason=" + this.failReason +
+                ", cataXp=" + this.cataXp +
+                ", stats=" + this.stats +
+                ", data=" + this.data +
+                '}';
         }
     }
 
@@ -144,11 +156,8 @@ final class HypixelAPI {
     static final String getFormattedRankAndName(@NotNull final UUID uuid) {
         final var player = API.INSTANCE.getPlayerSync(uuid);
 
-        if (null == player) {
-            return null;
-        }
+        return null == player ? null : UtilsKt.getFormattedName(player);
 
-        return UtilsKt.getFormattedName(player);
     }
 
     @Nullable
@@ -188,7 +197,7 @@ final class HypixelAPI {
         }
     }
 
-    private static final double getMasterCompletions(@NotNull final DungeonData data, @NotNull final int floorNumber) {
+    private static final double getMasterCompletions(@NotNull final DungeonData data, final int floorNumber) {
         final var master = data.getMaster();
         final var masterCompletions = null == master ? null : HypixelAPI.getCompletionsCatching(master);
 

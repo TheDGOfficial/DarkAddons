@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 final class TPSDisplay extends SimpleGuiElement {
-    private static final String[] LOADING_TEXTS = {"Loading.", "Loading..", "Loading..."};
+    private static final String[] LOADING_TEXTS = new String[]{"Loading.", "Loading..", "Loading..."};
     private static final int loadingTextsLength = TPSDisplay.LOADING_TEXTS.length;
 
     private static int currentLoadingTextIndex;
@@ -48,7 +48,7 @@ final class TPSDisplay extends SimpleGuiElement {
 
         TPSDisplay.tps = ServerTPSCalculator.initialized ? ServerTPSCalculator.lastTPS : -1;
 
-        if (isDemoRenderBypass || (-1 == TPSDisplay.tps || TPSDisplay.lastTps != TPSDisplay.tps) || this.isEmpty()) {
+        if (isDemoRenderBypass || -1 == TPSDisplay.tps || TPSDisplay.lastTps != TPSDisplay.tps || this.isEmpty()) {
             TPSDisplay.lastTps = TPSDisplay.tps;
 
             super.update();

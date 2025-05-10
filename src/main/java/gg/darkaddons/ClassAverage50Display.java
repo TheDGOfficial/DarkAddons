@@ -290,15 +290,7 @@ final class ClassAverage50Display extends GuiElement {
 
     @NotNull
     private static final EnumMap<DungeonListener.DungeonClass, Integer> createRunsMap(final int healerRuns, final int mageRuns, final int berserkRuns, final int archerRuns, final int tankRuns) {
-        final var classes = new EnumMap<DungeonListener.DungeonClass, Integer>(DungeonListener.DungeonClass.class);
-
-        classes.put(DungeonListener.DungeonClass.HEALER, healerRuns);
-        classes.put(DungeonListener.DungeonClass.MAGE, mageRuns);
-        classes.put(DungeonListener.DungeonClass.BERSERK, berserkRuns);
-        classes.put(DungeonListener.DungeonClass.ARCHER, archerRuns);
-        classes.put(DungeonListener.DungeonClass.TANK, tankRuns);
-
-        return classes;
+        return RunsTillCA50.generateMap(healerRuns, mageRuns, berserkRuns, archerRuns, tankRuns);
     }
 
     private static final void classes(@NotNull final RunsTillCA50.ProgramResult result, @NotNull final String floorName) {

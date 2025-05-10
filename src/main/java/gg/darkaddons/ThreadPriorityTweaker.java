@@ -44,7 +44,7 @@ final class ThreadPriorityTweaker {
      * Tweaks the priority of all currently live threads and registers a
      * task that runs every minute to periodically do this operation again,
      * in case new threads are spawned.
-     *
+     * <p>
      * This method automatically cancels the previous scheduled task if it
      * is not already cancelled.
      */
@@ -55,8 +55,8 @@ final class ThreadPriorityTweaker {
 
     /**
      * Cancels the periodic thread priority tweaking task so that it will not run again, unless you call the {@link ThreadPriorityTweaker#scheduleTweakTask()} method again.
-     *
-     * Additionally restores the old thread priorities.
+     * <p>
+     * Additionally, restores the old thread priorities.
      */
     static final void cancelTweakTaskAndRestorePriorities() {
         ThreadPriorityTweaker.cancelTweakTask();

@@ -30,6 +30,13 @@ final class SmartFontRenderer {
         private TextShadow(@NotNull final gg.skytils.skytilsmod.utils.graphics.SmartFontRenderer.TextShadow shadow) {
             this.shadow = shadow;
         }
+
+        @Override
+        public final String toString() {
+            return "TextShadow{" +
+                "shadow=" + this.shadow +
+                '}';
+        }
     }
 
     enum CommonColors {
@@ -40,6 +47,13 @@ final class SmartFontRenderer {
 
         private CommonColors(@NotNull final gg.skytils.skytilsmod.utils.graphics.colors.CommonColors color) {
             this.color = color;
+        }
+
+        @Override
+        public final String toString() {
+            return "CommonColors{" +
+                "color=" + this.color +
+                '}';
         }
     }
 }

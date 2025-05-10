@@ -53,12 +53,12 @@ public final class MethodMapping {
         private static final HashMap<String, MethodMapping> loadMappings() {
             final var darkaddonsFolder = new File(new File("config"), "darkaddons");
 
-            final var oldMappingsFile = new File(darkaddonsFolder, "methods.csv");
             final var mappingsFile = new File(darkaddonsFolder, "methods.v2.csv");
 
             try {
+                final var oldMappingsFile = new File(darkaddonsFolder, "methods.csv");
                 if (oldMappingsFile.exists()) {
-                    Files.delete(oldMappingsFile.toPath()); // Delete old version of the file if it exists.
+                    Files.delete(oldMappingsFile.toPath()); // Delete the old version of the file if it exists.
                 }
 
                 // Copy the file to the location on the disk.

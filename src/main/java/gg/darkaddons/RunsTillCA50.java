@@ -336,15 +336,20 @@ final class RunsTillCA50 {
 
     @NotNull
     static final EnumMap<DungeonListener.DungeonClass, Double> generateXpMap(final double healerXp, final double mageXp, final double bersXp, final double archerXp, final double tankXp) {
-        final var xpMap = new EnumMap<DungeonListener.DungeonClass, Double>(DungeonListener.DungeonClass.class);
+        return RunsTillCA50.generateMap(healerXp, mageXp, bersXp, archerXp, tankXp);
+    }
 
-        xpMap.put(DungeonListener.DungeonClass.HEALER, healerXp);
-        xpMap.put(DungeonListener.DungeonClass.MAGE, mageXp);
-        xpMap.put(DungeonListener.DungeonClass.BERSERK, bersXp);
-        xpMap.put(DungeonListener.DungeonClass.ARCHER, archerXp);
-        xpMap.put(DungeonListener.DungeonClass.TANK, tankXp);
+    @NotNull
+    static final <T extends Number> EnumMap<DungeonListener.DungeonClass, T> generateMap(@NotNull final T healer, @NotNull final T mage, @NotNull final T bers, @NotNull final T archer, @NotNull final T tank) {
+        final var map = new EnumMap<DungeonListener.DungeonClass, T>(DungeonListener.DungeonClass.class);
 
-        return xpMap;
+        map.put(DungeonListener.DungeonClass.HEALER, healer);
+        map.put(DungeonListener.DungeonClass.MAGE, mage);
+        map.put(DungeonListener.DungeonClass.BERSERK, bers);
+        map.put(DungeonListener.DungeonClass.ARCHER, archer);
+        map.put(DungeonListener.DungeonClass.TANK, tank);
+
+        return map;
     }
 
     private static final void outputResultsHeader(@NotNull final String formattedRankAndName, @NotNull final RunsTillCA50.ProgramResult result, final boolean m7, final boolean derpy, @NotNull final RunsTillCA50.Mode mode, @NotNull final EnumMap<DungeonListener.DungeonClass, Double> originalXpMap, @NotNull final EnumMap<DungeonListener.DungeonClass, Double> xpMap) {
@@ -380,7 +385,7 @@ final class RunsTillCA50 {
             final var endXp = xpMap.get(dungeonClass);
             final var overflowRunsDone = (int) ((endXp - RunsTillCA50.MAX_LEVEL_XP) / RunsTillCA50.xpGained(true, m7, derpy));
 
-            DarkAddons.queueWarning(dungeonClass.name().charAt(0) + dungeonClass.name().toLowerCase(Locale.ROOT).substring(1, dungeonClass.name().length()) + " | " + Objects.toString(result.runsAsClass.get(dungeonClass), "0") + " Runs." + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.Mode.EARLY == mode ? Math.max((double) RunsTillCA50.MAX_LEVEL, RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) : RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.xpToLevel(endXp)) + " | " + overflowRunsDone + " Runs.");
+            DarkAddons.queueWarning(dungeonClass.name().charAt(0) + dungeonClass.name().toLowerCase(Locale.ROOT).substring(1, dungeonClass.name().length()) + " | " + Objects.toString(result.runsAsClass.get(dungeonClass), "0") + " Runs." + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.Mode.EARLY == mode ? Math.max(RunsTillCA50.MAX_LEVEL, RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) : RunsTillCA50.xpToLevel(result.finishXp.get(dungeonClass))) + " | " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.xpToLevel(endXp)) + " | " + overflowRunsDone + " Runs.");
         }
 
         RunsTillCA50.outputResultsFooter(result, m7, currentCompletions, derpy);
@@ -428,7 +433,7 @@ final class RunsTillCA50 {
     }
 
     private static final double noOverflowXpToLevel(final double xp) {
-        double levelWithProgress = 0;
+        var levelWithProgress = 0.0D;
         for (final var level : RunsTillCA50.DungeonLeveling.levels) {
             if (level.cumulativeXpRequiredToGet <= xp) {
                 levelWithProgress = level.level;

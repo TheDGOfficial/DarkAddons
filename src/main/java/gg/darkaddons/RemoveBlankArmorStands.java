@@ -15,8 +15,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
-import java.util.ArrayList;
-
 final class RemoveBlankArmorStands {
     static final int BLANK_ARMOR_STAND_REMOVAL_INTERVAL_IN_TICKS = 100;
 
@@ -25,15 +23,13 @@ final class RemoveBlankArmorStands {
     }
 
     private static final boolean isInventoryEmpty(@NotNull final Entity entity) {
-        var hasNoItems = true;
         for (final var item : entity.getInventory()) {
             //noinspection VariableNotUsedInsideIf
             if (null != item) {
-                hasNoItems = false;
-                break;
+                return false;
             }
         }
-        return hasNoItems;
+        return true;
     }
 
     private static final boolean isAnyGuardiansTargetingEntity(@NotNull final WorldClient world, @NotNull final Entity entity) {
@@ -64,10 +60,7 @@ final class RemoveBlankArmorStands {
     }
 
     static final boolean checkRender(@NotNull final Entity entity) {
-        if (Config.isRemoveBlankArmorStands() && entity.ticksExisted < 10 && entity.getCustomNameTag().isEmpty() && RemoveBlankArmorStands.isInventoryEmpty(entity)) {
-            return false;
-        }
-        return true;
+        return !Config.isRemoveBlankArmorStands() || 10 <= entity.ticksExisted || !entity.getCustomNameTag().isEmpty() || !RemoveBlankArmorStands.isInventoryEmpty(entity);
     }
 
     private static final void removeBlankArmorStands() {
@@ -103,7 +96,7 @@ final class RemoveBlankArmorStands {
             for (final var item : inventory) {
                 if (null != item) {
                     ++nonNullCount;
-                    if (nonNullCount > 1) {
+                    if (1 < nonNullCount) {
                         return;
                     }
                     singleItem = item;

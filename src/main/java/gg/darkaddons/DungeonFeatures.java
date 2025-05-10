@@ -30,7 +30,7 @@ public final class DungeonFeatures {
     public final void onTick(@NotNull final TickEvent.ClientTickEvent event) {
         final var mc = Minecraft.getMinecraft();
 
-        if (event.phase != TickEvent.Phase.START || mc.thePlayer == null || mc.theWorld == null) {
+        if (TickEvent.Phase.START != event.phase || null == mc.thePlayer || null == mc.theWorld) {
             return;
         }
 

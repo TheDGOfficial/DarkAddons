@@ -3,13 +3,10 @@ package gg.darkaddons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Locale;
-
-import java.util.concurrent.TimeUnit;
 
 final class FPSDisplay extends SimpleGuiElement {
-    private static long fps;
-    private static long lastFps;
+    private static int fps;
+    private static int lastFps;
 
     FPSDisplay() {
         super("FPS Display", Config::isFpsDisplay, () -> true, () -> 0);
@@ -19,8 +16,8 @@ final class FPSDisplay extends SimpleGuiElement {
 
     @Override
     final void clear() {
-        FPSDisplay.fps = 0L;
-        FPSDisplay.lastFps = 0L;
+        FPSDisplay.fps = 0;
+        FPSDisplay.lastFps = 0;
 
         super.clear();
     }
@@ -43,8 +40,8 @@ final class FPSDisplay extends SimpleGuiElement {
     }
 
     @NotNull
-    private static final String getFpsWithColor(final long fpsToColor) {
-        final var color = 60L <= fpsToColor ? "a" : 30L <= fpsToColor ? "e" : "c";
+    private static final String getFpsWithColor(final int fpsToColor) {
+        final var color = 60 <= fpsToColor ? "a" : 30 <= fpsToColor ? "e" : "c";
 
         return color + fpsToColor;
     }

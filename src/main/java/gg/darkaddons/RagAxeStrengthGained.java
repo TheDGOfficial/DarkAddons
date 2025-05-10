@@ -29,27 +29,17 @@ final class RagAxeStrengthGained {
             if (null != player) {
                 final var item = player.getHeldItem();
                 if (null != item) {
-                    final var compound = item.getTagCompound();
-                    if (null != compound) {
-                        final var display = compound.getCompoundTag("display");
-                        if (null != display) {
-                            final var taglist = display.getTagList("Lore", 8);
-                            if (null != taglist) {
-                                final var size = taglist.tagCount();
-                                for (var i = 0; i < size; ++i) {
-                                    final var line = Utils.removeControlCodes(taglist.getStringTagAt(i));
-                                    if (line.startsWith("Strength: +")) {
-                                        final var amount = StringUtils.substringBefore(StringUtils.substringAfter(line, "Strength: +"), " ");
-                                        try {
-                                            final var parsed = Double.parseDouble(amount);
-                                            DarkAddons.queueUserSentMessageOrCommand("/pc Gained strength from rag axe: " + (int) Math.floor(parsed * 1.5));
-                                        } catch (final NumberFormatException nfe) {
-                                            DarkAddons.modError(nfe);
-                                        }
-                                        break;
-                                    }
-                                }
+                    for (final var line : Utils.getItemLore(item)) {
+                        final var cleanLine = Utils.removeControlCodes(line);
+                        if (cleanLine.startsWith("Strength: +")) {
+                            final var amount = StringUtils.substringBefore(StringUtils.substringAfter(cleanLine, "Strength: +"), " ");
+                            try {
+                                final var parsed = Double.parseDouble(amount);
+                                DarkAddons.queueUserSentMessageOrCommand("/pc Gained strength from rag axe: " + (int) Math.floor(parsed * 1.5));
+                            } catch (final NumberFormatException nfe) {
+                                DarkAddons.modError(nfe);
                             }
+                            break;
                         }
                     }
                 }

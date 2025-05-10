@@ -1,7 +1,6 @@
 package gg.darkaddons.mixins;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Pseudo;
@@ -18,7 +17,7 @@ final class MixinSlayerFeatures {
     }
 
     @Inject(method = "onRenderLivingPre", remap = false, at = @At(value = "HEAD", remap = false), cancellable = true)
-    private final void onRenderLivingPre$darkaddons(@NotNull @Coerce final Object event, @NotNull CallbackInfo ci) {
+    private final void onRenderLivingPre$darkaddons(@NotNull @Coerce final Object event, @NotNull final CallbackInfo ci) {
         ci.cancel();
     }
 }

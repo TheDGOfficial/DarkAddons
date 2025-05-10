@@ -27,10 +27,10 @@ final class MixinTextUtils {
     @Redirect(method = "convertMagnitudes", at = @At(value = "INVOKE", target = "Ljava/util/regex/Pattern;matcher(Ljava/lang/CharSequence;)Ljava/util/regex/Matcher;"), remap = false)
     @NotNull
     private static final Matcher redirectMagnitudeMatcher$darkaddons(@NotNull final Pattern pattern, @NotNull final CharSequence text) {
-        if (null != MixinTextUtils.magnitudeMatcher) {
-            MixinTextUtils.magnitudeMatcher.reset(text);
-        } else {
+        if (null == MixinTextUtils.magnitudeMatcher) {
             MixinTextUtils.magnitudeMatcher = pattern.matcher(text);
+        } else {
+            MixinTextUtils.magnitudeMatcher.reset(text);
         }
 
         return MixinTextUtils.magnitudeMatcher;

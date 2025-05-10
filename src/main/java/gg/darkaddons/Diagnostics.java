@@ -96,15 +96,14 @@ final class Diagnostics {
 
     private static final AtomicInteger frameCount = new AtomicInteger(0);
 
-    static volatile int lastFPS = 60;
+    private static volatile int lastFPS = 60;
 
     static {
         Utils.newThread(Diagnostics::watchdogLoop, "DarkAddons Watchdog Thread").start();
 
         Diagnostics.calculatorThread.scheduleWithFixedDelay(() -> {
             if (Config.isFpsDisplay()) {
-                final var framesThisSecond = Diagnostics.frameCount.getAndSet(0);
-                Diagnostics.lastFPS = framesThisSecond;
+                Diagnostics.lastFPS = Diagnostics.frameCount.getAndSet(0);
             }
         }, 1L, 1L, TimeUnit.SECONDS);
     }
@@ -123,7 +122,7 @@ final class Diagnostics {
             return Class.forName("gg.skytils.skytilsmod.Skytils").getField("VERSION").get(null).toString();
         } catch (final ClassNotFoundException cnfe) {
             // The Skytils mod is either not installed or we are living in a future where Skytils devs changed the main class name.
-            // In either case, return not found, since even if Skytils is installed but the class name is changed, we technically did not find it hence not found is correct here.
+            // In either case, return "not found", since even if Skytils is installed but the class name is changed, we technically did not find it, hence not found is correct here.
             return "not found";
         } catch (final NoSuchFieldException | IllegalAccessException ignored) {
             // The field is public and exists at nearly all versions, if this happens we are probably in a future where Skytils devs changed
@@ -218,8 +217,7 @@ final class Diagnostics {
         Diagnostics.diag("Last Game Loop Time", Diagnostics.getLastGameLoopTimeString() + " (" + Diagnostics.getFPSWithNanosecondPrecision() + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
     }
 
-    @NotNull
-    static final long getFPSWithNanosecondPrecision() {
+    static final int getFPSWithNanosecondPrecision() {
         return Diagnostics.lastFPS;
     }
 
@@ -530,7 +528,7 @@ final class Diagnostics {
         // Maths.abs technically not necessary anymore after the switch from System#currentTimeMillis into System#nanoTime,
         // but leave it as a hardening measure or in case we swap back to System#currentTimeMillis again.
 
-        // The reason it was necessary with System#currentTimeMillis is that it uses system time which can return a result that is smaller than the value from the previous calls because of system time changes (NTP sync, daylight saving adjustments, manual change by user or timezone change, etc.)
+        // The reason it was necessary with System#currentTimeMillis is that it uses system time which can return a result that is smaller than the value from the previous calls because of system time changes (NTP sync, daylight-saving adjustments, manual change by user or timezone change, etc.)
         Diagnostics.lastGameLoopTimeNs = Math.abs(Diagnostics.gameLoopEnd - Diagnostics.gameLoopStart);
 
         Diagnostics.lastGameLoopTime = TimeUnit.NANOSECONDS.toMillis(Diagnostics.lastGameLoopTimeNs);

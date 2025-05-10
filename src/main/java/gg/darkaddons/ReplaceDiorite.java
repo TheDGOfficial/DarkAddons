@@ -31,9 +31,9 @@ final class ReplaceDiorite {
     }
 
     @NotNull
-    private static final BlockPos[] pillars = {new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
+    private static final BlockPos[] pillars = new BlockPos[]{new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
 
-    private static final int @NotNull [] pillarColors = {5, 4, 10, 14};
+    private static final int @NotNull [] pillarColors = new int[]{5, 4, 10, 14};
 
     @NotNull
     private static final HashSet<BlockPos>[] coordinates = ReplaceDiorite.createPillarSets();
@@ -77,7 +77,7 @@ final class ReplaceDiorite {
                     final long chunkX = pos.getX() >> 4L;
                     final long chunkZ = pos.getZ() >> 4L;
 
-                    final var chunk = chunks.computeIfAbsent(chunkX << 32L | chunkZ, k -> chunkProvider.provideChunk((int) chunkX, (int) chunkZ));
+                    final var chunk = chunks.computeIfAbsent(chunkX << 32L | chunkZ, l -> chunkProvider.provideChunk((int) chunkX, (int) chunkZ));
                     if (chunk.getBlock(pos) == Blocks.stone) {
                         ReplaceDiorite.setGlass(world, pos, coordinate);
                     }

@@ -1,5 +1,7 @@
 package gg.darkaddons.mixins;
 
+import net.minecraft.client.network.NetworkPlayerInfo;
+
 import org.jetbrains.annotations.NotNull;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +22,7 @@ final class MixinTabListParser {
 
     @Redirect(method = "parse", at = @At(value = "INVOKE", target = "Lcom/google/common/collect/Ordering;sortedCopy(Ljava/lang/Iterable;)Ljava/util/List;", remap = false), remap = false)
     @NotNull
-    private static final <T> List<T> sortedCopy$darkaddons(@NotNull final Ordering<T> ordering, @NotNull final Iterable<T> iterable) {
+    private static final List<NetworkPlayerInfo> sortedCopy$darkaddons(@NotNull final Ordering<NetworkPlayerInfo> ordering, @NotNull final Iterable<NetworkPlayerInfo> iterable) {
         return ordering.immutableSortedCopy(iterable);
     }
 }

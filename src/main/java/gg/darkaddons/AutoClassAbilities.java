@@ -237,7 +237,7 @@ final class AutoClassAbilities {
                         AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAGNAROK;
                     }
                     case MAGE -> {
-                        final var isDupeMage = 1 < DungeonListener.getTeam().stream().filter(t -> DungeonListener.DungeonClass.MAGE == t.getDungeonClass()).count();
+                        final var isDupeMage = 1L < DungeonListener.getTeam().stream().filter(t -> DungeonListener.DungeonClass.MAGE == t.getDungeonClass()).count();
                         var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) >> 1;
                         if (!isDupeMage) {
                             lvlExtraCdReduc <<= 1;

@@ -1,19 +1,23 @@
 package gg.darkaddons;
 
-final class SkyblockDedection {
+import net.minecraft.client.Minecraft;
+
+import java.util.Locale;
+
+final class SkyblockDetection {
     /**
      * Private constructor since this class only contains static members.
      * <p>
      * Always throws {@link UnsupportedOperationException} (for when
      * constructed via reflection).
      */
-    private SkyblockDedection() {
+    private SkyblockDetection() {
         super();
 
         throw Utils.staticClassException();
     }
 
     static final boolean isInSkyblock() {
-        return gg.skytils.skytilsmod.utils.Utils.INSTANCE.getInSkyblock();
+        return SBInfo.isInSkyblock();
     }
 }

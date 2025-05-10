@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.jetbrains.annotations.NotNull;
 
 @Pseudo
-@Mixin(targets = {"gg.skytils.skytilsmod.features.impl.funny.Funny"}, remap = false, priority = 1_001)
+@Mixin(targets = "gg.skytils.skytilsmod.features.impl.funny.Funny", remap = false, priority = 1_001)
 final class MixinFunny {
     private MixinFunny() {
         super();

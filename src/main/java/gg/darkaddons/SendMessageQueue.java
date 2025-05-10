@@ -20,7 +20,7 @@ final class SendMessageQueue {
     static final boolean isMessageOrCommandQueuedToBeSentByUser(@NotNull final String messageOrCommand) {
         return Skytils.sendMessageQueue.contains(messageOrCommand);
     }
- 
+
     static final void queueUserSentMessageOrCommand(@NotNull final String messageOrCommand) {
         Skytils.sendMessageQueue.add(messageOrCommand);
     }

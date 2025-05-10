@@ -26,6 +26,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -181,7 +182,7 @@ final class Utils {
     /**
      * The character used to signal the start of a formatting code.
      * <p>
-     * We store this as a {@link String} since that has more performance
+     * We store this as a {@link String} since that has higher performance
      * than an unboxed {@link Character}, although primitive char is more
      * performant, we need the {@link Character} for string operations.
      */
@@ -432,7 +433,7 @@ final class Utils {
         return Utils.toPrimitive(nullableBool, false);
     }
 
-    static final boolean toPrimitive(@Nullable final Boolean nullableBool, final boolean defaultValue) {
+    private static final boolean toPrimitive(@Nullable final Boolean nullableBool, final boolean defaultValue) {
         return null == nullableBool ? defaultValue : nullableBool;
     }
 
@@ -440,7 +441,7 @@ final class Utils {
         return Utils.toPrimitive(nullableDouble, 0.0D);
     }
 
-    static final double toPrimitive(@Nullable final Double nullableDouble, final double defaultValue) {
+    private static final double toPrimitive(@Nullable final Double nullableDouble, final double defaultValue) {
         return null == nullableDouble ? defaultValue : nullableDouble;
     }
 
@@ -686,6 +687,28 @@ final class Utils {
         final var itemStack = Utils.getHeldItemStack(mc);
 
         return null != itemStack && itemStack.getDisplayName().contains(search);
+    }
+
+    @NotNull
+    static final List<String> getItemLore(@NotNull final ItemStack itemStack) {
+        final var tagCompound = itemStack.getTagCompound();
+        if (null != tagCompound) {
+            final var display = tagCompound.getCompoundTag("display");
+            if (null != display) {
+                final var tagList = display.getTagList("Lore", 0);
+                if (null != tagList) {
+                    final var length = tagList.tagCount();
+
+                    final var lore = new ArrayList<String>(length);
+                    for (var i = 0; i < length; ++i) {
+                        lore.add(tagList.getStringTagAt(i));
+                    }
+
+                    return Collections.unmodifiableList(lore);
+                }
+            }
+        }
+        return Collections.emptyList();
     }
 
     private static final void setupConnectionProperties(@NotNull final URLConnection con,
@@ -1064,7 +1087,7 @@ final class Utils {
         return (int) Math.ceil(numMappings / 0.75D);
     }
 
-    static final boolean checkBossName(@NotNull final int floor, @NotNull final String bossName) {
+    static final boolean checkBossName(final int floor, @NotNull final String bossName) {
         final var correctBoss = switch (floor) {
             case 0 -> "The Watcher";
             case 1 -> "Bonzo";

@@ -19,10 +19,7 @@ final class MixinRandomStuff {
 
     @Redirect(method = "onCheckRenderEvent", remap = false, at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isInvisible()Z", remap = true))
     private final boolean isInvisible$darkaddons(@NotNull final Entity entity) {
-        if (-1L == DungeonTimer.getPhase1ClearTime() || -1L != DungeonTimer.getBossClearTime() || !(entity instanceof EntityArmorStand)) {
-            return false;
-        }
+        return -1L != DungeonTimer.getPhase1ClearTime() && -1L == DungeonTimer.getBossClearTime() && entity instanceof EntityArmorStand && entity.isInvisible();
 
-        return entity.isInvisible();
     }
 }

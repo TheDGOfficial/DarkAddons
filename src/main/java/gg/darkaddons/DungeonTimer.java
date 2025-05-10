@@ -44,7 +44,7 @@ public final class DungeonTimer {
         final var line = Utils.removeControlCodes(packet.getPrefix() + String.join(" ", packet.getPlayers()) + packet.getSuffix());
 
         if (line.startsWith("Cleared: ")) {
-            final var matcher = dungeonClearedPatternMatcher.reset(line);
+            final var matcher = DungeonTimer.dungeonClearedPatternMatcher.reset(line);
             if (matcher.find()) {
                 if (-1L == DungeonTimer.dungeonStartTime) {
                     DungeonTimer.dungeonStartTime = System.currentTimeMillis();
@@ -70,11 +70,11 @@ public final class DungeonTimer {
         final var unformatted = Utils.removeControlCodes(event.message.getUnformattedText());
 
         final var currentTime = System.currentTimeMillis();
-        final Integer dungeonFloorNumber = DungeonFeatures.getDungeonFloorNumber();
+        final var dungeonFloorNumber = DungeonFeatures.getDungeonFloorNumber();
 
         if (-1L == DungeonTimer.bossEntryTime && unformatted.startsWith("[BOSS] ") && unformatted.contains(":")) {
             final var bossName = StringUtils.substringBefore(StringUtils.substringAfter(unformatted, "[BOSS] "), ":").trim();
-            if (!"The Watcher".equals(bossName) && dungeonFloorNumber != null && Utils.checkBossName(dungeonFloorNumber, bossName)) {
+            if (!"The Watcher".equals(bossName) && null != dungeonFloorNumber && Utils.checkBossName(dungeonFloorNumber, bossName)) {
                 DungeonTimer.bossEntryTime = currentTime;
             }
         } else if (-1L != DungeonTimer.bossEntryTime && -1L == DungeonTimer.bossClearTime && message.contains("§r§c☠ §r§eDefeated §r")) {

@@ -26,7 +26,7 @@ final class TinyConfig {
     private TinyConfig() {
         super();
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("static class");
     }
 
     static {

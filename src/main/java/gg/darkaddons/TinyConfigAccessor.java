@@ -12,7 +12,7 @@ public final class TinyConfigAccessor {
     private TinyConfigAccessor() {
         super();
 
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("static class");
     }
 
     public static final boolean getBoolean(@NotNull final String key, final boolean defaultValue) {

@@ -23,7 +23,7 @@ public final class AccessibleObjectResource<T extends AccessibleObject> implemen
     /**
      * Creates a new wrapper resource for the given {@link AccessibleObject}.
      *
-     * @param field The {@link AccessibleObject} to create the wrapper for.
+     * @param accessibleObject The {@link AccessibleObject} to create the wrapper for.
      */
     @SuppressWarnings("unchecked")
     public AccessibleObjectResource(@NotNull final AccessibleObject accessibleObject) {
@@ -51,7 +51,7 @@ public final class AccessibleObjectResource<T extends AccessibleObject> implemen
     @Synthetic
     @Bridge
     private final void restoreAccess() {
-        if (accessibilityModified) {
+        if (this.accessibilityModified) {
             this.modifyAccessibility(false);
         }
     }
@@ -73,7 +73,8 @@ public final class AccessibleObjectResource<T extends AccessibleObject> implemen
     @Override
     public final String toString() {
         return "AccessibleObjectResource{" +
-                "accessibleObject=" + this.accessibleObject +
-                '}';
+            "accessibleObject=" + this.accessibleObject +
+            ", accessibilityModified=" + this.accessibilityModified +
+            '}';
     }
 }

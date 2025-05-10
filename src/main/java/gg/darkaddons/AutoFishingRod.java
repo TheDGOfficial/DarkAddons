@@ -165,10 +165,10 @@ final class AutoFishingRod {
     }
 
     private static final void throwBobberOnceNoBobber(final boolean initialBobber) {
-        if (!initialBobber) {
-            AutoFishingRod.throwBobber();
-        } else {
+        if (initialBobber) {
             Utils.awaitCondition(() -> !AutoFishingRod.hasActiveBobber(), AutoFishingRod::throwBobber);
+        } else {
+            AutoFishingRod.throwBobber();
         }
     }
 
@@ -225,18 +225,18 @@ final class AutoFishingRod {
 
     private static final void moveMouse(@NotNull final EntityPlayerSP player) {
         final var now = System.currentTimeMillis();
- 
-        if (!Float.isNaN(AutoFishingRod.lastYaw) && !Float.isNaN(AutoFishingRod.lastPitch) && (player.rotationYaw != AutoFishingRod.lastYaw || player.rotationPitch != AutoFishingRod.lastPitch)) {
-            // Head moved since the last time fishing rod bobber was thrown - restart the timer
+
+        if (!Float.isNaN(AutoFishingRod.lastYaw) && !Float.isNaN(AutoFishingRod.lastPitch) && (!Utils.compareFloatExact(player.rotationYaw, AutoFishingRod.lastYaw) || !Utils.compareFloatExact(player.rotationPitch, AutoFishingRod.lastPitch))) {
+            // Head has moved since the last time fishing rod bobber was thrown - restart the timer
             AutoFishingRod.lastMouseMoveTime = now;
 
-            // Update values so that the if will be false if its not moved another time in the next check when the rod is thrown again
+            // Update values so that the condition will be false if it's not moved another time in the next check when the rod is thrown again
             AutoFishingRod.lastYaw = player.rotationYaw;
             AutoFishingRod.lastPitch = player.rotationPitch;
 
             return;
         }
- 
+
         AutoFishingRod.lastYaw = player.rotationYaw;
         AutoFishingRod.lastPitch = player.rotationPitch;
 

@@ -6,6 +6,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 final class TickTask {
     @NotNull
@@ -33,9 +35,8 @@ final class TickTask {
         TickTask.TickTaskManager.tasks.add(this);
     }
 
-    @NotNull
-    static final TickTask.TickTaskManager newManager() {
-        return new TickTask.TickTaskManager();
+    static final void registerTickTaskManager(@NotNull final Consumer<Supplier<Object>[]> registerer) {
+        registerer.accept(JavaUtils.createGenericArray(TickTask.TickTaskManager::new));
     }
 
     private static final class TickTaskManager {

@@ -3,10 +3,21 @@ package gg.darkaddons;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 
 @SuppressWarnings("strictfp")
 final strictfp class SmoothLookHelper {
+    /**
+     * Private constructor since this class only contains static members.
+     * <p>
+     * Always throws {@link UnsupportedOperationException} (for when
+     * constructed via reflection).
+     */
+    private SmoothLookHelper() {
+        super();
+
+        throw Utils.staticClassException();
+    }
+
     private enum Algorithm {
         INSTANTANEOUS() {
             @Override
@@ -54,6 +65,7 @@ final strictfp class SmoothLookHelper {
         };
 
         abstract float applyForYaw(final float currentYaw, final float targetYaw);
+
         abstract float applyForPitch(final float currentPitch, final float targetPitch);
     }
 
@@ -63,18 +75,14 @@ final strictfp class SmoothLookHelper {
         // This class is currently only used by Auto Fishing Rod feature
         // If we ever use it from any other class needs adding seperate option to select different algorithm for different use-cases
         final var configSelection = Config.getAutoFishingRodAFKBypassAlgorithm();
-        switch (configSelection) {
-            case 0:
-                return SmoothLookHelper.Algorithm.INSTANTANEOUS;
-            case 1:
-                return SmoothLookHelper.Algorithm.LERP;
-            case 2:
-                return SmoothLookHelper.Algorithm.EASE_IN_OUT;
-            case 3:
-                return SmoothLookHelper.Algorithm.GRADUAL_MOUSE_MOVEMENT;
-            default:
+        return switch (configSelection) {
+            case 0 -> SmoothLookHelper.Algorithm.INSTANTANEOUS;
+            case 1 -> SmoothLookHelper.Algorithm.LERP;
+            case 2 -> SmoothLookHelper.Algorithm.EASE_IN_OUT;
+            case 3 -> SmoothLookHelper.Algorithm.GRADUAL_MOUSE_MOVEMENT;
+            default ->
                 throw new IllegalStateException("auto fishing rod afk bypass algorithm selection out-of supported values range received from config: " + configSelection);
-        }
+        };
     }
 
     private static final float LERP_SPEED = 0.1F;
@@ -89,21 +97,21 @@ final strictfp class SmoothLookHelper {
     private static boolean done = true; // Prevent unnecessary updates
 
     static final void setTarget(final float yaw, final float pitch) {
-        targetYaw = yaw;
-        targetPitch = pitch;
+        SmoothLookHelper.targetYaw = yaw;
+        SmoothLookHelper.targetPitch = pitch;
 
         SmoothLookHelper.lastYaw = Float.NaN;
         SmoothLookHelper.lastPitch = Float.NaN;
 
-        done = false; // Reset to allow updates
+        SmoothLookHelper.done = false; // Reset to allow updates
     }
 
     static final void update() {
-        if (!done) {
+        if (!SmoothLookHelper.done) {
             final var player = Minecraft.getMinecraft().thePlayer;
             if (null != player) {
-                // If player manually moved their head, we cancel the entire process and bail out. Player input should always override automatic control.
-                if (!Float.isNaN(SmoothLookHelper.lastYaw) && !Float.isNaN(SmoothLookHelper.lastPitch) && (player.rotationYaw != SmoothLookHelper.lastYaw || player.rotationPitch != SmoothLookHelper.lastPitch)) {
+                // If the player manually moved their head, we cancel the entire process and bail out. Player input should always override automatic control.
+                if (!Float.isNaN(SmoothLookHelper.lastYaw) && !Float.isNaN(SmoothLookHelper.lastPitch) && (!Utils.compareFloatExact(player.rotationYaw, SmoothLookHelper.lastYaw) || !Utils.compareFloatExact(player.rotationPitch, SmoothLookHelper.lastPitch))) {
                     SmoothLookHelper.done = true;
                     return;
                 }
@@ -114,8 +122,8 @@ final strictfp class SmoothLookHelper {
                 player.rotationYaw = algorithm.applyForYaw(player.rotationYaw, SmoothLookHelper.targetYaw);
                 player.rotationPitch = algorithm.applyForPitch(player.rotationPitch, SmoothLookHelper.targetPitch);
 
-                // If yaw and pitch doesn't change after applying the algorithm anymore, we're done
-                if (algorithm.applyForYaw(player.rotationYaw, SmoothLookHelper.targetYaw) == player.rotationYaw && algorithm.applyForPitch(player.rotationPitch, SmoothLookHelper.targetPitch) == player.rotationPitch) {
+                // If yaw and pitch do not change after applying the algorithm anymore, we're done
+                if (Utils.compareFloatExact(algorithm.applyForYaw(player.rotationYaw, SmoothLookHelper.targetYaw), player.rotationYaw) && Utils.compareFloatExact(algorithm.applyForPitch(player.rotationPitch, SmoothLookHelper.targetPitch), player.rotationPitch)) {
                     SmoothLookHelper.done = true;
                 }
 
@@ -130,14 +138,14 @@ final strictfp class SmoothLookHelper {
     }
 
     private static final float easeInOut(final float start, final float end, final float progress) {
-        float smoothStep = progress * progress * (3.0F - 2.0F * progress); // Smoothstep easing
+        final var smoothStep = progress * progress * (3.0F - 2.0F * progress); // Smoothstep easing
         return start + smoothStep * (end - start);
     }
 
     private static final float gradualAdjust(final float start, final float end, final float speed) {
         var delta = (end - start) * speed;
 
-        if (Math.abs(delta) < 0.1F) {
+        if (0.1F > Math.abs(delta)) {
             delta = 0.0F;
         }
 

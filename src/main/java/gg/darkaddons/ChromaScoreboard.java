@@ -24,6 +24,12 @@ final class ChromaScoreboard {
     // This required for ProGuard to not optimize out the calls as the interface is only implemented in runtime.
     // A hacky workaround but works for now without having to disable optimizations.
     private static final class Dummy implements IMixinS3BPacketScoreboardObjective {
+        private Dummy() {
+            super();
+
+            throw new IllegalStateException("dummy");
+        }
+
         @Override
         @NotNull
         public final String getObjectiveValue() {

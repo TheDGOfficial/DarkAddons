@@ -518,7 +518,7 @@ final class SubCommand {
 
         final var indent = '\t';
 
-        for (var i = 1; i < len; ++i) { // Skip the first one as its already printed above
+        for (var i = 1; i < len; ++i) { // Skip the first one as it's already printed above
             final var elem = stack[i];
 
             final var className = ProfilerImpl.getClassName(elem);

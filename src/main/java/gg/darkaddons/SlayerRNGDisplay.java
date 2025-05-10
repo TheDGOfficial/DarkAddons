@@ -29,7 +29,7 @@ final class SlayerRNGDisplay extends GuiElement {
     }
 
     @NotNull
-    private static final String formatMeterProgressPercent(@NotNull final double meterProgressPercent) {
+    private static final String formatMeterProgressPercent(final double meterProgressPercent) {
         return String.format(Locale.ROOT, "%.2f", Math.min(100.0D, meterProgressPercent)) + '%';
     }
 
@@ -197,13 +197,12 @@ final class SlayerRNGDisplay extends GuiElement {
                     SlayerRNGDisplay.addLine("§cYou are not eligible to drop this RNG,");
                     SlayerRNGDisplay.addLine("§cbecause you are not at the required");
                     SlayerRNGDisplay.addLine("§clevel for this drop from this slayer yet.");
-                    SlayerRNGDisplay.addEmptyLine();
                 } else {
                     SlayerRNGDisplay.addLine("§cYou are not eligible to drop this RNG,");
                     SlayerRNGDisplay.addLine("§cbecause you are not doing the required");
                     SlayerRNGDisplay.addLine("§ctier of the boss for this drop at the moment.");
-                    SlayerRNGDisplay.addEmptyLine();
                 }
+                SlayerRNGDisplay.addEmptyLine();
             }
             SlayerRNGDisplay.stats(meterProgressPercent, dropChance, odds, etaTime, avgBossKillTime, moneyPerHour, drop);
         }
@@ -281,7 +280,7 @@ final class SlayerRNGDisplay extends GuiElement {
                     final var oldPrice = slayerDrop.price;
 
                     if (0 == oldPrice) {
-                        // If any of the slayer drops that supposed to have a AH/BZ price has none, we need to update the display so that it does not keep showing 0 coins till the next time you kill a boss.
+                        // If any of the slayer drops that supposed to have an AH/BZ price has none, we need to update the display so that it does not keep showing 0 coins till the next time you kill a boss.
                         // Otherwise, no need to unnecessarily update the display - it will be updated the next time a slayer boss is done.
                         updateNeeded = true;
                     }
@@ -520,27 +519,38 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private static final class QuantityRange {
         @NotNull
-        private static final QuantityRange SINGLE = QuantityRange.of(1, 1);
- 
+        private static final SlayerRNGDisplay.QuantityRange SINGLE = SlayerRNGDisplay.QuantityRange.of(1, 1);
+
         private final int min;
         private final int max;
 
         private final int average;
 
         private QuantityRange(final int min, final int max) {
+            super();
+
             this.min = min;
             this.max = max;
 
-            this.average = (this.min + this.max) / 2;
+            this.average = (this.min + this.max) >> 1;
         }
 
         @NotNull
-        private static final QuantityRange of(final int min, final int max) {
-            return new QuantityRange(min, max);
+        private static final SlayerRNGDisplay.QuantityRange of(final int min, final int max) {
+            return new SlayerRNGDisplay.QuantityRange(min, max);
         }
 
         private final int getAverage() {
             return this.average;
+        }
+
+        @Override
+        public final String toString() {
+            return "QuantityRange{" +
+                "min=" + this.min +
+                ", max=" + this.max +
+                ", average=" + this.average +
+                '}';
         }
     }
 
@@ -554,7 +564,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
         HIGH_CLASS_ARCHFIEND_DICE(194_939, 0.256_5D, SlayerRNGDisplay.Slayer.BLAZE, 7, 4, () -> Config.isPrioritizeDice() ? 2 : 1),
 
-        GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 10_649, 4.695_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> 1, SlayerRNGDisplay.SellingMethod.BAZAAR, null, QuantityRange.of(24, 32)),
+        GABAGOOL_DISTILLATE("CRUDE_GABAGOOL_DISTILLATE", 10_649, 4.695_2D, SlayerRNGDisplay.Slayer.BLAZE, 3, 2, () -> 1, SlayerRNGDisplay.SellingMethod.BAZAAR, null, SlayerRNGDisplay.QuantityRange.of(24, 32)),
 
         MC_GRUBBERS_BURGER(18_450, 1.219_5D, SlayerRNGDisplay.Slayer.VAMPIRE, 5, 4, () -> Config.isBurgersDone() ? 1 : 4, SlayerRNGDisplay.SellingMethod.NONE, "McGrubber's Burger"),
 
@@ -576,7 +586,7 @@ final class SlayerRNGDisplay extends GuiElement {
         @Nullable
         private final String displayName;
         @NotNull
-        private final QuantityRange quantityRange;
+        private final SlayerRNGDisplay.QuantityRange quantityRange;
         private int price;
         private int bossesDoneSinceLastRNGMeterDrop;
         @NotNull
@@ -613,10 +623,10 @@ final class SlayerRNGDisplay extends GuiElement {
         }
 
         private SlayerDrop(@Nullable final String itemIdIn, final int requiredMeterXPIn, final double baseDropChanceIn, @NotNull final SlayerRNGDisplay.Slayer slayerIn, final int requiredLevelIn, final int requiredTierIn, @NotNull final IntSupplier profitWeightIn, @NotNull final SlayerRNGDisplay.SellingMethod sellingMethodIn, @Nullable final String displayNameIn) {
-            this(itemIdIn, requiredMeterXPIn, baseDropChanceIn, slayerIn, requiredLevelIn, requiredTierIn, profitWeightIn, sellingMethodIn, displayNameIn, QuantityRange.SINGLE);
+            this(itemIdIn, requiredMeterXPIn, baseDropChanceIn, slayerIn, requiredLevelIn, requiredTierIn, profitWeightIn, sellingMethodIn, displayNameIn, SlayerRNGDisplay.QuantityRange.SINGLE);
         }
 
-        private SlayerDrop(@Nullable final String itemIdIn, final int requiredMeterXPIn, final double baseDropChanceIn, @NotNull final SlayerRNGDisplay.Slayer slayerIn, final int requiredLevelIn, final int requiredTierIn, @NotNull final IntSupplier profitWeightIn, @NotNull final SlayerRNGDisplay.SellingMethod sellingMethodIn, @Nullable final String displayNameIn, @NotNull final QuantityRange quantityRange) {
+        private SlayerDrop(@Nullable final String itemIdIn, final int requiredMeterXPIn, final double baseDropChanceIn, @NotNull final SlayerRNGDisplay.Slayer slayerIn, final int requiredLevelIn, final int requiredTierIn, @NotNull final IntSupplier profitWeightIn, @NotNull final SlayerRNGDisplay.SellingMethod sellingMethodIn, @Nullable final String displayNameIn, @NotNull final SlayerRNGDisplay.QuantityRange quantityRange) {
             this.itemId = itemIdIn;
             this.requiredMeterXP = requiredMeterXPIn;
             this.baseDropChance = baseDropChanceIn;
@@ -677,13 +687,13 @@ final class SlayerRNGDisplay extends GuiElement {
         }
 
         @NotNull
-        private final QuantityRange getQuantityRange() {
+        private final SlayerRNGDisplay.QuantityRange getQuantityRange() {
             return this.quantityRange;
         }
 
         private final int getDummyMoneyPerHour() {
-            // Calculate an inaccurate money per hour for this drop with dummy parameters (0 meter, 60s avg boss kill time) and use that as a comparable dummy money/hr in between drops, to determine the one making best money/hr, without needing the accurate parameters (or money/hr), as changing the dummy parameters to real ones will change money/hr but not the drop, and the returned value is only used for comparision between drops and is not displayed to the end user.
-            // Do not pass 0 as avg boss kill time for safety to not overflow the money per hr returned.
+            // Calculate inaccurate money per hour for this drop with dummy parameters (0 meter, 60s avg boss kill time) and use that as a comparable dummy money/hr in between drops, to determine the one making the best money/hr, without needing the accurate parameters (or money/hr), as changing the dummy parameters to real ones will change money/hr but not the drop, and the returned value is only used for comparison between drops and is not displayed to the end user.
+            // Do not pass 0 as avg boss kills time for safety to not overflow the money per hr returned.
             return SlayerRNGDisplay.getMoneyPerHour(SlayerRNGDisplay.getETATime(this, TimeUnit.SECONDS.toMillis(60L), SlayerRNGDisplay.getOdds(SlayerRNGDisplay.getDropChance(this, SlayerRNGDisplay.getMeterProgress(this, 0))), 0, 0), this.price) * this.quantityRange.getAverage();
         }
 
@@ -699,6 +709,7 @@ final class SlayerRNGDisplay extends GuiElement {
                 ", profitWeight=" + this.profitWeight +
                 ", sellingMethod=" + this.sellingMethod +
                 ", displayName='" + this.displayName + '\'' +
+                ", quantityRange=" + this.quantityRange +
                 ", price=" + this.price +
                 ", bossesDoneSinceLastRNGMeterDrop=" + this.bossesDoneSinceLastRNGMeterDrop +
                 ", enumName='" + this.enumName + '\'' +
@@ -734,7 +745,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
             SlayerRNGDisplay.SlayerDrop highest = null;
             for (final var drop : eligibleDrops) {
-                if (null == highest || highest.profitWeight.getAsInt() < drop.profitWeight.getAsInt() || (highest.profitWeight.getAsInt() == drop.profitWeight.getAsInt() && highest.getDummyMoneyPerHour() < drop.getDummyMoneyPerHour())) {
+                if (null == highest || highest.profitWeight.getAsInt() < drop.profitWeight.getAsInt() || highest.profitWeight.getAsInt() == drop.profitWeight.getAsInt() && highest.getDummyMoneyPerHour() < drop.getDummyMoneyPerHour()) {
                     highest = drop;
                 }
             }
@@ -745,7 +756,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
             // If no drops are eligible, default to a non-eligible most-profit drop. Even if they can't drop it yet, they can see their RNG meter progress, better than showing nothing, I guess.
             for (final var drop : drops) {
-                if (null == highest || highest.profitWeight.getAsInt() < drop.profitWeight.getAsInt() || (highest.profitWeight.getAsInt() == drop.profitWeight.getAsInt() && highest.getDummyMoneyPerHour() < drop.getDummyMoneyPerHour())) {
+                if (null == highest || highest.profitWeight.getAsInt() < drop.profitWeight.getAsInt() || highest.profitWeight.getAsInt() == drop.profitWeight.getAsInt() && highest.getDummyMoneyPerHour() < drop.getDummyMoneyPerHour()) {
                     highest = drop;
                 }
             }
@@ -835,7 +846,7 @@ final class SlayerRNGDisplay extends GuiElement {
                 if (xpNow > xpBefore) {
                     SlayerRNGDisplay.lastMeterXPGain = xpNow - xpBefore;
                 } else {
-                    // If the user used meter XP to drop an rng, the current XP will be lower than previous XP.
+                    // If the user used meter XP to drop a rng, the current XP will be lower than previous XP.
                     final var drop = SlayerRNGDisplay.lastSelectedDrop;
 
                     if (null != drop) {

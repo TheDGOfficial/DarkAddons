@@ -29,7 +29,7 @@ final class ServerTPSCalculator {
     private static final ScheduledExecutorService calculatorThread = Executors.newSingleThreadScheduledExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Server TPS Calculator Thread"));
 
     static volatile boolean initialized;
- 
+
     static volatile int lastTPS;
 
     static {
@@ -38,7 +38,7 @@ final class ServerTPSCalculator {
                 final var ticksThisSecond = ServerTPSCalculator.tickCount.getAndSet(0);
                 ServerTPSCalculator.lastTPS = Math.min(20, ticksThisSecond);
 
-                if (!ServerTPSCalculator.initialized && ticksThisSecond > 0) {
+                if (!ServerTPSCalculator.initialized && 0 < ticksThisSecond) {
                     ServerTPSCalculator.initialized = true;
                 }
             }
@@ -49,7 +49,7 @@ final class ServerTPSCalculator {
      * On world change, which is most of the time a server change on Hypixel,
      * the TPS will be 0 till we start getting the S32PacketConfirmTransaction packets.
      * so we have a flag to see if we got any confirm transaction packets in the current world,
-     * and if we do we can assume the tps is correct, otherwise we will show the TPS as loading.
+     * and if we do, we can assume the tps is correct, otherwise we will show the TPS as loading.
      */
     static final void onWorldUnload() {
         if (Config.isTpsDisplay()) {
@@ -62,13 +62,13 @@ final class ServerTPSCalculator {
     /**
      * Called by main mod class whenever a packet is received on the client.
      * The filtering of whether the packet should be sent to mod code is done
-     * by the main class already, i.e the checks for if packet's direction is
+     * by the main class already, i.e., the checks for if packet's direction is
      * EnumPacketDirection.CLIENTBOUND and is not sent in a local channel
-     * (e.g the integrated server in single player worlds).
+     * (e.g., the integrated server in single player worlds).
      */
     static final void handlePacket(@NotNull final Packet<?> packet) {
         if (Config.isTpsDisplay() && packet instanceof final S32PacketConfirmTransaction pct) {
-            if (pct.getActionNumber() < 1) {
+            if (1 > pct.getActionNumber()) {
                 ServerTPSCalculator.tickCount.incrementAndGet();
             }
         }

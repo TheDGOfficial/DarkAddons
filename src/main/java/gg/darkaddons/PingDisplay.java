@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 final class PingDisplay extends SimpleGuiElement {
-    private static final String[] LOADING_TEXTS = {"Loading.", "Loading..", "Loading..."};
+    private static final String[] LOADING_TEXTS = new String[]{"Loading.", "Loading..", "Loading..."};
     private static final int loadingTextsLength = PingDisplay.LOADING_TEXTS.length;
 
     private static int currentLoadingTextIndex;
@@ -39,7 +39,7 @@ final class PingDisplay extends SimpleGuiElement {
 
         PingDisplay.ping = PingTracker.getLastPingMillis();
 
-        if (isDemoRenderBypass || (-1 == PingDisplay.ping || PingDisplay.lastPing != PingDisplay.ping) || this.isEmpty()) {
+        if (isDemoRenderBypass || -1 == PingDisplay.ping || PingDisplay.lastPing != PingDisplay.ping || this.isEmpty()) {
             PingDisplay.lastPing = PingDisplay.ping;
 
             super.update();

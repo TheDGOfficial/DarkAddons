@@ -25,4 +25,12 @@ final class MixinEntityDragon implements EntityWitherKingDragon {
     public final void setWitherKingDragonTypeOrdinal(final int witherKingDragonTypeOrdinal) {
         this.witherKingDragonTypeOrdinal = witherKingDragonTypeOrdinal;
     }
+
+    @Unique
+    @Override
+    public final String toString() {
+        return "MixinEntityDragon{" +
+            "witherKingDragonTypeOrdinal=" + this.witherKingDragonTypeOrdinal +
+            '}';
+    }
 }

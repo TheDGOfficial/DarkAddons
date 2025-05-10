@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * Factory to open Vigilance config of the mod when the Config button is clicked in Mods page in Forge.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public final class ForgeConfigInterop implements IModGuiFactory {
     /**
      * Called by Forge. Do not call manually.

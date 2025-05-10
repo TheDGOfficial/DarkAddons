@@ -55,7 +55,8 @@ final class MixinNetworkManager {
     }
 
     @Redirect(method = "dispatchPacket", at = @At(value = "INVOKE", target = "Lio/netty/channel/EventLoop;execute(Ljava/lang/Runnable;)V", remap = false))
-    private final void onExecutePacketSend$darkaddons(@NotNull final EventLoop eventLoop, @NotNull final Runnable originalRunnable, @NotNull final Packet<?> packet, @NotNull final GenericFutureListener<? extends Future<? super Void>>[] futureListeners) {
+    @SafeVarargs
+    private final void onExecutePacketSend$darkaddons(@NotNull final EventLoop eventLoop, @NotNull final Runnable originalRunnable, @NotNull final Packet<?> packet, final @NotNull GenericFutureListener<? extends Future<? super Void>>... futureListeners) {
         eventLoop.execute(() -> {
             DarkAddons.onPacketSent(packet);
             originalRunnable.run();

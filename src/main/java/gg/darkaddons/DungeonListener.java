@@ -29,21 +29,21 @@ public final class DungeonListener {
     }
 
     @NotNull
-    static final List<DungeonTeammate> getTeam() {
+    static final List<DungeonListener.DungeonTeammate> getTeam() {
         return gg.skytils.skytilsmod.listeners.DungeonListener.INSTANCE.getTeam().values().stream().map(DungeonListener::mapDungeonTeammate).collect(Collectors.toList());
     }
 
     @NotNull
-    private static final DungeonTeammate mapDungeonTeammate(@NotNull final gg.skytils.skytilsmod.listeners.DungeonListener.DungeonTeammate dungeonTeammate) {
-        return new DungeonTeammate(dungeonTeammate.getPlayer(), DungeonListener.mapDungeonClass(dungeonTeammate.getDungeonClass()), dungeonTeammate.getClassLevel());
+    private static final DungeonListener.DungeonTeammate mapDungeonTeammate(@NotNull final gg.skytils.skytilsmod.listeners.DungeonListener.DungeonTeammate dungeonTeammate) {
+        return new DungeonListener.DungeonTeammate(dungeonTeammate.getPlayer(), DungeonListener.mapDungeonClass(dungeonTeammate.getDungeonClass()), dungeonTeammate.getClassLevel());
     }
 
     @Nullable
-    private static final DungeonClass mapDungeonClass(@Nullable final gg.skytils.skytilsmod.utils.DungeonClass dungeonClass) {
+    private static final DungeonListener.DungeonClass mapDungeonClass(@Nullable final gg.skytils.skytilsmod.utils.DungeonClass dungeonClass) {
         if (null != dungeonClass) {
             final var name = dungeonClass.name();
             if (!"EMPTY".equals(name)) {
-                return DungeonClass.valueOf(name);
+                return DungeonListener.DungeonClass.valueOf(name);
             }
         }
         return null;
@@ -60,10 +60,12 @@ public final class DungeonListener {
         @Nullable
         private final EntityPlayer player;
         @Nullable
-        private final DungeonClass dungeonClass;
+        private final DungeonListener.DungeonClass dungeonClass;
         private final int classLevel;
 
-        private DungeonTeammate(@Nullable final EntityPlayer player, @Nullable final DungeonClass dungeonClass, final int classLevel) {
+        private DungeonTeammate(@Nullable final EntityPlayer player, @Nullable final DungeonListener.DungeonClass dungeonClass, final int classLevel) {
+            super();
+
             this.player = player;
             this.dungeonClass = dungeonClass;
             this.classLevel = classLevel;
@@ -71,32 +73,40 @@ public final class DungeonListener {
 
         @Nullable
         final EntityPlayer getPlayer() {
-           return this.player;
+            return this.player;
         }
 
         @Nullable
-        final DungeonClass getDungeonClass() {
-           return this.dungeonClass;
+        final DungeonListener.DungeonClass getDungeonClass() {
+            return this.dungeonClass;
         }
 
         final int getClassLevel() {
-           return this.classLevel;
+            return this.classLevel;
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(this.player, this.dungeonClass, this.classLevel);
+            var result = Objects.hashCode(this.player);
+
+            result = 31 * result + Objects.hashCode(this.dungeonClass);
+            result = 31 * result + this.classLevel;
+
+            return result;
         }
 
         @Override
         public final boolean equals(@Nullable final Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj instanceof final DungeonTeammate other) {
-                return Objects.equals(this.player, other.player) && Objects.equals(this.dungeonClass, other.dungeonClass) && Objects.equals(this.classLevel, other.classLevel);
-            }
-            return false;
+            return this == obj || obj instanceof final DungeonTeammate other && Objects.equals(this.player, other.player) && this.dungeonClass == other.dungeonClass && this.classLevel == other.classLevel;
+        }
+
+        @Override
+        public final String toString() {
+            return "DungeonTeammate{" +
+                "player=" + this.player +
+                ", dungeonClass=" + this.dungeonClass +
+                ", classLevel=" + this.classLevel +
+                '}';
         }
     }
 }
