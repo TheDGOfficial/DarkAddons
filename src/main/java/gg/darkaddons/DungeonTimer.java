@@ -79,7 +79,7 @@ public final class DungeonTimer {
             }
         } else if (-1L != DungeonTimer.bossEntryTime && -1L == DungeonTimer.bossClearTime && message.contains("§r§c☠ §r§eDefeated §r")) {
             DungeonTimer.bossClearTime = currentTime;
-        } else if (7 == dungeonFloorNumber && message.startsWith("§r§4[BOSS] ")) {
+        } else if (null != dungeonFloorNumber && 7 == dungeonFloorNumber && message.startsWith("§r§4[BOSS] ")) {
             if (message.endsWith("§r§cPathetic Maxor, just like expected.§r") && -1L == DungeonTimer.phase1ClearTime) {
                 DungeonTimer.phase1ClearTime = currentTime;
             } else if (message.endsWith("§r§cWho dares trespass into my domain?§r") && -1L == DungeonTimer.phase2ClearTime) {
@@ -89,7 +89,7 @@ public final class DungeonTimer {
             } else if (message.endsWith("§r§cAll this, for nothing...§r")) {
                 DungeonTimer.phase4ClearTime = currentTime;
             }
-        } else if (6 == dungeonFloorNumber && message.startsWith("§r§c[BOSS] Sadan") && message.endsWith("§r§f: ENOUGH!§r") && -1L == DungeonTimer.terraClearTime) {
+        } else if (null != dungeonFloorNumber && 6 == dungeonFloorNumber && message.startsWith("§r§c[BOSS] Sadan") && message.endsWith("§r§f: ENOUGH!§r") && -1L == DungeonTimer.terraClearTime) {
             DungeonTimer.terraClearTime = currentTime;
         }
     }
