@@ -23,9 +23,10 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +69,7 @@ final class RunsTillCA50 {
 
     /**
      * Represents the Max Catacombs and Class Levels before Overflow Levels start.
-     *
+     * <p>
      * See {@link RunsTillCA50#MAX_LEVEL_XP} for how much XP this max level requires.
      */
     private static final int MAX_LEVEL = 50;
@@ -133,7 +134,8 @@ final class RunsTillCA50 {
         final var cached = RunsTillCA50.uuidCache.getIfPresent(username);
         if (null == cached) {
             DarkAddons.queueWarning("Fetching UUID for " + username + "...");
-            RunsTillCA50.apiFetcher.execute(() -> MojangUtil.getUUIDFromUsername(username, (@Nullable final UUID uuid) -> {
+            RunsTillCA50.apiFetcher.execute(() -> {
+                final var uuid = MojangUtil.getUUIDFromUsername(username);
                 if (null == uuid) {
                     RunsTillCA50.invalidPlayer();
                     return;
@@ -141,7 +143,7 @@ final class RunsTillCA50 {
 
                 RunsTillCA50.uuidCache.put(username, uuid);
                 RunsTillCA50.calculateUUID0(uuid, m7, callback, derpy, mode);
-            }, (@Nullable final Throwable t) -> RunsTillCA50.invalidPlayer()));
+            });
         } else {
             RunsTillCA50.apiFetcher.execute(() -> RunsTillCA50.calculateUUID(cached, m7, callback, derpy, mode));
         }
@@ -209,21 +211,16 @@ final class RunsTillCA50 {
 
             if (!data.isSuccessful()) {
                 if (printWarnings) {
-                    switch (data.getFailReason()) {
-                        case NO_API_DATA:
-                            DarkAddons.queueWarning("Can't find API data for this player, no Skyblock profiles?");
-                            break;
-                        case NO_DUNGEON_DATA:
-                            DarkAddons.queueWarning("This player didn't enter The Catacombs or earn any Catacombs XP, can't proceed. If you believe this incorrect, check if the player's last played profile is the correct profile.");
-                            break;
-                    }
+                    DarkAddons.queueWarning(switch (data.getFailReason()) {
+                        case NO_API_DATA -> "Can't find API data for this player, no Skyblock profiles?";
+                        case NO_DUNGEON_DATA ->
+                            "This player didn't enter The Catacombs or earn any Catacombs XP, can't proceed. If you believe this incorrect, check if the player's last played profile is the correct profile.";
+                    });
                 }
                 return null;
             }
 
-            final var classExperiences = new EnumMap<DungeonListener.DungeonClass, Double>(DungeonListener.DungeonClass.class);
-
-            Arrays.stream(DungeonListener.DungeonClass.values()).forEach(dungeonClass -> classExperiences.put(dungeonClass, data.getClassXpForClass(dungeonClass)));
+            final var classExperiences = Arrays.stream(DungeonListener.DungeonClass.values()).collect(Collectors.toMap(Function.identity(), data::getClassXpForClass, (a, b) -> b, () -> new EnumMap<>(DungeonListener.DungeonClass.class)));
 
             return RunsTillCA50.createDataHolder(uuid, data.getCataXp(), data.getMasterTierCompletionsForFloor(m7 ? 7 : 6), classExperiences);
         } catch (final Throwable t) {
