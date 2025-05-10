@@ -20,4 +20,15 @@ final class SkyblockDetection {
     static final boolean isInSkyblock() {
         return SBInfo.isInSkyblock();
     }
+
+    static final boolean isInAlphaNetwork() {
+        final var currentServer = Minecraft.getMinecraft().getCurrentServerData();
+        if (null != currentServer) {
+            final var ip = currentServer.serverIP;
+            if (null != ip) {
+                return ip.toLowerCase(Locale.ROOT).contains("alpha");
+            }
+        }
+        return false;
+    }
 }

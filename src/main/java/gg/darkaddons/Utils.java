@@ -376,7 +376,7 @@ final class Utils {
     }
 
     @NotNull
-    private static final JsonElement parseJsonFromString(@NotNull final String json) {
+    static final JsonElement parseJsonFromString(@NotNull final String json) {
         return Utils.GsonHolder.jsonParser.parse(json);
     }
 

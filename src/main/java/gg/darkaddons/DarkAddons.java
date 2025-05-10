@@ -6,9 +6,11 @@ import gg.essential.elementa.ElementaVersion;
 import gg.essential.universal.UChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
@@ -1106,6 +1108,16 @@ public final class DarkAddons {
     }
 
     /**
+     * Handles mod code that should run while drawing slot.
+     *
+     * @param gui The {@link GuiScreen}.
+     * @param slot The {@link Slot}.
+     */
+    public static final void handleDrawSlot(@NotNull final GuiContainer gui, @NotNull final Slot slot) {
+        MayorInfo.onDrawSlot(gui, slot);
+    }
+
+    /**
      * Handles player tick event.
      *
      * @param event The {@link TickEvent.PlayerTickEvent}
@@ -1377,6 +1389,7 @@ public final class DarkAddons {
             //DarkAddons.checkElementaVersion();
 
             RunsTillCA50.init();
+            MayorInfo.init();
 
             if (Config.isClassAverage50Display()) {
                 ClassAverage50Display.syncClassXP();
