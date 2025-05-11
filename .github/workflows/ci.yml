@@ -131,5 +131,7 @@ jobs:
    - name: Perform ShellCheck Analysis
      uses: ludeeus/action-shellcheck@2.0.0
      with:
+      env:
+       SHELLCHECK_OPTS: -x
       check_together: 'yes'
       ignore_paths: ./SkytilsMod/**
