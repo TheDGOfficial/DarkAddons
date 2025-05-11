@@ -111,7 +111,7 @@ final class GuiManager {
 
         McProfilerHelper.startSection("dark_addons_render_hud");
 
-        GlStateManager.pushAttrib();
+        GlState.pushState();
 
         for (final var element : GuiManager.guiElements.values()) {
             McProfilerHelper.startSection(element.getName());
@@ -141,7 +141,7 @@ final class GuiManager {
 
         McProfilerHelper.endSection();
 
-        GlStateManager.popAttrib();
+        GlState.popState();
 
         McProfilerHelper.endSection();
     }
