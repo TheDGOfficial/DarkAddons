@@ -5,7 +5,13 @@ IFS=$'\n\t'
 
 if [[ "$(basename "$PWD")" != "SkytilsMod" ]]; then
  echo "Error: Script must be run from inside the SkytilsMod directory (current: $(basename "$PWD"))"
- return 1 2>/dev/null || exit 1
+ (return 0 2>/dev/null) && sourced=1 || sourced=0
+
+ if (( sourced )); then
+  return 1
+ else
+  exit 1
+ fi
 fi
 
 declare -A versionProperties
