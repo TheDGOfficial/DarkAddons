@@ -103,6 +103,7 @@ if [ "${1:-default}" != "--skip-build" ]; then
     if [ "${1:-default}" != "--offline" ]; then
       git pull -X theirs &> /dev/null
     fi
+    # shellcheck source=findstverscommit.sh
     . ../findstverscommit.sh
     git checkout "$release_commit" &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; } 

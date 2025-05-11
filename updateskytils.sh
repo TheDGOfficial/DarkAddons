@@ -34,6 +34,7 @@ git fetch --all --tags --force &> /dev/null
 git checkout dev &> /dev/null
 git pull -X theirs &> /dev/null
 
+# shellcheck source=findstverscommit.sh
 . ../findstverscommit.sh
 
 git checkout "$release_commit" &> /dev/null
