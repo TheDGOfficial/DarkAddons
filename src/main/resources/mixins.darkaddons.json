@@ -86,7 +86,6 @@
         "MixinNEU",
         "MixinSlayerStatic",
         "MixinSlayer",
-        "MixinDemonlordSlayer",
         "MixinSlayerPacket",
         "MixinFontRendererHook",
         "MixinSlayerFeatures",
