@@ -42,7 +42,9 @@ git fetch --all --tags --force &> /dev/null
 
 git checkout dev &> /dev/null
 git pull -X theirs &> /dev/null
-release_commit=$(git log --grep "^version:\ $SKYTILS_VERSION\$" -1 --pretty=format:"%h")
+
+. ../findstverscommit.sh
+
 git checkout "$release_commit" &> /dev/null
 
 git stash pop &> /dev/null || true 

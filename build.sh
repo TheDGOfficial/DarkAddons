@@ -103,7 +103,7 @@ if [ "${1:-default}" != "--skip-build" ]; then
     if [ "${1:-default}" != "--offline" ]; then
       git pull -X theirs &> /dev/null
     fi
-    release_commit=$(git log --grep "^version:\ $SKYTILS_VERSION\$" -1 --pretty=format:"%h")
+    . ../findstverscommit.sh
     git checkout "$release_commit" &> /dev/null
     cd hypixel-api || { echo "cd failed"; exit 1; } 
     git stash &> /dev/null
