@@ -3,15 +3,6 @@ set -eEuo pipefail
 trap 'CODE=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $CODE' ERR
 IFS=$'\n\t'
 
-declare -A versionProperties
-while IFS='=' read -r key value; do
-  if [ -n "$key" ]; then
-    versionProperties["$key"]="$value"
-  fi
-done < versions.properties
-
-SKYTILS_VERSION=${versionProperties["skytils.version"]}
-
 git submodule init
 
 cd SkytilsMod || { echo "cd failed"; exit 1; }
