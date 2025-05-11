@@ -46,7 +46,7 @@ final class SubCommand {
         private static final Logger LOGGER = LogManager.getLogger();
     }
 
-    private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 17;
+    private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 24;
     @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"})
     @NotNull
     private static final LinkedHashSet<SubCommand> subCommandsRegistered = new LinkedHashSet<>(Utils.calculateHashMapCapacity(SubCommand.COLLECTIONS_SUB_COMMAND_COUNT_HINT));
@@ -372,6 +372,43 @@ final class SubCommand {
                 DarkAddons.queueWarning("Please enter the class to be dumped.");
             }
         }, "dumpclass", new Class<?>[]{String.class}, "<fully qualified class name>"));*/
+
+        SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
+            SubCommand.dumpDebugInfo();
+        }, "debuginfo"));
+    }
+
+    private static final void dumpDebugInfo() {
+        SubCommand.dumpDungeonsDebugInfo();
+        SubCommand.dumpMayorsDebugInfo();
+    }
+
+    private static final void dumpDungeonsDebugInfo() {
+        final var dungeonFloor = DungeonFeatures.getDungeonFloor();
+        DarkAddons.queueWarning("Dungeon floor: " + (null == dungeonFloor ? "not in dungeons" : dungeonFloor));
+        final var dungeonFloorNumber = DungeonFeatures.getDungeonFloorNumber();
+        DarkAddons.queueWarning("Dungeon floor number: " + (null == dungeonFloorNumber ? "not in dungeons" : Integer.toString(dungeonFloorNumber)));
+        DarkAddons.queueWarning("Boss has spawned: " + DungeonFeatures.getHasBossSpawned());
+        DarkAddons.queueWarning("Dungeon started: " + (-1L != DungeonTimer.getDungeonStartTime()));
+        DarkAddons.queueWarning("Boss entered: " + (-1L != DungeonTimer.getBossEntryTime()));
+        DarkAddons.queueWarning("Boss cleared: " + (-1L != DungeonTimer.getBossClearTime()));
+
+        SubCommand.dumpDungeonsPhaseDebugInfo();
+    }
+
+    private static final void dumpDungeonsPhaseDebugInfo() {
+        DarkAddons.queueWarning("Phase 1 cleared: " + (-1L != DungeonTimer.getPhase1ClearTime()));
+        DarkAddons.queueWarning("Phase 2 cleared: " + (-1L != DungeonTimer.getPhase2ClearTime()));
+        DarkAddons.queueWarning("Phase 3 cleared: " + (-1L != DungeonTimer.getPhase3ClearTime()));
+        DarkAddons.queueWarning("Phase 4 cleared: " + (-1L != DungeonTimer.getPhase4ClearTime()));
+        DarkAddons.queueWarning("Terracottas done: " + (-1L != DungeonTimer.getTerraClearTime()));
+    }
+
+    private static final void dumpMayorsDebugInfo() {
+        DarkAddons.queueWarning("Current mayor: " + MayorInfo.getCurrentMayor());
+        DarkAddons.queueWarning("Perks of current mayor & minister: " + String.join(", ", MayorInfo.getAllPerks()));
+        final var jerryMayor = MayorInfo.getJerryMayor();
+        DarkAddons.queueWarning("Jerry mayor: " + (null == jerryMayor ? "jerry is not mayor" : jerryMayor));
     }
 
     private static final void registerProfilerCommands() {
