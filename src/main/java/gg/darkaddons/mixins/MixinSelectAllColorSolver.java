@@ -29,7 +29,7 @@ final class MixinSelectAllColorSolver {
         final var itemName = iName.toString();
         final var terminalColorNeeded = termColorNeeded.toString();
         if (itemName.contains(terminalColorNeeded)) {
-            final var wantedBlue = "BLUE".equals(terminalColorNeeded);
+            final var wantedBlue = "blue".equals(terminalColorNeeded);
             return !wantedBlue || !itemName.contains("lightBlue");
         }
         return false;
