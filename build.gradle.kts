@@ -142,7 +142,7 @@ dependencies {
     api("gg.essential:elementa:704")
     implementation("gg.essential:universalcraft-1.8.9-forge:401")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.21")
 
     //annotationProcessor("io.github.llamalad7:mixinextras-common:0.3.2")!! // TODO make it shadowMe
 
