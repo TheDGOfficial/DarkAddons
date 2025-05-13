@@ -17,7 +17,11 @@ public final class SoundManager {
         throw Utils.staticClassException();
     }
 
-    public static boolean shouldBypassVolumeLimit;
+    private static boolean shouldBypassVolumeLimit;
+
+    public static final boolean isShouldBypassVolumeLimit() {
+        return SoundManager.shouldBypassVolumeLimit;
+    }
 
     static final void playSound(@NotNull final String sound, final float pitch, final float volume, final boolean bypassVolumeLimit) {
         final var player = Minecraft.getMinecraft().thePlayer;
@@ -26,7 +30,7 @@ public final class SoundManager {
         SoundManager.shouldBypassVolumeLimit = false;
     }
 
-    static final void playSound(@NotNull final String sound, final float pitch, final float volume, final boolean bypassVolumeLimit, final int delay) {
+    private static final void playSound(@NotNull final String sound, final float pitch, final float volume, final boolean bypassVolumeLimit, final int delay) {
         DarkAddons.registerTickTask("play_queued_sound", delay, false, () -> SoundManager.playSound(sound, pitch, volume, bypassVolumeLimit));
     }
 }

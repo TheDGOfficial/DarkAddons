@@ -20,7 +20,7 @@ final class MixinSoundManager {
 
     @Inject(method = "getNormalizedVolume", at = @At("HEAD"), cancellable = true)
     private final void getNormalizedVolume$darkaddons(@NotNull final ISound sound, @NotNull final SoundPoolEntry entry, @NotNull final SoundCategory category, @NotNull final CallbackInfoReturnable<Float> cir) {
-        if (gg.darkaddons.SoundManager.shouldBypassVolumeLimit) {
+        if (gg.darkaddons.SoundManager.isShouldBypassVolumeLimit()) {
             cir.setReturnValue(1.0F);
         }
     }
