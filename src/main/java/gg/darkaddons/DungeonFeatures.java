@@ -36,8 +36,7 @@ public final class DungeonFeatures {
 
         if (DarkAddons.isInDungeons()) {
             if (null == DungeonFeatures.dungeonFloor) {
-                final var scoreboardLines = ScoreboardUtil.fetchScoreboardLines(7);
-                for (final var line : scoreboardLines) {
+                for (final var line : ScoreboardUtil.fetchScoreboardLines(11)) {
                     if (line.contains("The Catacombs (")) {
                         DungeonFeatures.dungeonFloor = StringUtils.substringBetween(line, "(", ")");
                         DungeonFeatures.dungeonFloorNumber = Utils.safeParseIntFast(DungeonFeatures.dungeonFloor.substring(1, DungeonFeatures.dungeonFloor.length()));
