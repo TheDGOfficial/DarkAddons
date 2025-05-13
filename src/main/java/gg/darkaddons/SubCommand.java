@@ -379,8 +379,18 @@ final class SubCommand {
     }
 
     private static final void dumpDebugInfo() {
+        SubCommand.dumpGeneralInfo();
         SubCommand.dumpDungeonsDebugInfo();
         SubCommand.dumpMayorsDebugInfo();
+    }
+
+    private static final void dumpGeneralInfo() {
+        final var sbinfoInSb = SBInfo.isInSkyblock();
+        if (sbinfoInSb != DarkAddons.isInSkyblock() || sbinfoInSb != SkyblockDetection.isInSkyblock()) {
+            throw new IllegalStateException("skyblock dedection methods returned different results");
+        }
+        DarkAddons.queueWarning("In skyblock: " + sbinfoInSb);
+        DarkAddons.queueWarning("In dungeons: " + DarkAddons.isInDungeons());
     }
 
     private static final void dumpDungeonsDebugInfo() {
