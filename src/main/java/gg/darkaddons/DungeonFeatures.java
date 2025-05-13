@@ -69,6 +69,7 @@ public final class DungeonFeatures {
     @SubscribeEvent
     public final void onWorldChange(@NotNull final WorldEvent.Unload event) {
         DungeonFeatures.dungeonFloor = null;
+        DungeonFeatures.dungeonFloorNumber = null;
         DungeonFeatures.hasBossSpawned = false;
     }
 

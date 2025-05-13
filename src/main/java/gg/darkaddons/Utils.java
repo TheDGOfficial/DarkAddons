@@ -695,7 +695,7 @@ final class Utils {
         if (null != tagCompound) {
             final var display = tagCompound.getCompoundTag("display");
             if (null != display) {
-                final var tagList = display.getTagList("Lore", 0);
+                final var tagList = display.getTagList("Lore", 8);
                 if (null != tagList) {
                     final var length = tagList.tagCount();
 
