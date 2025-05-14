@@ -87,7 +87,6 @@
         "MixinSlayer",
         "MixinSlayerPacket",
         "MixinFontRendererHook",
-        "MixinSlayerFeatures",
         "MixinRomanNumeralParser",
         "MixinTabListUtils",
         "MixinTabListParser",
