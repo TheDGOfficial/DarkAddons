@@ -77,7 +77,7 @@ jobs:
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
-      tools: https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.21.2/codeql-bundle-linux64.tar.gz
+      tools: https://github.com/github/codeql-action/releases/download/codeql-bundle-v2.21.3/codeql-bundle-linux64.tar.gz
       #packs: |
       # Marcono1234/codeql-custom-queries-java@0.0.1
 
