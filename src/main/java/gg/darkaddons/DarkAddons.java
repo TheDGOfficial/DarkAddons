@@ -760,6 +760,7 @@ public final class DarkAddons {
         DarkAddons.registerStatic();
 
         TickTask.registerTickTaskManager(DarkAddons::registerEventListeners);
+        ScoreboardUtil.init();
 
         // GuiElement's don't go here. See above the registerAllGuiElements() method.
         DarkAddons.registerEventListeners(
