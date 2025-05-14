@@ -82,7 +82,6 @@
         "MixinVanillaStringUtils",
         "MixinEnumChatFormatting",
         "MixinDSMSelectAllColourSolver",
-        "MixinSelectAllColorSolver",
         "MixinNEU",
         "MixinSlayerStatic",
         "MixinSlayer",
