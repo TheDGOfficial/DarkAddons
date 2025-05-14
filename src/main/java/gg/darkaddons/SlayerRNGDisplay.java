@@ -322,7 +322,7 @@ final class SlayerRNGDisplay extends GuiElement {
 
             var foundQuest = false;
 
-            for (final var it = Arrays.asList(ScoreboardUtil.fetchScoreboardLines(12)).iterator(); it.hasNext();) {
+            for (final var it = Arrays.asList(ScoreboardUtil.getScoreboardLines()).iterator(); it.hasNext();) {
                 final var line = Utils.removeControlCodes(it.next()).trim();
 
                 if ("Slayer Quest".equals(line)) {

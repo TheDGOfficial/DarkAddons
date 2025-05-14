@@ -40,7 +40,7 @@ final class M7DragonDisplay extends GuiElement {
     }
 
     private static final void updateDragonHPsFromScoreboard() {
-        for (final var line : ScoreboardUtil.fetchScoreboardLines(8)) {
+        for (final var line : ScoreboardUtil.getScoreboardLines()) {
             if (line.contains(M7DragonDisplay.SUFFIX)) {
                 final var lineWithoutColors = Utils.removeControlCodes(line);
 

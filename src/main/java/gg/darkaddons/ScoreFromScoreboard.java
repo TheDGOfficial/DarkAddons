@@ -21,7 +21,7 @@ final class ScoreFromScoreboard {
                 return;
             }
 
-            for (final var line : ScoreboardUtil.fetchScoreboardLines(-1L == DungeonTimer.getBossEntryTime() ? 10 : 9)) {
+            for (final var line : ScoreboardUtil.getScoreboardLines()) {
                 final var withoutColor = Utils.removeControlCodes(line);
                 if (withoutColor.startsWith("Cleared: ")) {
                     final var score = Utils.safeParseIntFast(StringUtils.removeEnd(StringUtils.substringAfter(withoutColor, "% ("), ")"));

@@ -11,6 +11,9 @@ final class ScoreboardUtil {
     @NotNull
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
+    @NotNull
+    private static String[] scoreboardLines = ScoreboardUtil.EMPTY_STRING_ARRAY;
+
     /**
      * Private constructor since this class only contains static members.
      * <p>
@@ -21,6 +24,15 @@ final class ScoreboardUtil {
         super();
 
         throw Utils.staticClassException();
+    }
+
+    static final void init() {
+        DarkAddons.registerTickTask("fetch_scoreboard_lines", 1, true, () -> ScoreboardUtil.scoreboardLines = ScoreboardUtil.fetchScoreboardLines());
+    }
+
+    @NotNull
+    static final String[] getScoreboardLines() {
+        return ScoreboardUtil.scoreboardLines;
     }
 
     @Nullable
@@ -42,7 +54,7 @@ final class ScoreboardUtil {
     }
 
     @NotNull
-    static final String[] fetchScoreboardLines(final int limit) {
+    private static final String[] fetchScoreboardLines() {
         final var mc = Minecraft.getMinecraft();
         final var world = mc.theWorld;
 
@@ -63,7 +75,7 @@ final class ScoreboardUtil {
         }
 
         final var scores = scoreboard.getSortedScores(objective);
-        final var maxSize = Math.min(limit, scores.size());
+        final var maxSize = Math.min(15, scores.size()); // Limit 15
 
         if (0 == maxSize) {
             return ScoreboardUtil.EMPTY_STRING_ARRAY;
