@@ -24,8 +24,10 @@ final class ScoreFromScoreboard {
             for (final var line : ScoreboardUtil.getScoreboardLines()) {
                 final var withoutColor = Utils.removeControlCodes(line);
                 if (withoutColor.startsWith("Cleared: ")) {
-                    final var score = Utils.safeParseIntFast(StringUtils.removeEnd(StringUtils.substringAfter(withoutColor, "% ("), ")"));
-                    ScoreFromScoreboard.onScoreUpdate(ScoreFromScoreboard.fixScoreboardScore(score), score);
+                    if (-1L != DungeonTimer.getDungeonStartTime()) {
+                        final var score = Utils.safeParseIntFast(StringUtils.removeEnd(StringUtils.substringAfter(withoutColor, "% ("), ")"));
+                        ScoreFromScoreboard.onScoreUpdate(ScoreFromScoreboard.fixScoreboardScore(score), score);
+                    }
                     break;
                 }
             }
