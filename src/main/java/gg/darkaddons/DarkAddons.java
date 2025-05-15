@@ -1027,6 +1027,15 @@ public final class DarkAddons {
     }
 
     /**
+     * Handles mob spawn.
+     *
+     * @param entity The entity that got spawned.
+     */
+    public static final void handleSpawnMob(@NotNull final Entity entity) {
+        M7Features.onMobSpawned(entity);
+    }
+
+    /**
      * Handles tile entity render.
      *
      * @param tileEntity The tile entity that is going to be rendered.

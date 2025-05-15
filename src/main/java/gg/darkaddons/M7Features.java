@@ -128,17 +128,9 @@ final class M7Features {
         return xDelta * xDelta + zDelta * zDelta;
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public final void onMobSpawn(@NotNull final EntityJoinWorldEvent event) {
-        if (DarkAddons.checkClientEvent()) {
-            return;
-        }
-
-        M7Features.onMobSpawned(event.entity);
-    }
-
-    private static final void onMobSpawned(@NotNull final Entity entity) {
-        if (Config.isDragonHud() && -1L != DungeonTimer.getPhase4ClearTime() && entity instanceof final EntityDragon dragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
+    static final void onMobSpawned(@NotNull final Entity entity) {
+        final var hud = Config.isDragonHud();
+        if ((hud || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification()) && -1L != DungeonTimer.getPhase4ClearTime() && entity instanceof final EntityDragon dragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
             final var id = dragon.getEntityId();
 
             var type = M7Features.dragonMap.get(id);
@@ -155,15 +147,20 @@ final class M7Features {
             }
 
             M7Features.dragonMap.put(id, type);
-            M7Features.reverseDragonMap[type.getEnumOrdinal()] = id;
+ 
+            if (hud) {
+                M7Features.reverseDragonMap[type.getEnumOrdinal()] = id;
 
-            M7Features.spawningDragons.remove(type);
-            M7Features.killedDragons.remove(type);
+                M7Features.spawningDragons.remove(type);
+                M7Features.killedDragons.remove(type);
+            }
         }
     }
 
     private static final void handleDeath(@NotNull final LivingDeathEvent event) {
-        if (!Config.isDragonHud()) {
+        final var hud = Config.isDragonHud();
+ 
+        if (!hud && !Config.isStatueDestroyedNotification() && !Config.isStatueMissedNotification()) {
             return;
         }
 
@@ -176,10 +173,13 @@ final class M7Features {
                 return;
             }
 
-            M7Features.killedDragons.add(type);
-            M7Features.spawningDragons.remove(type);
             M7Features.dragonMap.remove(dragon.getEntityId());
-            M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
+
+            if (hud) {
+                M7Features.killedDragons.add(type);
+                M7Features.spawningDragons.remove(type);
+                M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
+            }
         }
     }
 
