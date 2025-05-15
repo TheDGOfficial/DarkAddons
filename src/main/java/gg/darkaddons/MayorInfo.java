@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Executors;
 
 import java.util.regex.Matcher;
@@ -52,18 +53,19 @@ final class MayorInfo {
     private static final HashSet<String> allPerks = new HashSet<>(4);
 
     @NotNull
-    private static final ExecutorService mayorFetcherThread = Executors.newSingleThreadExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Mayor Fetcher Thread"));
+    private static final ScheduledExecutorService mayorFetcherThread = Executors.newSingleThreadScheduledExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Mayor Fetcher Thread"));
 
     static final void init() {
+        MayorInfo.mayorFetcherThread.execute(MayorInfo::assignCurrentMayor);
         MayorInfo.mayorFetcherThread.execute(MayorInfo::loadKnownMayors);
 
-        DarkAddons.registerTickTask("fetch_and_assign_current_mayor_and_perks", 60 * 20, true, () -> {
+        MayorInfo.mayorFetcherThread.scheduleWithFixedDelay(() -> {
             if (!DarkAddons.isInSkyblock() || SkyblockDetection.isInAlphaNetwork()) {
                 return;
             }
 
-            MayorInfo.mayorFetcherThread.execute(MayorInfo::assignCurrentMayor);
-        });
+            MayorInfo.assignCurrentMayor();
+        }, 60L, 60L, TimeUnit.SECONDS);
     }
 
     private static final void assignCurrentMayor() {
