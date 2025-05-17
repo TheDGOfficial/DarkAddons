@@ -28,7 +28,6 @@
         "MixinChannelInitializer",
         "MixinDefaultChannelConfig",
         "MixinDefaultSocketChannelConfig",
-        "MixinSkytils",
         "MixinMultithreading",
         "MixinMultithreadingOther",
         "MixinGuiIngame",
