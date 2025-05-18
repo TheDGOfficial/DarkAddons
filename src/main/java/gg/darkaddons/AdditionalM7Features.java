@@ -65,7 +65,7 @@ final class AdditionalM7Features {
     }
 
     static final boolean canRemoveBlankArmorStands() {
-        return AdditionalM7Features.canRemoveBlankArmorStands;
+        return AdditionalM7Features.canRemoveBlankArmorStands && !DarkAddons.isPlayerInMineshaft();
     }
 
     static final boolean isInM7() {
