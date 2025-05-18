@@ -75,7 +75,7 @@ final class M7DragonDisplay extends GuiElement {
 
     @NotNull
     private static final String getDragonInfoText(@NotNull final WitherKingDragons dragon, final boolean demo) {
-        return (dragon.isDestroyed() || demo && (WitherKingDragons.ICE == dragon || WitherKingDragons.FLAME == dragon) ? "§a✔" : "§c✖") + ' ' + dragon.getChatColor() + dragon.getEnumName() + "§f: " + M7DragonDisplay.getDragonStatusInfo(dragon, demo);
+        return (dragon.isDestroyed() || demo && WitherKingDragons.FLAME == dragon ? "§a✔" : "§c✖") + ' ' + dragon.getChatColor() + dragon.getEnumName() + "§f: " + M7DragonDisplay.getDragonStatusInfo(dragon, demo);
     }
 
     @NotNull
