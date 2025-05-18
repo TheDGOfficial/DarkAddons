@@ -127,6 +127,42 @@ Shows live updated odds to drop your selected RNG while doing slayers, your mone
 
 ![image](https://github.com/user-attachments/assets/c17145ed-8ccd-4084-828d-4cf1622bc00b)
 
+# Installer
+
+DarkAddons provides an installer opened by double clicking just like the Forge, Optifine and SBA mods!
+
+This provides ease-of-use and simplicity to start using the mod, rather than manually putting it to your mods folder, which also requires you to locate the .minecraft folder in AppData, which might not be as straightfoward as is to us, for the non-technical people.
+
+You might be used to see the installer only being present on big mods, but it's actually easy to implement, and we have it for you.
+
+Double-click to the JAR you have downloaded on our [Releases](https://github.com/TheDGOfficial/DarkAddons/releases) page to open the installer and start installing the mod!
+
+![Screenshot From 2025-05-18 18-23-39](https://github.com/user-attachments/assets/f2cfe083-15fe-4151-b20c-1d9c4e3b8da1)
+
+# Mixins
+
+DarkAddons uses Mixins to hook into vanilla game code and even other mod's code, to provide bug fixes, performance enchancements, or implement new features based around them.
+
+This is better than using say, ASM Transformers for compatibility with other mods because of the nature of the Mixin subsystem.
+
+Check out the [Mixin folder](https://github.com/TheDGOfficial/DarkAddons/tree/main/src/main/java/gg/darkaddons/mixins) to see all our Mixins!
+
+As the end user there is no command or feature you can use to enable, disable or configure Mixins directly at the moment, but the regular feature toggles enable or disable the Mixin triggers, while not disabling the Mixin's itself.
+
+# Profiler
+
+DarkAddons bundles a self-written sampling Profiler written in Java with it. This is less advanced and less accurate than the equiavalants of Spark, but it's also more lightweight and simple to use. The results rather than being uploaded to a remote server, will be displayed on your local machine, with a simple HTML code allowing you to see full stack traces or just the method names.
+
+The results are automatically remapped from names along the likes of func_149324_c to the real names like getPlayerName. This is done with the provided mappings file inside the mod's JAR which you can see [here](https://github.com/TheDGOfficial/DarkAddons/blob/main/src/main/resources/methods.v2.csv). This CSV file holds all the mappings and it's even more extended than the default 1.8.9 mappings because we took some mappings from 1.9.4 that were also applying cleanly to the 1.8.9 names, for the methods that had no mapping available previously, like most of the methods in the JsonToNBT class in the vanilla code.
+
+Summary of top time taking methods on a sub 1 minute profiler run with all default settings:
+![Screenshot From 2025-05-18 18-26-35](https://github.com/user-attachments/assets/98bc40eb-7a7c-44f0-aae5-e082bcb134eb)
+
+Extending to see the stack trace of the first element:
+![Screenshot From 2025-05-18 18-26-56](https://github.com/user-attachments/assets/0d557404-dd5f-48cc-ac8e-fe8e10a5a48e)
+
+To use the profiler, type /darkaddon startprofiling 100. The 100 is the sampling interval in milliseconds. To see the results and stop the profiler, you can type /darkaddon stopprofiling. You can then open localhost:8000 in your browser to see and navigate the results. The page is simple HTML and is stored locally so it will load instantly, the mod will close the temporary dummy web server created to serve the page to you after the page is served. This to ensure no memory leaks are being created by keeping the web server alive in the background. For this reason, you will lose the profiler results if you refresh the page, unless you have started and stopped another profiler before doing so.
+
 # And more!
 
 Check out all the features by typing /darkaddons and navigating the config when you install the mod! You can also look at the source code of all indiviual features over here at GitHub.
