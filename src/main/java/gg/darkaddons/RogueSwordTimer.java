@@ -37,7 +37,7 @@ final class RogueSwordTimer extends GuiElement {
     }
 
     private static final char getColor(final long timeInMillis) {
-        return 0L < timeInMillis ? 'c' : 'a';
+        return 0L < timeInMillis ? 'a' : 'c';
     }
 
     @Override
