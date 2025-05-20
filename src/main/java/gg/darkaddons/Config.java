@@ -953,6 +953,13 @@ final class Config extends Vigilant {
     private static boolean disablePatcherFontRenderer;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Never Reset Cursor",
+        description = "Never resets your cursor when opening an inventory. Similar to Skytils and SkyblockAddons feature that stops resetting when navigating GUIs, but those still reset it on the initial menu open, more specifically they only not reset it if last gui opened was 150ms ago. This causes your mouse to reset to the center when you first open skyblock menu, but then if you press wardrobe to open wardrobe menu for example, provided that you have less than 150ms ping, your position wouldn't reset. This feature in DarkAddons however, will cause your position to be never set - so even the first initial skyblock menu open will not reset the mouse position, and it doesnt matter if you have above 150ms ping.",
+        category = "Misc", subcategory = "Developer Options"
+    )
+    private static boolean neverResetCursor;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Century Raffle Playtime Ticket Timer",
         description = "Shows time till you can get a Raffle Playtime Ticket in the Century Raffle event. If unknown or negative value it will show as 30min. This depends on the chat messages to know when you get a ticket. This feature does not take the cap of tickets you can earn per day into account, so it will always keep showing a timer even if you can't earn any more tickets. Note: This was a feature dedicated to Year 300 and 400 Raffle Events, unless another Raffle Event happens in SkyBlock you probably shouldn't enable this feature.",
         category = "Misc", subcategory = "Events"
@@ -1853,6 +1860,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.disablePatcherFontRenderer;
+    }
+
+    static final boolean isNeverResetCursor() {
+        Config.checkUninit();
+
+        return Config.neverResetCursor;
     }
 
     static final boolean isProfilerMode() {

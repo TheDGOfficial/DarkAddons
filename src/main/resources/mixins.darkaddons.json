@@ -93,7 +93,8 @@
         "MixinSBInfo",
         "MixinSoundManager",
         "MixinEntityDragon",
-        "MixinGuiContainer"
+        "MixinGuiContainer",
+        "MixinMouseHelper"
     ],
     "server": [
     ],

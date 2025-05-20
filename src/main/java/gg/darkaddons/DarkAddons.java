@@ -941,6 +941,15 @@ public final class DarkAddons {
     }
 
     /**
+     * Returns true if never reset cursor is true, false otherwise.
+     *
+     * @return True if never reset cursor is enabled in Config.
+     */
+    public static final boolean isNeverResetCursor() {
+        return Config.isNeverResetCursor();
+    }
+
+    /**
      * Returns true if skytils waypoints should not be rendered, false otherwise.
      *
      * @return True if skytils waypoints should not be rendered.
