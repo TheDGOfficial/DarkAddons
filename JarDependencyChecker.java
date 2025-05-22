@@ -32,7 +32,7 @@ final class JarDependencyChecker {
         }
 
         final var jarPath = args[0];
-        final var discouragedPackages = new HashSet<String>();
+        final var discouragedPackages = new HashSet<String>(16);
         for (var i = 1; i < args.length; ++i) {
             discouragedPackages.add(args[i].replace('.', '/') + '/');
         }
@@ -56,14 +56,14 @@ final class JarDependencyChecker {
             for (final var entry : sortedEntries) {
                 final var currentClass = entry.getName();
                 try {
-                    final var results = new LinkedHashMap<String, List<String>>();
+                    final var results = new LinkedHashMap<String, List<String>>(100);
                     final var reader = new ClassReader(jarFile.getInputStream(entry));
                     reader.accept(new ClassVisitor(JarDependencyChecker.ASM_API_VERSION) {
                         @Override
                         public final MethodVisitor visitMethod(final int access, final String name, final String descriptor, final String signature, final String[] exceptions) {
                             return new MethodVisitor(this.api) {
                                 final void recordEntry(final String type, final String ref) {
-                                    results.computeIfAbsent(currentClass, k -> new ArrayList<>())
+                                    results.computeIfAbsent(currentClass, k -> new ArrayList<>(16))
                                            .add("[" + type + "] " + ref);
                                 }
 

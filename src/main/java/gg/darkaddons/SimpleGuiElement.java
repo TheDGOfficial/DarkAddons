@@ -9,7 +9,7 @@ import java.util.function.IntSupplier;
 
 abstract class SimpleGuiElement extends GuiElement {
     @NotNull
-    private final ArrayList<String> linesToRender = new ArrayList<>(1);
+    private final ArrayList<String> linesToRender;
     private int linesToRenderSize;
 
     private int width;
@@ -27,12 +27,17 @@ abstract class SimpleGuiElement extends GuiElement {
     private boolean demoRenderBypass;
 
     SimpleGuiElement(@NotNull final String elementName, @NotNull final BooleanSupplier isEnabledCheckerIn, @NotNull final BooleanSupplier renderPreconditionsIn, @NotNull final IntSupplier shadowSelectionIn) {
+        this(elementName, isEnabledCheckerIn, renderPreconditionsIn, shadowSelectionIn, 1);
+    }
+
+    SimpleGuiElement(@NotNull final String elementName, @NotNull final BooleanSupplier isEnabledCheckerIn, @NotNull final BooleanSupplier renderPreconditionsIn, @NotNull final IntSupplier shadowSelectionIn, final int initialSizeHint) {
         super(elementName);
 
         this.isEnabledChecker = isEnabledCheckerIn;
         this.renderPreconditions = renderPreconditionsIn;
 
         this.shadowSelection = shadowSelectionIn;
+        this.linesToRender = new ArrayList<>(initialSizeHint);
     }
 
     abstract void buildHudLines(@NotNull final Collection<String> lines);

@@ -55,7 +55,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
     }
 
     BlazeEffectTimer() {
-        super("Blaze Effect Timer", BlazeEffectTimer.isEnabled, SlayerRNGDisplay::isDoingInfernoDemonlordSlayer, () -> 0);
+        super("Blaze Effect Timer", BlazeEffectTimer.isEnabled, SlayerRNGDisplay::isDoingInfernoDemonlordSlayer, () -> 0, 4);
 
         // Load previously saved values (if exist).
         BlazeEffectTimer.syncFromDisk();

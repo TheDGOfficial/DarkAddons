@@ -579,7 +579,7 @@ final class SubCommand {
 
     private static final void registerHelp() {
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
-            DarkAddons.queueWarning("Available subcommands:");
+            DarkAddons.queueWarning("Available subcommands (" + SubCommand.subCommandsRegistered.size() + "):");
             for (final var subCommand : SubCommand.subCommandsRegistered) {
                 DarkAddons.queueWarning(subCommand.getHelpText());
             }
