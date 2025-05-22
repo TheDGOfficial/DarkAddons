@@ -25,7 +25,7 @@ final class GuiManager {
     }
 
     @NotNull
-    private static final HashMap<String, GuiElement> guiElements = new HashMap<>(Utils.calculateHashMapCapacity(9));
+    private static final HashMap<String, GuiElement> guiElements = new HashMap<>(Utils.calculateHashMapCapacity(16));
 
     @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"})
     @NotNull
