@@ -28,12 +28,14 @@ final class HackingForDummiesSolver {
     static final void onGuiOpen(@NotNull final GuiOpenEvent event) {
         McProfilerHelper.startSection("hacking_for_dummies_solver_gui");
 
-        if (Config.isHackingForDummiesSolver()) {
+        final var gui = event.gui;
+
+        if (Config.isHackingForDummiesSolver() || null == gui) {
             // Not a memory leak, normally we would register one for GuiCloseEvent
             // as well and set it to null there so that it can be garbage collected,
             // but there's no GuiCloseEvent and instead, GuiOpenEvent is just fired with
             // event.gui as null when you close a GUI. So there's no memory leak here.
-            HackingForDummiesSolver.currentGui = event.gui;
+            HackingForDummiesSolver.currentGui = gui;
         }
 
         McProfilerHelper.endSection();
