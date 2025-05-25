@@ -76,6 +76,7 @@ final class ArmorStandOptimizer {
 
     private static final void refreshArmorStands() {
         if (!Config.isArmorStandOptimizer()) {
+            ArmorStandOptimizer.reusableStands.clear();
             ArmorStandOptimizer.armorStandRenderSet.clear();
             return;
         }
@@ -117,6 +118,8 @@ final class ArmorStandOptimizer {
 
             ArmorStandOptimizer.armorStandRenderSet.addAll(closest);
         }
+
+        ArmorStandOptimizer.reusableStands.clear();
     }
 
     static {
