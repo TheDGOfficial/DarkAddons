@@ -17,6 +17,8 @@ GUAVA_VERSION=${versionProperties["guava.version"]}
 JETBRAINS_ANNOTATIONS_VERSION=${versionProperties["jetbrains.annotations.version"]}
 COMMONS_LANG3_VERSION=${versionProperties["commons.lang3.version"]}
 
+ASM_VERSION=${versionProperties["asm.version"]}
+
 HYPIXEL_MODAPI_VERSION=1.0.1.2
 
 VIGILANCE_VERSION=306
@@ -34,8 +36,6 @@ LWJGL_VERSION=2.9.4-nightly-20150209
 LOG4J_VERSION=2.0-beta9
 
 GSON_VERSION=2.2.4
-
-ASM_VERSION=9.8
 
 ERRORPRONE_VERSION=2.38.0
 
