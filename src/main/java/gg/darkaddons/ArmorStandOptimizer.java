@@ -44,14 +44,6 @@ final class ArmorStandOptimizer {
         return AdditionalM7Features.canHideArmorstands(bossEntryTime) && (ArmorStandOptimizer.isInM7P5() || AdditionalM7Features.isInM6OrF6Boss(bossEntryTime) && ArmorStandOptimizer.isNotOnSadanWhitelist(entityArmorStand.getCustomNameTag(), true));
     }
 
-    @Nullable
-    private static final String getAndClearLastNameTag() {
-        final var name = NameTagCache.getLastNameTag();
-        NameTagCache.clearLastNameTag();
-
-        return name;
-    }
-
     private static final boolean shouldDoBlankRemoval() {
         if (Config.isRemoveBlankArmorStands()) {
             ++ArmorStandOptimizer.passes;
@@ -67,7 +59,6 @@ final class ArmorStandOptimizer {
         McProfilerHelper.startSection("remove_blank_armor_stands");
         if (RemoveBlankArmorStands.removeIfBlankArmorStand(world, e)) {
             McProfilerHelper.endSection();
-            NameTagCache.clearLastNameTag();
             return true;
         }
         McProfilerHelper.endSection();
@@ -102,7 +93,6 @@ final class ArmorStandOptimizer {
                     continue;
                 }
 
-                NameTagCache.clearLastNameTag();
                 ArmorStandOptimizer.reusableStands.add(stand);
             }
         }

@@ -72,7 +72,6 @@ final class RemoveBlankArmorStands {
                 for (final var entity : world.loadedEntityList) {
                     if (entity instanceof EntityArmorStand) {
                         RemoveBlankArmorStands.removeIfBlankArmorStand(world, entity);
-                        NameTagCache.clearLastNameTag();
                     }
                 }
             }
