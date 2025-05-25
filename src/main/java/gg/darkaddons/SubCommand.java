@@ -390,7 +390,19 @@ final class SubCommand {
             throw new IllegalStateException("skyblock dedection methods returned different results");
         }
         DarkAddons.queueWarning("In skyblock: " + sbinfoInSb);
-        DarkAddons.queueWarning("In dungeons: " + DarkAddons.isInDungeons());
+        for (final var island : SkyblockIsland.values()) {
+            final var name = island.name();
+            final var displayName = new StringBuilder(name.length() + 1);
+            displayName.append(name.charAt(0));
+            for (var i = 1; i < name.length(); ++i) {
+                final var c = name.charAt(i);
+                if (Character.isUpperCase(c)) {
+                    displayName.append(' ');
+                }
+                displayName.append(c);
+            }
+            DarkAddons.queueWarning("In " + displayName + ": " + island.isInIsland());
+        }
     }
 
     private static final void dumpDungeonsDebugInfo() {

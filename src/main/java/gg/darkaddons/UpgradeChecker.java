@@ -479,7 +479,7 @@ final class UpgradeChecker {
         UpgradeChecker.upgradeCheckerExecutor.execute(() -> {
             outputConsumer.accept("Fetching data from API, please wait...");
             Utils.sendWebRequest("https://sky.shiiyu.moe/stats/" + playerName, "text/html", false, 30L); // The api doesn't update unless a request to frontend is sent first.
-            final var output = Utils.sendWebRequest("https://sky.shiiyu.moe/api/v2/profile/" + playerName + "?cache=" + UUID.randomUUID(), "application/json", true, 10L); // The api returns a cached result (the cache seems to not expire even after a day) so we use a query parameter with random UUID to bypass the cache.
+            final var output = Utils.sendWebRequest("https://sky.shiiyu.moe/api/v2/profile/" + playerName + "?cache=" + UUID.randomUUID(), "application/json", false, 10L); // The api returns a cached result (the cache seems to not expire even after a day) so we use a query parameter with random UUID to bypass the cache.
             if (null == output) {
                 outputConsumer.accept("An error occurred while connecting to the API.");
                 return;
