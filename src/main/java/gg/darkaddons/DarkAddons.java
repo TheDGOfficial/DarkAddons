@@ -746,7 +746,8 @@ public final class DarkAddons {
             FPSDisplay::new,
             PingDisplay::new,
             MaxorHPDisplay::new,
-            BlazeEffectTimer::new
+            BlazeEffectTimer::new,
+            CPSDisplay::new
         );
     }
 
@@ -965,6 +966,20 @@ public final class DarkAddons {
 
     static final boolean isUsingLabyMod() {
         return DarkAddons.usingLabyMod;
+    }
+
+    /**
+     * Called when the player left clicks with the mouse.
+     */
+    public static final void onLeftClickMouse() {
+        CPSCalculator.onLeftClick();
+    }
+
+    /**
+     * Called when the player right clicks with the mouse.
+     */
+    public static final void onRightClickMouse() {
+        CPSCalculator.onRightClick();
     }
 
     /**

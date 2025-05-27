@@ -247,6 +247,13 @@ final class Config extends Vigilant {
     )
     private static boolean pingDisplay;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "CPS Display",
+        description = "Shows cps on the screen, updating every second. Show in green if equal or above 15 CPS, dark green if equal or above 10 CPS, yellow if equal or above 5 CPS, orange if equal or above 1 CPS, and white if 0 CPS.",
+        category = "Misc", subcategory = "HUD", triggerActionOnInitialization = false
+    )
+    private static boolean cpsDisplay;
+
     /*@Property(
         type = PropertyType.SWITCH, name = "Dimensional Slash Alert",
         description = "Creates a title when you are in range of dimensional slash.",
@@ -1404,6 +1411,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.pingDisplay;
+    }
+
+    static final boolean isCpsDisplay() {
+        Config.checkUninit();
+
+        return Config.cpsDisplay;
     }
 
     static final boolean isSharperDragonBoundingBox() {

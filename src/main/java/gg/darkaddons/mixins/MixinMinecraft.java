@@ -118,6 +118,16 @@ final class MixinMinecraft {
         throw MixinUtils.shadowFail();
     }
 
+    @Inject(method = "clickMouse", at = @At("HEAD"))
+    private final void clickMouse$darkaddons(@NotNull final CallbackInfo ci) {
+        DarkAddons.onLeftClickMouse();
+    }
+
+    @Inject(method = "rightClickMouse", at = @At("HEAD"))
+    private final void rightClickMouse$darkaddons(@NotNull final CallbackInfo ci) {
+        DarkAddons.onRightClickMouse();
+    }
+
     @Unique
     private final boolean isPressed0$darkaddons(@NotNull final KeyBinding keyBinding) {
         return DarkAddons.isPressedStatic(keyBinding, this::clickMouse, this::rightClickMouse);
