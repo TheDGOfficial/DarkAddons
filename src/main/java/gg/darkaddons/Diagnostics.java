@@ -94,7 +94,7 @@ final class Diagnostics {
         throw new IllegalStateException("not allowed to run static initializer from thread " + Thread.currentThread().getName() + " which is not the client thread");
     }
 
-    static final void getMcThreadId() {
+    static final long getMcThreadId() {
         return Diagnostics.MC_THREAD_ID;
     }
 
