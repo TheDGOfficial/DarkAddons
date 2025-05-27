@@ -40,7 +40,7 @@ final class CPSCalculator {
 
     static {
         CPSCalculator.calculatorThread.scheduleWithFixedDelay(() -> {
-            if (Config.isTpsDisplay()) {
+            if (Config.isCpsDisplay()) {
                 CPSCalculator.lastLeftClickCPS = CPSCalculator.leftClickCount.getAndSet(0);
                 CPSCalculator.lastRightClickCPS = CPSCalculator.rightClickCount.getAndSet(0);
             }
@@ -48,10 +48,14 @@ final class CPSCalculator {
     }
 
     static final void onLeftClick() {
-        leftClickCount.incrementAndGet();
+        if (Config.isCpsDisplay()) {
+            leftClickCount.incrementAndGet();
+        }
     }
 
     static final void onRightClick() {
-        rightClickCount.incrementAndGet();
+        if (Config.isCpsDisplay()) {
+            rightClickCount.incrementAndGet();
+        }
     }
 }
