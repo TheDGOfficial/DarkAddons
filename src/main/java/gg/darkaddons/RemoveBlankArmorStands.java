@@ -16,8 +16,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 
 final class RemoveBlankArmorStands {
-    static final int BLANK_ARMOR_STAND_REMOVAL_INTERVAL_IN_TICKS = 100;
-
     RemoveBlankArmorStands() {
         super();
     }
@@ -32,47 +30,8 @@ final class RemoveBlankArmorStands {
         return true;
     }
 
-    private static final boolean isAnyGuardiansTargetingEntity(@NotNull final WorldClient world, @NotNull final Entity entity) {
-        for (final var ent : world.loadedEntityList) {
-            if (ent instanceof final EntityGuardian guardian) {
-                if (entity == guardian.getTargetedEntity()) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    static final boolean removeIfBlankArmorStand(@NotNull final WorldClient world, @NotNull final Entity entity) {
-        //noinspection ObjectEquality
-        if ((!AdditionalM7Features.isInM7OrF7() || AdditionalM7Features.phase5Started) && AdditionalM7Features.canRemoveBlankArmorStands() && 0.0D == entity.motionX && 0.0D == entity.motionY && 0.0D == entity.motionZ && 10 < entity.ticksExisted && Minecraft.getMinecraft().thePlayer.ridingEntity != entity && !RemoveBlankArmorStands.isAnyGuardiansTargetingEntity(world, entity) && entity.getCustomNameTag().isEmpty() && RemoveBlankArmorStands.isInventoryEmpty(entity)) {
-            world.removeEntityFromWorld(entity.getEntityId());
-            return true;
-        }
-        return false;
-    }
-
     static final boolean checkRender(@NotNull final Entity entity) {
         return !Config.isRemoveBlankArmorStands() || 10 <= entity.ticksExisted || !entity.getCustomNameTag().isEmpty() || !RemoveBlankArmorStands.isInventoryEmpty(entity);
-    }
-
-    private static final void removeBlankArmorStands() {
-        if (Config.isRemoveBlankArmorStands() && !Config.isArmorStandOptimizer()) {
-            final var mc = Minecraft.getMinecraft();
-            final var world = mc.theWorld;
-
-            if (null != world) {
-                for (final var entity : world.loadedEntityList) {
-                    if (entity instanceof EntityArmorStand) {
-                        RemoveBlankArmorStands.removeIfBlankArmorStand(world, entity);
-                    }
-                }
-            }
-        }
-    }
-
-    static final void registerPeriodicRemoval() {
-        DarkAddons.registerTickTask("remove_blank_armor_stands", RemoveBlankArmorStands.BLANK_ARMOR_STAND_REMOVAL_INTERVAL_IN_TICKS, true, RemoveBlankArmorStands::removeBlankArmorStands);
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

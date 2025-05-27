@@ -513,11 +513,6 @@ public final class DarkAddons {
         return SkyblockIsland.CrimsonIsle.isInIsland();
     }
 
-    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
-    static final boolean isPlayerInMineshaft() {
-        return SkyblockIsland.GlaciteMineshafts.isInIsland();
-    }
-
     static final boolean isDerpy() {
         return "Derpy".equals(MayorInfo.getCurrentMayor());
     }
@@ -709,7 +704,6 @@ public final class DarkAddons {
 
     private static final void registerStatic() {
         MemoryLeakFix.registerPeriodicClean();
-        RemoveBlankArmorStands.registerPeriodicRemoval();
 
         GhostBlock.registerKeybindings();
         RequeueKey.registerKeybindings();

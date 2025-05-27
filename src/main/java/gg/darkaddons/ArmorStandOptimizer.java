@@ -16,7 +16,6 @@ import com.google.common.collect.Ordering;
 final class ArmorStandOptimizer {
     private static final HashSet<EntityArmorStand> armorStandRenderSet = new HashSet<>(Utils.calculateHashMapCapacity(128));
     private static final ArrayList<EntityArmorStand> reusableStands = new ArrayList<>(128);
-    private static int passes;
 
     /**
      * Private constructor since this class only contains static members.
@@ -44,27 +43,6 @@ final class ArmorStandOptimizer {
         return AdditionalM7Features.canHideArmorstands(bossEntryTime) && (ArmorStandOptimizer.isInM7P5() || AdditionalM7Features.isInM6OrF6Boss(bossEntryTime) && ArmorStandOptimizer.isNotOnSadanWhitelist(entityArmorStand.getCustomNameTag(), true));
     }
 
-    private static final boolean shouldDoBlankRemoval() {
-        if (Config.isRemoveBlankArmorStands()) {
-            ++ArmorStandOptimizer.passes;
-            if (RemoveBlankArmorStands.BLANK_ARMOR_STAND_REMOVAL_INTERVAL_IN_TICKS <= ArmorStandOptimizer.passes) {
-                ArmorStandOptimizer.passes = 0;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private static final boolean removeBlankArmorStand(@NotNull final WorldClient world, @NotNull final Entity e) {
-        McProfilerHelper.startSection("remove_blank_armor_stands");
-        if (RemoveBlankArmorStands.removeIfBlankArmorStand(world, e)) {
-            McProfilerHelper.endSection();
-            return true;
-        }
-        McProfilerHelper.endSection();
-        return false;
-    }
-
     private static final void refreshArmorStands() {
         if (!Config.isArmorStandOptimizer()) {
             ArmorStandOptimizer.reusableStands.clear();
@@ -82,17 +60,11 @@ final class ArmorStandOptimizer {
             return;
         }
 
-        final var shouldDoBlankRemoval = ArmorStandOptimizer.shouldDoBlankRemoval();
-
         ArmorStandOptimizer.reusableStands.clear();
         ArmorStandOptimizer.armorStandRenderSet.clear();
 
         for (final var entity : world.loadedEntityList) {
             if (entity instanceof final EntityArmorStand stand) {
-                if (shouldDoBlankRemoval && ArmorStandOptimizer.removeBlankArmorStand(world, entity)) {
-                    continue;
-                }
-
                 ArmorStandOptimizer.reusableStands.add(stand);
             }
         }

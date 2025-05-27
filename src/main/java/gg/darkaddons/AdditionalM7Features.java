@@ -26,7 +26,6 @@ final class AdditionalM7Features {
     private static boolean lividsSpawned;
     private static boolean playingTank;
     static boolean phase5Started;
-    private static boolean canRemoveBlankArmorStands = true;
 
     AdditionalM7Features() {
         super();
@@ -62,10 +61,6 @@ final class AdditionalM7Features {
 
     static final boolean canHideArmorstands(final long bossEntryTime) {
         return (AdditionalM7Features.phase5NotStarted && -1L == DungeonTimer.getPhase3ClearTime() && -1L == DungeonTimer.getPhase4ClearTime() || AdditionalM7Features.phase5Started) && AdditionalM7Features.notSaidFinalDialogue && -1L == DungeonTimer.getBossClearTime() && (AdditionalM7Features.firstGolemWoken || -1L == bossEntryTime || !AdditionalM7Features.isInM6OrF6Boss(bossEntryTime));
-    }
-
-    static final boolean canRemoveBlankArmorStands() {
-        return AdditionalM7Features.canRemoveBlankArmorStands && !DarkAddons.isPlayerInMineshaft();
     }
 
     static final boolean isInM7() {
@@ -181,7 +176,6 @@ final class AdditionalM7Features {
         AdditionalM7Features.playingTank = false;
         AdditionalM7Features.lastKilledDragon = null;
         AdditionalM7Features.phase5Started = false;
-        AdditionalM7Features.canRemoveBlankArmorStands = true;
     }
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
@@ -305,11 +299,6 @@ final class AdditionalM7Features {
                 AdditionalM7Features.notSaidFinalDialogue = false;
             case "Your Tank stats are doubled because you are the only player using this class!" ->
                 AdditionalM7Features.playingTank = true;
-            case
-                "[STATUE] Oruo the Omniscient: I am Oruo the Omniscient. I have lived many lives. I have learned all there is to know." ->
-                AdditionalM7Features.canRemoveBlankArmorStands = false;
-            case "[STATUE] Oruo the Omniscient: I bestow upon you all the power of a hundred years!" ->
-                AdditionalM7Features.canRemoveBlankArmorStands = true;
             default -> {
                 if (message.startsWith("[BOSS] Sadan: Interesting strategy, waking up my Golems. Or was that unintentional, ") || message.startsWith("[BOSS] Sadan: You weren't supposed to wake up that Golem, ") || message.startsWith("[BOSS] Sadan: My Terracotta Army wasn't enough? You had to awaken a Golem on top, ") || message.startsWith("[BOSS] Sadan: Those Golems will be your undoing, ")) {
                     AdditionalM7Features.firstGolemWoken = true;

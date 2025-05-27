@@ -11,7 +11,6 @@ enum SkyblockIsland {
     ThePark("foraging_1"),
     SpiderDen("combat_1"),
     Hub("hub"),
-    GlaciteMineshafts("mineshaft"),
     Dungeon("dungeon");
 
     @NotNull
