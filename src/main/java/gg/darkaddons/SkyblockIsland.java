@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 enum SkyblockIsland {
     CrimsonIsle("crimson_isle"),
     TheRift("rift"),
-    TheGarden("garden"),
     DungeonHub("dungeon_hub"),
     CrystalHollows("crystal_hollows"),
     TheEnd("combat_3"),

@@ -504,11 +504,6 @@ public final class DarkAddons {
     }
 
     @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
-    static final boolean isPlayerInGarden() {
-        return SkyblockIsland.TheGarden.isInIsland();
-    }
-
-    @SuppressWarnings("StaticMethodOnlyUsedInOneClass")
     static final boolean isPlayerInRift() {
         return SkyblockIsland.TheRift.isInIsland();
     }

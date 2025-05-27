@@ -61,7 +61,7 @@ final class AdditionalM7Features {
     }
 
     static final boolean canHideArmorstands(final long bossEntryTime) {
-        return (AdditionalM7Features.phase5NotStarted && -1L == DungeonTimer.getPhase3ClearTime() && -1L == DungeonTimer.getPhase4ClearTime() || AdditionalM7Features.phase5Started) && AdditionalM7Features.notSaidFinalDialogue && -1L == DungeonTimer.getBossClearTime() && (AdditionalM7Features.firstGolemWoken || -1L == bossEntryTime || !AdditionalM7Features.isInM6OrF6Boss(bossEntryTime)) && !DarkAddons.isPlayerInGarden() && !DarkAddons.isPlayerInMineshaft();
+        return (AdditionalM7Features.phase5NotStarted && -1L == DungeonTimer.getPhase3ClearTime() && -1L == DungeonTimer.getPhase4ClearTime() || AdditionalM7Features.phase5Started) && AdditionalM7Features.notSaidFinalDialogue && -1L == DungeonTimer.getBossClearTime() && (AdditionalM7Features.firstGolemWoken || -1L == bossEntryTime || !AdditionalM7Features.isInM6OrF6Boss(bossEntryTime));
     }
 
     static final boolean canRemoveBlankArmorStands() {
