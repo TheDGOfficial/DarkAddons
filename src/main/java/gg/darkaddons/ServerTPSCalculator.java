@@ -28,9 +28,17 @@ final class ServerTPSCalculator {
 
     private static final ScheduledExecutorService calculatorThread = Executors.newSingleThreadScheduledExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Server TPS Calculator Thread"));
 
-    static volatile boolean initialized;
+    private static volatile boolean initialized;
 
-    static volatile int lastTPS;
+    private static volatile int lastTPS;
+
+    /**
+     * Gets TPS from the last second.
+     * Returns -1 if not measured yet.
+     */
+    static final int getLastTPS() {
+        return ServerTPSCalculator.initialized ? ServerTPSCalculator.lastTPS : -1;
+    }
 
     static {
         ServerTPSCalculator.calculatorThread.scheduleWithFixedDelay(() -> {

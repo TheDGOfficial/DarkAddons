@@ -1258,7 +1258,7 @@ public final class DarkAddons {
      * @return The Minecraft main client thread ID.
      */
     public static final long getMcThreadId() {
-        return Diagnostics.MC_THREAD_ID;
+        return Diagnostics.getMcThreadId();
     }
 
     /**

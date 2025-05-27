@@ -85,13 +85,17 @@ final class Diagnostics {
         }
     }
 
-    static final long MC_THREAD_ID = Diagnostics.getMcThreadId();
+    private static final long MC_THREAD_ID = Diagnostics.fetchMcThreadId();
 
-    private static final long getMcThreadId() {
+    private static final long fetchMcThreadId() {
         if (Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
             return Utils.threadId(Thread.currentThread());
         }
         throw new IllegalStateException("not allowed to run static initializer from thread " + Thread.currentThread().getName() + " which is not the client thread");
+    }
+
+    static final void getMcThreadId() {
+        return Diagnostics.MC_THREAD_ID;
     }
 
     private static final AtomicInteger frameCount = new AtomicInteger(0);

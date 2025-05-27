@@ -46,7 +46,7 @@ final class TPSDisplay extends SimpleGuiElement {
 
         final var isDemoRenderBypass = this.isDemoRenderBypass();
 
-        TPSDisplay.tps = ServerTPSCalculator.initialized ? ServerTPSCalculator.lastTPS : -1;
+        TPSDisplay.tps = ServerTPSCalculator.getLastTPS();
 
         if (isDemoRenderBypass || -1 == TPSDisplay.tps || TPSDisplay.lastTps != TPSDisplay.tps || this.isEmpty()) {
             TPSDisplay.lastTps = TPSDisplay.tps;
