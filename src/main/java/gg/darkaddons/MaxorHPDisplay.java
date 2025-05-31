@@ -65,7 +65,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
         }
 
         final var hp = entity.getHealth();
-        MaxorHPDisplay.maxorDead = 1.0F >= hp;
+        MaxorHPDisplay.maxorDead = Utils.compareFloatExact(1.0F, hp) || Utils.compareFloatExact(3.0F, hp); // It's either 1.0F or, rarely, 3.0F once it dies.
 
         return hp / Math.max(1.0D, entity.getMaxHealth()) * 100.0D;
     }
