@@ -56,6 +56,7 @@ final class ArmorStandOptimizer {
         final var player = mc.thePlayer;
 
         if (null == world || null == player) {
+            ArmorStandOptimizer.reusableStands.clear();
             ArmorStandOptimizer.armorStandRenderSet.clear();
             return;
         }
