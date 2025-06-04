@@ -218,7 +218,7 @@ final class Diagnostics {
 
         Diagnostics.diagChat();
 
-        Diagnostics.diag("Last Game Loop Time", Diagnostics.getLastGameLoopTimeString() + " (" + Diagnostics.getFPSWithNanosecondPrecision() + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
+        Diagnostics.diag("Last Game Loop Time", Diagnostics.getLastGameLoopTimeString() + " (" + 1_000L / Diagnostics.getLastGameLoopTime() + " fps) [" + MixinUtils.getLastTicksRan() + " ticks ran, taking " + Diagnostics.getLastFrameTickTimeString() + ']');
     }
 
     static final int getFPSWithNanosecondPrecision() {
