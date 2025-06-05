@@ -185,6 +185,7 @@ if [ ! -f build/bin/gg/darkaddons/MarkCompilerGeneratedMethodsFinal.class ]; the
 fi
 
 if [ "$EXIT_CODE" == "1" ]; then
+ echo Compiling optimizer
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
  javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/bin -g -parameters -Xlint:all MarkCompilerGeneratedMethodsFinal.java
 fi
@@ -194,6 +195,7 @@ java -cp "$CLASSPATH_WITH_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMeth
 EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "0" ]; then
+  echo Verifying optimized artifact
   java -cp "$CLASSPATH_WITH_OPTIMIZED_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
 fi
 
