@@ -87,7 +87,6 @@
         "MixinTabListUtils",
         "MixinTabListParser",
         "IMixinS3BPacketScoreboardObjective",
-        "MixinSBInfo",
         "MixinSoundManager",
         "MixinEntityDragon",
         "MixinGuiContainer",
