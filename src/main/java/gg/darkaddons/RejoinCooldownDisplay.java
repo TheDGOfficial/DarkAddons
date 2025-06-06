@@ -33,7 +33,7 @@ final class RejoinCooldownDisplay extends SimpleGuiElement {
     static final void onMessage(@NotNull final ClientChatReceivedEvent event) {
         McProfilerHelper.startSection("sb_rejoin_cooldown_after_kick_display_check_message");
 
-        if (RejoinCooldownDisplay.isEnabled.getAsBoolean() && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type)) {
+        if (RejoinCooldownDisplay.isEnabled.getAsBoolean() && 0L == RejoinCooldownDisplay.kickCooldownEnd && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type)) {
             final var message = event.message;
             if (message.getFormattedText().startsWith("§c")) {
                 RejoinCooldownDisplay.parseMessage(message.getUnformattedText());
