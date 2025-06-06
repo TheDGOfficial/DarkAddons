@@ -206,13 +206,6 @@ final class Config extends Vigilant {
     private static boolean goldenFishTimer;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Blaze Effect Timer",
-        description = "Shows time left on Smoldering Polarization (Re-heated Gummy Polar Bear) and Wisp's Ice Flavored Splash Potion on your screen.",
-        category = "Misc", subcategory = "HUD"
-    )
-    private static boolean blazeEffectTimer;
-
-    @Property(
         type = PropertyType.SWITCH, name = "SB Rejoin Cooldown After Kick Display",
         description = "Shows time left before you can rejoin SkyBlock after you get kicked in your screen.",
         category = "Misc", subcategory = "HUD"
@@ -994,6 +987,13 @@ final class Config extends Vigilant {
     )
     private static boolean prioritizeDice;
 
+    @Property(
+        type = PropertyType.SWITCH, name = "Blaze Effect Timer",
+        description = "Shows time left on Smoldering Polarization (Re-heated Gummy Polar Bear) and Wisp's Ice Flavored Splash Potion on your screen.",
+        category = "Slayers", subcategory = "HUD"
+    )
+    private static boolean blazeEffectTimer;
+
     private static boolean initialized;
 
     @NotNull
@@ -1375,12 +1375,6 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.dialogueSkipHelper;
-    }
-
-    static final boolean isBlazeEffectTimer() {
-        Config.checkUninit();
-
-        return Config.blazeEffectTimer;
     }
 
     static final boolean isSbRejoinCooldownAfterKickDisplay() {
@@ -1803,6 +1797,24 @@ final class Config extends Vigilant {
         return Config.hackingForDummiesSolver;
     }
 
+    static final boolean isAutoSalvation() {
+        Config.checkUninit();
+
+        return Config.autoSalvation;
+    }
+
+    static final int getAutoSalvationCpsLimit() {
+        Config.checkUninit();
+
+        return Config.autoSalvationCpsLimit;
+    }
+
+    static final boolean isDisableAutoSalvationInThornBoss() {
+        Config.checkUninit();
+
+        return Config.disableAutoSalvationInThornBoss;
+    }
+
     static final boolean isLeftClickAutoClicker() {
         Config.checkUninit();
 
@@ -1959,22 +1971,10 @@ final class Config extends Vigilant {
         return Config.prioritizeDice;
     }
 
-    static final boolean isAutoSalvation() {
+    static final boolean isBlazeEffectTimer() {
         Config.checkUninit();
 
-        return Config.autoSalvation;
-    }
-
-    static final int getAutoSalvationCpsLimit() {
-        Config.checkUninit();
-
-        return Config.autoSalvationCpsLimit;
-    }
-
-    static final boolean isDisableAutoSalvationInThornBoss() {
-        Config.checkUninit();
-
-        return Config.disableAutoSalvationInThornBoss;
+        return Config.blazeEffectTimer;
     }
 
     private static final void checkUninit() {
