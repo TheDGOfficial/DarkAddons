@@ -588,13 +588,21 @@ final class Diagnostics {
     @Nullable
     private static NotificationListener notificationListener;
 
+    private static long lastGCAt;
+
+    @NotNull
+    private static final HashMap<Long, Long> gcSamplesCollected = new HashMap<>(Utils.calculateHashMapCapacity(100));
+
     static final void registerGCTracker(final boolean detailed) {
         Diagnostics.unregisterGCTracker();
         Diagnostics.notificationListener = (@NotNull final Notification notification, @NotNull final Object handback) -> {
             final var gcni = GarbageCollectionNotificationInfo.from((CompositeData) notification.getUserData());
             final var info = gcni.getGcInfo();
+            final var now = System.nanoTime();
+            Diagnostics.gcSamplesCollected.put(0L == Diagnostics.lastGCAt ? 0L : Math.abs(now - Diagnostics.lastGCAt), info.getDuration());
+            Diagnostics.lastGCAt = now;
             //noinspection StringConcatenationMissingWhitespace
-            DarkAddons.queueWarning(detailed ? '[' + Diagnostics.DATE_FORMAT.format(new Date()) + "] " + gcni.getGcName() + " lasted for " + info.getDuration() + "ms. GC cause: " + gcni.getGcCause() + ", GC state: at " + gcni.getGcAction() : gcni.getGcName() + " lasted for " + info.getDuration() + "ms");
+            DarkAddons.queueWarning(("GC Event #" + Diagnostics.gcSamplesCollected.size() + " - ") + (detailed ? '[' + Diagnostics.DATE_FORMAT.format(new Date()) + "] " + gcni.getGcName() + " lasted for " + info.getDuration() + "ms. GC cause: " + gcni.getGcCause() + ", GC state: at " + gcni.getGcAction() : gcni.getGcName() + " lasted for " + info.getDuration() + "ms"));
             if (detailed) {
                 final var before = info.getMemoryUsageBeforeGc();
                 //noinspection StreamToLoop
@@ -621,6 +629,26 @@ final class Diagnostics {
         return null != Diagnostics.notificationListener;
     }
 
+    static final void dumpGCSampleStats() {
+        var totalDuration = 0L;
+        var totalFreq = 0L;
+
+        final var nEntries = Diagnostics.gcSamplesCollected.size();
+
+        for (final var entry : Diagnostics.gcSamplesCollected.entrySet()) {
+            final var freq = entry.getKey();
+            final var duration = entry.getValue();
+
+            totalDuration += duration;
+            totalFreq += freq;
+        }
+
+        final var avgDurationMs = totalDuration / nEntries;
+        final var avgFreq = TimeUnit.NANOSECONDS.toSeconds(totalFreq / nEntries);
+
+        DarkAddons.queueWarning("GC stats (sample size of " + nEntries + "): Average frequency of " + avgFreq + "s in-between GCs with average pause time of " + avgDurationMs + "ms.");
+    }
+
     static final void unregisterGCTracker() {
         if (Diagnostics.isGCTrackerRegistered()) {
             final var garbageCollectorMXBeans = ManagementFactory.getGarbageCollectorMXBeans();
@@ -633,6 +661,7 @@ final class Diagnostics {
             }
             Diagnostics.notificationListener = null;
         }
+        Diagnostics.gcSamplesCollected.clear();
     }
 
     static final class ThreadData {

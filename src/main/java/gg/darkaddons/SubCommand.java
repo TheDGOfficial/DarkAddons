@@ -182,6 +182,7 @@ final class SubCommand {
                 DarkAddons.queueWarning("GC tracking is already stopped or never started. Please start it first.");
                 return;
             }
+            Diagnostics.dumpGCSampleStats();
             Diagnostics.unregisterGCTracker();
             DarkAddons.queueWarning("Stopped tracking GC");
         }, "untrackgc"));
