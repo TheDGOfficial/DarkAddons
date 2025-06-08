@@ -90,7 +90,11 @@
         "MixinSoundManager",
         "MixinEntityDragon",
         "MixinGuiContainer",
-        "MixinMouseHelper"
+        "MixinMouseHelper",
+        "MixinMeterTracker",
+        "MixinStatsManager",
+        "MixinSoundSystem",
+        "MixinWorldRenderer"
     ],
     "server": [
     ],

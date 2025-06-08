@@ -37,6 +37,8 @@ LOG4J_VERSION=2.0-beta9
 
 GSON_VERSION=2.2.4
 
+SOUNDSYSTEM_VERSION=201809301515
+
 ERRORPRONE_VERSION=2.38.0
 
 KOTLIN_VERSION=2.1.20
@@ -62,21 +64,21 @@ ensure_m2_artifact_exists() {
  HAS_PROCESSOR=${10}
 
  if [ ! -f "$ARTIFACT_PATH" ]; then
-  ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+  ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
  fi
  if [ "$FETCH_SOURCE" = "true" ]; then
   if [ ! -f "$SOURCES_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:sources
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:sources
   fi
  fi
  if [ "$FETCH_JAVADOC" = "true" ]; then
   if [ ! -f "$JAVADOC_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:javadoc
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:javadoc
   fi
  fi
  if [ "$HAS_PROCESSOR" = "true" ]; then
   if [ ! -f "$PROCESSOR_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:processor
+   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:processor
   fi
  fi
 }
@@ -139,6 +141,8 @@ add_m2_artifact_to_classpath org.jetbrains.kotlin kotlin-stdlib "$KOTLIN_VERSION
 add_m2_artifact_to_classpath org.jetbrains.kotlinx kotlinx-coroutines-core "$KOTLIN_COROUTINES_VERISON"
 
 add_m2_artifact_to_classpath net.hypixel mod-api-forge "$HYPIXEL_MODAPI_VERSION"
+
+add_m2_artifact_to_classpath com.paulscode soundsystem "$SOUNDSYSTEM_VERSION"
 
 CLASSPATH=$CLASSPATH:$REPO/gg/skytils/skytilsmod/$SKYTILS_VERSION/skytilsmod-$SKYTILS_VERSION.jar
 
