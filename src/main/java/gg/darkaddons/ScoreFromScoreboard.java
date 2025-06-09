@@ -87,7 +87,7 @@ final class ScoreFromScoreboard {
 
         final var diff = rawScore - ScoreFromScoreboard.previousScore;
 
-        if (28 <= diff || 300 <= rawScore) {
+        if ((28 <= diff && -1L != DungeonTimer.getBossEntryTime()) || 300 <= rawScore) {
             ScoreFromScoreboard.realScoreHook(Math.max(rawScore, calculatedScore), deaths);
         }
 

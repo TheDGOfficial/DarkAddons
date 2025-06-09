@@ -94,7 +94,8 @@
         "MixinMeterTracker",
         "MixinStatsManager",
         "MixinSoundSystem",
-        "MixinWorldRenderer"
+        "MixinWorldRenderer",
+        "MixinDSMUtils"
     ],
     "server": [
     ],

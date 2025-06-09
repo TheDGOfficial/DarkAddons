@@ -30,7 +30,10 @@ final class DialogueSkipHelper {
         final var clean = Utils.removeControlCodes(message);
 
         if ("[BOSS] The Watcher: Let's see how you can handle this.".equals(clean)) {
-            GuiManager.createTitle("§4Kill Blood Mobs!", 60, true, GuiManager.Sound.PLING);
+            GuiManager.createTitle("§43", 20, true, GuiManager.Sound.ORB);
+            DarkAddons.registerTickTask("dialogue_skip_helper_continue_2", 20, false, () -> GuiManager.createTitle("§42", 20, true, GuiManager.Sound.ORB));
+            DarkAddons.registerTickTask("dialogue_skip_helper_continue_1", 40, false, () -> GuiManager.createTitle("§41", 20, true, GuiManager.Sound.ORB));
+            DarkAddons.registerTickTask("dialogue_skip_helper_continue_finish", 60, false, () -> GuiManager.createTitle("§4Kill Blood Mobs!", 20, true, GuiManager.Sound.PLING));
         }
     }
 }
