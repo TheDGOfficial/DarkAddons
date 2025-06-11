@@ -21,6 +21,6 @@ final class MixinWaterSolverMod {
 
     @Redirect(method = "<clinit>", remap = false, at = @At(value = "INVOKE", target = "Ljava/util/concurrent/Executors;newFixedThreadPool(I)Ljava/util/concurrent/ExecutorService;", remap = false))
     private static final ExecutorService newFixedThreadPool$darkaddons(final int originalPoolSize) {
-        return Executors.newFixedThreadPool(1, (@NotNull final Runnable r) -> PublicUtils.newThread(r, "Desco WaterSolver Thread"));
+        return Executors.newFixedThreadPool(1);
     }
 }

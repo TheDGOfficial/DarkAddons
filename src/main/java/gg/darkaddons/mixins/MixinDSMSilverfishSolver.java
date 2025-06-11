@@ -6,6 +6,8 @@ import gg.darkaddons.mixin.MixinUtils;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
+import java.io.PrintStream;
+
 import org.jetbrains.annotations.NotNull;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,6 +43,16 @@ final class MixinDSMSilverfishSolver {
 
     @Redirect(method = "onTick", remap = false, at = @At(value = "INVOKE", target = "Ljava/lang/Thread;start()V", remap = false))
     private final void onTickThreadStart$darkaddons(@NotNull final Thread thread) {
+        // do nothing
+    }
+
+    @Redirect(method = "lambda$onTick$0", remap = false, at = @At(value = "INVOKE", target = "Ljava/util/Arrays;deepToString([Ljava/lang/Object;)Ljava/lang/String;", remap = false))
+    private static final String onTickArraysDeepToString$darkaddons(@NotNull final Object[] board) {
+        return ""; // Avoid to string computation since it will not be printed anymore.
+    }
+
+    @Redirect(method = "lambda$onTick$0", remap = false, at = @At(value = "INVOKE", target = "Ljava/io/PrintStream;println(Ljava/lang/String;)V", remap = false))
+    private static final void onTickPrintln$darkaddons(@NotNull final PrintStream out, @NotNull final String text) {
         // do nothing
     }
 
