@@ -250,7 +250,7 @@ tasks {
                     "ModType" to "FML",
                     //"TweakClass" to "gg.darkaddons.tweaker.DarkAddonsTweaker",
                     "TweakClass" to "org.spongepowered.asm.launch.MixinTweaker",
-                    "TweakOrder" to "0",
+                    "TweakOrder" to "1",
                     "FMLAT" to "darkaddons_at.cfg"
                 )
             )
