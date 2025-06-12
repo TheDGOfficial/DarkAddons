@@ -354,6 +354,10 @@ final class Utils {
     @Nullable
     @SafeVarargs
     static final <T> T lastValue(@NotNull final T... elements) {
+        if (0 == elements.length) {
+            return null; // Empty, return null as specified in the JavaDoc
+        }
+
         return elements[elements.length - 1];
     }
 
