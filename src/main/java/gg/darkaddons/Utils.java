@@ -160,7 +160,7 @@ final class Utils {
                 return text;
             }
 
-            final var cleanedString = new StringBuilder(length);
+            final var cleanedString = new StringBuilder(length - 2);
 
             var readIndex = 0;
 
