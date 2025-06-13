@@ -134,9 +134,7 @@ final class Utils {
          * <p>
          * Note that unlike other methods this doesn't utilize a
          * {@link java.util.regex.Pattern} or {@link java.util.regex.Matcher} and
-         * just uses simple {@link StringUtils#replace(String, String, String)}
-         * against all known codes (0-9 a-f color codes plus formatting codes (k-r)
-         * and z for chroma).
+         * just uses simple {@link StringBuilder} and thus will be much faster.
          *
          * @param text The text to remove Minecraft control codes from.
          * @return Empty string if the given text is null, or the given text
@@ -160,7 +158,7 @@ final class Utils {
                 return text;
             }
 
-            final var cleanedString = new StringBuilder(length - 2);
+            final var cleanedString = new StringBuilder(length - 1);
 
             var readIndex = 0;
 
