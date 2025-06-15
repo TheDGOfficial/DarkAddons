@@ -162,7 +162,7 @@ final class MayorInfo {
             final var stack = slot.getStack();
 
             if (null != stack && ("Mayor Jerry".equals(chestName) && (13 == slotNumber || "§dJERRY IS MAYOR!!!".equals(stack.getDisplayName())) || "Calendar and Events".equals(chestName) && 37 == slotNumber)) {
-                final var lore = Utils.getItemLore(stack);
+                final var lore = ItemUtils.getItemLore(stack);
                 if (!lore.contains("§9Perkpocalypse Perks:")) {
                     return;
                 }

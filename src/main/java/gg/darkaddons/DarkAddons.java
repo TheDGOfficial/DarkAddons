@@ -946,7 +946,7 @@ public final class DarkAddons {
      */
     public static final boolean shouldNotRenderSkytilsWaypoints() {
         final var mc = Minecraft.getMinecraft();
-        return Config.isRenderSkytilsWaypointsOnlyWhenHoldingAOTV() && (Items.diamond_shovel != Utils.getHeldItem(mc) || !Utils.isHoldingItemContaining(mc, "Aspect of the Void"));
+        return Config.isRenderSkytilsWaypointsOnlyWhenHoldingAOTV() && (Items.diamond_shovel != ItemUtils.getHeldItem(mc) || !ItemUtils.isHoldingItemContaining(mc, "Aspect of the Void"));
     }
 
     static final boolean isUsingSBA() {

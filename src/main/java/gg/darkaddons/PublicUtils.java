@@ -86,7 +86,7 @@ public final class PublicUtils {
      */
     @NotNull
     public static final String read(@NotNull final File file) {
-        return Utils.read(file);
+        return FileUtils.read(file);
     }
 
     /**

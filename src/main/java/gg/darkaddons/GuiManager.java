@@ -312,12 +312,12 @@ final class GuiManager {
     }
 
     private static final void write(@NotNull final String text) {
-        Utils.write(GuiManager.positionsFile, text);
+        FileUtils.write(GuiManager.positionsFile, text);
     }
 
     @NotNull
     private static final String read() {
-        return Utils.read(GuiManager.positionsFile);
+        return FileUtils.read(GuiManager.positionsFile);
     }
 
     static final void init() {

@@ -32,33 +32,33 @@ final class AutoClicker {
     }
 
     static final boolean isHoldingASword(@NotNull final Minecraft mc) {
-        final var item = Utils.getHeldItem(mc);
+        final var item = ItemUtils.getHeldItem(mc);
 
         //noinspection ObjectEquality
         return Items.diamond_sword == item || Items.golden_sword == item || Items.iron_sword == item || Items.stone_sword == item || Items.wooden_sword == item;
     }
 
     private static final boolean isHoldingABow(@NotNull final Minecraft mc) {
-        final var item = Utils.getHeldItem(mc);
+        final var item = ItemUtils.getHeldItem(mc);
 
         //noinspection ObjectEquality
         return Items.bow == item;
     }
 
     private static final boolean isHoldingTerm(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingABow(mc) && Utils.isHoldingItemContaining(mc, "Terminator");
+        return AutoClicker.isHoldingABow(mc) && ItemUtils.isHoldingItemContaining(mc, "Terminator");
     }
 
     static final boolean isHoldingHype(@NotNull final Minecraft mc) {
-        return Utils.isHoldingItemContaining(mc, "Hyperion");
+        return ItemUtils.isHoldingItemContaining(mc, "Hyperion");
     }
 
     static final boolean isHoldingTermOrRCM(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingTerm(mc) || Utils.isHoldingItemContaining(mc, "Astraea") || AutoClicker.isHoldingHype(mc);
+        return AutoClicker.isHoldingTerm(mc) || ItemUtils.isHoldingItemContaining(mc, "Astraea") || AutoClicker.isHoldingHype(mc);
     }
 
     static final boolean isHoldingClaymoreMidasOrGS(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingASword(mc) && (Utils.isHoldingItemContaining(mc, "Claymore") || Utils.isHoldingItemContaining(mc, "Midas'") || Utils.isHoldingItemContaining(mc, "Giant's Sword"));
+        return AutoClicker.isHoldingASword(mc) && (ItemUtils.isHoldingItemContaining(mc, "Claymore") || ItemUtils.isHoldingItemContaining(mc, "Midas'") || ItemUtils.isHoldingItemContaining(mc, "Giant's Sword"));
     }
 
     @SuppressWarnings("TypeMayBeWeakened")

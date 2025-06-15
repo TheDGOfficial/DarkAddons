@@ -1000,7 +1000,7 @@ final class Config extends Vigilant {
     private static final File CONFIG_FILE = new File(new File(new File("config"), "darkaddons"), "config.toml");
 
     private static final void reloadChunks(final boolean ignoredValue) {
-        Utils.reloadChunks();
+        ChunkUtils.reloadChunks();
     }
 
     private static final void switchThreadPriorityTweaker(final boolean state) {

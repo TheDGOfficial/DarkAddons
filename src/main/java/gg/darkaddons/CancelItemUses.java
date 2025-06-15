@@ -29,6 +29,6 @@ final class CancelItemUses {
         final var mc = Minecraft.getMinecraft();
         final var settings = mc.gameSettings;
 
-        return settings.keyBindUseItem == keyBinding ? !Utils.isHoldingItemContaining(mc, "Gloomlock Grimoire") && !Utils.isHoldingItemContaining(mc, "Terminator") && !Utils.isHoldingItemContaining(mc, "Daedalus Axe") && !Utils.isHoldingItemContaining(mc, "Gyrokinetic Wand") : settings.keyBindAttack != keyBinding || !Utils.isHoldingItemContaining(mc, "Terminator");
+        return settings.keyBindUseItem == keyBinding ? !ItemUtils.isHoldingItemContaining(mc, "Gloomlock Grimoire") && !ItemUtils.isHoldingItemContaining(mc, "Terminator") && !ItemUtils.isHoldingItemContaining(mc, "Daedalus Axe") && !ItemUtils.isHoldingItemContaining(mc, "Gyrokinetic Wand") : settings.keyBindAttack != keyBinding || !ItemUtils.isHoldingItemContaining(mc, "Terminator");
     }
 }

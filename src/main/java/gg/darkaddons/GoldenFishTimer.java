@@ -52,7 +52,7 @@ final class GoldenFishTimer extends SimpleGuiElement {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public final void onEntityJoinWorld(@NotNull final EntityJoinWorldEvent event) {
-        if (Config.isGoldenFishTimer() && event.entity instanceof final EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler && Items.fishing_rod == Utils.getHeldItem(Minecraft.getMinecraft()) && DarkAddons.isPlayerInCrimsonIsle()) {
+        if (Config.isGoldenFishTimer() && event.entity instanceof final EntityFishHook bobber && Minecraft.getMinecraft().thePlayer == bobber.angler && Items.fishing_rod == ItemUtils.getHeldItem(Minecraft.getMinecraft()) && DarkAddons.isPlayerInCrimsonIsle()) {
             final var now = System.currentTimeMillis();
             GoldenFishTimer.nextRodThrowThreshold = now + TimeUnit.MINUTES.toMillis(3L);
             if (0L == GoldenFishTimer.nextGoldenFish) {

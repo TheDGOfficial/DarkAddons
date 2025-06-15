@@ -66,7 +66,7 @@ final class AutoFishingRod {
     }
 
     private static final boolean isHoldingRod() {
-        return Items.fishing_rod == Utils.getHeldItem(Minecraft.getMinecraft());
+        return Items.fishing_rod == ItemUtils.getHeldItem(Minecraft.getMinecraft());
     }
 
     private static final boolean checkPreconditions() {
