@@ -95,7 +95,7 @@ final class ScoreFromScoreboard {
     }
 
     private static final void realScoreHook(final int score, final int deaths) {
-        if (Config.isSendMessageForScoreAtBossEntry() && (-1L != DungeonTimer.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry) {
+        if (Config.isSendMessageForScoreAtBossEntry() && (-1L != DungeonTimer.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry && -1L == DungeonTimer.getBossClearTime()) {
             var affordableDeaths = 0;
             var extraScore = score - 300;
 
