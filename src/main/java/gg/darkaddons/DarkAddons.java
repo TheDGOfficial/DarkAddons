@@ -1159,7 +1159,7 @@ public final class DarkAddons {
     }
 
     /**
-     * Handles world load event.
+     * Handles world unload event.
      */
     public static final void handleWorldUnload() {
         AutoClassAbilities.onWorldUnload();
