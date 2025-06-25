@@ -24,7 +24,7 @@ final class RagAxeStrengthGained {
 
     static final void handlePacket(@NotNull final Packet<?> packet) {
         final var mc = Minecraft.getMinecraft();
-        if (Config.isSendMessageOnRagAxe() && (!Config.isSendMessageOnRagAxeOnlyInDungeons() || DarkAddons.isInDungeons()) && packet instanceof final S29PacketSoundEffect soundPacket && "mob.wolf.howl".equals(soundPacket.getSoundName()) && Utils.compareFloatExact(1.492_063_5F, soundPacket.getPitch()) && ItemUtils.isHoldingItemContaining(mc, "Ragnarock Axe")) {
+        if (Config.isSendMessageOnRagAxe() && (!Config.isSendMessageOnRagAxeOnlyInDungeons() || DarkAddons.isInDungeons()) && packet instanceof final S29PacketSoundEffect soundPacket && "mob.wolf.howl".equals(soundPacket.getSoundName()) && Utils.compareFloatExact(1.492_063_5F, soundPacket.getPitch()) && ItemUtils.isHoldingItemContaining(mc, "Ragnarock")) {
             final var player = mc.thePlayer;
             if (null != player) {
                 final var item = player.getHeldItem();
