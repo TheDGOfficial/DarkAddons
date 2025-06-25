@@ -11,6 +11,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import java.util.function.IntConsumer;
+
 final class ServerTPSCalculator {
     /**
      * Private constructor since this class only contains static members.
@@ -32,6 +34,11 @@ final class ServerTPSCalculator {
 
     private static volatile int lastTPS;
 
+    private static volatile boolean enableTPSCalculationTemporarily;
+
+    private static volatile IntConsumer hook;
+    private static volatile Runnable serverTickHook;
+
     /**
      * Gets TPS from the last second.
      * Returns -1 if not measured yet.
@@ -42,12 +49,24 @@ final class ServerTPSCalculator {
 
     static {
         ServerTPSCalculator.calculatorThread.scheduleWithFixedDelay(() -> {
-            if (Config.isTpsDisplay()) {
+            if (ServerTPSCalculator.shouldCalculate()) {
                 final var ticksThisSecond = ServerTPSCalculator.tickCount.getAndSet(0);
                 ServerTPSCalculator.lastTPS = Math.min(20, ticksThisSecond);
 
                 if (!ServerTPSCalculator.initialized && 0 < ticksThisSecond) {
                     ServerTPSCalculator.initialized = true;
+                }
+
+                if (ServerTPSCalculator.initialized) {
+                    final var hook = ServerTPSCalculator.hook;
+                    if (null != hook) {
+                        final var value = ServerTPSCalculator.lastTPS;
+
+                        // Run the hook inside client thread for thread safety.
+                        DarkAddons.runOnceInNextTick("tps_update_hook", () -> {
+                            hook.accept(value);
+                        });
+                    }
                 }
             }
         }, 1L, 1L, TimeUnit.SECONDS);
@@ -60,7 +79,7 @@ final class ServerTPSCalculator {
      * and if we do, we can assume the tps is correct, otherwise we will show the TPS as loading.
      */
     static final void onWorldUnload() {
-        if (Config.isTpsDisplay()) {
+        if (ServerTPSCalculator.shouldCalculate()) {
             ServerTPSCalculator.initialized = false;
             ServerTPSCalculator.lastTPS = 0;
             ServerTPSCalculator.tickCount.set(0);
@@ -75,10 +94,40 @@ final class ServerTPSCalculator {
      * (e.g., the integrated server in single player worlds).
      */
     static final void handlePacket(@NotNull final Packet<?> packet) {
-        if (Config.isTpsDisplay() && packet instanceof final S32PacketConfirmTransaction pct) {
+        if (ServerTPSCalculator.shouldCalculate() && packet instanceof final S32PacketConfirmTransaction pct) {
             if (1 > pct.getActionNumber()) {
                 ServerTPSCalculator.tickCount.incrementAndGet();
+
+                final var hook = ServerTPSCalculator.serverTickHook;
+                if (null != hook) {
+                    // Run the hook inside client thread for thread safety.
+                    DarkAddons.runOnceInNextTick("server_tick_hook", hook);
+                }
             }
         }
+    }
+
+    static final void startCalculatingTPS(@NotNull final IntConsumer hook) {
+        ServerTPSCalculator.enableTPSCalculationTemporarily = true;
+        ServerTPSCalculator.hook = hook;
+    }
+
+    static final void stopCalculatingTPS() {
+        ServerTPSCalculator.enableTPSCalculationTemporarily = false;
+        ServerTPSCalculator.hook = null;
+    }
+
+    static final void startListeningTicks(@NotNull final Runnable serverTickHook) {
+        ServerTPSCalculator.enableTPSCalculationTemporarily = true;
+        ServerTPSCalculator.serverTickHook = serverTickHook;
+    }
+
+    static final void stopListeningTicks() {
+        ServerTPSCalculator.enableTPSCalculationTemporarily = false;
+        ServerTPSCalculator.serverTickHook = null;
+    }
+
+    private static final boolean shouldCalculate() {
+        return Config.isTpsDisplay() || ServerTPSCalculator.enableTPSCalculationTemporarily;
     }
 }

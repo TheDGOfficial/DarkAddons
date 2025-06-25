@@ -769,7 +769,9 @@ public final class DarkAddons {
             AutoExtraStats::new,
             AutoFishingRod::new,
             MelodyMessage::new,
-            ReplaceDiorite::new
+            ReplaceDiorite::new,
+            LaggyServerDetector::new,
+            SoloCrushHelper::new
         );
 
         DarkAddons.registerAllGuiElements();

@@ -670,6 +670,27 @@ final class Config extends Vigilant {
     private static boolean dialogueSkipHelper;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Laggy Server Detector",
+        description = "Calculates a 30 second TPS average upon joining any server and displays a title after calculation. If you leave the server before 30 seconds, calculation will be reset and continue on the new server.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean laggyServerDetector;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Laggy Server Detector Notify Party",
+        description = "Notifies the party if in dungeons about the 30 second TPS average, with a comment about how to interpret the value - 20 to 19 is classified as Good, 18 is classified as Decent, 17 is classified as Fine, 16 is classified as Bearable, 15 is classified as Bad, and <14 is classified as Very Bad.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean laggyServerDetectorNotifyParty;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Solo Crush Helper",
+        description = "Shows a title when to move the crusher for the purple pad solo crush to work. Uses server tick based timing to work even when the server is lagging. However, the timer will only trigger after taking 2 Giga Lightning hits (based on chat message) - so if you are under a pillar and don't take lightning damage the feature won't work. This to ensure the feature does not tell you to crush when you are just doing green yellow or you are not the solo crusher.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean soloCrushHelper;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Chroma/Rainbow Toggle",
         description = "If enabled, will use chroma/rainbow color in various places. (Requires SkyblockAddons)",
         category = "Misc", subcategory = "Chroma"
@@ -1140,6 +1161,7 @@ final class Config extends Vigilant {
         this.addDependency("autoFishingRodAFKBypassAlgorithm", "autoFishingRod");
 
         this.addDependency("sendMessageOnRagAxeOnlyInDungeons", "sendMessageOnRagAxe");
+        this.addDependency("laggyServerDetectorNotifyParty", "laggyServerDetector");
     }
 
     private final void addListeners() {
@@ -1375,6 +1397,24 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.dialogueSkipHelper;
+    }
+
+    static final boolean isLaggyServerDetector() {
+        Config.checkUninit();
+
+        return Config.laggyServerDetector;
+    }
+
+    static final boolean isLaggyServerDetectorNotifyParty() {
+        Config.checkUninit();
+
+        return Config.laggyServerDetectorNotifyParty;
+    }
+
+    static final boolean isSoloCrushHelper() {
+        Config.checkUninit();
+
+        return Config.soloCrushHelper;
     }
 
     static final boolean isSbRejoinCooldownAfterKickDisplay() {
