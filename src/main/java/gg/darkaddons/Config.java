@@ -649,18 +649,18 @@ final class Config extends Vigilant {
     private static boolean sendMessageOnMelodyTerminal;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Send Message for Ragnarock Axe Strength Gained",
-        description = "Sends message after using ragnarock axe to party chat about strength gained.",
+        type = PropertyType.SWITCH, name = "Send Message for Ragnarock Strength Gained",
+        description = "Sends message after using ragnarock to party chat about strength gained.",
         category = "Dungeons", subcategory = "Helpers"
     )
-    private static boolean sendMessageOnRagAxe;
+    private static boolean sendMessageOnRagnarock;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Send Message for Ragnarock Axe Strength Gained Only In Dungeons",
+        type = PropertyType.SWITCH, name = "Send Message for Ragnarock Strength Gained Only In Dungeons",
         description = "Makes it so the message is only sent while in dungeons.",
         category = "Dungeons", subcategory = "Helpers"
     )
-    private static boolean sendMessageOnRagAxeOnlyInDungeons;
+    private static boolean sendMessageOnRagnarockOnlyInDungeons;
 
     @Property(
         type = PropertyType.SWITCH, name = "Dialogue Skip Helper",
@@ -1160,7 +1160,7 @@ final class Config extends Vigilant {
         this.addDependency("autoFishingRodGoldenFishMode", "autoFishingRod");
         this.addDependency("autoFishingRodAFKBypassAlgorithm", "autoFishingRod");
 
-        this.addDependency("sendMessageOnRagAxeOnlyInDungeons", "sendMessageOnRagAxe");
+        this.addDependency("sendMessageOnRagnarockOnlyInDungeons", "sendMessageOnRagnarock");
         this.addDependency("laggyServerDetectorNotifyParty", "laggyServerDetector");
     }
 
@@ -1381,16 +1381,16 @@ final class Config extends Vigilant {
         return Config.sendMessageOnMelodyTerminal;
     }
 
-    static final boolean isSendMessageOnRagAxe() {
+    static final boolean isSendMessageOnRagnarock() {
         Config.checkUninit();
 
-        return Config.sendMessageOnRagAxe;
+        return Config.sendMessageOnRagnarock;
     }
 
-    static final boolean isSendMessageOnRagAxeOnlyInDungeons() {
+    static final boolean isSendMessageOnRagnarockOnlyInDungeons() {
         Config.checkUninit();
 
-        return Config.sendMessageOnRagAxeOnlyInDungeons;
+        return Config.sendMessageOnRagnarockOnlyInDungeons;
     }
 
     static final boolean isDialogueSkipHelper() {

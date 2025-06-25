@@ -9,14 +9,14 @@ import net.minecraft.network.play.server.S29PacketSoundEffect;
 
 import org.apache.commons.lang3.StringUtils;
 
-final class RagAxeStrengthGained {
+final class RagnarockStrengthGained {
     /**
      * Private constructor since this class only contains static members.
      * <p>
      * Always throws {@link UnsupportedOperationException} (for when
      * constructed via reflection).
      */
-    private RagAxeStrengthGained() {
+    private RagnarockStrengthGained() {
         super();
 
         throw Utils.staticClassException();
@@ -24,7 +24,7 @@ final class RagAxeStrengthGained {
 
     static final void handlePacket(@NotNull final Packet<?> packet) {
         final var mc = Minecraft.getMinecraft();
-        if (Config.isSendMessageOnRagAxe() && (!Config.isSendMessageOnRagAxeOnlyInDungeons() || DarkAddons.isInDungeons()) && packet instanceof final S29PacketSoundEffect soundPacket && "mob.wolf.howl".equals(soundPacket.getSoundName()) && Utils.compareFloatExact(1.492_063_5F, soundPacket.getPitch()) && ItemUtils.isHoldingItemContaining(mc, "Ragnarock")) {
+        if (Config.isSendMessageOnRagnarock() && (!Config.isSendMessageOnRagnarockOnlyInDungeons() || DarkAddons.isInDungeons()) && packet instanceof final S29PacketSoundEffect soundPacket && "mob.wolf.howl".equals(soundPacket.getSoundName()) && Utils.compareFloatExact(1.492_063_5F, soundPacket.getPitch()) && ItemUtils.isHoldingItemContaining(mc, "Ragnarock")) {
             final var player = mc.thePlayer;
             if (null != player) {
                 final var item = player.getHeldItem();
@@ -35,7 +35,7 @@ final class RagAxeStrengthGained {
                             final var amount = StringUtils.substringBefore(StringUtils.substringAfter(cleanLine, "Strength: +"), " ");
                             try {
                                 final var parsed = Double.parseDouble(amount);
-                                DarkAddons.queueUserSentMessageOrCommand("/pc Gained strength from rag axe: " + (int) Math.floor(parsed * 1.5));
+                                DarkAddons.queueUserSentMessageOrCommand("/pc Gained strength from ragnarock: " + (int) Math.floor(parsed * 1.5));
                             } catch (final NumberFormatException nfe) {
                                 DarkAddons.modError(nfe);
                             }

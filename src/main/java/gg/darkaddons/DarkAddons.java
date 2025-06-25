@@ -997,7 +997,7 @@ public final class DarkAddons {
 
         M7Features.handlePacket(packet);
         ChromaScoreboard.handlePacket(packet);
-        RagAxeStrengthGained.handlePacket(packet);
+        RagnarockStrengthGained.handlePacket(packet);
 
         ServerTPSCalculator.handlePacket(packet);
         PingTracker.onPacketReceived(packet);
