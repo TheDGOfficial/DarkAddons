@@ -194,7 +194,7 @@ final class GuiManager {
     private static final void renderTitles(@NotNull final ScaledResolution scaledResolution) {
         final var mc = Minecraft.getMinecraft();
 
-        if (null == mc.theWorld || null == mc.thePlayer || !DarkAddons.isInSkyblock()) {
+        if (null == mc.theWorld || null == mc.thePlayer) {
             return;
         }
 
