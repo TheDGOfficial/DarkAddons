@@ -62,15 +62,15 @@ final class MelodyMessage {
 
         if (openContainer instanceof final ContainerChest containerChest && "Click the button on time!".equals(containerChest.getLowerChestInventory().getDisplayName().getUnformattedText())) {
             if (!MelodyMessage.quarter && MelodyMessage.checkSlot(containerChest.getSlot(25))) {
-                DarkAddons.queueUserSentMessageOrCommand("/pc Melody terminal is at 25%");
+                DarkAddons.queueUserSentMessageOrCommand("/pc Melody 25%");
                 MelodyMessage.quarter = true;
             }
             if (!MelodyMessage.halfway && MelodyMessage.checkSlot(containerChest.getSlot(34))) {
-                DarkAddons.queueUserSentMessageOrCommand("/pc Melody terminal is at 50%");
+                DarkAddons.queueUserSentMessageOrCommand("/pc Melody 50%");
                 MelodyMessage.halfway = true;
             }
             if (!MelodyMessage.almost && MelodyMessage.checkSlot(containerChest.getSlot(43))) {
-                DarkAddons.queueUserSentMessageOrCommand("/pc Melody terminal is at 75%");
+                DarkAddons.queueUserSentMessageOrCommand("/pc Melody 75%");
                 MelodyMessage.almost = true;
             }
         }
