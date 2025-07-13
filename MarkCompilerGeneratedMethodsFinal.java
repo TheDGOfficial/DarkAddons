@@ -28,6 +28,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -287,17 +288,34 @@ final class MarkCompilerGeneratedMethodsFinal {
     }
 
     private static final void deleteAllFilesInDir(@NotNull final File dir) throws IOException {
-        if (dir.exists()) {
-            if (!dir.isDirectory()) {
-                throw new IllegalArgumentException("argument is not a directory");
-            }
+        if (!dir.exists()) {
+            return;
+        }
 
-            for (final var file : dir.listFiles()) {
-                if (file.isDirectory()) {
-                    MarkCompilerGeneratedMethodsFinal.deleteAllFilesInDir(file);
+        if (!dir.isDirectory()) {
+            throw new IllegalArgumentException("argument is not a directory");
+        }
+
+        final var stack = new ArrayDeque<File>();
+        final var postOrder = new ArrayDeque<File>(); // For reversed post-order traversal
+
+        stack.push(dir);
+
+        while (!stack.isEmpty()) {
+            final var current = stack.pop();
+            postOrder.push(current); // Reverse post-order: parent after children
+
+            final var children = current.listFiles();
+            if (children != null) {
+                for (final var child : children) {
+                    stack.push(child);
                 }
-                Files.delete(file.toPath());
             }
+        }
+
+        while (!postOrder.isEmpty()) {
+            final var file = postOrder.pop();
+            Files.delete(file.toPath());
         }
     }
 
@@ -529,19 +547,35 @@ final class MarkCompilerGeneratedMethodsFinal {
     @NotNull
     private static final ArrayList<File> getFilesInDirectoryRecursively(@NotNull final File dir) {
         final var files = new ArrayList<File>(100);
-        if (dir.exists()) {
-            if (!dir.isDirectory()) {
-                throw new IllegalArgumentException("argument is not a directory");
+        final var stack = new ArrayDeque<File>(); // Deque is more efficient than Stack
+
+        if (!dir.exists()) {
+            return files;
+        }
+
+        if (!dir.isDirectory()) {
+            throw new IllegalArgumentException("argument is not a directory");
+        }
+
+        stack.push(dir);
+
+        while (!stack.isEmpty()) {
+            final var current = stack.pop();
+            final var children = current.listFiles();
+
+            if (children == null) {
+                continue; // Could be a permission issue or IO error
             }
 
-            for (final var file : dir.listFiles()) {
+            for (final var file : children) {
                 if (file.isDirectory()) {
-                    files.addAll(MarkCompilerGeneratedMethodsFinal.getFilesInDirectoryRecursively(file));
+                    stack.push(file);
                 } else {
                     files.add(file);
                 }
             }
         }
+
         return files;
     }
 
@@ -593,21 +627,14 @@ final class MarkCompilerGeneratedMethodsFinal {
 
     @NotNull
     private static final String removeOnce(@NotNull final String str, final char remove) {
-        if (StringUtils.isEmpty(str) || StringUtils.INDEX_NOT_FOUND == str.indexOf(remove)) {
-            return str;
-        }
-        final var chars = str.toCharArray();
-        var pos = 0;
-        var replacedOnce = false;
-        final var charsLength = chars.length;
-        for (var i = 0; i < charsLength; ++i) {
-            if (chars[i] != remove || replacedOnce) {
-                chars[pos++] = chars[i];
-            } else {
-                replacedOnce = true;
-            }
-        }
-        return new String(chars, 0, pos);
+        final int index = str.indexOf(remove);
+        if (index == -1) return str;
+
+        final var len = str.length();
+        final var chars = new char[len - 1];
+        str.getChars(0, index, chars, 0); // copy before
+        str.getChars(index + 1, len, chars, index); // copy after
+        return new String(chars);
     }
 
     @NotNull

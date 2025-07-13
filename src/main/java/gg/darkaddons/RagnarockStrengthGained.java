@@ -35,7 +35,7 @@ final class RagnarockStrengthGained {
                             final var amount = StringUtils.substringBefore(StringUtils.substringAfter(cleanLine, "Strength: +"), " ");
                             try {
                                 final var parsed = Double.parseDouble(amount);
-                                DarkAddons.queueUserSentMessageOrCommand("/pc Gained strength from ragnarock: " + (int) Math.floor(parsed * 1.5));
+                                DarkAddons.queueUserSentMessageOrCommand("/pc Gained strength from Ragnarock: " + (int) Math.floor(parsed * 1.5));
                             } catch (final NumberFormatException nfe) {
                                 DarkAddons.modError(nfe);
                             }
