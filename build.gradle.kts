@@ -138,7 +138,7 @@ dependencies {
         exclude(module = "vigilance-1.8.9-forge")
     }
 
-    implementation("gg.essential:vigilance:306")
+    implementation("gg.essential:vigilance:312")
     api("gg.essential:elementa:710")
     implementation("gg.essential:universalcraft-1.8.9-forge:421")
 
