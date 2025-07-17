@@ -44,25 +44,25 @@ final class SoloCrushHelper {
     private static final void onServerTick() {
         final var passed = ++ticksPassed;
 
-        if (20 == passed) {
+        if (1 == passed) {
             if (Config.isSoloCrushHelper()) { // If the user turned off the feature before timer is finished (Edge case)
                 GuiManager.createTitle("§53", 20, true, GuiManager.Sound.ORB);
             }
         }
 
-        if (40 == passed) {
+        if (20 == passed) {
             if (Config.isSoloCrushHelper()) { // If the user turned off the feature before timer is finished (Edge case)
                 GuiManager.createTitle("§52", 20, true, GuiManager.Sound.ORB);
             }
         }
 
-        if (60 == passed) {
+        if (40 == passed) {
             if (Config.isSoloCrushHelper()) { // If the user turned off the feature before timer is finished (Edge case)
                 GuiManager.createTitle("§51", 20, true, GuiManager.Sound.ORB);
             }
         }
 
-        if (80 == passed) {
+        if (60 == passed) {
             ServerTPSCalculator.stopListeningTicks();
 
             if (Config.isSoloCrushHelper()) { // If the user turned off the feature before timer is finished (Edge case)
