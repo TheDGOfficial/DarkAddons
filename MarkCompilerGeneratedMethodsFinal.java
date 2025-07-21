@@ -643,11 +643,11 @@ final class MarkCompilerGeneratedMethodsFinal {
     }
 
     private static final void markCompilerGeneratedMethodsFinal() throws IOException {
-        //System.out.println("Finding classes to transform...");
+        System.out.println("Discovering classes");
         final var classes = MarkCompilerGeneratedMethodsFinal.findClassesToTransform();
-        //System.out.println("Transforming classes...");
+        System.out.println("Transforming classes");
         MarkCompilerGeneratedMethodsFinal.transformClasses(classes, false);
-        //System.out.println("Generate new JAR with transformed classes...");
+        System.out.println("Packing optimized JAR");
         MarkCompilerGeneratedMethodsFinal.generateNewJarWithTransformedClasses();
     }
 
