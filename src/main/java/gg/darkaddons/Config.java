@@ -297,7 +297,7 @@ final class Config extends Vigilant {
         description = "If enabled, will skip rendering the boxes for already destroyed statues.",
         category = "Dungeons", subcategory = "Wither King Fight"
     )
-    private static boolean hideStatueBoxForDestroyedStatues = true;
+    private static boolean hideStatueBoxForDestroyedStatues;
 
     /*@Property(
         type = PropertyType.SWITCH, name = "Show Dragon Spawn Timer",
