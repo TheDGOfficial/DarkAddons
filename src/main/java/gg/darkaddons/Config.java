@@ -269,6 +269,13 @@ final class Config extends Vigilant {
     private static boolean showStatueBox;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Show Arrow Stack Box",
+        description = "Shows arrow stack boxes inside the Statue Boxes to help locate where to shoot your Terminator or Last Breath arrows, in addition to the Statue Boxes.",
+        category = "Dungeons", subcategory = "Wither King Fight"
+    )
+    private static boolean showArrowStackBox;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Sharper Dragon Bounding Box Lines",
         description = "Changes width of the lines in dragon statue boxes in M7 to be sharper.",
         category = "Dungeons", subcategory = "Wither King Fight"
@@ -647,6 +654,13 @@ final class Config extends Vigilant {
         category = "Dungeons", subcategory = "Helpers"
     )
     private static boolean sendMessageOnMelodyTerminal;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Ragnarock Use Notifier",
+        description = "Displays a message on screen when you should start casting Ragnarock for extra strength on M5/F5. Mainly useful for LCM.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean ragnarockUseNotifier;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message for Ragnarock Strength Gained",
@@ -1109,6 +1123,7 @@ final class Config extends Vigilant {
         this.addDependency("dragonBoundingBoxWidth", "sharperDragonBoundingBox", (@NotNull final Boolean state) -> state && Config.showStatueBox);
 
         this.addDependency("hideStatueBoxForDestroyedStatues", Config.SHOW_STATUE_BOX);
+        this.addDependency("showArrowStackBox", Config.SHOW_STATUE_BOX);
         this.addDependency("armorStandLimit", "armorStandOptimizer");
         this.addDependency("dragonHudShadow", "dragonHud");
 
@@ -1379,6 +1394,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.sendMessageOnMelodyTerminal;
+    }
+
+    static final boolean isRagnarockUseNotifier() {
+        Config.checkUninit();
+
+        return Config.ragnarockUseNotifier;
     }
 
     static final boolean isSendMessageOnRagnarock() {
@@ -1955,6 +1976,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.showStatueBox;
+    }
+
+    static final boolean isShowArrowStackBox() {
+        Config.checkUninit();
+
+        return Config.showArrowStackBox;
     }
 
     static final boolean isHideStatueBoxForDestroyedStatues() {

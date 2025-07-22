@@ -265,6 +265,15 @@ final class M7Features {
                     width,
                     event.partialTicks
                 );
+
+                if (Config.isShowArrowStackBox()) {
+                    RenderUtil.drawOutlinedBoundingBox(
+                        drag.getArrowStackBoundingBox(),
+                        drag.getColor(),
+                        width,
+                        event.partialTicks
+                    );
+                }
             }
         }
 

@@ -19,34 +19,39 @@ enum WitherKingDragons {
         WitherKingDragons.newBlockPos(27, 13, 58),
         WitherKingDragons.Constants.RED_AWTCOLOR,
         ChatColor.RED,
-        WitherKingDragons.newBlockPos(32, 18, 59)),
+        WitherKingDragons.newBlockPos(32, 18, 59),
+        WitherKingDragons.Constants.RED_STACK),
     APEX("Green",
         WitherKingDragons.newBlockPos(27, 14, 94),
         WitherKingDragons.newBlockPos(22, 8, 95),
         WitherKingDragons.Constants.GREEN_AWTCOLOR,
         ChatColor.GREEN,
-        WitherKingDragons.newBlockPos(32, 19, 94)),
+        WitherKingDragons.newBlockPos(32, 19, 94),
+        WitherKingDragons.Constants.GREEN_STACK),
     SOUL(
         "Purple",
         WitherKingDragons.newBlockPos(56, 14, 125),
         WitherKingDragons.newBlockPos(57, 13, 125),
         WitherKingDragons.Constants.PURPLE_AWTCOLOR,
         ChatColor.DARK_PURPLE,
-        WitherKingDragons.newBlockPos(56, 18, 128)
+        WitherKingDragons.newBlockPos(56, 18, 128),
+        WitherKingDragons.Constants.PURPLE_STACK
     ),
     ICE("Blue",
         WitherKingDragons.newBlockPos(84, 14, 94),
         WitherKingDragons.newBlockPos(84, 16, 95),
         WitherKingDragons.Constants.BLUE_AWTCOLOR,
         ChatColor.AQUA,
-        WitherKingDragons.newBlockPos(79, 19, 94)),
+        WitherKingDragons.newBlockPos(79, 19, 94),
+        WitherKingDragons.Constants.BLUE_STACK),
     FLAME(
         "Orange",
         WitherKingDragons.newBlockPos(85, 14, 56),
         WitherKingDragons.newBlockPos(87, 8, 62),
         WitherKingDragons.Constants.ORANGE_AWTCOLOR,
         ChatColor.GOLD,
-        WitherKingDragons.newBlockPos(80, 19, 56)
+        WitherKingDragons.newBlockPos(80, 19, 56),
+        WitherKingDragons.Constants.ORANGE_STACK
     );
 
     private static final BlockPos newBlockPos(final int x, final int y, final int z) {
@@ -76,6 +81,17 @@ enum WitherKingDragons {
         private static final Color BLUE_AWTCOLOR = new Color(0.0F, 1.0F, 1.0F);
         @NotNull
         private static final Color ORANGE_AWTCOLOR = new Color(1.0F, 0.498_039_22F, 0.313_725_5F);
+
+        @NotNull
+        private static final AxisAlignedBB RED_STACK = WitherKingDragons.getSingleBlockBoundingBox(23, 21, 54);
+        @NotNull
+        private static final AxisAlignedBB GREEN_STACK = WitherKingDragons.getSingleBlockBoundingBox(27, 16, 94);
+        @NotNull
+        private static final AxisAlignedBB PURPLE_STACK = WitherKingDragons.getSingleBlockBoundingBox(56, 20, 124);
+        @NotNull
+        private static final AxisAlignedBB BLUE_STACK = WitherKingDragons.getSingleBlockBoundingBox(85, 20, 98);
+        @NotNull
+        private static final AxisAlignedBB ORANGE_STACK = WitherKingDragons.getSingleBlockBoundingBox(84, 20, 59);
     }
 
     @NotNull
@@ -164,9 +180,16 @@ enum WitherKingDragons {
     }
 
     @NotNull
+    private static final AxisAlignedBB getSingleBlockBoundingBox(final int x, final int y, final int z) {
+        return new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1);
+    }
+
+    @NotNull
     private final AxisAlignedBB boundingBox;
     @NotNull
     private final AxisAlignedBB moreAccurateBoundingBox;
+    @NotNull
+    private final AxisAlignedBB stack;
 
     @NotNull
     private final BlockPos particleLocation;
@@ -186,7 +209,7 @@ enum WitherKingDragons {
         this.destroyed = newDestroyed;
     }
 
-    private WitherKingDragons(@NotNull final String dragonTextColor, @NotNull final BlockPos blockPosition, @NotNull final BlockPos moreAccurateBlockPos, @NotNull final Color dragonColor, @NotNull final ChatColor dragonChatColor, @NotNull final BlockPos bottomChin) {
+    private WitherKingDragons(@NotNull final String dragonTextColor, @NotNull final BlockPos blockPosition, @NotNull final BlockPos moreAccurateBlockPos, @NotNull final Color dragonColor, @NotNull final ChatColor dragonChatColor, @NotNull final BlockPos bottomChin, @NotNull final AxisAlignedBB stack) {
         this.textColor = dragonTextColor;
 
         this.blockPos = blockPosition;
@@ -200,11 +223,17 @@ enum WitherKingDragons {
         this.chatColor = dragonChatColor;
 
         this.bottomChinMiddleVec = new Vec3(bottomChin.getX() + 0.5, bottomChin.getY() + 0.5, bottomChin.getZ() + 0.5);
+        this.stack = stack;
     }
 
     @NotNull
     final AxisAlignedBB getMoreAccurateBoundingBoxIfEnabled() {
         return Config.isMoreAccurateDragonBoundingBoxes() ? this.moreAccurateBoundingBox : this.boundingBox;
+    }
+
+    @NotNull
+    final AxisAlignedBB getArrowStackBoundingBox() {
+        return this.stack;
     }
 
     @NotNull
