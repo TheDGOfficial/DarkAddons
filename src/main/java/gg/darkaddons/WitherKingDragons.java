@@ -83,15 +83,15 @@ enum WitherKingDragons {
         private static final Color ORANGE_AWTCOLOR = new Color(1.0F, 0.498_039_22F, 0.313_725_5F);
 
         @NotNull
-        private static final AxisAlignedBB RED_STACK = WitherKingDragons.getSingleBlockBoundingBox(23, 21, 54);
+        private static final AxisAlignedBB RED_STACK = WitherKingDragons.getSingleBlockBoundingBox(27, 19, 56);
         @NotNull
-        private static final AxisAlignedBB GREEN_STACK = WitherKingDragons.getSingleBlockBoundingBox(27, 16, 94);
+        private static final AxisAlignedBB GREEN_STACK = WitherKingDragons.getSingleBlockBoundingBox(26, 21, 92);
         @NotNull
         private static final AxisAlignedBB PURPLE_STACK = WitherKingDragons.getSingleBlockBoundingBox(56, 20, 124);
         @NotNull
-        private static final AxisAlignedBB BLUE_STACK = WitherKingDragons.getSingleBlockBoundingBox(85, 20, 98);
+        private static final AxisAlignedBB BLUE_STACK = WitherKingDragons.getSingleBlockBoundingBox(82, 19, 96);
         @NotNull
-        private static final AxisAlignedBB ORANGE_STACK = WitherKingDragons.getSingleBlockBoundingBox(84, 20, 59);
+        private static final AxisAlignedBB ORANGE_STACK = WitherKingDragons.getSingleBlockBoundingBox(83, 19, 57);
     }
 
     @NotNull
