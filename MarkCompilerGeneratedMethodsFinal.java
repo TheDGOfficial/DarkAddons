@@ -28,6 +28,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.HashMap;
@@ -35,6 +36,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javassist.bytecode.ClassFile;
 import javassist.bytecode.MethodInfo;
@@ -175,39 +178,42 @@ final class MarkCompilerGeneratedMethodsFinal {
     }
 
     private static final boolean isModClass(final ClassPath.ClassInfo info) {
-        return (info.getPackageName().startsWith("gg.darkaddons") || info.getPackageName().startsWith("darkaddons")) && !info.getName().contains(MarkCompilerGeneratedMethodsFinal.class.getName());
+        return (info.getPackageName().startsWith("gg.darkaddons") || info.getPackageName().startsWith("darkaddons")) && !info.getName().contains(MarkCompilerGeneratedMethodsFinal.class.getName()) && !info.getName().contains("Test");
     }
 
     @NotNull
-    private static final ArrayList<String> findClassesToTransform(final boolean verbose, final boolean reversedLogic) throws IOException {
-        var willTransformAtLeastOne = false;
-        var notFoundAmount = 0;
-        final var classesToProc = new ArrayList<String>(100);
-        for (final var info : MarkCompilerGeneratedMethodsFinal.getAllClasses()) {
-            if (!MarkCompilerGeneratedMethodsFinal.isModClass(info)) {
-                continue;
-            }
-            if (!info.getSimpleName().startsWith("Test") && !MarkCompilerGeneratedMethodsFinal.class.getSimpleName().equals(info.getSimpleName())) {
-                //System.out.println("Found class: " + info.getName());
+    static final ArrayList<String> findClassesToTransform(final boolean verbose, final boolean reversedLogic) throws IOException {
+        final var notFound = new AtomicInteger(0);
+        final var foundAny = new AtomicBoolean(false);
+
+        final var result = MarkCompilerGeneratedMethodsFinal.getAllClasses().parallelStream()
+            .filter(MarkCompilerGeneratedMethodsFinal::isModClass)
+            .map(info -> {
                 try {
                     final var clazz = info.load();
                     final var classMod = clazz.getModifiers();
                     final var synthetic = clazz.isSynthetic();
                     var shouldProc = false;
+
                     for (final var method : clazz.getDeclaredMethods()) {
                         final var mod = method.getModifiers();
                         final var name = method.getName();
                         final var methodDefinition = MarkCompilerGeneratedMethodsFinal.getMethodDefinition(name, mod);
 
-                        if (!MarkCompilerGeneratedMethodsFinal.VALUES.equals(name) && !MarkCompilerGeneratedMethodsFinal.VALUE_OF.equals(name) && MarkCompilerGeneratedMethodsFinal.isNonFinalStaticMethod(methodDefinition) && !clazz.isInterface()) { // Interfaces cant have final methods
+                        if (!MarkCompilerGeneratedMethodsFinal.VALUES.equals(name) &&
+                            !MarkCompilerGeneratedMethodsFinal.VALUE_OF.equals(name) &&
+                            MarkCompilerGeneratedMethodsFinal.isNonFinalStaticMethod(methodDefinition) &&
+                            !clazz.isInterface()) {
                             MarkCompilerGeneratedMethodsFinal.err("Non-final static method: " + methodDefinition + " in class " + clazz.getName());
                         }
 
-                        if (MarkCompilerGeneratedMethodsFinal.isNonFinalPrivateMethod(methodDefinition) && !clazz.isInterface()) { // Interfaces cant have final methods
+                        if (MarkCompilerGeneratedMethodsFinal.isNonFinalPrivateMethod(methodDefinition) && !clazz.isInterface()) {
                             MarkCompilerGeneratedMethodsFinal.err("Non-final private method: " + methodDefinition + " in class " + clazz.getName());
                         }
 
-                        if ((MarkCompilerGeneratedMethodsFinal.shouldMakeFinal(methodDefinition) && !"invoke".equals(method.getName()) || (MarkCompilerGeneratedMethodsFinal.VALUES.equals(name) || MarkCompilerGeneratedMethodsFinal.VALUE_OF.equals(name)) && !Modifier.isFinal(mod)) && !clazz.isInterface() && !Modifier.isAbstract(mod)) { // Interfaces cant have final methods and abstract methods cant be final
+                        if ((MarkCompilerGeneratedMethodsFinal.shouldMakeFinal(methodDefinition) && !"invoke".equals(name) ||
+                            (MarkCompilerGeneratedMethodsFinal.VALUES.equals(name) || MarkCompilerGeneratedMethodsFinal.VALUE_OF.equals(name)) && !Modifier.isFinal(mod)) &&
+                            !clazz.isInterface() && !Modifier.isAbstract(mod)) {
                             if (verbose) {
                                 MarkCompilerGeneratedMethodsFinal.info("verbose: Optimizing method: " + methodDefinition);
                             }
@@ -215,8 +221,12 @@ final class MarkCompilerGeneratedMethodsFinal {
                             break;
                         }
 
-                        /* && !method.getName().equals(((Name) method.getAnnotation(nameAnnotation)).value())*/
-                        if (MarkCompilerGeneratedMethodsFinal.ANNOTATIONS_PRESENT && (method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.bridgeAnnotation) && !methodDefinition.contains("bridge") || method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.syntheticAnnotation) && !method.isSynthetic() || method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.privateAnnotation) && !methodDefinition.contains("private") || method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.packagePrivateAnnotation) && methodDefinition.contains("public") || method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.nameAnnotation))) {
+                        if (MarkCompilerGeneratedMethodsFinal.ANNOTATIONS_PRESENT && (
+                            (method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.bridgeAnnotation) && !methodDefinition.contains("bridge")) ||
+                            (method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.syntheticAnnotation) && !method.isSynthetic()) ||
+                            (method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.privateAnnotation) && !methodDefinition.contains("private")) ||
+                            (method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.packagePrivateAnnotation) && methodDefinition.contains("public")) ||
+                            method.isAnnotationPresent(MarkCompilerGeneratedMethodsFinal.nameAnnotation))) {
                             if (verbose) {
                                 MarkCompilerGeneratedMethodsFinal.info("verbose: Using custom annotation for method: " + methodDefinition);
                             }
@@ -224,67 +234,68 @@ final class MarkCompilerGeneratedMethodsFinal {
                             break;
                         }
 
-                        if ("darkaddons.installer.DarkAddonsInstaller$OperatingSystem".equals(clazz.getName()) && method.getName().startsWith("values$") && Modifier.isPublic(method.getModifiers())) {
+                        if ("darkaddons.installer.DarkAddonsInstaller$OperatingSystem".equals(clazz.getName()) && name.startsWith("values$") && Modifier.isPublic(mod)) {
                             shouldProc = true;
                             break;
                         }
 
-                        if ("gg.darkaddons.mixins.MixinItemModelGenerator".equals(clazz.getName()) && method.getName().startsWith("func_178397_a$")) {
+                        if ("gg.darkaddons.mixins.MixinItemModelGenerator".equals(clazz.getName()) && name.startsWith("func_178397_a$")) {
                             shouldProc = true;
                             break;
                         }
 
-                        if ("gg.darkaddons.mixins.MixinTabListUtils".equals(clazz.getName()) && method.getName().startsWith("sortedCopy$darkaddons$")) {
+                        if ("gg.darkaddons.mixins.MixinTabListUtils".equals(clazz.getName()) && name.startsWith("sortedCopy$darkaddons$")) {
                             shouldProc = true;
                             break;
                         }
 
-                        if ("gg.darkaddons.mixins.MixinTabListParser".equals(clazz.getName()) && method.getName().startsWith("sortedCopy$darkaddons$")) {
+                        if ("gg.darkaddons.mixins.MixinTabListParser".equals(clazz.getName()) && name.startsWith("sortedCopy$darkaddons$")) {
                             shouldProc = true;
                             break;
                         }
                     }
-                    if ((synthetic || clazz.getName().contains("Kt")) && (synthetic && !verbose || Modifier.isPublic(classMod))) {
+
+                    if ((synthetic || clazz.getName().contains("Kt")) &&
+                        (synthetic && !verbose || Modifier.isPublic(classMod))) {
                         if (verbose) {
                             MarkCompilerGeneratedMethodsFinal.info("verbose: Optimizing class: " + Modifier.toString(classMod) + ' ' + clazz.getName());
                         }
                         shouldProc = true;
                     }
+
                     if (clazz.getName().contains("Kt")) {
                         for (final var field : clazz.getFields()) {
                             if (Modifier.isPublic(field.getModifiers())) {
-                                //System.out.println(clazz.getName() + ": " + Modifier.toString(field.getModifiers()) + " " + field.getName());
                                 shouldProc = true;
                                 break;
                             }
                         }
                     }
-                    if (shouldProc) {
-                        if (!reversedLogic) {
-                            classesToProc.add(clazz.getName());
-                        }
-                        willTransformAtLeastOne = true;
-                        //} else if (!verbose && !reversedLogic) {
-                        //System.out.println("Will not process class " + clazz.getName());
-                    } else if (reversedLogic) {
-                        classesToProc.add(clazz.getName());
+
+                    if ((shouldProc && !reversedLogic) || (!shouldProc && reversedLogic)) {
+                        foundAny.set(true);
+                        return clazz.getName();
                     }
                 } catch (final NoClassDefFoundError ncdfe) {
+                    notFound.incrementAndGet();
                     if (verbose) {
-                        ++notFoundAmount;
                         MarkCompilerGeneratedMethodsFinal.err("Can't find " + ncdfe.getMessage() + " (used inside " + info.getName() + "), please check class path!");
                     }
                 }
-            }
+                return null;
+            })
+            .filter(Objects::nonNull)
+            .collect(Collectors.toCollection(ArrayList::new));
+
+        if (notFound.get() > 0) {
+            MarkCompilerGeneratedMethodsFinal.err("Couldn't find " + notFound.get() + " classes, please check class path.");
         }
-        if (0 != notFoundAmount) {
-            MarkCompilerGeneratedMethodsFinal.err("Couldn't find " + notFoundAmount + " classes, please check class path.");
-        }
-        //noinspection IfCanBeAssertion
-        if (!willTransformAtLeastOne) {
+
+        if (!foundAny.get()) {
             throw new IOException("found nothing to transform");
         }
-        return classesToProc;
+
+        return result;
     }
 
     private static final void deleteAllFilesInDir(@NotNull final File dir) throws IOException {
@@ -546,7 +557,7 @@ final class MarkCompilerGeneratedMethodsFinal {
     @SuppressWarnings("CollectionDeclaredAsConcreteClass")
     @NotNull
     private static final ArrayList<File> getFilesInDirectoryRecursively(@NotNull final File dir) {
-        final var files = new ArrayList<File>(100);
+        final var files = new ArrayList<File>(200);
         final var stack = new ArrayDeque<File>(); // Deque is more efficient than Stack
 
         if (!dir.exists()) {
@@ -582,7 +593,7 @@ final class MarkCompilerGeneratedMethodsFinal {
     @SuppressWarnings("CollectionDeclaredAsConcreteClass")
     @NotNull
     private static final ArrayList<File> getTransformedClassFiles() throws IOException {
-        final var transformedClassFiles = new ArrayList<File>(100);
+        final var transformedClassFiles = new ArrayList<File>(200);
         final var transformedClassesDir = new File(new File(MarkCompilerGeneratedMethodsFinal.BUILD), MarkCompilerGeneratedMethodsFinal.TRANSFORMED_CLASSES);
         for (final var file : MarkCompilerGeneratedMethodsFinal.getFilesInDirectoryRecursively(transformedClassesDir)) {
             if (file.getName().endsWith(".class")) {

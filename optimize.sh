@@ -184,22 +184,23 @@ if [ "$EXIT_CODE" == "2" ]; then
 fi
 
 # Set exit code to 1 if class file doesn't exist, which will force compilation.
-if [ ! -f build/bin/gg/darkaddons/MarkCompilerGeneratedMethodsFinal.class ]; then
+if [ ! -f build/optimizer/gg/darkaddons/MarkCompilerGeneratedMethodsFinal.class ]; then
  EXIT_CODE=1
 fi
 
 if [ "$EXIT_CODE" == "1" ]; then
  echo Compiling optimizer
  cp MarkCompilerGeneratedMethodsFinal.java build/bin/MarkCompilerGeneratedMethodsFinal.java
- javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/bin -g -parameters -Xlint:all MarkCompilerGeneratedMethodsFinal.java
+ javac -cp "$CLASSPATH_WITH_MOD" -proc:none -d build/optimizer -g -parameters -Xlint:all MarkCompilerGeneratedMethodsFinal.java
+ jar --create --file=build/bin/optimizer.jar -C build/optimizer .
 fi
 
-java -cp "$CLASSPATH_WITH_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal
+java -cp "$CLASSPATH_WITH_MOD":build/bin/optimizer.jar gg.darkaddons.MarkCompilerGeneratedMethodsFinal
 
 EXIT_CODE=$?
 
 if [ "$EXIT_CODE" == "0" ]; then
   echo Verifying optimized artifact
-  java -cp "$CLASSPATH_WITH_OPTIMIZED_MOD":build/bin gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
+  java -cp "$CLASSPATH_WITH_OPTIMIZED_MOD":build/bin/optimizer.jar gg.darkaddons.MarkCompilerGeneratedMethodsFinal postRun
 fi
 
