@@ -182,7 +182,7 @@ final class MarkCompilerGeneratedMethodsFinal {
     }
 
     @NotNull
-    static final ArrayList<String> findClassesToTransform(final boolean verbose, final boolean reversedLogic) throws IOException {
+    private static final ArrayList<String> findClassesToTransform(final boolean verbose, final boolean reversedLogic) throws IOException {
         final var notFound = new AtomicInteger(0);
         final var foundAny = new AtomicBoolean(false);
 
