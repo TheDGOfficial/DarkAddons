@@ -835,8 +835,8 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private static final void parseMessage(@NotNull final String originalMessage, @NotNull final String message) {
         // The originalMessage checks are necessary to make sure it's the colored message sent by Hypixel and not a message sent by players in all, party, guild chat etc., when pasting their RNG drops, for example.
-        if (message.endsWith("% ✯ Magic Find)") && message.contains(") (+") && originalMessage.contains(" §r§b(+")) {
-            SlayerRNGDisplay.lastMagicFind = Utils.safeParseIntFast(StringUtils.substringAfter(StringUtils.substringBefore(message, "% ✯ Magic Find)"), ") (+"));
+        if (message.endsWith(" ✯ Magic Find)") && message.contains(") (+") && originalMessage.contains(" §r§b(+")) {
+            SlayerRNGDisplay.lastMagicFind = Utils.safeParseIntFast(StringUtils.remove(StringUtils.substringAfter(StringUtils.substringBefore(message, " ✯ Magic Find)"), ") (+"), '%'));
             SlayerRNGDisplay.updateNeeded = true;
         } else if (message.startsWith("RNG Meter - ") && originalMessage.contains("§dRNG Meter")) {
             final var xpBefore = SlayerRNGDisplay.lastMeterXP;
