@@ -271,6 +271,12 @@ final class AdditionalM7Features {
         }
     }
 
+    private static final void notifyToStartCastingRagnarockIfNecessary() {
+         if (Config.isRagnarockUseNotifier()) {
+             GuiManager.createTitle("§5Cast Ragnarock!", 60, true, GuiManager.Sound.PLING);
+         }
+    }
+
     private static final void handleMessage4(@NotNull final String message) {
         switch (message) {
             case "[BOSS] Wither King: Futile.", "[BOSS] Wither King: You just made a terrible mistake!",
@@ -281,11 +287,10 @@ final class AdditionalM7Features {
                 AdditionalM7Features.notSaidFinalDialogue = false;
                 AdditionalM7Features.destroyAllStatues();
             }
-            case "[BOSS] Livid: I can now turn those Spirits into shadows of myself, identical to their creator." -> {
-                if (Config.isRagnarockUseNotifier()) {
-                    GuiManager.createTitle("§5Cast Ragnarock!", 60, true, GuiManager.Sound.PLING);
-                }
-            }
+            case "[BOSS] Wither King: I no longer wish to fight, but I know that will not stop you." ->
+                AdditionalM7Features.notifyToStartCastingRagnarockIfNecessary();
+            case "[BOSS] Livid: I can now turn those Spirits into shadows of myself, identical to their creator." ->
+                AdditionalM7Features.notifyToStartCastingRagnarockIfNecessary();
             case "[BOSS] Livid: I respect you for making it to here, but I'll be your undoing." -> {
                 AdditionalM7Features.lividsSpawned = true;
                 AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
