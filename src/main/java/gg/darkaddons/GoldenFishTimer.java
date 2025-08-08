@@ -56,7 +56,7 @@ final class GoldenFishTimer extends SimpleGuiElement {
             final var now = System.currentTimeMillis();
             GoldenFishTimer.nextRodThrowThreshold = now + TimeUnit.MINUTES.toMillis(3L);
             if (0L == GoldenFishTimer.nextGoldenFish) {
-                GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(8L);
+                GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(3L);
             }
         }
     }
@@ -69,14 +69,14 @@ final class GoldenFishTimer extends SimpleGuiElement {
 
             if (formattedMessage.contains("§")) {
                 if ("You spot a Golden Fish surface from beneath the lava!".equals(unformattedMessage)) {
-                    GoldenFishTimer.nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(8L);
+                    GoldenFishTimer.nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3L);
                     GoldenFishTimer.goldenFishDespawnTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1L);
                 } else if ("The Golden Fish escapes your hook.".equals(unformattedMessage) || "The Golden Fish escapes your hook but looks weakened.".equals(unformattedMessage) || "The Golden Fish is weak!".equals(unformattedMessage)) {
                     GoldenFishTimer.goldenFishDespawnTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1L);
                 } else if (unformattedMessage.startsWith("TROPHY FISH! You caught a Golden Fish ")) {
                     GoldenFishTimer.goldenFishDespawnTime = 0L;
                 } else if ("The Golden Fish swims back beneath the lava...".equals(unformattedMessage)) {
-                    GoldenFishTimer.nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(8L);
+                    GoldenFishTimer.nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3L);
                     GoldenFishTimer.goldenFishDespawnTime = 0L;
                 }
             }
@@ -98,7 +98,7 @@ final class GoldenFishTimer extends SimpleGuiElement {
         var reset = false;
 
         if (0L == GoldenFishTimer.nextGoldenFish) {
-            GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(8L);
+            GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(3L);
             reset = true;
         }
 
@@ -122,7 +122,7 @@ final class GoldenFishTimer extends SimpleGuiElement {
         if (0L >= timeUntilMissingGoldenFish && !reset) {
             throwRodText = "§4You missed your chance to get Golden Fish!";
 
-            GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(8L);
+            GoldenFishTimer.nextGoldenFish = now + TimeUnit.MINUTES.toMillis(3L);
             goldenFishText = Utils.formatTime(GoldenFishTimer.nextGoldenFish - now, true);
         } else {
             throwRodText = "§cThrow rod before " + Utils.formatTime(timeUntilMissingGoldenFish, true);
