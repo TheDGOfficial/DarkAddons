@@ -225,7 +225,7 @@ final class AdditionalM7Features {
                     }
                 }
             }
-            case "[BOSS] Storm: At least my son died by your hands." -> {
+            case "[BOSS] Storm: I should have known that I stood no chance." -> {
                 if (Config.isPhase3StartingNotification()) {
                     final var msg = Utils.chromaIfEnabledOrAqua() + "Phase 3 starting";
 
