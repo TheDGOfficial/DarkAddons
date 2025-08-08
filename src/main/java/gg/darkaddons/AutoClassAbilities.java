@@ -216,50 +216,46 @@ final class AutoClassAbilities {
     }
 
     private static final void findClassAndAssignAbilities() {
-        final var self = Minecraft.getMinecraft().thePlayer;
-        for (final var teammate : DungeonListener.getTeam()) {
-            //noinspection ObjectEquality
-            if (self == teammate.getPlayer()) {
-                final var dungeonClass = teammate.getDungeonClass();
-                if (null == dungeonClass) {
-                    // The dungeon probably did not start yet
-                    break;
-                }
-                switch (dungeonClass) {
-                    case ARCHER -> {
-                        AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT.cooldownInMs = TimeUnit.SECONDS.toMillis(40L - (Math.min(50, teammate.getClassLevel()) / 5L << 1L));
-                        AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT;
+        final var dungeonClass = DungeonListener.getSelfDungeonClass();            
 
-                        AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAPID_FIRE;
-                    }
-                    case BERSERK -> {
-                        AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.THROWING_AXE;
-                        AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAGNAROK;
-                    }
-                    case MAGE -> {
-                        final var isDupeMage = 1L < DungeonListener.getTeam().stream().filter(t -> DungeonListener.DungeonClass.MAGE == t.getDungeonClass()).count();
-                        var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) >> 1;
-                        if (!isDupeMage) {
-                            lvlExtraCdReduc <<= 1;
-                        }
-                        final var baseCdReduc = 25;
-                        final var totalCdReducMultiplier = 1.0D - (baseCdReduc + lvlExtraCdReduc) / 100.0D;
-                        AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (30.0D * totalCdReducMultiplier));
-                        AutoClassAbilities.UltimateClassAbility.THUNDERSTORM.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (500.0D * totalCdReducMultiplier));
-                        AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP;
-                        AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.THUNDERSTORM;
-                    }
-                    case HEALER -> {
-                        AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.HEALING_CIRCLE;
-                        AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.WISH;
-                    }
-                    case TANK -> {
-                        AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.SEISMIC_WAVE;
-                        AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE;
-                    }
-                }
-                break;
+        if (null == dungeonClass) {
+            // The dungeon probably did not start yet
+            break;
+        }
+
+        switch (dungeonClass) {
+            case ARCHER -> {
+                AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT.cooldownInMs = TimeUnit.SECONDS.toMillis(40L - (Math.min(50, teammate.getClassLevel()) / 5L << 1L));
+                AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT;
+
+                AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAPID_FIRE;
             }
+            case BERSERK -> {
+                AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.THROWING_AXE;
+                AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAGNAROK;
+            }
+            case MAGE -> {
+                final var isDupeMage = 1L < DungeonListener.getTeam().stream().filter(t -> DungeonListener.DungeonClass.MAGE == t.getDungeonClass()).count();
+                var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) >> 1;
+                if (!isDupeMage) {
+                    lvlExtraCdReduc <<= 1;
+                }
+                final var baseCdReduc = 25;
+                final var totalCdReducMultiplier = 1.0D - (baseCdReduc + lvlExtraCdReduc) / 100.0D;
+                AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (30.0D * totalCdReducMultiplier));
+                AutoClassAbilities.UltimateClassAbility.THUNDERSTORM.cooldownInMs = TimeUnit.SECONDS.toMillis((long) (500.0D * totalCdReducMultiplier));
+                AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.GUIDED_SHEEP;
+                AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.THUNDERSTORM;
+            }
+            case HEALER -> {
+                AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.HEALING_CIRCLE;
+                AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.WISH;
+            }
+            case TANK -> {
+                AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.SEISMIC_WAVE;
+                AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE;
+            }
+        }
         }
     }
 

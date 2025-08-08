@@ -20,14 +20,16 @@ enum WitherKingDragons {
         WitherKingDragons.Constants.RED_AWTCOLOR,
         ChatColor.RED,
         WitherKingDragons.newBlockPos(32, 18, 59),
-        WitherKingDragons.Constants.RED_STACK),
+        WitherKingDragons.Constants.RED_STACK,
+        3),
     APEX("Green",
         WitherKingDragons.newBlockPos(27, 14, 94),
         WitherKingDragons.newBlockPos(22, 8, 95),
         WitherKingDragons.Constants.GREEN_AWTCOLOR,
         ChatColor.GREEN,
         WitherKingDragons.newBlockPos(32, 19, 94),
-        WitherKingDragons.Constants.GREEN_STACK),
+        WitherKingDragons.Constants.GREEN_STACK,
+        2),
     SOUL(
         "Purple",
         WitherKingDragons.newBlockPos(56, 14, 125),
@@ -35,7 +37,8 @@ enum WitherKingDragons {
         WitherKingDragons.Constants.PURPLE_AWTCOLOR,
         ChatColor.DARK_PURPLE,
         WitherKingDragons.newBlockPos(56, 18, 128),
-        WitherKingDragons.Constants.PURPLE_STACK
+        WitherKingDragons.Constants.PURPLE_STACK,
+        5
     ),
     ICE("Blue",
         WitherKingDragons.newBlockPos(84, 14, 94),
@@ -43,7 +46,8 @@ enum WitherKingDragons {
         WitherKingDragons.Constants.BLUE_AWTCOLOR,
         ChatColor.AQUA,
         WitherKingDragons.newBlockPos(79, 19, 94),
-        WitherKingDragons.Constants.BLUE_STACK),
+        WitherKingDragons.Constants.BLUE_STACK,
+        4),
     FLAME(
         "Orange",
         WitherKingDragons.newBlockPos(85, 14, 56),
@@ -51,7 +55,8 @@ enum WitherKingDragons {
         WitherKingDragons.Constants.ORANGE_AWTCOLOR,
         ChatColor.GOLD,
         WitherKingDragons.newBlockPos(80, 19, 56),
-        WitherKingDragons.Constants.ORANGE_STACK
+        WitherKingDragons.Constants.ORANGE_STACK,
+        1
     );
 
     private static final BlockPos newBlockPos(final int x, final int y, final int z) {
@@ -201,6 +206,12 @@ enum WitherKingDragons {
 
     private boolean destroyed;
 
+    private int prio;
+
+    final int getPrio() {
+        return this.prio;
+    }
+
     final boolean isDestroyed() {
         return this.destroyed;
     }
@@ -209,7 +220,7 @@ enum WitherKingDragons {
         this.destroyed = newDestroyed;
     }
 
-    private WitherKingDragons(@NotNull final String dragonTextColor, @NotNull final BlockPos blockPosition, @NotNull final BlockPos moreAccurateBlockPos, @NotNull final Color dragonColor, @NotNull final ChatColor dragonChatColor, @NotNull final BlockPos bottomChin, @NotNull final AxisAlignedBB stack) {
+    private WitherKingDragons(@NotNull final String dragonTextColor, @NotNull final BlockPos blockPosition, @NotNull final BlockPos moreAccurateBlockPos, @NotNull final Color dragonColor, @NotNull final ChatColor dragonChatColor, @NotNull final BlockPos bottomChin, @NotNull final AxisAlignedBB stack, final int prio) {
         this.textColor = dragonTextColor;
 
         this.blockPos = blockPosition;
@@ -224,6 +235,8 @@ enum WitherKingDragons {
 
         this.bottomChinMiddleVec = new Vec3(bottomChin.getX() + 0.5, bottomChin.getY() + 0.5, bottomChin.getZ() + 0.5);
         this.stack = stack;
+
+        this.prio = prio;
     }
 
     @NotNull

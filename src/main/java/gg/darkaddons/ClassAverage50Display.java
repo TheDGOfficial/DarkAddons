@@ -254,15 +254,9 @@ final class ClassAverage50Display extends GuiElement {
 
     @Nullable
     private static final DungeonListener.DungeonClass findClass(@NotNull final EnumMap<DungeonListener.DungeonClass, Integer> classes) {
-        final var self = Minecraft.getMinecraft().thePlayer;
-        for (final var teammate : DungeonListener.getTeam()) {
-            //noinspection ObjectEquality
-            if (self == teammate.getPlayer()) {
-                final var dungeonClass = teammate.getDungeonClass();
-                if (null != dungeonClass) {
-                    return ClassAverage50Display.lastPlayedClass = dungeonClass;
-                }
-            }
+        final var dungeonClass = DungeonListener.getSelfDungeonClass();
+        if (null != dungeonClass) {
+            return ClassAverage50Display.lastPlayedClass = dungeonClass;
         }
 
         return null == ClassAverage50Display.lastPlayedClass ? ClassAverage50Display.findMinRunsLeftClass(classes) : ClassAverage50Display.lastPlayedClass;

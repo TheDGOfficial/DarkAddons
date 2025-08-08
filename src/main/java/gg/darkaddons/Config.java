@@ -200,7 +200,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Golden Fish Timer",
-        description = "Shows a timer for Golden Fish along with how much time left to throw your rod before you miss the chance of catching one. Shows as Ready after 15 minutes and Ready (Guaranteed) at 20 minutes, according to information from the official wiki. There's also a despawn timer that counts down time for your spawned Golden Fish to despawn (it despawns 60 seconds after the last interaction with it).",
+        description = "Shows a timer for Golden Fish along with how much time left to throw your rod before you miss the chance of catching one. Shows as Ready after 3 minutes (assumes Gold Bait attribute from Goldfin shard at max tier) and Ready (Guaranteed) at 7 minutes, according to information from the official wiki. There's also a despawn timer that counts down time for your spawned Golden Fish to despawn (it despawns 60 seconds after the last interaction with it).",
         category = "Misc", subcategory = "HUD"
     )
     private static boolean goldenFishTimer;
@@ -657,7 +657,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Ragnarock Use Notifier",
-        description = "Displays a message on screen when you should start casting Ragnarock for extra strength on M5/F5. Mainly useful for LCM.",
+        description = "Displays a message on screen when you should start casting Ragnarock for extra strength on M5/F5 and M7/F7.",
         category = "Dungeons", subcategory = "Helpers"
     )
     private static boolean ragnarockUseNotifier;

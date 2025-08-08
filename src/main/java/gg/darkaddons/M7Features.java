@@ -51,6 +51,9 @@ final class M7Features {
     private static final EnumMap<WitherKingDragons, Long> dragonSpawnTimes = new EnumMap<>(WitherKingDragons.class);
 
     @NotNull
+    private static final EnumSet<WitherKingDragons> splitDragons = EnumSet.noneOf(WitherKingDragons.class);
+
+    @NotNull
     static final EnumMap<WitherKingDragons, Long> getDragonSpawnTimes() {
         return M7Features.dragonSpawnTimes;
     }
@@ -61,6 +64,10 @@ final class M7Features {
 
     static {
         Utils.fillIntArray(M7Features.reverseDragonMap, -1);
+    }
+
+    private static final void showSpawningNotification(@NotNull final WitherKingDragons dragon) {
+        GuiManager.createTitle(dragon.getChatColor() + "§l" + dragon.getEnumName() + " §c§lis spawning!", 40, false);
     }
 
     static final void handlePacket(@NotNull final Packet<?> p) {
@@ -86,10 +93,32 @@ final class M7Features {
 
             M7Features.dragonSpawnTimes.computeIfAbsent(owner, (final WitherKingDragons dragon) -> {
                 if (Config.isSpawningNotification()) {
-                    final var color = owner.getChatColor();
-                    final var name = owner.getEnumName();
+                    if (M7Features.splitDragons.isEmpty()) {
+                        M7Features.splitDragons.add(owner);
+                    } else if (M7Features.splitDragons.size() == 1) {
+                        M7Features.splitDragons.add(owner);
 
-                    GuiManager.queueTitle(color + "§l" + name + " §c§lis spawning!"); // shown for 2 seconds (implementation detail)
+                        final var drag1 = M7Features.splitDragons.get(0);
+                        final var drag2 = M7Features.splitDragons.get(1);
+
+                        var archDrag = null;
+                        var bersDrag = null;
+
+                        if (drag1.getPrio() > drag2.getPrio()) {
+                            archDrag = drag1;
+                            bersDrag = drag2;
+                        } else {
+                            archDrag = drag2;
+                            bersDrag = drag1;
+                        }
+
+                        final var dungeonClass = DungeonListener.getSelfDungeonClass();
+                        final var playersDrag = DungeonListener.DungeonClass.ARCHER == dungeonClass || DungeonListener.DungeonClass.TANK == dungeonClass ? archDrag : bersDrag;
+
+                        M7Features.showSpawningNotification(playersDrag);
+                    } else {
+                        M7Features.showSpawningNotification(owner);
+                    }
                 }
 
                 return System.currentTimeMillis() + 5_000L;
@@ -197,6 +226,7 @@ final class M7Features {
     }
 
     private static final void handleWorldUnload() {
+        M7Features.splitDragons.clear();
         M7Features.spawningDragons.clear();
         M7Features.killedDragons.clear();
         M7Features.dragonMap.clear();
