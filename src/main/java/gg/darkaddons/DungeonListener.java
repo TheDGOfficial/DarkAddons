@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.Minecraft;
 
 public final class DungeonListener {
     /**
@@ -31,6 +31,30 @@ public final class DungeonListener {
     @NotNull
     static final List<DungeonListener.DungeonTeammate> getTeam() {
         return gg.skytils.skytilsmod.listeners.DungeonListener.INSTANCE.getTeam().values().stream().map(DungeonListener::mapDungeonTeammate).collect(Collectors.toList());
+    }
+
+    @Nullable
+    static final DungeonListener.DungeonTeammate getSelfDungeonTeammate() {
+        final var self = Minecraft.getMinecraft().thePlayer;
+        for (final var teammate : DungeonListener.getTeam()) {
+            //noinspection ObjectEquality
+            if (self == teammate.getPlayer()) {
+                return teammate;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    static final DungeonListener.DungeonClass getSelfDungeonClass() {
+        final var self = DungeonListener.getSelfDungeonTeammate();
+        if (null != self) {
+            final var dungeonClass = self.getDungeonClass();
+            if (null != dungeonClass) {
+                return dungeonClass;
+            }
+        }
+        return null;
     }
 
     @NotNull

@@ -16,6 +16,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -66,8 +67,12 @@ final class M7Features {
         Utils.fillIntArray(M7Features.reverseDragonMap, -1);
     }
 
-    private static final void showSpawningNotification(@NotNull final WitherKingDragons dragon) {
-        GuiManager.createTitle(dragon.getChatColor() + "§l" + dragon.getEnumName() + " §c§lis spawning!", 40, false);
+    private static final void showSpawningNotification(@NotNull final WitherKingDragons dragon, @Nullable WitherKingDragons otherDragon) {
+        if (null == otherDragon) {
+            GuiManager.createTitle(dragon.getChatColor() + "§l" + dragon.getEnumName() + " §c§lis spawning!", 40, false);
+        } else {
+            GuiManager.createTitle(dragon.getChatColor() + "§l" + dragon.getEnumName() + " §c§lis your priority dragon!", otherDragon.getChatColor() + " §eis the other dragon.", 40, 40, false, GuiManager.Sound.NO_SOUND);
+        }
     }
 
     static final void handlePacket(@NotNull final Packet<?> p) {
@@ -98,11 +103,13 @@ final class M7Features {
                     } else if (M7Features.splitDragons.size() == 1) {
                         M7Features.splitDragons.add(owner);
 
-                        final var drag1 = M7Features.splitDragons.get(0);
-                        final var drag2 = M7Features.splitDragons.get(1);
+                        final var it = M7Features.splitDragons.iterator();
 
-                        var archDrag = null;
-                        var bersDrag = null;
+                        final var drag1 = it.next();
+                        final var drag2 = it.next();
+
+                        WitherKingDragons archDrag = null;
+                        WitherKingDragons bersDrag = null;
 
                         if (drag1.getPrio() > drag2.getPrio()) {
                             archDrag = drag1;
@@ -115,9 +122,9 @@ final class M7Features {
                         final var dungeonClass = DungeonListener.getSelfDungeonClass();
                         final var playersDrag = DungeonListener.DungeonClass.ARCHER == dungeonClass || DungeonListener.DungeonClass.TANK == dungeonClass ? archDrag : bersDrag;
 
-                        M7Features.showSpawningNotification(playersDrag);
+                        M7Features.showSpawningNotification(playersDrag, playersDrag == archDrag ? bersDrag : archDrag);
                     } else {
-                        M7Features.showSpawningNotification(owner);
+                        M7Features.showSpawningNotification(owner, null);
                     }
                 }
 

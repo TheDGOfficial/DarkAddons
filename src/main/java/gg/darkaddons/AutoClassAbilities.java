@@ -216,16 +216,23 @@ final class AutoClassAbilities {
     }
 
     private static final void findClassAndAssignAbilities() {
-        final var dungeonClass = DungeonListener.getSelfDungeonClass();            
+        final var self = DungeonListener.getSelfDungeonTeammate();
+
+        if (null == self) {
+            // The dungeon probably did not start yet
+            return;
+        }
+
+        final var dungeonClass = self.getDungeonClass();
 
         if (null == dungeonClass) {
             // The dungeon probably did not start yet
-            break;
+            return;
         }
 
         switch (dungeonClass) {
             case ARCHER -> {
-                AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT.cooldownInMs = TimeUnit.SECONDS.toMillis(40L - (Math.min(50, teammate.getClassLevel()) / 5L << 1L));
+                AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT.cooldownInMs = TimeUnit.SECONDS.toMillis(40L - (Math.min(50, self.getClassLevel()) / 5L << 1L));
                 AutoClassAbilities.regularClassAbility = AutoClassAbilities.RegularClassAbility.EXPLOSIVE_SHOT;
 
                 AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.RAPID_FIRE;
@@ -236,7 +243,7 @@ final class AutoClassAbilities {
             }
             case MAGE -> {
                 final var isDupeMage = 1L < DungeonListener.getTeam().stream().filter(t -> DungeonListener.DungeonClass.MAGE == t.getDungeonClass()).count();
-                var lvlExtraCdReduc = Math.min(50, teammate.getClassLevel()) >> 1;
+                var lvlExtraCdReduc = Math.min(50, self.getClassLevel()) >> 1;
                 if (!isDupeMage) {
                     lvlExtraCdReduc <<= 1;
                 }

@@ -556,7 +556,6 @@ final class SlayerRNGDisplay extends GuiElement {
 
     private enum SlayerDrop {
         WARDEN_HEART(3_631_749, 0.013_8D, SlayerRNGDisplay.Slayer.ZOMBIE, 7, 5),
-        TARANTULA_TALISMAN(234_050, 0.213_6D, SlayerRNGDisplay.Slayer.SPIDER, 6, 3),
         PRIMORDIAL_EYE(3_510_750, 0.014_2D, SlayerRNGDisplay.Slayer.SPIDER, 7, 5),
         OVERFLUX_CAPACITOR(1_232_700, 0.040_6D, SlayerRNGDisplay.Slayer.WOLF, 7, 4),
         JUDGEMENT_CORE(885_562, 0.056_5D, SlayerRNGDisplay.Slayer.ENDERMAN, 7, 4),
