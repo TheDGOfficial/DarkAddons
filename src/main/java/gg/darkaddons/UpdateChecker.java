@@ -25,7 +25,7 @@ final class UpdateChecker {
     private static final ExecutorService updateCheckerExecutor = Executors.newSingleThreadExecutor((@NotNull final Runnable r) -> Utils.newThread(r, "DarkAddons Update Checker Thread"));
 
     enum UpdateCheckerResult {
-        UP_TO_DATE, OUT_OF_DATE, COULD_NOT_CHECK;
+        UP_TO_DATE, OUT_OF_DATE, AHEAD_OF_REMOTE, COULD_NOT_CHECK;
 
         private UpdateCheckerResult() {
 
@@ -51,6 +51,15 @@ final class UpdateChecker {
             return UpdateChecker.UpdateCheckerResult.UP_TO_DATE;
         }
 
+        final var cmp = UpdateChecker.compareSemVer(currentVersion, latestVersion);
+        if (0 == cmp) {
+            return UpdateChecker.UpdateCheckerResult.UP_TO_DATE;
+        } else if (cmp > 0) {
+            // Current version is higher than latest release
+            DarkAddons.queueWarning("You are running an in-development version of DarkAddons. Please report bugs and provide feedback!");
+            return UpdateChecker.UpdateCheckerResult.AHEAD_OF_REMOTE;
+        }
+
         DarkAddons.queueWarning("A new version of " + DarkAddons.MOD_NAME + " is available: v" + latestVersion + ". You are running " + DarkAddons.class.getSimpleName() + " v" + currentVersion + ". It is recommended to always use the latest version available of the mod, please update when convenient.");
         DarkAddons.queueWarning("The latest release of the mod can be installed from GitHub at: https://github.com/TheDGOfficial/DarkAddons/releases");
         DarkAddons.queueWarning("Version upgrades are always recommended and will include various bug fixes, performance enhancements, and new features. Instructions for installing from GitHub: Head down to the Assets section and expand it then download the JAR file (not source code!), and put in mods folder as usual. Remove any older versions to avoid conflicts.");
@@ -60,5 +69,31 @@ final class UpdateChecker {
     @Nullable
     private static final String getLatestVersion() {
         return Utils.sendWebRequest("https://darkaddons.netlify.app/latest_mod_version.txt");
+    }
+
+    /**
+     * Compares two semantic versions (major.minor.patch).
+     * Returns positive if v1 > v2, negative if v1 < v2, 0 if equal.
+     */
+    private static final int compareSemVer(@NotNull final String v1, @NotNull final String v2) {
+        final var p1 = v1.split("\\.");
+        final var p2 = v2.split("\\.");
+        final var length = Math.max(p1.length, p2.length);
+        for (var i = 0; i < length; ++i) {
+            final var num1 = i < p1.length ? UpdateChecker.parseIntSafe(p1[i]) : 0;
+            final var num2 = i < p2.length ? UpdateChecker.parseIntSafe(p2[i]) : 0;
+            if (num1 != num2) {
+                return Integer.compare(num1, num2);
+            }
+        }
+        return 0;
+    }
+
+    private static final int parseIntSafe(@NotNull final String s) {
+        try {
+            return Integer.parseInt(s.replaceAll("[^0-9]", ""));
+        } catch (final NumberFormatException nfe) {
+            return 0;
+        }
     }
 }
