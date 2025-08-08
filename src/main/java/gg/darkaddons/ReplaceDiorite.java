@@ -25,7 +25,7 @@ final class ReplaceDiorite {
     private static final IBlockState[] glassStates = new IBlockState[16];
 
     static {
-        for (var i = 0; 16 > i; ++i) {
+        for (var i = 0; glassStates.length > i; ++i) {
             ReplaceDiorite.glassStates[i] = Blocks.stained_glass.getStateFromMeta(i);
         }
     }
