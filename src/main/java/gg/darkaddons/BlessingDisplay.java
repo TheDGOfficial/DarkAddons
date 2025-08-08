@@ -47,14 +47,18 @@ final class BlessingDisplay extends GuiElement {
     }
 
     private static final double getBaseDamageBonusFromBlessingOfStone() {
-        final var tier = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.STONE, 0);
-        final var paulMultiplier = DarkAddons.isPaulMoreEffectiveBlessingsActive() ? 1.25D : 1.0D;
-
         // Source: https://wiki.hypixel.net/Blessings
         // Assume F3 or an above floor cause this for M7.
         // Assume maxed wither essence blessing perk
         // because you are throwing if you don't have it.
-        return 1.1D * paulMultiplier * 1.2D * (tier * 6.0D);
+        final var blessingLevel = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.STONE, 0);
+        final var forbiddenBlessingMultiplier = 1.1D;
+        final var fakerAttributeMultiplier = 1.1D;
+        final var paulMultiplier = DarkAddons.isPaulMoreEffectiveBlessingsActive() ? 1.25D : 1.0D;
+        final var floorBonusMultiplier = 1.2D;
+        final var blessingOfStoneFlatIncreaseMultiplier = 6.0D;
+
+        return forbiddenBlessingMultiplier * fakerAttributeMultiplier * paulMultiplier * floorBonusMultiplier * (blessingLevel * blessingOfStoneFlatIncreaseMultiplier);
     }
 
     static final void doCheckMessage(@NotNull final ClientChatReceivedEvent event) {
