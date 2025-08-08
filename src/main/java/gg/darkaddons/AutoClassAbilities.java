@@ -256,7 +256,6 @@ final class AutoClassAbilities {
                 AutoClassAbilities.ultimateClassAbility = AutoClassAbilities.UltimateClassAbility.CASTLE_OF_STONE;
             }
         }
-        }
     }
 
     private static final void emulateDropKeyPress(final boolean bulkDropWithCtrl) {
