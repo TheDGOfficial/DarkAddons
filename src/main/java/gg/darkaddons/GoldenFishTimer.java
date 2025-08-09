@@ -73,7 +73,7 @@ final class GoldenFishTimer extends SimpleGuiElement {
                     GoldenFishTimer.goldenFishDespawnTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1L);
                 } else if ("The Golden Fish escapes your hook.".equals(unformattedMessage) || "The Golden Fish escapes your hook but looks weakened.".equals(unformattedMessage) || "The Golden Fish is weak!".equals(unformattedMessage)) {
                     GoldenFishTimer.goldenFishDespawnTime = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(1L);
-                } else if (unformattedMessage.startsWith("TROPHY FISH! You caught a Golden Fish ")) {
+                } else if (unformattedMessage.startsWith("♔ TROPHY FISH! You caught a Golden Fish ")) {
                     GoldenFishTimer.goldenFishDespawnTime = 0L;
                 } else if ("The Golden Fish swims back beneath the lava...".equals(unformattedMessage)) {
                     GoldenFishTimer.nextGoldenFish = System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(3L);
@@ -109,7 +109,7 @@ final class GoldenFishTimer extends SimpleGuiElement {
         if (guaranteed) {
             goldenFishText = "§a§lReady (Guaranteed)";
         } else {
-            goldenFishText = 0L >= timeUntilNextGoldenFish ? "§aReady" : Utils.formatTime(timeUntilNextGoldenFish, true);
+            goldenFishText = 0L >= timeUntilNextGoldenFish ? "§aReady" : Utils.formatTime(Math.max(1000, timeUntilNextGoldenFish), true);
         }
 
         if (0L == GoldenFishTimer.nextRodThrowThreshold) {
@@ -133,7 +133,7 @@ final class GoldenFishTimer extends SimpleGuiElement {
             GoldenFishTimer.nextGoldenFish = 0L;
         }
 
-        final var despawnText = 0L == GoldenFishTimer.goldenFishDespawnTime ? "" : Utils.formatTime(GoldenFishTimer.goldenFishDespawnTime - now, true);
+        final var despawnText = 0L <= GoldenFishTimer.goldenFishDespawnTime ? "" : Utils.formatTime(GoldenFishTimer.goldenFishDespawnTime - now, true);
 
         if (despawnText.isEmpty()) {
             lines.add("§6Golden Fish Timer: " + goldenFishText);

@@ -165,7 +165,7 @@ final class M7Features {
     }
 
     static final void onMobSpawned(@NotNull final Entity entity) {
-        final var hud = Config.isDragonHud();
+        final var hud = Config.isDragonHud() || Config.isDragonSpawningNotification();
         if ((hud || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification()) && -1L != DungeonTimer.getPhase4ClearTime() && entity instanceof final EntityDragon dragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
             final var id = dragon.getEntityId();
 
@@ -194,9 +194,9 @@ final class M7Features {
     }
 
     private static final void handleDeath(@NotNull final LivingDeathEvent event) {
-        final var hud = Config.isDragonHud();
+        final var hud = Config.isDragonHud() || Config.isDragonSpawningNotification();
  
-        if (!hud && !Config.isStatueDestroyedNotification() && !Config.isStatueMissedNotification()) {
+        if (!hud) {
             return;
         }
 
@@ -237,6 +237,7 @@ final class M7Features {
         M7Features.spawningDragons.clear();
         M7Features.killedDragons.clear();
         M7Features.dragonMap.clear();
+        M7Features.dragonSpawnTimes.clear();
 
         final var len = M7Features.reverseDragonMap.length;
         for (var i = 0; i < len; ++i) {

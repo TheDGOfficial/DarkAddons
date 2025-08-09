@@ -559,7 +559,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Dragon Spawning Notification",
-        description = "Shows a title message on screen when a dragon is spawning.",
+        description = "Shows a title message on screen when a dragon is spawning. For the first 2 dragons, shows your priority dragon based on your class, configured to always attempt splitting.",
         category = "Dungeons", subcategory = "Notifiers"
     )
     private static boolean spawningNotification = true;
@@ -657,7 +657,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Ragnarock Use Notifier",
-        description = "Displays a message on screen when you should start casting Ragnarock for extra strength on M5/F5 and M7/F7.",
+        description = "Displays a message on screen when you should start casting Ragnarock for extra strength on M5/F5 and M7.",
         category = "Dungeons", subcategory = "Helpers"
     )
     private static boolean ragnarockUseNotifier;
