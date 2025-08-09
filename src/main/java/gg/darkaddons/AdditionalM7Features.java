@@ -11,12 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 final class AdditionalM7Features {
-    private static final int MAX_RETRY_TICKS_WAITING_FOR_DEATH_EVENT = 60;
     private static final int TITLE_TICKS = 60;
 
     private static boolean firstLaserNotDone = true;
     @Nullable
-    private static WitherKingDragons lastKilledDragon;
+    static WitherKingDragons lastKilledDragon;
     private static boolean witherKingDefeated;
     private static boolean firstGolemWoken;
     @SuppressWarnings("NegativelyNamedBooleanVariable")
@@ -91,7 +90,7 @@ final class AdditionalM7Features {
             final var name = dragon.getEnumName();
 
             UChat.chat("§cThe " + color + "§l" + name + " §r§cdragon's statue has been §4missed! §cYou need to kill it again!");
-            GuiManager.createTitle("§c✖ Missed!", color + "§l" + name + "§r§ckilled out of statue!", AdditionalM7Features.TITLE_TICKS, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.ANVIL_LAND);
+            GuiManager.createTitle("§c✖ Missed!", color + "§l" + name + " §r§ckilled out of statue!", AdditionalM7Features.TITLE_TICKS, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.ANVIL_LAND);
         }
     }
 
@@ -109,22 +108,13 @@ final class AdditionalM7Features {
     }
 
     private static final void processStatueMessage(final boolean destroy) {
-        AdditionalM7Features.processStatueMessage(destroy, 1);
-    }
-
-    private static final void processStatueMessage(final boolean destroy, final int ticks) {
         if (!Config.isStatueDestroyedNotification() && !Config.isStatueMissedNotification() && (!Config.isShowStatueBox() || !Config.isHideStatueBoxForDestroyedStatues())) {
             return;
         }
 
         final var lastDragon = AdditionalM7Features.lastKilledDragon;
 
-        if (null == lastDragon) {
-            // TODO sometimes causes weird bugs, i.e., shows for the wrong dragon, or shows killed when its actually missed, or doesn't show at all, etc.
-            if (AdditionalM7Features.MAX_RETRY_TICKS_WAITING_FOR_DEATH_EVENT > ticks) {
-                DarkAddons.runOnceInNextTick("process_statue_message_recheck", () -> AdditionalM7Features.processStatueMessage(destroy, ticks + 1));
-            }
-        } else {
+        if (null != lastDragon) {
             if (destroy) {
                 if (!lastDragon.isDestroyed()) {
                     lastDragon.setDestroyed(true);
@@ -134,34 +124,8 @@ final class AdditionalM7Features {
             } else if (!lastDragon.isDestroyed()) {
                 AdditionalM7Features.onStatueMissed(lastDragon);
             }
+
             AdditionalM7Features.lastKilledDragon = null;
-        }
-    }
-
-    private static final void handleDeath(@NotNull final LivingDeathEvent event) {
-        if (!Config.isStatueDestroyedNotification() && !Config.isStatueMissedNotification() && (!Config.isShowStatueBox() || !Config.isHideStatueBoxForDestroyedStatues())) {
-            return;
-        }
-
-        final var entity = event.entityLiving;
-        if (entity instanceof final EntityDragon dragon) {
-            final var type = WitherKingDragons.from(((EntityWitherKingDragon) dragon).getWitherKingDragonTypeOrdinal());
-            if (null != type) {
-                AdditionalM7Features.lastKilledDragon = type;
-            }
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public final void onDeath(@NotNull final LivingDeathEvent event) {
-        if (DarkAddons.checkClientEvent()) {
-            return;
-        }
-
-        if (DarkAddons.shouldProfile()) {
-            DarkAddons.handleEvent("additionalm7features_handle_death", event, AdditionalM7Features::handleDeath);
-        } else {
-            AdditionalM7Features.handleDeath(event);
         }
     }
 

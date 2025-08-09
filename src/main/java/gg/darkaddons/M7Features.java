@@ -6,6 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S2APacketParticles;
+import net.minecraft.network.play.server.S1CPacketEntityMetadata;
 import net.minecraft.network.play.server.S2CPacketSpawnGlobalEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
@@ -131,6 +132,36 @@ final class M7Features {
 
                 return System.currentTimeMillis() + 5_000L;
             });
+        } else if (p instanceof final S1CPacketEntityMetadata packet) {
+            M7Features.handleS1CPacketEntityMetadata(packet);
+        }
+    }
+
+    private static final void handleS1CPacketEntityMetadata(@NotNull final S1CPacketEntityMetadata packet) {
+        WitherKingDragons dragon = null;
+        EntityDragon entity = null;
+
+        for (final WitherKingDragons drag : WitherKingDragons.getValues()) {
+            final var ent = drag.getEntity();
+            if (null != ent && ent.getEntityId() == packet.getEntityId()) {
+                dragon = drag;
+                entity = ent;
+                break;
+            }
+        }
+
+        if (null != dragon && null != entity) {
+            final var watchableObjects = packet.func_149376_c();
+            for (final var watchableObject : watchableObjects) {
+                if (6 == watchableObject.getDataValueId()) {
+                    final var obj = watchableObject.getObject();
+                    if (obj instanceof final Float fl) {
+                        if (0 >= fl) {
+                            M7Features.handleDeath(entity);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -166,8 +197,8 @@ final class M7Features {
     }
 
     static final void onMobSpawned(@NotNull final Entity entity) {
-        final var hud = Config.isDragonHud() || Config.isSpawningNotification();
-        if ((hud || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification()) && -1L != DungeonTimer.getPhase4ClearTime() && entity instanceof final EntityDragon dragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
+        final var proc = Config.isDragonHud() || Config.isSpawningNotification() || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification() || (Config.isShowStatueBox() && Config.isHideStatueBoxForDestroyedStatues());
+        if (proc && -1L != DungeonTimer.getPhase4ClearTime() && entity instanceof final EntityDragon dragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
             final var id = dragon.getEntityId();
 
             var type = M7Features.dragonMap.get(id);
@@ -185,51 +216,38 @@ final class M7Features {
 
             M7Features.dragonMap.put(id, type);
  
-            if (hud) {
+            if (proc) {
                 M7Features.reverseDragonMap[type.getEnumOrdinal()] = id;
 
                 M7Features.spawningDragons.remove(type);
                 M7Features.killedDragons.remove(type);
+                M7Features.dragonSpawnTimes.remove(type);
             }
         }
     }
 
-    private static final void handleDeath(@NotNull final LivingDeathEvent event) {
-        final var hud = Config.isDragonHud() || Config.isSpawningNotification();
+    private static final void handleDeath(@NotNull final EntityDragon entity) {
+        final var proc = Config.isDragonHud() || Config.isSpawningNotification() || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification() || (Config.isShowStatueBox() && Config.isHideStatueBoxForDestroyedStatues());
  
-        if (!hud) {
+        if (!proc) {
             return;
         }
 
-        final var entity = event.entity;
+        final var type = WitherKingDragons.from(((EntityWitherKingDragon) entity).getWitherKingDragonTypeOrdinal());
 
-        if (entity instanceof final EntityDragon dragon) {
-            final var type = WitherKingDragons.from(((EntityWitherKingDragon) dragon).getWitherKingDragonTypeOrdinal());
-
-            if (null == type) {
-                return;
-            }
-
-            M7Features.dragonMap.remove(dragon.getEntityId());
-
-            if (hud) {
-                M7Features.killedDragons.add(type);
-                M7Features.spawningDragons.remove(type);
-                M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
-            }
-        }
-    }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
-    public final void onDeath(@NotNull final LivingDeathEvent event) {
-        if (DarkAddons.checkClientEvent()) {
+        if (null == type) {
             return;
         }
 
-        if (DarkAddons.shouldProfile()) {
-            DarkAddons.handleEvent("m7features_handle_death", event, M7Features::handleDeath);
-        } else {
-            M7Features.handleDeath(event);
+        AdditionalM7Features.lastKilledDragon = type;
+
+        M7Features.dragonMap.remove(entity.getEntityId());
+
+        if (proc) {
+            M7Features.killedDragons.add(type);
+            M7Features.spawningDragons.remove(type);
+            M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
+            M7Features.dragonSpawnTimes.remove(type);
         }
     }
 
