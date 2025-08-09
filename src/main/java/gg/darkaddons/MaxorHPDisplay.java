@@ -6,14 +6,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Objects;
 
 import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.item.EntityArmorStand;
 
 import java.lang.ref.WeakReference;
 
 final class MaxorHPDisplay extends SimpleGuiElement {
     // Safety: Uses WeakReference to not create a memory leak of the entity.
     private static @Nullable WeakReference<EntityWither> maxor;
+    private static @Nullable WeakReference<EntityArmorStand> maxorNametag;
+
+    @Nullable
+    private static String maxorName;
+    @Nullable
+    private static String lastMaxorName;
 
     private static double maxorHp;
     private static double lastMaxorHp;
@@ -31,7 +39,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
     @Nullable
     private static final EntityWither findAndAssignMaxor() {
         for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-            if (entity instanceof final EntityWither wither && entity.getName().contains("Maxor")) {
+            if (entity instanceof final EntityWither wither && wither.getName().contains("Maxor")) {
                 MaxorHPDisplay.maxor = new WeakReference<>(wither);
 
                 return wither;
@@ -51,10 +59,35 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
         final var cached = MaxorHPDisplay.maxor.get();
 
-        // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case, try to find and assign it again, otherwise will return null.
+        // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case, try to find and assign it again, otherwise will return null. Return existing entity if cached is not null.
         return null == cached ? MaxorHPDisplay.findAndAssignMaxor() : cached;
+    }
 
-        // Return existing entity.
+    @Nullable
+    private static final EntityArmorStand findAndAssignMaxorNametag() {
+        for (final var entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+            if (entity instanceof final EntityArmorStand stand && stand.getName().contains("Maxor")) {
+                MaxorHPDisplay.maxorNametag = new WeakReference<>(stand);
+
+                return stand;
+            }
+        }
+
+        // Caller should handle this.
+        return null;
+    }
+
+    @Nullable
+    private static final EntityArmorStand getOrFindMaxorNametag() {
+        if (null == MaxorHPDisplay.maxorNametag) {
+            // May return null; caller should handle it.
+            return MaxorHPDisplay.findAndAssignMaxorNametag();
+        }
+
+        final var cached = MaxorHPDisplay.maxorNametag.get();
+
+        // Since it's a WeakReference, it can get cleared without us calling the clear method. In this case, try to find and assign it again, otherwise will return null. Return existing entity if cached is not null.
+        return null == cached ? MaxorHPDisplay.findAndAssignMaxorNametag() : cached;
     }
 
     private static final double findMaxorHp() {
@@ -75,9 +108,17 @@ final class MaxorHPDisplay extends SimpleGuiElement {
         if (null != MaxorHPDisplay.maxor) {
             MaxorHPDisplay.maxor.clear();
         }
+
+        if (null != MaxorHPDisplay.maxorNametag) {
+            MaxorHPDisplay.maxorNametag.clear();
+        }
+
         MaxorHPDisplay.maxor = null;
+        MaxorHPDisplay.maxorNametag = null;
+
         MaxorHPDisplay.maxorHp = 0.0D;
         MaxorHPDisplay.lastMaxorHp = 0.0D;
+
         MaxorHPDisplay.maxorDead = false;
         MaxorHPDisplay.saidEnrageSkipHelperMessage = false;
 
@@ -99,8 +140,13 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
         MaxorHPDisplay.maxorHp = MaxorHPDisplay.findMaxorHp();
 
-        if (isDemoRenderBypass || !Utils.compareDoubleExact(MaxorHPDisplay.lastMaxorHp, MaxorHPDisplay.maxorHp) || this.isEmpty()) {
+        final var maxorNametag = MaxorHPDisplay.getOrFindMaxorNametag();
+
+        MaxorHPDisplay.maxorName = null == maxorNametag ? null : maxorNametag.getName();
+
+        if (isDemoRenderBypass || !Utils.compareDoubleExact(MaxorHPDisplay.lastMaxorHp, MaxorHPDisplay.maxorHp) || !Objects.equals(MaxorHPDisplay.lastMaxorName, MaxorHPDisplay.maxorName) || this.isEmpty()) {
             MaxorHPDisplay.lastMaxorHp = MaxorHPDisplay.maxorHp;
+            MaxorHPDisplay.lastMaxorName = MaxorHPDisplay.maxorName;
 
             super.update();
         }
@@ -108,14 +154,11 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
     @Override
     final void buildHudLines(@NotNull final Collection<String> lines) {
-        var maxorName = "§e﴾ §c§lMaxor§r §e﴿";
-        final var maxor = MaxorHPDisplay.maxor;
+        var maxorName = "§e﴾ §8☠§5♃ §c§lMaxor§r §e﴿";
+        final var maxorNametag = MaxorHPDisplay.maxorName;
 
-        if (null != maxor) {
-            final var entityMaxor = maxor.get();
-            if (null != entityMaxor) {
-                maxorName = entityMaxor.getName();
-            }
+        if (null != maxorNametag) {
+            maxorName = maxorNametag;
         }
 
         final var text = maxorName + "§d's health percentage: ";
