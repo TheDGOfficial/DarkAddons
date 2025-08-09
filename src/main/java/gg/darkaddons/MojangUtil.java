@@ -23,7 +23,7 @@ final class MojangUtil {
 
     @Nullable
     static final UUID getUUIDFromUsername(@NotNull final String username) {
-        final var response = Utils.sendWebRequest(MojangUtil.API_URL + username, "application/json", false, 10L);
+        final var response = Utils.sendWebRequest(MojangUtil.API_URL + username, "application/json", true, 10L);
         if (null != response) {
             final var json = Utils.parseJsonObjectFromString(response);
             final var success = json.get("success").getAsBoolean();
