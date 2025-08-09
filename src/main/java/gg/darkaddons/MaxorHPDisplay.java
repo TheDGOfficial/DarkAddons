@@ -108,7 +108,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
     @Override
     final void buildHudLines(@NotNull final Collection<String> lines) {
-        final var text = "§e﴾ §c§lMaxor§r§r §e﴿§r§d's health percentage: ";
+        final var text = "§e﴾ §c§lMaxor§r §e﴿§d's health percentage: ";
 
         final var hp = MaxorHPDisplay.maxorHp;
 
