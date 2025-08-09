@@ -69,9 +69,9 @@ final class M7Features {
 
     private static final void showSpawningNotification(@NotNull final WitherKingDragons dragon, @Nullable WitherKingDragons otherDragon) {
         if (null == otherDragon) {
-            GuiManager.createTitle(dragon.getChatColor() + "§l" + dragon.getEnumName() + " §c§lis spawning!", 40, false);
+            GuiManager.createTitle(dragon.getChatColor() + dragon.getTextColor().toUpperCase(Locale.ROOT) + " IS SPAWNING!", 40, false);
         } else {
-            GuiManager.createTitle(dragon.getChatColor() + "§l" + dragon.getEnumName() + " §c§lis your priority dragon!", otherDragon.getChatColor() + " §eis the other dragon.", 40, 40, false, GuiManager.Sound.NO_SOUND);
+            GuiManager.createTitle(dragon.getChatColor() + dragon.getTextColor().toUpperCase(Locale.ROOT) + " IS SPAWNING!", otherDragon.getChatColor() + otherDragon.getTextColor() + " is the other dragon.", 40, 40, false, GuiManager.Sound.NO_SOUND);
         }
     }
 
