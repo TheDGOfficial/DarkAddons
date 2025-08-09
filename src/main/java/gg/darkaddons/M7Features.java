@@ -132,6 +132,8 @@ final class M7Features {
 
                 return System.currentTimeMillis() + 5_000L;
             });
+
+            M7Features.spawningDragons.add(owner);
         } else if (p instanceof final S1CPacketEntityMetadata packet) {
             M7Features.handleS1CPacketEntityMetadata(packet);
         }
