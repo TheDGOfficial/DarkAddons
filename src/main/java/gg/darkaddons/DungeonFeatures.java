@@ -35,11 +35,12 @@ public final class DungeonFeatures {
         }
 
         if (DarkAddons.isInDungeons()) {
-            if (null == DungeonFeatures.dungeonFloor) {
+            // If you join an F7 and then join M7 with the command without leaving the F7, the WorldEvent.Unload triggers while scoreboard still says F7, and so you will be in a bugged state in M7 with the floor being detected as F7. To fix this rare bug, we keep re-assigning the dungeon floor till the dungeon starts in addition to the null check.
+            if (null == DungeonFeatures.dungeonFloor || -1L == DungeonTimer.getDungeonStartTime()) {
                 for (final var line : ScoreboardUtil.getScoreboardLines()) {
                     if (line.contains("The Catacombs (")) {
                         DungeonFeatures.dungeonFloor = StringUtils.substringBetween(line, "(", ")");
-                        DungeonFeatures.dungeonFloorNumber = Utils.safeParseIntFast(DungeonFeatures.dungeonFloor.substring(1, DungeonFeatures.dungeonFloor.length()));
+                        DungeonFeatures.dungeonFloorNumber = "E".equals(DungeonFeatures.dungeonFloor) ? 0 : Utils.safeParseIntFast(DungeonFeatures.dungeonFloor.substring(1, DungeonFeatures.dungeonFloor.length()));
                         break;
                     }
                 }
