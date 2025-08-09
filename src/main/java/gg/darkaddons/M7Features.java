@@ -21,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.Locale;
 
 final class M7Features {
     @NotNull
