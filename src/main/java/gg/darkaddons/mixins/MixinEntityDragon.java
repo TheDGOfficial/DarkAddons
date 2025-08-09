@@ -10,7 +10,7 @@ import net.minecraft.entity.boss.EntityDragon;
 @Mixin(value = EntityDragon.class, priority = 999)
 final class MixinEntityDragon implements EntityWitherKingDragon {
     @Unique
-    private int witherKingDragonTypeOrdinal;
+    private int witherKingDragonTypeOrdinal = -1;
 
     private MixinEntityDragon() {
         super();

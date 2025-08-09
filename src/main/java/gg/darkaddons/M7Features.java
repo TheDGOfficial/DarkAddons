@@ -157,7 +157,7 @@ final class M7Features {
                     final var obj = watchableObject.getObject();
                     if (obj instanceof final Float fl) {
                         if (0 >= fl) {
-                            M7Features.handleDeath(entity);
+                            M7Features.handleDeath(entity, dragon);
                         }
                     }
                 }
@@ -226,16 +226,10 @@ final class M7Features {
         }
     }
 
-    private static final void handleDeath(@NotNull final EntityDragon entity) {
+    private static final void handleDeath(@NotNull final EntityDragon entity, @NotNull final WitherKingDragons type) {
         final var proc = Config.isDragonHud() || Config.isSpawningNotification() || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification() || (Config.isShowStatueBox() && Config.isHideStatueBoxForDestroyedStatues());
  
         if (!proc) {
-            return;
-        }
-
-        final var type = WitherKingDragons.from(((EntityWitherKingDragon) entity).getWitherKingDragonTypeOrdinal());
-
-        if (null == type) {
             return;
         }
 
