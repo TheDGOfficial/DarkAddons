@@ -161,8 +161,7 @@ final class M7Features {
                             if (null != dragEntity && entity.getDistanceToEntity(dragEntity) <= 8) {
                                 drag.setIceSprayed(true);
                                 drag.setIceSprayedInTicks(dragEntity.ticksExisted);
-
-                                return;
+                                break;
                             }
                         }
                     }

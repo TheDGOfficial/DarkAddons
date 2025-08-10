@@ -1,19 +1,28 @@
 package gg.darkaddons;
 
 import gg.essential.universal.UChat;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityWither;
+
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BooleanSupplier;
 
 final class AdditionalM7Features {
     private static final int TITLE_TICKS = 60;
 
     private static boolean firstLaserNotDone = true;
+    private static boolean firstFrenzyNotDone = true;
+    private static boolean queuedNotifier;
     @Nullable
     static WitherKingDragons lastKilledDragon;
     private static boolean witherKingDefeated;
@@ -143,6 +152,8 @@ final class AdditionalM7Features {
 
     private static final void handleWorldUnload() {
         AdditionalM7Features.firstLaserNotDone = true;
+        AdditionalM7Features.firstFrenzyNotDone = true;
+        AdditionalM7Features.queuedNotifier = false;
         AdditionalM7Features.witherKingDefeated = false;
         AdditionalM7Features.firstGolemWoken = false;
         AdditionalM7Features.notSaidFinalDialogue = true;
@@ -224,12 +235,36 @@ final class AdditionalM7Features {
         }
     }
 
+    private static final void checkNecronDead() {
+        if (Config.isEdragReminder() && AdditionalM7Features.isInM7() && !AdditionalM7Features.queuedNotifier) {
+            final var world = Minecraft.getMinecraft().theWorld;
+            if (null != world) {
+                for (final var ent : world.loadedEntityList) {
+                    if (ent instanceof final EntityWither wither && wither.getName().contains("Necron")) {
+                        final BooleanSupplier isDead = () -> Utils.compareFloatExact(1.0F, wither.getHealth()) || Utils.compareFloatExact(3.0F, wither.getHealth()); // It's either 1.0F or, rarely, 3.0F once it dies.
+
+                        final Runnable hook = () -> {
+                            DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Phase 4 done. Equip your Ender Dragon!");
+                            GuiManager.createTitle("§bSwap to edrag!", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
+                        };
+
+                        Utils.awaitCondition(isDead, hook);
+                        AdditionalM7Features.queuedNotifier = true;
+
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     private static final void handleMessage3(@NotNull final String message) {
         switch (message) {
-            case "[BOSS] Necron: All this, for nothing..." -> {
-                if (Config.isEdragReminder() && AdditionalM7Features.isInM7()) {
-                    DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Phase 4 done. Equip your Ender Dragon!");
-                    GuiManager.createTitle("§bSwap to edrag!", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
+            case "[BOSS] Necron: ARGH!" -> {
+                if (AdditionalM7Features.firstFrenzyNotDone) {
+                    AdditionalM7Features.firstFrenzyNotDone = false;
+                } else {
+                    AdditionalM7Features.checkNecronDead();
                 }
             }
             case "[BOSS] Wither King: You... again?", "[BOSS] Wither King: Ohhh?" -> {
