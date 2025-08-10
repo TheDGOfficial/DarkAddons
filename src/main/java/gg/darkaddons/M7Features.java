@@ -1,10 +1,14 @@
 package gg.darkaddons;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S04PacketEntityEquipment;
 import net.minecraft.network.play.server.S2APacketParticles;
 import net.minecraft.network.play.server.S1CPacketEntityMetadata;
 import net.minecraft.network.play.server.S2CPacketSpawnGlobalEntity;
@@ -136,6 +140,34 @@ final class M7Features {
             M7Features.spawningDragons.add(owner);
         } else if (p instanceof final S1CPacketEntityMetadata packet) {
             M7Features.handleS1CPacketEntityMetadata(packet);
+        } else if (p instanceof final S04PacketEntityEquipment packet) {
+            M7Features.handleS04PacketEntityEquipment(packet);
+        }
+    }
+
+    @NotNull
+    private static final Item PACKED_ICE = Item.getItemFromBlock(Blocks.packed_ice);
+
+    private static final void handleS04PacketEntityEquipment(@NotNull final S04PacketEntityEquipment packet) {
+        final var stack = packet.getItemStack();
+        if (null != stack) {
+            if (M7Features.PACKED_ICE == stack.getItem()) {
+                final var world = Minecraft.getMinecraft().theWorld;
+                if (null != world) {
+                    final var entity = world.getEntityByID(packet.getEntityID());
+                    if (entity instanceof final EntityArmorStand stand) {
+                        for (final WitherKingDragons drag : WitherKingDragons.getValues()) {
+                            final var dragEntity = drag.getEntity();
+                            if (null != dragEntity && entity.getDistanceToEntity(dragEntity) <= 8) {
+                                drag.setIceSprayed(true);
+                                drag.setIceSprayedInTicks(dragEntity.ticksExisted);
+
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -216,6 +248,9 @@ final class M7Features {
                 entityWitherKingDragon.setWitherKingDragonTypeOrdinal(type.getEnumOrdinal());
             }
 
+            type.setIceSprayed(false);
+            type.setIceSprayedInTicks(-1);
+
             M7Features.dragonMap.put(id, type);
  
             if (proc) {
@@ -261,6 +296,8 @@ final class M7Features {
 
         for (final var dragon : WitherKingDragons.getValues()) {
             dragon.setDestroyed(false);
+            dragon.setIceSprayed(false);
+            dragon.setIceSprayedInTicks(-1);
         }
     }
 

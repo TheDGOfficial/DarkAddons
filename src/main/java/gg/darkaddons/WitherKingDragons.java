@@ -206,7 +206,27 @@ enum WitherKingDragons {
 
     private boolean destroyed;
 
-    private int prio;
+    private boolean iceSprayed;
+
+    final boolean isIceSprayed() {
+        return this.iceSprayed;
+    }
+
+    final void setIceSprayed(final boolean iceSprayed) {
+        this.iceSprayed = iceSprayed;
+    }
+
+    private int iceSprayedInTicks = -1;
+
+    final int getIceSprayedInTicks() {
+        return this.iceSprayedInTicks;
+    }
+
+    final void setIceSprayedInTicks(final int iceSprayedInTicks) {
+        this.iceSprayedInTicks = iceSprayedInTicks;
+    }
+
+    private final int prio;
 
     final int getPrio() {
         return this.prio;
