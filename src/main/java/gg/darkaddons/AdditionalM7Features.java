@@ -74,13 +74,24 @@ final class AdditionalM7Features {
         return AdditionalM7Features.playingTank;
     }
 
+    private static final String getExtraInfo(@NotNull final WitherKingDragons dragon) {
+        final var sprayed = dragon.isIceSprayed();
+        final var ticks = dragon.getIceSprayedInTicks();
+
+        dragon.setIceSprayed(false);
+        dragon.setIceSprayedInTicks(-1);
+
+        return " §b(Sprayed: " + (sprayed ? "§aYes [" + ticks + "t]" : "§cNo") + ')';
+    }
+
     private static final void onStatueDestroyed(@NotNull final WitherKingDragons dragon) {
         if (Config.isStatueDestroyedNotification()) {
             final var color = dragon.getChatColor();
             final var name = dragon.getEnumName();
+            final var extra = AdditionalM7Features.getExtraInfo(dragon);
 
-            UChat.chat("§bThe " + color + "§l" + name + " §r§bdragon's statue has been destroyed! §a§lGood job!");
-            GuiManager.createTitle("§a✔ Good Job!", color + "§l" + name + " §astatue destroyed!", AdditionalM7Features.TITLE_TICKS, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.LEVEL_UP);
+            UChat.chat("§bThe " + color + "§l" + name + " §r§bdragon's statue has been destroyed! §a§lGood job!" + extra);
+            GuiManager.createTitle("§a✔ Good Job!", color + "§l" + name + " §astatue destroyed!" + extra, AdditionalM7Features.TITLE_TICKS, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.LEVEL_UP);
         }
     }
 
@@ -88,9 +99,10 @@ final class AdditionalM7Features {
         if (Config.isStatueMissedNotification()) {
             final var color = dragon.getChatColor();
             final var name = dragon.getEnumName();
+            final var extra = AdditionalM7Features.getExtraInfo(dragon);
 
-            UChat.chat("§cThe " + color + "§l" + name + " §r§cdragon's statue has been §4missed! §cYou need to kill it again!");
-            GuiManager.createTitle("§c✖ Missed!", color + "§l" + name + " §r§ckilled out of statue!", AdditionalM7Features.TITLE_TICKS, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.ANVIL_LAND);
+            UChat.chat("§cThe " + color + "§l" + name + " §r§cdragon's statue has been §4missed! §cYou need to kill it again!" + extra);
+            GuiManager.createTitle("§c✖ Missed!", color + "§l" + name + " §r§ckilled out of statue!" + extra, AdditionalM7Features.TITLE_TICKS, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.ANVIL_LAND);
         }
     }
 
