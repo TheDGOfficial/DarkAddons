@@ -3,6 +3,7 @@ package gg.darkaddons;
 import gg.essential.universal.ChatColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.Vec3;
@@ -10,7 +11,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.Color;
+
 import java.util.Locale;
+import java.util.HashMap;
 
 @SuppressWarnings("FieldNotUsedInToString")
 enum WitherKingDragons {
@@ -224,6 +227,21 @@ enum WitherKingDragons {
 
     final void setIceSprayedInTicks(final int iceSprayedInTicks) {
         this.iceSprayedInTicks = iceSprayedInTicks;
+    }
+
+    private final HashMap<String, Integer> arrowsHit = new HashMap<>(Utils.calculateHashMapCapacity(5));
+
+    @NotNull
+    final HashMap<String, Integer> getArrowsHit() {
+        return this.arrowsHit;
+    }
+
+    final void registerArrowHit(@NotNull final EntityPlayer player) {
+        this.arrowsHit.merge(player.getName(), 1, Integer::sum);
+    }
+
+    final void clearArrowsHit() {
+        this.arrowsHit.clear();
     }
 
     private final int prio;

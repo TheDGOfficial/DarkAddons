@@ -1,12 +1,19 @@
 package gg.darkaddons;
 
+import gg.essential.universal.UChat;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.boss.EntityWither;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S04PacketEntityEquipment;
 import net.minecraft.network.play.server.S2APacketParticles;
@@ -23,6 +30,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -59,6 +67,9 @@ final class M7Features {
 
     @NotNull
     private static final EnumSet<WitherKingDragons> splitDragons = EnumSet.noneOf(WitherKingDragons.class);
+
+    @NotNull
+    private static final HashMap<String, Integer> arrowsHit = new HashMap<>(Utils.calculateHashMapCapacity(5));
 
     @NotNull
     static final EnumMap<WitherKingDragons, Long> getDragonSpawnTimes() {
@@ -138,11 +149,78 @@ final class M7Features {
             });
 
             M7Features.spawningDragons.add(owner);
+
+            owner.clearArrowsHit();
         } else if (p instanceof final S1CPacketEntityMetadata packet) {
             M7Features.handleS1CPacketEntityMetadata(packet);
         } else if (p instanceof final S04PacketEntityEquipment packet) {
             M7Features.handleS04PacketEntityEquipment(packet);
         }
+    }
+
+    private static final void handleDragonHit(@Nullable final Entity shooter, @NotNull final WitherKingDragons type) {
+        if (shooter instanceof final EntityPlayer player) {
+            type.registerArrowHit(player);
+        }
+    }
+
+    static final void onArrowDespawn(@NotNull final EntityArrow arrow, @NotNull final Entity shooter, @NotNull final ArrayList<Entity> entitiesHit) {
+        for (final var entity : entitiesHit) {
+            M7Features.registerArrowHitOnEntity(shooter, entity);
+        }
+    }
+
+    private static final void registerArrowHitOnEntity(@NotNull final Entity shooter, @NotNull final Entity entity) {
+        if (entity instanceof final EntityDragonPart dragonPart) {
+            final var entityDragon = (EntityWitherKingDragon) dragonPart.entityDragonObj;
+            final var type = WitherKingDragons.from(entityDragon.getWitherKingDragonTypeOrdinal());
+
+            M7Features.handleDragonHit(shooter, type);
+        } else if (entity instanceof final EntityDragon dragon) {
+            final var entityDragon = (EntityWitherKingDragon) dragon;
+            final var type = WitherKingDragons.from(entityDragon.getWitherKingDragonTypeOrdinal());
+
+            M7Features.handleDragonHit(shooter, type);
+        } else if (entity instanceof final EntityWither wither && (wither.getName().contains("Maxor") || wither.getName().contains("Storm") || wither.getName().contains("Goldor") || wither.getName().contains("Necron"))) {
+            if (shooter instanceof final EntityPlayer player) {
+                M7Features.arrowsHit.merge(player.getName(), 1, Integer::sum);
+            }
+        }
+    }
+
+    private static final void echoArrowsHit(@NotNull final String bossName) {
+        final var builder = new StringBuilder();
+        final boolean[] first = {false};
+
+        M7Features.arrowsHit.forEach((player, amount) -> {
+            if (!first[0]) {
+                first[0] = true;
+            } else {
+                builder.append(", ");
+            }
+
+            builder.append(player + " " + amount);
+        });
+
+        UChat.chat("§bArrows hit to "+ bossName + ": " + builder.toString());
+
+        M7Features.arrowsHit.clear();
+    }
+
+    static final void onMaxorDead() {
+        M7Features.echoArrowsHit("Maxor");
+    }
+
+    static final void onStormDead() {
+        M7Features.echoArrowsHit("Storm");
+    }
+
+    static final void onGoldorDead() {
+        M7Features.echoArrowsHit("Goldor");
+    }
+ 
+    static final void onNecronDead() {
+        M7Features.echoArrowsHit("Necron");
     }
 
     @NotNull
@@ -287,6 +365,7 @@ final class M7Features {
         M7Features.killedDragons.clear();
         M7Features.dragonMap.clear();
         M7Features.dragonSpawnTimes.clear();
+        M7Features.arrowsHit.clear();
 
         final var len = M7Features.reverseDragonMap.length;
         for (var i = 0; i < len; ++i) {
@@ -297,6 +376,7 @@ final class M7Features {
             dragon.setDestroyed(false);
             dragon.setIceSprayed(false);
             dragon.setIceSprayedInTicks(-1);
+            dragon.clearArrowsHit();
         }
     }
 

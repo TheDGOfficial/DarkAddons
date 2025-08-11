@@ -10,9 +10,11 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S1CPacketEntityMetadata;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.init.Items;
 import net.minecraft.util.BlockPos;
@@ -35,6 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -1001,8 +1004,39 @@ public final class DarkAddons {
 
         ServerTPSCalculator.handlePacket(packet);
         PingTracker.onPacketReceived(packet);
+        ArrowTracker.onPacket(packet);
 
         return true;
+    }
+
+    /**
+     * Called when an {@link Entity}'s metadata has been updated by the server.
+     *
+     * @param packet The {@link S1CPacketEntityMetadata}.
+     */
+    public static final void onEntityMetadata(@NotNull final S1CPacketEntityMetadata packet) {
+        ArrowTracker.onEntityMetadata(packet);
+    }
+
+    /**
+     * Called when an arrow hits an entity.
+     *
+     * @param arrow The {@link EntityArrow}.
+     * @param entity The {@link Entity} that got hit.
+     */
+    public static final void onArrowHit(@NotNull final EntityArrow arrow, @NotNull final Entity entity) {
+        ArrowTracker.onArrowHit(arrow, entity);
+    }
+
+    /**
+     * Called when an arrow despawns.
+     *
+     * @param arrow The {@link EntityArrow}.
+     * @param shooter The {@link Entity} that shot the arrow.
+     * @param entitiesHit The list of {@link Entity Entities} that got hit by the arrow.
+     */
+    public static final void onArrowDespawn(@NotNull final EntityArrow arrow, @NotNull final Entity shooter, @NotNull final ArrayList<Entity> entitiesHit) {
+        M7Features.onArrowDespawn(arrow, shooter, entitiesHit);
     }
 
     /**
