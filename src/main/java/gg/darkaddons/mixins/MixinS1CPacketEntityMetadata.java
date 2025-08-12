@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import org.jetbrains.annotations.NotNull;
 
-@Mixin(value = S1CPacketEntityMetadata.class, priority = 999)
+@Mixin(value = S1CPacketEntityMetadata.class, priority = 1001)
 final class MixinS1CPacketEntityMetadata {
     private MixinS1CPacketEntityMetadata() {
         super();

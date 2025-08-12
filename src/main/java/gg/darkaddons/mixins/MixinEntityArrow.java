@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.List;
 
-@Mixin(value = EntityArrow.class, priority = 999)
+@Mixin(value = EntityArrow.class, priority = 1001)
 final class MixinEntityArrow {
     private MixinEntityArrow() {
         super();

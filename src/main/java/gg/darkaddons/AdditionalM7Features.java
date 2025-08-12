@@ -287,10 +287,8 @@ final class AdditionalM7Features {
                         final BooleanSupplier isDead = () -> Utils.compareFloatExact(1.0F, wither.getHealth()) || Utils.compareFloatExact(3.0F, wither.getHealth()); // It's either 1.0F or, rarely, 3.0F once it dies.
 
                         final Runnable hook = () -> {
-                            if (Config.isEdragReminder()) {
-                                DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor Dead");
-                                GuiManager.createTitle("§bMaxor Dead", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
-                            }
+                            DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor Dead");
+                            GuiManager.createTitle("§bMaxor Dead", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
 
                             M7Features.onMaxorDead();
                         };
