@@ -202,7 +202,9 @@ final class M7Features {
             builder.append(player + " " + amount);
         });
 
-        UChat.chat("§bArrows hit to "+ bossName + ": " + builder.toString());
+        final var arrowsHit = builder.toString();
+
+        UChat.chat("§bArrows hit to "+ bossName + ": " + (arrowsHit.isEmpty() ? "None" : arrowsHit));
 
         M7Features.arrowsHit.clear();
     }
@@ -271,6 +273,7 @@ final class M7Features {
                             M7Features.handleDeath(entity, dragon);
                         }
                     }
+                    break;
                 }
             }
         }

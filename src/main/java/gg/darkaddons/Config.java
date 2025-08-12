@@ -559,7 +559,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Dragon Spawning Notification",
-        description = "Shows a title message on screen when a dragon is spawning. For the first 2 dragons, shows your priority dragon based on your class, configured to always attempt splitting.",
+        description = "Shows a title message on screen when a dragon is spawning. For the first 2 dragons, shows your priority dragon based on your class, configured to always attempt splitting. The other dragon is shown as sub-title in case no-split is preferred for some reason.",
         category = "Dungeons", subcategory = "Notifiers"
     )
     private static boolean spawningNotification = true;
@@ -573,14 +573,14 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Statue Destroyed Notification",
-        description = "Shows a title message on screen after you successfully kill a dragon in its statue and destroy the statue.",
+        description = "Shows a title message on screen after you successfully kill a dragon in its statue and destroy the statue. Includes how many LBs hit by Tank, Healer & Mage and if the dragon was ice sprayed or not as well. A chat message with detailed breakdown of how many arrows were hit by each player will be sent in addition.",
         category = "Dungeons", subcategory = "Notifiers"
     )
     private static boolean statueDestroyedNotification = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Statue Missed Notification",
-        description = "Shows a title message on screen if you kill a dragon out of its statue.",
+        description = "Shows a title message on screen if you kill a dragon out of its statue. Includes how many LBs hit by Tank, Healer & Mage and if the dragon was ice sprayed or not as well. A chat message with detailed breakdown of how many arrows were hit by each player will be sent in addition.",
         category = "Dungeons", subcategory = "Notifiers"
     )
     private static boolean statueMissedNotification = true;

@@ -115,6 +115,25 @@ final class AdditionalM7Features {
         return " §b(Sprayed: " + (sprayed ? "§aYes [" + ticks + "t]" : "§cNo") + "§b, LB: " + color + Integer.toString(lb) + ')';
     }
 
+    private static final void echoArrowsHit(@NotNull final WitherKingDragons dragon) {
+        final var builder = new StringBuilder();
+        final boolean[] first = {false};
+
+        dragon.getArrowsHit().forEach((player, amount) -> {
+            if (!first[0]) {
+                first[0] = true;
+            } else {
+                builder.append(", ");
+            }
+
+            builder.append(player + " " + amount);
+        });
+
+        final var arrowsHit = builder.toString();
+
+        UChat.chat("§bArrows hit: " + (arrowsHit.isEmpty() ? "None" : arrowsHit));
+    }
+
     private static final void onStatueDestroyed(@NotNull final WitherKingDragons dragon) {
         if (Config.isStatueDestroyedNotification()) {
             final var color = dragon.getChatColor();
@@ -124,20 +143,7 @@ final class AdditionalM7Features {
             UChat.chat("§bThe " + color + "§l" + name + " §r§bdragon's statue has been destroyed! §a§lGood job!" + extra);
             GuiManager.createTitle("§a✔ Good Job!", color + "§l" + name + " §astatue destroyed!" + extra, AdditionalM7Features.TITLE_TICKS, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.LEVEL_UP);
 
-            final var builder = new StringBuilder();
-            final boolean[] first = {false};
-
-            dragon.getArrowsHit().forEach((player, amount) -> {
-                if (!first[0]) {
-                    first[0] = true;
-                } else {
-                    builder.append(", ");
-                }
-
-                builder.append(player + " " + amount);
-            });
-
-            UChat.chat("§bArrows hit: " + builder.toString());
+            AdditionalM7Features.echoArrowsHit(dragon);
         }
     }
 
@@ -149,6 +155,8 @@ final class AdditionalM7Features {
 
             UChat.chat("§cThe " + color + "§l" + name + " §r§cdragon's statue has been §4missed! §cYou need to kill it again!" + extra);
             GuiManager.createTitle("§c✖ Missed!", color + "§l" + name + " §r§ckilled out of statue!" + extra, AdditionalM7Features.TITLE_TICKS, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.ANVIL_LAND);
+
+            AdditionalM7Features.echoArrowsHit(dragon);
         }
     }
 
