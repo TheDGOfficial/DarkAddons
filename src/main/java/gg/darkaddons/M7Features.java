@@ -69,9 +69,6 @@ final class M7Features {
     private static final EnumSet<WitherKingDragons> splitDragons = EnumSet.noneOf(WitherKingDragons.class);
 
     @NotNull
-    private static final HashMap<String, Integer> arrowsHit = new HashMap<>(Utils.calculateHashMapCapacity(5));
-
-    @NotNull
     static final EnumMap<WitherKingDragons, Long> getDragonSpawnTimes() {
         return M7Features.dragonSpawnTimes;
     }
@@ -181,48 +178,7 @@ final class M7Features {
             final var type = WitherKingDragons.from(entityDragon.getWitherKingDragonTypeOrdinal());
 
             M7Features.handleDragonHit(shooter, type);
-        } else if (entity instanceof final EntityWither wither && (wither.getName().contains("Maxor") || wither.getName().contains("Storm") || wither.getName().contains("Goldor") || wither.getName().contains("Necron"))) {
-            if (shooter instanceof final EntityPlayer player) {
-                M7Features.arrowsHit.merge(player.getName(), 1, Integer::sum);
-            }
         }
-    }
-
-    private static final void echoArrowsHit(@NotNull final String bossName) {
-        final var builder = new StringBuilder();
-        final boolean[] first = {false};
-
-        M7Features.arrowsHit.forEach((player, amount) -> {
-            if (!first[0]) {
-                first[0] = true;
-            } else {
-                builder.append(", ");
-            }
-
-            builder.append(player + " " + amount);
-        });
-
-        final var arrowsHit = builder.toString();
-
-        UChat.chat("§bArrows hit to "+ bossName + ": " + (arrowsHit.isEmpty() ? "None" : arrowsHit));
-
-        M7Features.arrowsHit.clear();
-    }
-
-    static final void onMaxorDead() {
-        M7Features.echoArrowsHit("Maxor");
-    }
-
-    static final void onStormDead() {
-        M7Features.echoArrowsHit("Storm");
-    }
-
-    static final void onGoldorDead() {
-        M7Features.echoArrowsHit("Goldor");
-    }
- 
-    static final void onNecronDead() {
-        M7Features.echoArrowsHit("Necron");
     }
 
     @NotNull
@@ -368,7 +324,6 @@ final class M7Features {
         M7Features.killedDragons.clear();
         M7Features.dragonMap.clear();
         M7Features.dragonSpawnTimes.clear();
-        M7Features.arrowsHit.clear();
 
         final var len = M7Features.reverseDragonMap.length;
         for (var i = 0; i < len; ++i) {

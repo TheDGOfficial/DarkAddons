@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Locale;
 import java.util.HashMap;
 import java.util.function.BooleanSupplier;
 
@@ -23,9 +24,6 @@ final class AdditionalM7Features {
     private static final int TITLE_TICKS = 60;
 
     private static boolean firstLaserNotDone = true;
-    private static boolean firstFrenzyNotDone = true;
-    private static boolean queuedNecronNotifier;
-    private static boolean queuedMaxorNotifier;
     @Nullable
     static WitherKingDragons lastKilledDragon;
     private static boolean witherKingDefeated;
@@ -100,19 +98,25 @@ final class AdditionalM7Features {
         }
 
         final int[] lbHitsGuess = {0};
+        final int[] dpsArrows = {0};
 
         dragon.getArrowsHit().forEach((player, amount) -> {
             final var dungeonClass = classes.get(player);
 
             if (DungeonListener.DungeonClass.TANK == dungeonClass || DungeonListener.DungeonClass.HEALER == dungeonClass || DungeonListener.DungeonClass.MAGE == dungeonClass) {
                 lbHitsGuess[0] += amount;
+            } else if (DungeonListener.DungeonClass.ARCHER == dungeonClass || DungeonListener.DungeonClass.BERSERK == dungeonClass) {
+                dpsArrows[0] += amount;
             }
         });
 
         final var lb = lbHitsGuess[0];
-        final var color = lb >= 5 ? "§a" : lb == 4 ? "§6" : lb == 3 ? "§6" : lb == 2 ? "§e" : lb == 1 ? "§c" : "§4";
+        final var color = lb >= 5 ? "§a" : lb == 4 ? "§2" : lb == 3 ? "§6" : lb == 2 ? "§e" : lb == 1 ? "§c" : "§4";
 
-        return " §b(Sprayed: " + (sprayed ? "§aYes [" + ticks + "t]" : "§cNo") + "§b, LB: " + color + Integer.toString(lb) + ')';
+        final var dps = dpsArrows[0];
+        final var dpsColor = dps >= 100 ? "§a" : dps >= 60 ? "§2" : dps >= 50 ? "§6" : dps >= 40 ? "§c" : "§4";
+
+        return " §b(Spray: " + (sprayed ? "§aYes [" + ticks + "t]" : "§cNo") + "§b, LB: " + color + Integer.toString(lb) + ", A+B: " + dpsColor + Integer.toString(dps) + ')';
     }
 
     private static final void echoArrowsHit(@NotNull final WitherKingDragons dragon) {
@@ -131,7 +135,7 @@ final class AdditionalM7Features {
 
         final var arrowsHit = builder.toString();
 
-        UChat.chat("§bArrows hit: " + (arrowsHit.isEmpty() ? "None" : arrowsHit));
+        UChat.chat("§bArrows hit to " + dragon.getTextColor().toUpperCase(Locale.ROOT) + ": " + (arrowsHit.isEmpty() ? "None" : arrowsHit));
     }
 
     private static final void onStatueDestroyed(@NotNull final WitherKingDragons dragon) {
@@ -197,9 +201,6 @@ final class AdditionalM7Features {
 
     private static final void handleWorldUnload() {
         AdditionalM7Features.firstLaserNotDone = true;
-        AdditionalM7Features.firstFrenzyNotDone = true;
-        AdditionalM7Features.queuedNecronNotifier = false;
-        AdditionalM7Features.queuedMaxorNotifier = false;
         AdditionalM7Features.witherKingDefeated = false;
         AdditionalM7Features.firstGolemWoken = false;
         AdditionalM7Features.notSaidFinalDialogue = true;
@@ -256,18 +257,7 @@ final class AdditionalM7Features {
                     if (flag) {
                         AdditionalM7Features.firstLaserNotDone = false;
                     }
-                } else {
-                    AdditionalM7Features.checkMaxorDead();
                 }
-            }
-            case "[BOSS] Storm: I should have known that I stood no chance." -> {
-                if (Config.isPhase3StartingNotification()) {
-                    final var msg = Utils.chromaIfEnabledOrAqua() + "Phase 3 starting";
-
-                    DarkAddons.sendMessage(msg);
-                    GuiManager.createTitle(msg, AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
-                }
-                M7Features.onStormDead();
             }
             case "[BOSS] Goldor: You have done it, you destroyed the factory…" -> {
                 AdditionalM7Features.phase5NotStarted = false; // Have to do it here instead of Necron final dialogue because that's too late
@@ -280,73 +270,12 @@ final class AdditionalM7Features {
                     DarkAddons.queueUserSentMessageOrCommand("/pc Wish and castle of stone!");
                 }
             }
-            case "[BOSS] Goldor: ...." ->
-                M7Features.onGoldorDead();
             default -> AdditionalM7Features.handleMessage3(message);
-        }
-    }
-
-    private static final void checkMaxorDead() {
-        if (!AdditionalM7Features.queuedMaxorNotifier) {
-            final var world = Minecraft.getMinecraft().theWorld;
-            if (null != world) {
-                for (final var ent : world.loadedEntityList) {
-                    if (ent instanceof final EntityWither wither && wither.getName().contains("Maxor")) {
-                        final BooleanSupplier isDead = () -> Utils.compareFloatExact(1.0F, wither.getHealth()) || Utils.compareFloatExact(3.0F, wither.getHealth()); // It's either 1.0F or, rarely, 3.0F once it dies.
-
-                        final Runnable hook = () -> {
-                            DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor Dead");
-                            GuiManager.createTitle("§bMaxor Dead", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
-
-                            M7Features.onMaxorDead();
-                        };
-
-                        Utils.awaitCondition(isDead, hook);
-                        AdditionalM7Features.queuedMaxorNotifier = true;
-
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    private static final void checkNecronDead() {
-        if (AdditionalM7Features.isInM7() && !AdditionalM7Features.queuedNecronNotifier) {
-            final var world = Minecraft.getMinecraft().theWorld;
-            if (null != world) {
-                for (final var ent : world.loadedEntityList) {
-                    if (ent instanceof final EntityWither wither && wither.getName().contains("Necron")) {
-                        final BooleanSupplier isDead = () -> Utils.compareFloatExact(1.0F, wither.getHealth()) || Utils.compareFloatExact(3.0F, wither.getHealth()); // It's either 1.0F or, rarely, 3.0F once it dies.
-
-                        final Runnable hook = () -> {
-                            if (Config.isEdragReminder()) {
-                                DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Phase 4 done. Equip your Ender Dragon!");
-                                GuiManager.createTitle("§bSwap to edrag!", AdditionalM7Features.TITLE_TICKS, true, GuiManager.Sound.PLING);
-                            }
-
-                            M7Features.onNecronDead();
-                        };
-
-                        Utils.awaitCondition(isDead, hook);
-                        AdditionalM7Features.queuedNecronNotifier = true;
-
-                        break;
-                    }
-                }
-            }
         }
     }
 
     private static final void handleMessage3(@NotNull final String message) {
         switch (message) {
-            case "[BOSS] Necron: ARGH!" -> {
-                if (AdditionalM7Features.firstFrenzyNotDone) {
-                    AdditionalM7Features.firstFrenzyNotDone = false;
-                } else {
-                    AdditionalM7Features.checkNecronDead();
-                }
-            }
             case "[BOSS] Wither King: You... again?", "[BOSS] Wither King: Ohhh?" -> {
                 AdditionalM7Features.phase5Started = true;
                 if (Config.isPhase5StartingNotification()) {

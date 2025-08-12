@@ -1449,6 +1449,7 @@ public final class DarkAddons {
 
             RunsTillCA50.init();
             MayorInfo.init();
+            WitherLordDeadNotifier.init();
 
             if (Config.isClassAverage50Display()) {
                 ClassAverage50Display.syncClassXP();

@@ -36,8 +36,12 @@ final class ArrowTracker {
         throw Utils.staticClassException();
     }
 
+    private static final boolean shouldTrack() {
+        return Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification();
+    }
+
     static final void onArrowHit(@NotNull final EntityArrow arrow, @NotNull final Entity entity) {
-        if (!entity.isDead) {
+        if (ArrowTracker.shouldTrack() && !entity.isDead) {
             final var data = arrows.get(arrow.getEntityId());
             if (null != data) {
                 data.entitiesHit.add(entity);
@@ -46,6 +50,10 @@ final class ArrowTracker {
     }
 
     static final void onEntityMetadata(@NotNull final S1CPacketEntityMetadata pem) {
+        if (!ArrowTracker.shouldTrack()) {
+            return;
+        }
+
         final var entityId = pem.getEntityId();
         final var data = arrows.get(entityId);
         if (null != data && null == data.arrow) {
@@ -61,6 +69,10 @@ final class ArrowTracker {
     }
 
     static final void onPacket(@NotNull final Packet<?> packet) {
+        if (!ArrowTracker.shouldTrack()) {
+            return;
+        }
+
         if (packet instanceof final S0EPacketSpawnObject spawn && 60 == spawn.getType()) {
             arrows.put(spawn.getEntityID(), new ArrowData());
         } else if (packet instanceof final S13PacketDestroyEntities destroy) {

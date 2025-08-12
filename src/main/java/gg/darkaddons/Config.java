@@ -586,6 +586,13 @@ final class Config extends Vigilant {
     private static boolean statueMissedNotification = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Wither Lord Dead Notifier",
+        description = "Shows a title message on screen when a Wither Lord dies. Triggers as soon as their HP reaches zero, does not depend on any boss dialogue or phase timer to be said or finished.",
+        category = "Dungeons", subcategory = "Notifiers"
+    )
+    private static boolean witherLordDeadNotifier = true;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Ultimate Reminder",
         description = "Shows a title message on screen after the first laser in Maxor and after terminals are done (for the Goldor fight), to remind you about using your ultimate class ability.",
         category = "Dungeons", subcategory = "Reminders"
@@ -1688,6 +1695,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.statueMissedNotification;
+    }
+
+    static final boolean isWitherLordDeadNotifier() {
+        Config.checkUninit();
+
+        return Config.witherLordDeadNotifier;
     }
 
     static final boolean isUltReminder() {

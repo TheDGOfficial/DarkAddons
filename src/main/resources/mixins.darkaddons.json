@@ -101,7 +101,9 @@
         "MixinSoundSystem",
         "MixinWorldRenderer",
         "MixinDSMUtils",
-        "MixinGuiManager"
+        "MixinGuiManager",
+        "MixinEntityArrow",
+        "MixinS1CPacketEntityMetadata"
     ],
     "server": [
     ],
