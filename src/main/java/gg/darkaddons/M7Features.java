@@ -172,10 +172,18 @@ final class M7Features {
             final var entityDragon = (EntityWitherKingDragon) dragonPart.entityDragonObj;
             final var type = WitherKingDragons.from(entityDragon.getWitherKingDragonTypeOrdinal());
 
+            if (null == type) {
+                return;
+            }
+
             M7Features.handleDragonHit(shooter, type);
         } else if (entity instanceof final EntityDragon dragon) {
             final var entityDragon = (EntityWitherKingDragon) dragon;
             final var type = WitherKingDragons.from(entityDragon.getWitherKingDragonTypeOrdinal());
+
+            if (null == type) {
+                return;
+            }
 
             M7Features.handleDragonHit(shooter, type);
         }

@@ -1137,6 +1137,8 @@ public final class DarkAddons {
 
         BlessingDisplay.doCheckMessage(event);
         BlazeEffectTimer.onMessage(event);
+
+        WitherLordDeadNotifier.handleMessage(event);
     }
 
     /**
