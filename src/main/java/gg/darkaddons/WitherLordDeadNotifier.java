@@ -5,6 +5,8 @@ import gg.essential.universal.UChat;
 import java.util.HashMap;
 import java.util.WeakHashMap;
 
+import com.google.common.collect.MapMaker;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.boss.EntityWither;
 
@@ -14,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
 
 final class WitherLordDeadNotifier {
     @NotNull
-    private static final WeakHashMap<String, EntityWither> witherLords = new WeakHashMap<>();
+    private static final Map<String, EntityWither> witherLords = new MapMaker().weakValues().makeMap();
     @NotNull
-    private static final HashMap<String, Boolean> states = new HashMap<>(Utils.calculateHashMapCapacity(4));
+    private static final WeakHashMap<EntityWither, Boolean> states = new WeakHashMap<>();
 
     static final void init() {
         DarkAddons.registerTickTask("wither_lord_dead_notifier_tick", 1, true, WitherLordDeadNotifier::tick);
@@ -38,22 +40,22 @@ final class WitherLordDeadNotifier {
         }
 
         switch (message) {
-            case "[BOSS] Maxor: WELL! WELL! WELL! LOOK WHO'S HERE!" -> {
+            case "[BOSS] Maxor: YOU TRICKED ME!" -> {
                 if (Config.isWitherLordDeadNotifier()) {
                     WitherLordDeadNotifier.findWitherLord("Maxor");
                 }
             }
-            case "[BOSS] Storm: Pathetic Maxor, just like expected." -> {
+            case "[BOSS] Storm: ENERGY HEED MY CALL!" -> {
                 if (Config.isWitherLordDeadNotifier() || Config.isPhase3StartingNotification()) {
                     WitherLordDeadNotifier.findWitherLord("Storm");
                 }
             }
-            case "[BOSS] Goldor: Who dares trespass into my domain?" -> {
+            case "The Core entrance is opening!" -> {
                 if (Config.isWitherLordDeadNotifier()) {
                     WitherLordDeadNotifier.findWitherLord("Goldor");
                 }
             }
-            case "[BOSS] Necron: You went further than any human before, congratulations." -> {
+            case "[BOSS] Necron: ARGH!" -> {
                 if (Config.isWitherLordDeadNotifier() || Config.isEdragReminder()) {
                     WitherLordDeadNotifier.findWitherLord("Necron");
                 }
@@ -67,11 +69,11 @@ final class WitherLordDeadNotifier {
         }
 
         WitherLordDeadNotifier.witherLords.forEach((name, wither) -> {
-            final var state = WitherLordDeadNotifier.states.get(name);
+            final var state = WitherLordDeadNotifier.states.get(wither);
 
             final var isDead = Utils.compareFloatExact(1.0F, wither.getHealth()) || Utils.compareFloatExact(3.0F, wither.getHealth()); // It's either 1.0F or, rarely, 3.0F once it dies.
 
-            WitherLordDeadNotifier.states.put(name, isDead);
+            WitherLordDeadNotifier.states.put(wither, isDead);
 
             if ((null == state || !state) && isDead) {
                 WitherLordDeadNotifier.onWitherLordDead(name);
