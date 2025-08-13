@@ -71,8 +71,14 @@ final class WitherLordDeadNotifier {
 
         WitherLordDeadNotifier.witherLords.forEach((name, wither) -> {
             final var state = WitherLordDeadNotifier.states.get(wither);
+            final var hp = wither.getHealth();
 
-            final var isDead = Utils.compareFloatExact(1.0F, wither.getHealth()) || Utils.compareFloatExact(3.0F, wither.getHealth()); // It's either 1.0F or, rarely, 3.0F once it dies.
+            if (hp <= 0.0F) {
+                // The wither is actually dead (e.g removed from the world, but it takes time for it to be removed from our weak hash map)
+                return;
+            }
+
+            final var isDead = Utils.compareFloatExact(1.0F, hp) || Utils.compareFloatExact(3.0F, hp); // It's either 1.0F or, rarely, 3.0F once it dies, but Hypixel does not set the HP to 0 instantly or remove the wither to play a death animation.
 
             WitherLordDeadNotifier.states.put(wither, isDead);
 
