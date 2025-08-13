@@ -2,6 +2,7 @@ package gg.darkaddons;
 
 import gg.essential.universal.UChat;
 
+import java.util.Map;
 import java.util.HashMap;
 import java.util.WeakHashMap;
 
