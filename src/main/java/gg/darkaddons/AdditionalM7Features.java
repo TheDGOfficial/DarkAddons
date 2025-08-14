@@ -116,7 +116,7 @@ final class AdditionalM7Features {
         final var dps = dpsArrows[0];
         final var dpsColor = dps >= 100 ? "§a" : dps >= 60 ? "§2" : dps >= 50 ? "§6" : dps >= 40 ? "§c" : "§4";
 
-        return " §b(Spray: " + (sprayed ? "§aYes [" + ticks + "t]" : "§cNo") + "§b, LB: " + color + Integer.toString(lb) + ", A+B: " + dpsColor + Integer.toString(dps) + ')';
+        return " §b(Spray: " + (sprayed ? "§aYes [" + ticks + "t]" : "§cNo") + "§b, LB: " + color + Integer.toString(lb) + "§b, A+B: " + dpsColor + Integer.toString(dps) + ')';
     }
 
     private static final void echoArrowsHit(@NotNull final WitherKingDragons dragon) {

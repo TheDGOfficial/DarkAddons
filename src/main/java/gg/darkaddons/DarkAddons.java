@@ -1202,6 +1202,7 @@ public final class DarkAddons {
     public static final void handleWorldUnload() {
         AutoClassAbilities.onWorldUnload();
         ServerTPSCalculator.onWorldUnload();
+        WitherLordDeadNotifier.onWorldUnload();
     }
 
     /**

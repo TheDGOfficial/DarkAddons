@@ -5,10 +5,12 @@ import gg.essential.universal.UChat;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.WeakHashMap;
+import java.util.function.Predicate;
 
 import com.google.common.collect.MapMaker;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -23,6 +25,11 @@ final class WitherLordDeadNotifier {
 
     static final void init() {
         DarkAddons.registerTickTask("wither_lord_dead_notifier_tick", 1, true, WitherLordDeadNotifier::tick);
+    }
+
+    static final void onWorldUnload() {
+        WitherLordDeadNotifier.witherLords.clear();
+        WitherLordDeadNotifier.states.clear();
     }
 
     static final void handleMessage(@NotNull final ClientChatReceivedEvent event) {
@@ -69,14 +76,15 @@ final class WitherLordDeadNotifier {
             return;
         }
 
+        // The wither is actually dead (e.g removed from the world, but it takes time for it to be removed from our weak hash maps due to GC and finalization delay)
+        final Predicate<EntityWither> isActuallyDead = (wither) -> wither.getHealth() <= 0.0F || wither.isDead || !WitherLordDeadNotifier.entityExistsInWorld(wither);
+
+        WitherLordDeadNotifier.witherLords.values().removeIf(isActuallyDead);
+        WitherLordDeadNotifier.states.keySet().removeIf(isActuallyDead);
+
         WitherLordDeadNotifier.witherLords.forEach((name, wither) -> {
             final var state = WitherLordDeadNotifier.states.get(wither);
             final var hp = wither.getHealth();
-
-            if (hp <= 0.0F) {
-                // The wither is actually dead (e.g removed from the world, but it takes time for it to be removed from our weak hash map)
-                return;
-            }
 
             final var isDead = Utils.compareFloatExact(1.0F, hp) || Utils.compareFloatExact(3.0F, hp); // It's either 1.0F or, rarely, 3.0F once it dies, but Hypixel does not set the HP to 0 instantly or remove the wither to play a death animation.
 
@@ -109,13 +117,25 @@ final class WitherLordDeadNotifier {
 
     private static final void findWitherLord(@NotNull final String witherLord) {
         final var world = Minecraft.getMinecraft().theWorld;
+
         if (null != world) {
             for (final var ent : world.loadedEntityList) {
                 if (ent instanceof final EntityWither wither && wither.getName().contains(witherLord)) {
                     WitherLordDeadNotifier.witherLords.put(witherLord, wither);
+
                     break;
                 }
             }
         }
+    }
+
+    private static final boolean entityExistsInWorld(@NotNull final Entity entity) {
+        final var world = Minecraft.getMinecraft().theWorld;
+
+        if (null != world) {
+            return world.loadedEntityList.contains(entity);
+        }
+
+        return false;
     }
 }
