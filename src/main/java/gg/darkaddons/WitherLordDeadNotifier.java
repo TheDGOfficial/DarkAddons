@@ -48,12 +48,12 @@ final class WitherLordDeadNotifier {
         }
 
         switch (message) {
-            case "[BOSS] Maxor: YOU TRICKED ME!" -> {
+            case "[BOSS] Maxor: DON'T DISAPPOINT ME, I HAVEN'T HAD A GOOD FIGHT IN A WHILE." -> {
                 if (Config.isWitherLordDeadNotifier()) {
                     WitherLordDeadNotifier.findWitherLord("Maxor");
                 }
             }
-            case "[BOSS] Storm: ENERGY HEED MY CALL!" -> {
+            case "[BOSS] Storm: I'd be happy to show you what that's like!" -> {
                 if (Config.isWitherLordDeadNotifier() || Config.isPhase3StartingNotification()) {
                     WitherLordDeadNotifier.findWitherLord("Storm");
                 }
@@ -63,7 +63,7 @@ final class WitherLordDeadNotifier {
                     WitherLordDeadNotifier.findWitherLord("Goldor");
                 }
             }
-            case "[BOSS] Necron: ARGH!" -> {
+            case "[BOSS] Necron: That's a very impressive trick. I guess I'll have to handle this myself." -> {
                 if (Config.isWitherLordDeadNotifier() || Config.isEdragReminder()) {
                     WitherLordDeadNotifier.findWitherLord("Necron");
                 }
