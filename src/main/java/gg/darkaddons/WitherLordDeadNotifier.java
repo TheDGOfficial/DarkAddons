@@ -76,22 +76,24 @@ final class WitherLordDeadNotifier {
             return;
         }
 
-        // The wither is actually dead (e.g removed from the world, but it takes time for it to be removed from our weak hash maps due to GC and finalization delay)
-        final Predicate<EntityWither> isActuallyDead = (wither) -> wither.getHealth() <= 0.0F || wither.isDead || !WitherLordDeadNotifier.entityExistsInWorld(wither);
+        WitherLordDeadNotifier.witherLords.entrySet().removeIf((entry) -> {
+            final var name = entry.getKey();
+            final var wither = entry.getValue();
 
-        WitherLordDeadNotifier.witherLords.values().removeIf(isActuallyDead);
-        WitherLordDeadNotifier.states.keySet().removeIf(isActuallyDead);
-
-        WitherLordDeadNotifier.witherLords.forEach((name, wither) -> {
             final var state = WitherLordDeadNotifier.states.get(wither);
             final var hp = wither.getHealth();
 
             final var isDead = Utils.compareFloatExact(1.0F, hp) || Utils.compareFloatExact(3.0F, hp); // It's either 1.0F or, rarely, 3.0F once it dies, but Hypixel does not set the HP to 0 instantly or remove the wither to play a death animation.
 
-            WitherLordDeadNotifier.states.put(wither, isDead);
-
             if ((null == state || !state) && isDead) {
                 WitherLordDeadNotifier.onWitherLordDead(name);
+                WitherLordDeadNotifier.states.remove(wither);
+
+                return true;
+            } else {
+                WitherLordDeadNotifier.states.put(wither, isDead);
+
+                return false;
             }
         });
     }
@@ -127,15 +129,5 @@ final class WitherLordDeadNotifier {
                 }
             }
         }
-    }
-
-    private static final boolean entityExistsInWorld(@NotNull final Entity entity) {
-        final var world = Minecraft.getMinecraft().theWorld;
-
-        if (null != world) {
-            return world.loadedEntityList.contains(entity);
-        }
-
-        return false;
     }
 }
