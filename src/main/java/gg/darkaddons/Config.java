@@ -1222,7 +1222,7 @@ final class Config extends Vigilant {
             this.addDependencies();
             this.addListeners();
         } catch (final Throwable tw) {
-            new IllegalStateException("Initializing config feature dependencies and change listeners failed", tw).printStackTrace();
+            DarkAddons.modError(new IllegalStateException("Initializing config feature dependencies and change listeners failed", tw));
         }
     }
 
