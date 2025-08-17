@@ -64,20 +64,34 @@ final class BlessingDisplay extends GuiElement {
     static final void doCheckMessage(@NotNull final ClientChatReceivedEvent event) {
         McProfilerHelper.startSection("blessing_display_check_message");
 
-        if (Config.isSendDetailedBlessingsMessage() && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type) && DarkAddons.isInSkyblock() && DarkAddons.isInDungeons()) {
+        if ((Config.isSendDetailedBlessingsMessage() || Config.isSpawningNotification()) && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type) && DarkAddons.isInSkyblock() && DarkAddons.isInDungeons()) {
             final var message = Utils.removeControlCodes(event.message.getUnformattedText());
             if (message.endsWith(" picked the Corrupted Blue Relic!")) {
+                M7Features.clearSplit();
                 BlessingDisplay.needBlessingInfo = true;
-                DarkAddons.registerTickTask("send_detailed_blessings_message", 46, false, () ->
-                    Utils.awaitCondition(() -> !BlessingDisplay.needBlessingInfo, () -> {
-                        final var power = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.POWER, 0);
-                        final var time = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.TIME, 0);
-                        final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.WISDOM, 0);
-                        final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
 
-                        DarkAddons.queueUserSentMessageOrCommand("/pc Detailed Blessings: Power " + power + (0 == time ? "" : " - Time " + time) + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
-                    })
-                );
+                if (Config.isSpawningNotification()) {
+                    DarkAddons.registerTickTask("send_split_message", 40, false, () ->
+                        Utils.awaitCondition(() -> !BlessingDisplay.needBlessingInfo, () -> {
+                            final var power = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.POWER, 0);
+
+                            DarkAddons.queueUserSentMessageOrCommand("/pc Power: " + power + " || Split on all drags!");
+                        })
+                    );
+                }
+
+                if (Config.isSendDetailedBlessingsMessage()) {
+                    DarkAddons.registerTickTask("send_detailed_blessings_message", 46, false, () ->
+                        Utils.awaitCondition(() -> !BlessingDisplay.needBlessingInfo, () -> {
+                            final var power = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.POWER, 0);
+                            final var time = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.TIME, 0);
+                            final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.WISDOM, 0);
+                            final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
+
+                            DarkAddons.queueUserSentMessageOrCommand("/pc Detailed Blessings: Power " + power + (0 == time ? "" : " - Time " + time) + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
+                        })
+                    );
+                }
             }
         }
 

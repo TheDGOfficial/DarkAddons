@@ -200,7 +200,7 @@ final class AutoFishingRod {
         final var player = Minecraft.getMinecraft().thePlayer;
         if (Config.isAutoFishingRod() && null != player && event.entity instanceof final EntityFishHook bobber && player == bobber.angler && AutoFishingRod.isHoldingRod()) {
             AutoFishingRod.lastRodThrowTime = System.currentTimeMillis();
-            AutoFishingRod.moveMouse(player);
+            //AutoFishingRod.moveMouse(player);
 
             if (null != AutoFishingRod.countdownArmorStand) {
                 AutoFishingRod.countdownArmorStand.clear();

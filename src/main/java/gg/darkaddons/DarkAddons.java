@@ -652,7 +652,7 @@ public final class DarkAddons {
     @SuppressWarnings("ArrayCreationWithoutNewKeyword")
     @NotNull
     private static final String[] WELCOME_MESSAGE = {
-        "Welcome to " + DarkAddons.MOD_NAME + ", version " + DarkAddons.VERSION + "! Type " + DarkAddonsCommand.COMMAND_PREFIX + DarkAddonsCommand.MAIN_COMMAND_NAME + " to get started!",
+        "Welcome to " + DarkAddons.MOD_NAME + ", version " + DarkAddons.VERSION + "! Type " + DarkAddonsCommand.COMMAND_PREFIX + DarkAddonsCommand.COMMAND_NAME + " to get started!",
         "",
         "If you wish to turn off this message, you can do so from the config, accessible by clicking the Config button after entering the command."
     };
@@ -688,6 +688,7 @@ public final class DarkAddons {
      */
     private static final void registerCommands() {
         ClientCommandHandler.instance.registerCommand(new DarkAddonsCommand());
+        ClientCommandHandler.instance.registerCommand(new SendPrioCommand());
 
         if (Config.isWelcomeMessage()) {
             DarkAddons.queueWelcomeMessage();
@@ -1261,7 +1262,7 @@ public final class DarkAddons {
      * @param keyBinding The key binding to check if it is pressed.
      */
     public static final boolean isKeyDownHook(@NotNull final KeyBinding keyBinding) {
-        return CancelItemUses.shouldAllowKeyPress(keyBinding);
+        return CancelItemUses.shouldAllowKeyPress(keyBinding) && SafePickobulus.shouldAllowKeyPress(keyBinding);
     }
 
     /**
@@ -1274,7 +1275,7 @@ public final class DarkAddons {
      * @return True if given {@link KeyBinding#isPressed()} call should succeed in the current tick, false otherwise.
      */
     public static final boolean isPressedStatic(@NotNull final KeyBinding keyBinding, @NotNull final Runnable leftClick, @NotNull final Runnable rightClick) {
-        return AutoClicker.isPressedStatic(keyBinding, leftClick, rightClick) && CancelItemUses.shouldAllowKeyPress(keyBinding);
+        return AutoClicker.isPressedStatic(keyBinding, leftClick, rightClick) && CancelItemUses.shouldAllowKeyPress(keyBinding) && SafePickobulus.shouldAllowKeyPress(keyBinding);
     }
 
     /**

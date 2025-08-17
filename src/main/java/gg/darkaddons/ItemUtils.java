@@ -25,7 +25,7 @@ final class ItemUtils {
     }
 
     @Nullable
-    private static final ItemStack getHeldItemStack(@NotNull final Minecraft mc) {
+    static final ItemStack getHeldItemStack(@NotNull final Minecraft mc) {
         return mc.thePlayer.getHeldItem();
     }
 

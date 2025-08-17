@@ -68,6 +68,10 @@ final class M7Features {
     @NotNull
     private static final EnumSet<WitherKingDragons> splitDragons = EnumSet.noneOf(WitherKingDragons.class);
 
+    static final void clearSplit() {
+        M7Features.splitDragons.clear();
+    }
+
     @NotNull
     static final EnumMap<WitherKingDragons, Long> getDragonSpawnTimes() {
         return M7Features.dragonSpawnTimes;
@@ -137,6 +141,11 @@ final class M7Features {
                         final var playersDrag = DungeonListener.DungeonClass.ARCHER == dungeonClass || DungeonListener.DungeonClass.TANK == dungeonClass ? archDrag : bersDrag;
 
                         M7Features.showSpawningNotification(playersDrag, playersDrag == archDrag ? bersDrag : archDrag);
+
+                        final var arch = archDrag.getTextColor().toUpperCase(Locale.ROOT);
+                        final var bers = bersDrag.getTextColor().toUpperCase(Locale.ROOT);
+
+                        DarkAddons.queueUserSentMessageOrCommand("/pc BERS TEAM --> " + bers + "                             ARCH TEAM --> " + arch);
                     } else {
                         M7Features.showSpawningNotification(owner, null);
                     }
@@ -327,7 +336,6 @@ final class M7Features {
     }
 
     private static final void handleWorldUnload() {
-        M7Features.splitDragons.clear();
         M7Features.spawningDragons.clear();
         M7Features.killedDragons.clear();
         M7Features.dragonMap.clear();
