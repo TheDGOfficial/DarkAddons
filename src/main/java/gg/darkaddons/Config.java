@@ -781,12 +781,12 @@ final class Config extends Vigilant {
     )
     private static boolean autoFishingRodRecast = true;
 
-    @Property(
+    /*@Property(
         type = PropertyType.SELECTOR, name = "Auto Fishing Rod AFK Bypass Algorithm",
         description = "As you might know, Hypixel stops you from getting any catches if you don't move your head for a while. To counter this the mod automatically moves your head very slightly. To move your head, the mod can use 4 different algorithms: Instantaneous, Lerp, Ease In-Out and Gradual Mouse Movement (Default). Leave at default setting if in doubt.",
         category = "QOL", subcategory = "General",
         options = {"Instantaneous", "Lerp", "Ease In-Out", "Gradual Mouse Movement"}
-    )
+    )*/
     private static int autoFishingRodAFKBypassAlgorithm = 3;
 
     @Property(
