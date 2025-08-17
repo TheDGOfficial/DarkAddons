@@ -74,8 +74,11 @@ final class BlessingDisplay extends GuiElement {
                     DarkAddons.registerTickTask("send_split_message", 40, false, () ->
                         Utils.awaitCondition(() -> !BlessingDisplay.needBlessingInfo, () -> {
                             final var power = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.POWER, 0);
+                            final var time = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.TIME, 0);
 
-                            DarkAddons.queueUserSentMessageOrCommand("/pc Power: " + power + " || Split on all drags!");
+                            final var truePower = power + (time / 2);
+
+                            DarkAddons.queueUserSentMessageOrCommand("/pc Power: " + truePower + " || Split on all drags!");
                         })
                     );
                 }
