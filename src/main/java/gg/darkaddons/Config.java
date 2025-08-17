@@ -1218,8 +1218,12 @@ final class Config extends Vigilant {
     }
 
     private final void addDependencyAndListeners() {
-        this.addDependencies();
-        this.addListeners();
+        try {
+            this.addDependencies();
+            this.addListeners();
+        } catch (final Throwable tw) {
+            new IllegalStateException("Initializing config feature dependencies and change listeners failed", tw).printStackTrace();
+        }
     }
 
     // TODO use this.hidePropertyIf to hide chroma related settings if SBA is not installed
