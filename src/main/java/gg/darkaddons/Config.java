@@ -1187,7 +1187,7 @@ final class Config extends Vigilant {
         this.addDependency("autoFishingRodMaximumDelay", "autoFishingRod");
         this.addDependency("autoFishingRodSlugfishMode", "autoFishingRod");
         this.addDependency("autoFishingRodGoldenFishMode", "autoFishingRod");
-        this.addDependency("autoFishingRodAFKBypassAlgorithm", "autoFishingRod");
+        //this.addDependency("autoFishingRodAFKBypassAlgorithm", "autoFishingRod");
 
         this.addDependency("sendMessageOnRagnarockOnlyInDungeons", "sendMessageOnRagnarock");
         this.addDependency("laggyServerDetectorNotifyParty", "laggyServerDetector");
