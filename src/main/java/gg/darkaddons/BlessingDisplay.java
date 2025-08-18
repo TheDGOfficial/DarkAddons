@@ -77,6 +77,7 @@ final class BlessingDisplay extends GuiElement {
                             final var time = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.TIME, 0);
 
                             final var truePower = ((double) power) + ((double) time / 2.0D);
+                            final var truePowerTrimUnnecessaryDecimal = (truePower == Math.rint(truePower)) ? Long.toString((long) truePower) : Double.toString(truePower);
 
                             DarkAddons.queueUserSentMessageOrCommand("/pc Power: " + truePower + " || Split on all drags!");
                         })
