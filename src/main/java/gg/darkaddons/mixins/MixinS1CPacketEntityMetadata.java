@@ -6,7 +6,8 @@ import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.S1CPacketEntityMetadata;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -16,10 +17,8 @@ final class MixinS1CPacketEntityMetadata {
         super();
     }
 
-    @Redirect(method = "processPacket(Lnet/minecraft/network/play/INetHandlerPlayClient;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/INetHandlerPlayClient;handleEntityMetadata(Lnet/minecraft/network/play/server/S1CPacketEntityMetadata;)V"), require = 0)
-    private final void redirectProcessPacket(@NotNull final INetHandlerPlayClient instance, @NotNull final S1CPacketEntityMetadata packet) {
-        instance.handleEntityMetadata(packet);
-
-        DarkAddons.onEntityMetadata(packet);
+    @Inject(method = "processPacket(Lnet/minecraft/network/play/INetHandlerPlayClient;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/network/play/INetHandlerPlayClient;handleEntityMetadata(Lnet/minecraft/network/play/server/S1CPacketEntityMetadata;)V", shift = At.Shift.AFTER))
+    private final void afterProcessPacket(@NotNull final INetHandlerPlayClient instance, @NotNull final CallbackInfo ci) {
+        DarkAddons.onEntityMetadata((S1CPacketEntityMetadata) (Object) this);
     }
 }
