@@ -267,7 +267,7 @@ final class AdditionalM7Features {
                     AdditionalM7Features.sendUseUltTitle();
                 }
                 if (Config.isSendMessageForWishAndCastleOfStone()) {
-                    DarkAddons.queueUserSentMessageOrCommand("/pc Wish and castle of stone!");
+                    DarkAddons.queueUserSentMessageOrCommand("/pc Wish!");
                 }
             }
             default -> AdditionalM7Features.handleMessage3(message);
