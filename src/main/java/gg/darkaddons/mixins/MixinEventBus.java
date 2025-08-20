@@ -47,7 +47,7 @@ final class MixinEventBus {
         } else if (event instanceof GuiOpenEvent) {
             DarkAddons.handleGuiOpen((GuiOpenEvent) event);
         } else if (event instanceof WorldEvent.Unload) {
-            DarkAddons.handleWorldUnload();
+            DarkAddons.handleWorldUnload((WorldEvent.Unload) event);
         }
     }
 }

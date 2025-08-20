@@ -102,6 +102,10 @@
         "MixinWorldRenderer",
         "MixinDSMUtils",
         "MixinGuiManager",
+        "IMixinWorld",
+        "IMixinIntHashMap",
+        "IMixinChunkProviderClient",
+        "MixinLongHashMap",
         "MixinEntityArrow",
         "MixinS1CPacketEntityMetadata"
     ],

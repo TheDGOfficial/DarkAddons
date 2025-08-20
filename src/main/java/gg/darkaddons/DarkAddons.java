@@ -22,6 +22,7 @@ import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -1200,9 +1201,10 @@ public final class DarkAddons {
     /**
      * Handles world unload event.
      */
-    public static final void handleWorldUnload() {
+    public static final void handleWorldUnload(@NotNull final WorldEvent.Unload event) {
         AutoClassAbilities.onWorldUnload();
         ServerTPSCalculator.onWorldUnload();
+        MemoryLeakFix.onWorldUnload(event);
         WitherLordDeadNotifier.onWorldUnload();
     }
 

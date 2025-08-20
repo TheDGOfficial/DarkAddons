@@ -1,8 +1,26 @@
 package gg.darkaddons;
 
+import gg.darkaddons.mixins.IMixinWorld;
+import gg.darkaddons.mixins.IMixinIntHashMap;
+import gg.darkaddons.mixins.IMixinChunkProviderClient;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+
+import net.minecraftforge.event.world.WorldEvent;
+
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.multiplayer.ChunkProviderClient;
+
+import java.util.HashMap;
+import java.util.WeakHashMap;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
 
 final class MemoryLeakFix {
     /**
@@ -26,6 +44,79 @@ final class MemoryLeakFix {
     private static final EntityPlayer[] EMPTY_ENTITY_PLAYER_ARRAY = new EntityPlayer[0];
 
     private static int memoryReserveOriginalSize;
+
+    private static final Set<WorldClient> oldWorlds = Collections.newSetFromMap(new WeakHashMap<>());
+
+    static final ArrayList<WorldClient> getPossiblyLeakedWorlds() {
+        final var leaked = new ArrayList<WorldClient>(100);
+
+        for (final WorldClient world : oldWorlds) {
+            if (world != Minecraft.getMinecraft().theWorld) {
+                leaked.add(world);
+            }
+        }
+
+        return leaked;
+    }
+
+    static final HashMap<String, Integer> findLeakedDataInWorld(@NotNull final WorldClient world, final boolean clear) {
+        final var data = new HashMap<String, Integer>(100);
+        final var mixinWorld = (IMixinWorld) world;
+
+        MemoryLeakFix.collect(data, "Entities", world.loadedEntityList, clear);
+        MemoryLeakFix.collect(data, "Unloaded Entities", mixinWorld.getUnloadedEntityList(), clear);
+        MemoryLeakFix.collect(data, "Player Entities", world.playerEntities, clear);
+        MemoryLeakFix.collect(data, "Tile Entities", world.loadedTileEntityList, clear);
+        MemoryLeakFix.collect(data, "Tickable Tile Entities", world.tickableTileEntities, clear);
+        MemoryLeakFix.collect(data, "Tile Entities Pending Removal", mixinWorld.getTileEntitiesToBeRemoved(), clear);
+
+        final var entityIdMap = mixinWorld.getEntitiesById();
+        if (entityIdMap != null) {
+            data.put("Entity ID Map", ((IMixinIntHashMap) entityIdMap).getCount());
+            if (clear) {
+                entityIdMap.clearMap();
+            }
+        }
+
+        final var chunkProvider = mixinWorld.getChunkProvider();
+        if (chunkProvider instanceof final ChunkProviderClient chunkProviderClient) {
+            final var chunkMapping = ((IMixinChunkProviderClient) chunkProviderClient).getChunkMapping();
+            if (chunkMapping != null) {
+                data.put("Chunk Mappings", ((MinecraftCollection) chunkMapping).collectionSize());
+                if (clear) {
+                    ((MinecraftCollection) chunkMapping).clearCollection();
+                }
+            }
+
+            MemoryLeakFix.collect(data, "Loaded Chunks", ((IMixinChunkProviderClient) chunkProviderClient).getChunkListing(), clear);
+        }
+
+        MemoryLeakFix.collect(data, "Added Tile Entities", mixinWorld.getAddedTileEntityList(), clear);
+        MemoryLeakFix.collect(data, "Weather Effects", mixinWorld.getWeatherEffects(), clear);
+
+        return data;
+    }
+
+    private static final <T extends Collection<?>> void collect(@NotNull final HashMap<String, Integer> data, @NotNull final String name, @Nullable final T collection, final boolean clear) {
+        if (collection != null) {
+            data.put(name, collection.size());
+            if (clear) {
+                collection.clear();
+            }
+        }
+    }
+
+    static final void onWorldUnload(@NotNull final WorldEvent.Unload event) {
+        if (Config.isPatchMemoryLeaks()) {
+            final var world = event.world;
+
+            if (world instanceof final WorldClient client) {
+                oldWorlds.add(client);
+
+                MemoryLeakFix.findLeakedDataInWorld(client, true);
+            }
+        }
+    }
 
     static final void freeUnnecessary() {
         if (Config.isPatchMemoryLeaks() && null != Minecraft.memoryReserve) {

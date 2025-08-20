@@ -46,7 +46,7 @@ final class SubCommand {
         private static final Logger LOGGER = LogManager.getLogger();
     }
 
-    private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 24;
+    private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 25;
     @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"})
     @NotNull
     private static final LinkedHashSet<SubCommand> subCommandsRegistered = new LinkedHashSet<>(Utils.calculateHashMapCapacity(SubCommand.COLLECTIONS_SUB_COMMAND_COUNT_HINT));
@@ -377,12 +377,23 @@ final class SubCommand {
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
             SubCommand.dumpDebugInfo();
         }, "debuginfo"));
+
+        SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
+            final var worlds = MemoryLeakFix.getPossiblyLeakedWorlds();
+
+            for (final var world : worlds) {
+                MemoryLeakFix.findLeakedDataInWorld(world, true);
+            }
+
+            DarkAddons.queueWarning("Cleared old world data.");
+        }, "clearoldworlds"));
     }
 
     private static final void dumpDebugInfo() {
         SubCommand.dumpGeneralInfo();
         SubCommand.dumpDungeonsDebugInfo();
         SubCommand.dumpMayorsDebugInfo();
+        SubCommand.dumpMemoryLeakInfo();
     }
 
     private static final void dumpGeneralInfo() {
@@ -432,6 +443,24 @@ final class SubCommand {
         DarkAddons.queueWarning("Perks of current mayor & minister: " + String.join(", ", MayorInfo.getAllPerks()));
         final var jerryMayor = MayorInfo.getJerryMayor();
         DarkAddons.queueWarning("Jerry mayor: " + (null == jerryMayor ? "jerry is not mayor" : jerryMayor));
+    }
+
+    private static final void dumpMemoryLeakInfo() {
+        final var worlds = MemoryLeakFix.getPossiblyLeakedWorlds();
+        DarkAddons.queueWarning("World instances pending GC or possibly being leaked: " + worlds.size());
+
+        final var totals = new HashMap<String, Integer>(100);
+
+        for (final var world : worlds) {
+            final var data = MemoryLeakFix.findLeakedDataInWorld(world, false);
+            data.forEach((label, count) -> totals.merge(label, count, Integer::sum));
+        }
+
+        DarkAddons.queueWarning("Total data summary inside the worlds:");
+
+        totals.forEach((label, count) -> {
+            DarkAddons.queueWarning(label + ": " + count);
+        });
     }
 
     private static final void registerProfilerCommands() {
