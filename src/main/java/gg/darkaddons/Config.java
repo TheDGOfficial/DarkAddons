@@ -572,6 +572,13 @@ final class Config extends Vigilant {
     private static boolean spawningNotification = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Split Messages",
+        description = "Sends split on all drags message and arch team/bers team dragon color to your party chat. You can use /sendprio command to send split settings to people using dragprio chattrigers module, to match darkaddon's settings. Dragon Spawning Notification and Split Messages together replaces all functionality of the dragprio chattrigers module as a drop-in replacement.",
+        category = "Dungeons", subcategory = "Notifiers"
+    )
+    private static boolean splitMessages;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Dragon In Statue Notification",
         description = "Shows a title message on screen when a dragon is in its statue, telling you to kill it.",
         category = "Dungeons", subcategory = "Notifiers"
@@ -1154,6 +1161,7 @@ final class Config extends Vigilant {
         this.addDependency("sendMessageForScoreAtBossEntry", "sendMessageOn300Score");
         this.addDependency("sendTitleOn301Score", "sendMessageOn300Score");
         this.addDependency("sendEnrageSkipHelperMessage", "maxorHPDisplay");
+        this.addDependency("splitMessages", "spawningNotification");
 
         this.addDependencies2();
     }
@@ -1694,6 +1702,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.spawningNotification;
+    }
+
+    static final boolean isSplitMessages() {
+        Config.checkUninit();
+
+        return Config.splitMessages;
     }
 
     static final boolean isKillNotification() {

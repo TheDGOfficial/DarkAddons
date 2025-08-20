@@ -70,7 +70,7 @@ final class BlessingDisplay extends GuiElement {
                 M7Features.clearSplit();
                 BlessingDisplay.needBlessingInfo = true;
 
-                if (Config.isSpawningNotification()) {
+                if (Config.isSpawningNotification() && Config.isSplitMessages()) {
                     DarkAddons.registerTickTask("send_split_message", 40, false, () ->
                         Utils.awaitCondition(() -> !BlessingDisplay.needBlessingInfo, () -> {
                             final var power = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.POWER, 0);

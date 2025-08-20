@@ -145,7 +145,9 @@ final class M7Features {
                         final var arch = archDrag.getTextColor().toUpperCase(Locale.ROOT);
                         final var bers = bersDrag.getTextColor().toUpperCase(Locale.ROOT);
 
-                        DarkAddons.queueUserSentMessageOrCommand("/pc BERS TEAM --> " + bers + "                             ARCH TEAM --> " + arch);
+                        if (Config.isSplitMessages()) {
+                            DarkAddons.queueUserSentMessageOrCommand("/pc BERS TEAM --> " + bers + "                             ARCH TEAM --> " + arch);
+                        }
                     } else {
                         M7Features.showSpawningNotification(owner, null);
                     }
