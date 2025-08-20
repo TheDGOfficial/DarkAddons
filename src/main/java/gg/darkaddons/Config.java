@@ -485,13 +485,13 @@ final class Config extends Vigilant {
     )
     private static int hideWitherKing;*/
 
-    @Property(
+    /*@Property(
         type = PropertyType.SELECTOR, name = "Hide Wither Skeletons on Maxor Fight",
         description = "Hides Wither Skeletons on Maxor Fight, with the specified mode. Hide just doesn't render it but keeps it as an entity on the world which will still tick them. Remove will completely remove it from the world as if it didn't exist at all, and disabled will not change anything.",
         category = "Performance", subcategory = "Experimental",
         options = {"Disabled", "Hide", "Remove"}
     )
-    private static int hideWitherSkeletonsOnMaxor;
+    private static int hideWitherSkeletonsOnMaxor;*/
 
     @Property(
         type = PropertyType.SWITCH, name = "Item Model Transparency Fix",
@@ -1630,11 +1630,11 @@ final class Config extends Vigilant {
         return Config.hideWitherKing;
     }*/
 
-    static final int getHideWitherSkeletonsOnMaxor() {
+    /*static final int getHideWitherSkeletonsOnMaxor() {
         Config.checkUninit();
 
         return Config.hideWitherSkeletonsOnMaxor;
-    }
+    }*/
 
     static final boolean isPatchMemoryLeaks() {
         Config.checkUninit();
