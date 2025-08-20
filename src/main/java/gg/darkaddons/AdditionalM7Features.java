@@ -242,7 +242,7 @@ final class AdditionalM7Features {
     private static final void handleMessage2(@NotNull final String message) {
         switch (message) {
             case "⚠ Maxor is enraged! ⚠" -> {
-                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
+                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook(false);
                 if (AdditionalM7Features.firstLaserNotDone) {
                     var flag = false;
                     if (Config.isUltReminder()) {
@@ -261,11 +261,7 @@ final class AdditionalM7Features {
             }
             case "[BOSS] Goldor: You have done it, you destroyed the factory…" -> {
                 AdditionalM7Features.phase5NotStarted = false; // Have to do it here instead of Necron final dialogue because that's too late
-                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
-                if (Config.isUltReminder()) {
-                    DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Goldor fight starting. Use your ultimate ability!");
-                    AdditionalM7Features.sendUseUltTitle();
-                }
+                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook(true);
                 if (Config.isSendMessageForWishAndCastleOfStone()) {
                     DarkAddons.queueUserSentMessageOrCommand("/pc Wish!");
                 }
@@ -313,7 +309,7 @@ final class AdditionalM7Features {
                 AdditionalM7Features.notifyToStartCastingRagnarockIfNecessary();
             case "[BOSS] Livid: I respect you for making it to here, but I'll be your undoing." -> {
                 AdditionalM7Features.lividsSpawned = true;
-                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
+                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook(false);
             }
             default -> AdditionalM7Features.handleMessage5(message);
         }
@@ -323,7 +319,7 @@ final class AdditionalM7Features {
         switch (message) {
             case "[BOSS] Sadan: My giants! Unleashed!" -> {
                 AdditionalM7Features.giantsFalling = true;
-                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook();
+                AutoClassAbilities.ultReminderToAutoClassAbilitiesHook(false);
             }
             case "[BOSS] Sadan: I'm sorry, but I need to concentrate. I wish it didn't have to come to this." ->
                 AdditionalM7Features.notSaidFinalDialogue = false;

@@ -601,14 +601,14 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Ultimate Reminder",
-        description = "Shows a title message on screen after the first laser in Maxor and after terminals are done (for the Goldor fight), to remind you about using your ultimate class ability.",
+        description = "Shows a title message on screen after the first laser in Maxor, to remind you about using your ultimate class ability.",
         category = "Dungeons", subcategory = "Reminders"
     )
     private static boolean ultReminder = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message for Wish and Castle of Stone",
-        description = "Sends a message to party chat reminding wish and castle of stone when Maxor enrages or when Goldor fight starts.",
+        description = "Sends a message to party chat reminding wish and castle of stone when Maxor enrages and reminding wish when Goldor fight starts.",
         category = "Dungeons", subcategory = "Reminders"
     )
     private static boolean sendMessageForWishAndCastleOfStone;

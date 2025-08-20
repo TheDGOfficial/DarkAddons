@@ -301,7 +301,7 @@ final class AutoClassAbilities {
         }
     }
 
-    static final void ultReminderToAutoClassAbilitiesHook() {
+    static final void ultReminderToAutoClassAbilitiesHook(final boolean goldor) {
         if (Config.isAutoUltimateAbility() && AutoClassAbilities.checkPrePreconditions()) {
             if (null == AutoClassAbilities.ultimateClassAbility) {
                 AutoClassAbilities.findClassAndAssignAbilities();
@@ -313,7 +313,7 @@ final class AutoClassAbilities {
                 shouldUse = 7 == DungeonFeatures.getDungeonFloorNumber();
             }
 
-            if (shouldUse && AutoClassAbilities.ultimateClassAbility.isCooldownReallyGone()) {
+            if (shouldUse && AutoClassAbilities.ultimateClassAbility.isCooldownReallyGone() && (!goldor || AutoClassAbilities.UltimateClassAbility.WISH == AutoClassAbilities.ultimateClassAbility)) {
                 AutoClassAbilities.ultimateClassAbility.markUsed();
                 AutoClassAbilities.emulateDropKeyPress(false);
             }
