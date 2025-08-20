@@ -59,7 +59,7 @@ final class Config extends Vigilant {
         category = "Dungeons", subcategory = "HUD", triggerActionOnInitialization = false,
         options = {"M7", "M6", "Adaptive"}
     )
-    private static int classAverage50DisplayFloor;
+    private static int classAverage50DisplayFloor = 2;
 
     @Property(
         type = PropertyType.SELECTOR, name = "Class Average 50 Display Visibility",
@@ -67,7 +67,7 @@ final class Config extends Vigilant {
         category = "Dungeons", subcategory = "HUD", triggerActionOnInitialization = false,
         options = {"Only in Dungeons", "Only after Run End", "Only after Run End or in Dungeon Hub", "When in Dungeons or Dungeon Hub", "When in Skyblock", "Always"}
     )
-    private static int classAverage50DisplayVisibility;
+    private static int classAverage50DisplayVisibility = 2;
 
     @Property(
         type = PropertyType.SELECTOR, name = "Class Average 50 Display Compactness",
@@ -105,7 +105,7 @@ final class Config extends Vigilant {
         description = "Shows a HUD element with Maxor's health percentage, which doesn't disappear at times unlike the Skytils showing Maxor's HP in the bossbar, which disappears at times and makes you fail enrage skip. It is also more up-to-date in health values compared to Skytils.",
         category = "Dungeons", subcategory = "HUD"
     )
-    private static boolean maxorHPDisplay;
+    private static boolean maxorHPDisplay = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Enrage Skip Helper Message",
@@ -126,7 +126,7 @@ final class Config extends Vigilant {
         description = "Hides blessings if they are Level 0.",
         category = "Dungeons", subcategory = "HUD"
     )
-    private static boolean hideBlessingWhenZero;
+    private static boolean hideBlessingWhenZero = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Blessing of Power",
@@ -154,14 +154,14 @@ final class Config extends Vigilant {
         description = "Enable or disable Blessing of Stone on Blessing Hud.",
         category = "Dungeons", subcategory = "HUD"
     )
-    private static boolean stoneBlessing;
+    private static boolean stoneBlessing = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Blessing of Wisdom",
         description = "Enable or disable Blessing of Wisdom on Blessing Hud.",
         category = "Dungeons", subcategory = "HUD"
     )
-    private static boolean wisdomBlessing;
+    private static boolean wisdomBlessing = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Detailed Blessings Message",
@@ -217,7 +217,7 @@ final class Config extends Vigilant {
         description = "Shows time left before you can rejoin SkyBlock after you get kicked in your screen.",
         category = "Misc", subcategory = "HUD"
     )
-    private static boolean sbRejoinCooldownAfterKickDisplay;
+    private static boolean sbRejoinCooldownAfterKickDisplay = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "FPS Limit Display",
@@ -502,7 +502,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "Patch Memory Leaks",
-        description = "Patches Memory Leaks, usually in Crimson Isle. Also removes a unused 10MB allocation created by vanilla Minecraft and stored forever, freeing memory. Every MB counts, W (Note: This of course doesn't fix all memory leaks.)",
+        description = "Patches (Known) Memory Leaks. Such as the 10MB memory reserve leak in vanilla, crimson isle player leak in Hypixel, NEU old worlds memory leak (partial fix only).",
         category = "Performance", subcategory = "Patches", triggerActionOnInitialization = false
     )
     private static boolean patchMemoryLeaks = true;
@@ -583,18 +583,18 @@ final class Config extends Vigilant {
         description = "Shows a title message on screen when a dragon is in its statue, telling you to kill it.",
         category = "Dungeons", subcategory = "Notifiers"
     )
-    private static boolean killNotification = true;
+    private static boolean killNotification;
 
     @Property(
         type = PropertyType.SWITCH, name = "Statue Destroyed Notification",
-        description = "Shows a title message on screen after you successfully kill a dragon in its statue and destroy the statue. Includes how many LBs hit by Tank, Healer & Mage and if the dragon was ice sprayed or not as well. A chat message with detailed breakdown of how many arrows were hit by each player will be sent in addition.",
+        description = "Shows a title message on screen after you successfully kill a dragon in its statue and destroy the statue. Includes how many LBs hit by Tank, Healer & Mage, if the dragon was ice sprayed or not, and how many arrows were hit by Archer and Berserker as A+B as well. A chat message with detailed breakdown of how many arrows were hit by each player will be sent in addition.",
         category = "Dungeons", subcategory = "Notifiers"
     )
     private static boolean statueDestroyedNotification = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Statue Missed Notification",
-        description = "Shows a title message on screen if you kill a dragon out of its statue. Includes how many LBs hit by Tank, Healer & Mage and if the dragon was ice sprayed or not as well. A chat message with detailed breakdown of how many arrows were hit by each player will be sent in addition.",
+        description = "Shows a title message on screen if you kill a dragon out of its statue. IIncludes how many LBs hit by Tank, Healer & Mage, if the dragon was ice sprayed or not, and how many arrows were hit by Archer and Berserker as A+B as well. A chat message with detailed breakdown of how many arrows were hit by each player will be sent in addition.",
         category = "Dungeons", subcategory = "Notifiers"
     )
     private static boolean statueMissedNotification = true;
@@ -625,35 +625,35 @@ final class Config extends Vigilant {
         description = "Shows a title message on screen when Phase 4 ends to remind you about equipping Ender Dragon pet.",
         category = "Dungeons", subcategory = "Reminders"
     )
-    private static boolean edragReminder = true;
+    private static boolean edragReminder;
 
     @Property(
         type = PropertyType.SWITCH, name = "Phase 3 Starting Notification",
         description = "Shows a title message on screen when Phase 2 ends to remind you about Phase 3 starting.",
         category = "Dungeons", subcategory = "Reminders"
     )
-    private static boolean phase3StartingNotification = true;
+    private static boolean phase3StartingNotification;
 
     @Property(
         type = PropertyType.SWITCH, name = "Phase 5 Starting Notification",
         description = "Shows a title message on screen when Phase 5 is starting.",
         category = "Dungeons", subcategory = "Reminders"
     )
-    private static boolean phase5StartingNotification = true;
+    private static boolean phase5StartingNotification;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message on 270 Score",
         description = "Uses score from scoreboard to determine the real score and send the 270 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet. It is recommended to have both Skytils and DarkAddons score messages enabled for best results.",
         category = "Dungeons", subcategory = "Helpers"
     )
-    private static boolean sendMessageOn270Score;
+    private static boolean sendMessageOn270Score = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message on 300 Score",
         description = "Uses score from scoreboard to determine the real score and send the 300 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet. It is recommended to have both Skytils and DarkAddons score messages enabled for best results.",
         category = "Dungeons", subcategory = "Helpers"
     )
-    private static boolean sendMessageOn300Score;
+    private static boolean sendMessageOn300Score = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message for Score At Boss Entry and Affordable Deaths for S+",
@@ -667,7 +667,7 @@ final class Config extends Vigilant {
         description = "Sends a title along with a sound effect when 301 score with 0 deaths or 302 score with 1+ deaths has been reached on M7 and F7. For other floors, it sends on 300 flat score no matter deaths instead.",
         category = "Dungeons", subcategory = "Helpers"
     )
-    private static boolean sendTitleOn301Score;
+    private static boolean sendTitleOn301Score = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message on Melody Terminal",
@@ -681,7 +681,7 @@ final class Config extends Vigilant {
         description = "Displays a message on screen when you should start casting Ragnarock for extra strength on M5/F5 and M7.",
         category = "Dungeons", subcategory = "Helpers"
     )
-    private static boolean ragnarockUseNotifier;
+    private static boolean ragnarockUseNotifier = true;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message for Ragnarock Strength Gained",
@@ -1048,7 +1048,7 @@ final class Config extends Vigilant {
         description = "Shows time left on Smoldering Polarization (Re-heated Gummy Polar Bear) and Wisp's Ice Flavored Splash Potion on your screen.",
         category = "Slayers", subcategory = "HUD"
     )
-    private static boolean blazeEffectTimer;
+    private static boolean blazeEffectTimer = true;
 
     private static boolean initialized;
 
