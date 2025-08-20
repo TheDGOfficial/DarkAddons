@@ -2,8 +2,6 @@ package gg.darkaddons;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.projectile.EntityWitherSkull;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -24,11 +22,6 @@ final class CheckRender {
         CheckRender.forwardCheckRender(entity, cir);
     }
 
-    private static final boolean isHideWitherSkeletonsModeEnabled() {
-        final var mode = Config.getHideWitherSkeletonsOnMaxor();
-        return 1 == mode || 2 == mode;
-    }
-
     private static final void forwardCheckRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
         if (Config.isArmorStandOptimizer() && entity instanceof EntityArmorStand) {
             if (!ArmorStandOptimizer.checkRender(entity)) {
@@ -38,10 +31,6 @@ final class CheckRender {
             if (!RemoveBlankArmorStands.checkRender(entity)) {
                 cir.setReturnValue(false);
             }
-        } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntitySkeleton && !HideWitherSkeletons.checkRender((EntitySkeleton) entity)) {
-            cir.setReturnValue(false);
-        } else if (CheckRender.isHideWitherSkeletonsModeEnabled() && entity instanceof EntityWitherSkull && !HideWitherSkeletons.checkRenderSkull((EntityWitherSkull) entity)) {
-            cir.setReturnValue(false);
         }
     }
 }
