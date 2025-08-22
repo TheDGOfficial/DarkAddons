@@ -279,7 +279,7 @@ enum WitherKingDragons {
 
     @NotNull
     final AxisAlignedBB getMoreAccurateBoundingBoxIfEnabled() {
-        return Config.isMoreAccurateDragonBoundingBoxes() ? this.moreAccurateBoundingBox : this.boundingBox;
+        return Config.isShowStatueBox() && Config.isMoreAccurateDragonBoundingBoxes() ? this.moreAccurateBoundingBox : this.boundingBox;
     }
 
     @NotNull

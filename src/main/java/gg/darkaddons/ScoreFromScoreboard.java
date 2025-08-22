@@ -67,10 +67,10 @@ final class ScoreFromScoreboard {
     }
 
     private static final void onScoreUpdate(final int score, final int rawScore) {
-        if (300 <= score && !ScoreCalculation.getHasSaid300()) {
+        if (Config.isSendMessageOn300Score() && 300 <= score && !ScoreCalculation.getHasSaid300()) {
             ScoreCalculation.setHasSaid300(true);
             DarkAddons.queueUserSentMessageOrCommand("/pc 300 score");
-        } else if (270 <= score && !ScoreCalculation.getHasSaid270()) {
+        } else if (Config.isSendMessageOn270Score() && 270 <= score && !ScoreCalculation.getHasSaid270()) {
             ScoreCalculation.setHasSaid270(true);
             DarkAddons.queueUserSentMessageOrCommand("/pc 270 score");
         }
@@ -80,7 +80,7 @@ final class ScoreFromScoreboard {
         final var deaths = ScoreCalculation.getDeaths().get();
         final var scoreReq = AdditionalM7Features.isInM7OrF7() ? 1 <= deaths ? 302 : 301 : 300;
 
-        if (highestScore >= scoreReq && !ScoreFromScoreboard.sentTitleOn301Score) {
+        if (Config.isSendMessageOn300Score() && Config.isSendTitleOn301Score() && highestScore >= scoreReq && !ScoreFromScoreboard.sentTitleOn301Score) {
             ScoreFromScoreboard.sentTitleOn301Score = true;
             GuiManager.createTitle("§a✔ " + highestScore + " Score!", "§a§lYou can go in.", 60, 60, true, GuiManager.Sound.LEVEL_UP);
         }
@@ -95,7 +95,7 @@ final class ScoreFromScoreboard {
     }
 
     private static final void realScoreHook(final int score, final int deaths) {
-        if (Config.isSendMessageForScoreAtBossEntry() && (-1L != DungeonTimer.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry && -1L == DungeonTimer.getBossClearTime()) {
+        if ((Config.isSendMessageOn300Score() && Config.isSendMessageForScoreAtBossEntry()) && (-1L != DungeonTimer.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry && -1L == DungeonTimer.getBossClearTime()) {
             var affordableDeaths = 0;
             var extraScore = score - 300;
 
