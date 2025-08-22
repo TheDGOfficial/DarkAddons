@@ -1,52 +1,22 @@
 package gg.darkaddons;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import com.google.common.collect.ImmutableList;
 
 @SuppressWarnings("ClassNamePrefixedWithPackageName")
-final class DarkAddonsCommand extends CommandBase {
+final class DarkAddonsCommand extends ModCommand {
     @NotNull
-    static final String COMMAND_PREFIX = "/";
-    @NotNull
-    static final String COMMAND_NAME = "darkaddons";
-
-    @NotNull
-    private static final List<String> COMMAND_ALIASES =
-        ImmutableList.of("darkaddon", "da");
+    static final String MAIN_COMMAND_NAME = "darkaddons";
 
     DarkAddonsCommand() {
-        super();
-    }
-
-    @Override
-    @NotNull
-    public final String getCommandName() {
-        return DarkAddonsCommand.COMMAND_NAME;
-    }
-
-    @Override
-    @NotNull
-    public final List<String> getCommandAliases() {
-        return ImmutableList.<String>builder()
-            .addAll(super.getCommandAliases())
-            .addAll(DarkAddonsCommand.COMMAND_ALIASES)
-            .build();
-    }
-
-    @Override
-    public final boolean canCommandSenderUseCommand(@Nullable final ICommandSender sender) {
-        return super.canCommandSenderUseCommand(sender);
+        super(DarkAddonsCommand.MAIN_COMMAND_NAME, "darkaddon", "da");
     }
 
     @Override
     @Nullable
-    public final List<String> addTabCompletionOptions(@Nullable final ICommandSender sender, @Nullable final String[] args, @Nullable final BlockPos pos) {
+    final List<String> tabComplete(@Nullable final String[] args) {
         if (DarkAddonsCommand.hasArgs(args)) {
             final var subcommand = args[0];
             if (null != subcommand) {
@@ -61,18 +31,7 @@ final class DarkAddonsCommand extends CommandBase {
                 }
             }
         }
-        return super.addTabCompletionOptions(sender, args, pos);
-    }
-
-    @Override
-    @NotNull
-    public final String getCommandUsage(@Nullable final ICommandSender sender) {
-        return DarkAddonsCommand.COMMAND_PREFIX + DarkAddonsCommand.COMMAND_NAME;
-    }
-
-    @Override
-    public final int getRequiredPermissionLevel() {
-        return super.getRequiredPermissionLevel() - 4;
+        return super.tabComplete(args);
     }
 
     private static final boolean hasArgs(@Nullable final String... args) {
@@ -80,13 +39,15 @@ final class DarkAddonsCommand extends CommandBase {
     }
 
     @Override
-    public final void processCommand(@Nullable final ICommandSender sender, @Nullable final String... args) {
+    final void execute(@Nullable final String... args) {
+        super.execute(args);
+
         if (DarkAddonsCommand.hasArgs(args)) {
             final var subcommand = args[0];
             if (null != subcommand) {
                 final var subCommand = SubCommand.match(subcommand);
                 if (null == subCommand) {
-                    DarkAddons.queueWarning("Unknown subcommand. Type " + DarkAddonsCommand.COMMAND_PREFIX + DarkAddonsCommand.COMMAND_NAME + " help to get a list of subcommands.");
+                    DarkAddons.queueWarning("Unknown subcommand. Type " + ModCommand.GENERIC_COMMAND_PREFIX + this.getCommandName() + " help to get a list of subcommands.");
                 } else {
                     subCommand.setArgs(args);
 

@@ -653,7 +653,7 @@ public final class DarkAddons {
     @SuppressWarnings("ArrayCreationWithoutNewKeyword")
     @NotNull
     private static final String[] WELCOME_MESSAGE = {
-        "Welcome to " + DarkAddons.MOD_NAME + ", version " + DarkAddons.VERSION + "! Type " + DarkAddonsCommand.COMMAND_PREFIX + DarkAddonsCommand.COMMAND_NAME + " to get started!",
+        "Welcome to " + DarkAddons.MOD_NAME + ", version " + DarkAddons.VERSION + "! Type " + ModCommand.GENERIC_COMMAND_PREFIX + DarkAddonsCommand.MAIN_COMMAND_NAME + " to get started!",
         "",
         "If you wish to turn off this message, you can do so from the config, accessible by clicking the Config button after entering the command."
     };

@@ -874,7 +874,7 @@ final class SubCommand {
 
     @NotNull
     private final String getHelpText() {
-        return DarkAddonsCommand.COMMAND_PREFIX + DarkAddonsCommand.COMMAND_NAME + ' ' + this.name + (this.argsDesc.isEmpty() ? "" : ' ' + this.argsDesc);
+        return ModCommand.GENERIC_COMMAND_PREFIX + DarkAddonsCommand.MAIN_COMMAND_NAME + ' ' + this.name + (this.argsDesc.isEmpty() ? "" : ' ' + this.argsDesc);
     }
 
     @Override
