@@ -170,7 +170,7 @@ final class MaxorHPDisplay extends SimpleGuiElement {
 
         lines.add(Utils.compareDoubleExact(-1.0D, hp) && !MaxorHPDisplay.maxorDead ? text + "§c§lUnknown" : text + color + hpText);
 
-        if (Config.isSendEnrageSkipHelperMessage() && !MaxorHPDisplay.saidEnrageSkipHelperMessage && 74.0D >= hp && !DarkAddons.isInLocationEditingGui()) {
+        if (Config.isSendEnrageSkipHelperMessage() && !MaxorHPDisplay.saidEnrageSkipHelperMessage && 74.0D >= hp && !DarkAddons.isInLocationEditingGui() && !Utils.compareDoubleExact(-1.0D, hp) && !MaxorHPDisplay.maxorDead) {
             MaxorHPDisplay.saidEnrageSkipHelperMessage = true;
             DarkAddons.queueUserSentMessageOrCommand("/pc Maxor HP: " + hpText + " | Enough damage dealt for first DPS phase!");
         }
