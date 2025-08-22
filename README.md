@@ -14,6 +14,8 @@ If you crash from NoSuchFieldError or a Mixin error - ensure you have latest Ess
 
 For Mixin errors, most common culprit is using outdated NEU. Get NEU from [here](https://github.com/NotEnoughUpdates/NotEnoughUpdates/). This because DarkAddons when NEU is present (so NEU is not required, but if you have it, you must have a recent enough version to be compatible) applies some Mixins for optimization purposes, but it does not check the specific NEU version before applying.
 
+If you want an even more updated NEU version with memory leak fix, attribute shard in dungeon chest profit support and more FPS, get NEU from [here](https://github.com/TheDGOfficial/NotEnoughUpdates/releases), from my fork.
+
 # Features
 
 For higlighted features of the mod with some screenshots, click [here](https://github.com/TheDGOfficial/DarkAddons/blob/main/HIGHLIGHTED_FEATURES.md). Keep in mind this list is not exhaustive and will only show higlighted features. You can access the feature toggles by typing /darkaddons and navigating the config. The HUD elements are also edited from the same command. If you have any questions, create a [Discussion](https://github.com/TheDGOfficial/DarkAddons/discussions) or an [Issue](https://github.com/TheDGOfficial/DarkAddons/issues).
