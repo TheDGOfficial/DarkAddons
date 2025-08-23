@@ -87,7 +87,7 @@ final class ScoreFromScoreboard {
 
         final var diff = rawScore - ScoreFromScoreboard.previousScore;
 
-        if ((28 <= diff && -1L != DungeonTimer.getBossEntryTime()) || 300 <= rawScore) {
+        if (28 <= diff && -1L != DungeonTimer.getBossEntryTime() || 300 <= rawScore) {
             ScoreFromScoreboard.realScoreHook(Math.max(rawScore, calculatedScore), deaths);
         }
 
@@ -95,7 +95,7 @@ final class ScoreFromScoreboard {
     }
 
     private static final void realScoreHook(final int score, final int deaths) {
-        if ((Config.isSendMessageOn300Score() && Config.isSendMessageForScoreAtBossEntry()) && (-1L != DungeonTimer.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry && -1L == DungeonTimer.getBossClearTime()) {
+        if (Config.isSendMessageOn300Score() && Config.isSendMessageForScoreAtBossEntry() && (-1L != DungeonTimer.getBossEntryTime() || 300 <= score) && !ScoreFromScoreboard.hasSaidScoreAtBossEntry && -1L == DungeonTimer.getBossClearTime()) {
             var affordableDeaths = 0;
             var extraScore = score - 300;
 

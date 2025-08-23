@@ -47,7 +47,7 @@ final class SubCommand {
     }
 
     private static final int COLLECTIONS_SUB_COMMAND_COUNT_HINT = 25;
-    @SuppressWarnings({"CollectionDeclaredAsConcreteClass", "TypeMayBeWeakened"})
+    @SuppressWarnings("CollectionDeclaredAsConcreteClass")
     @NotNull
     private static final LinkedHashSet<SubCommand> subCommandsRegistered = new LinkedHashSet<>(Utils.calculateHashMapCapacity(SubCommand.COLLECTIONS_SUB_COMMAND_COUNT_HINT));
     @NotNull
@@ -374,9 +374,7 @@ final class SubCommand {
             }
         }, "dumpclass", new Class<?>[]{String.class}, "<fully qualified class name>"));*/
 
-        SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
-            SubCommand.dumpDebugInfo();
-        }, "debuginfo"));
+        SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> SubCommand.dumpDebugInfo(), "debuginfo"));
 
         SubCommand.register(new SubCommand((@NotNull final SubCommand self) -> {
             final var worlds = MemoryLeakFix.getPossiblyLeakedWorlds();
@@ -406,7 +404,8 @@ final class SubCommand {
             final var name = island.name();
             final var displayName = new StringBuilder(name.length() + 1);
             displayName.append(name.charAt(0));
-            for (var i = 1; i < name.length(); ++i) {
+            final var nameLength = name.length();
+            for (var i = 1; i < nameLength; ++i) {
                 final var c = name.charAt(i);
                 if (Character.isUpperCase(c)) {
                     displayName.append(' ');
@@ -449,7 +448,7 @@ final class SubCommand {
         final var worlds = MemoryLeakFix.getPossiblyLeakedWorlds();
         DarkAddons.queueWarning("World instances pending GC or possibly being leaked: " + worlds.size());
 
-        final var totals = new HashMap<String, Integer>(100);
+        final var totals = new HashMap<String, Integer>(Utils.calculateHashMapCapacity(100));
 
         for (final var world : worlds) {
             final var data = MemoryLeakFix.findLeakedDataInWorld(world, false);
@@ -458,9 +457,7 @@ final class SubCommand {
 
         DarkAddons.queueWarning("Total data summary inside the worlds:");
 
-        totals.forEach((label, count) -> {
-            DarkAddons.queueWarning(label + ": " + count);
-        });
+        totals.forEach((label, count) -> DarkAddons.queueWarning(label + ": " + count));
     }
 
     private static final void registerProfilerCommands() {

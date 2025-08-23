@@ -10,15 +10,17 @@ import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.EOFException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -220,7 +222,7 @@ final class RunsTillCA50 {
                 return null;
             }
 
-            final var classExperiences = Arrays.stream(DungeonListener.DungeonClass.values()).collect(Collectors.toMap(Function.identity(), data::getClassXpForClass, (a, b) -> b, () -> new EnumMap<>(DungeonListener.DungeonClass.class)));
+            final var classExperiences = Arrays.stream(DungeonListener.DungeonClass.values()).collect(Collectors.toMap(Function.identity(), data::getClassXpForClass, (d1, d2) -> d2, () -> new EnumMap<>(DungeonListener.DungeonClass.class)));
 
             return RunsTillCA50.createDataHolder(uuid, data.getCataXp(), data.getMasterTierCompletionsForFloor(m7 ? 7 : 6), classExperiences);
         } catch (final Throwable t) {
@@ -280,26 +282,47 @@ final class RunsTillCA50 {
 
     private static final void handleError(@NotNull final Throwable t,
                                           final boolean printWarnings) {
-        if (t instanceof InvocationTargetException) {
-            RunsTillCA50.handleError(t.getCause(), printWarnings);
-            return;
+        var current = t;
+        final Set<Throwable> visited = Collections.newSetFromMap(new IdentityHashMap<>(Utils.calculateHashMapCapacity(10)));
+
+        // unwrap until it's not an InvocationTargetException,
+        // but stop if there's a cycle
+        while (current instanceof InvocationTargetException) {
+            if (!visited.add(current)) {
+                // cycle detected, break out
+                break;
+            }
+            final var cause = current.getCause();
+            if (null == cause) {
+                break;
+            }
+            current = cause;
         }
 
-        if (t.getClass().getName().contains("Timeout")) {
+        if (current.getClass().getName().contains("Timeout")) {
             if (printWarnings) {
-                DarkAddons.queueWarning("Request timed out while fetching data, please retry at a later time!");
+                DarkAddons.queueWarning(
+                    "Request timed out while fetching data, please retry at a later time!"
+                );
             }
-        } else if (t instanceof EOFException) {
+        } else if (current instanceof EOFException) {
             if (printWarnings) {
-                DarkAddons.queueWarning("Unexpected end of line error while fetching data; please retry again at a later time!");
+                DarkAddons.queueWarning(
+                    "Unexpected end of line error while fetching data; please retry again at a later time!"
+                );
             }
-        } else if (t instanceof NumberFormatException) {
+        } else if (current instanceof NumberFormatException) {
             if (printWarnings) {
-                DarkAddons.queueWarning("Parsing issue from the result gathered from API; Hypixel API format changed? Updating Skytils or " + DarkAddons.MOD_NAME + " might fix this error. The full error will be printed to the logs for debugging purposes after this message, although you probably can't fix this error yourself.");
+                DarkAddons.queueWarning(
+                    "Parsing issue from the result gathered from API; Hypixel API format changed? "
+                        + "Updating Skytils or " + DarkAddons.MOD_NAME + " might fix this error. "
+                        + "The full error will be printed to the logs for debugging purposes after this message, "
+                        + "although you probably can't fix this error yourself."
+                );
             }
-            RunsTillCA50.LOGGER.catching(t);
+            RunsTillCA50.LOGGER.catching(current);
         } else {
-            DarkAddons.modError(t);
+            DarkAddons.modError(current);
         }
     }
 

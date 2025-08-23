@@ -46,8 +46,8 @@ final class MixinEventBus {
             DarkAddons.handleClientChatReceived(e);
         } else if (event instanceof GuiOpenEvent) {
             DarkAddons.handleGuiOpen((GuiOpenEvent) event);
-        } else if (event instanceof WorldEvent.Unload) {
-            DarkAddons.handleWorldUnload((WorldEvent.Unload) event);
+        } else if (event instanceof final WorldEvent.Unload e) {
+            DarkAddons.handleWorldUnload(e);
         }
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @Mixin(value = ChunkProviderClient.class, priority = 999)
 public interface IMixinChunkProviderClient {
     /**
-     * Gets the chunk mapping map (private field in {@link ChunkProviderClient}).
+     * Gets the chunk mapping (private field in {@link ChunkProviderClient}).
      */
     @Accessor
     LongHashMap<Chunk> getChunkMapping();

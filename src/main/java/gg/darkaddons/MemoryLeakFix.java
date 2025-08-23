@@ -45,12 +45,12 @@ final class MemoryLeakFix {
 
     private static int memoryReserveOriginalSize;
 
-    private static final Set<WorldClient> oldWorlds = Collections.newSetFromMap(new WeakHashMap<>());
+    private static final Set<WorldClient> oldWorlds = Collections.newSetFromMap(new WeakHashMap<>(Utils.calculateHashMapCapacity(50)));
 
     static final ArrayList<WorldClient> getPossiblyLeakedWorlds() {
         final var leaked = new ArrayList<WorldClient>(100);
 
-        for (final WorldClient world : oldWorlds) {
+        for (final var world : MemoryLeakFix.oldWorlds) {
             if (world != Minecraft.getMinecraft().theWorld) {
                 leaked.add(world);
             }
@@ -60,7 +60,7 @@ final class MemoryLeakFix {
     }
 
     static final HashMap<String, Integer> findLeakedDataInWorld(@NotNull final WorldClient world, final boolean clear) {
-        final var data = new HashMap<String, Integer>(100);
+        final var data = new HashMap<String, Integer>(Utils.calculateHashMapCapacity(100));
         final var mixinWorld = (IMixinWorld) world;
 
         MemoryLeakFix.collect(data, "Entities", world.loadedEntityList, clear);
@@ -71,17 +71,15 @@ final class MemoryLeakFix {
         MemoryLeakFix.collect(data, "Tile Entities Pending Removal", mixinWorld.getTileEntitiesToBeRemoved(), clear);
 
         final var entityIdMap = mixinWorld.getEntitiesById();
-        if (entityIdMap != null) {
-            data.put("Entity ID Map", ((IMixinIntHashMap) entityIdMap).getCount());
-            if (clear) {
-                entityIdMap.clearMap();
-            }
+        data.put("Entity ID Map", ((IMixinIntHashMap) entityIdMap).getCount());
+        if (clear) {
+            entityIdMap.clearMap();
         }
 
         final var chunkProvider = mixinWorld.getChunkProvider();
         if (chunkProvider instanceof final ChunkProviderClient chunkProviderClient) {
             final var chunkMapping = ((IMixinChunkProviderClient) chunkProviderClient).getChunkMapping();
-            if (chunkMapping != null) {
+            if (null != chunkMapping) {
                 data.put("Chunk Mappings", ((MinecraftCollection) chunkMapping).collectionSize());
                 if (clear) {
                     ((MinecraftCollection) chunkMapping).clearCollection();
@@ -98,7 +96,7 @@ final class MemoryLeakFix {
     }
 
     private static final <T extends Collection<?>> void collect(@NotNull final HashMap<String, Integer> data, @NotNull final String name, @Nullable final T collection, final boolean clear) {
-        if (collection != null) {
+        if (null != collection) {
             data.put(name, collection.size());
             if (clear) {
                 collection.clear();
@@ -111,7 +109,7 @@ final class MemoryLeakFix {
             final var world = event.world;
 
             if (world instanceof final WorldClient client) {
-                oldWorlds.add(client);
+                MemoryLeakFix.oldWorlds.add(client);
 
                 MemoryLeakFix.findLeakedDataInWorld(client, true);
             }

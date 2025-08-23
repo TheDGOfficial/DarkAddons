@@ -76,8 +76,8 @@ final class BlessingDisplay extends GuiElement {
                             final var power = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.POWER, 0);
                             final var time = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.TIME, 0);
 
-                            final var truePower = ((double) power) + ((double) time / 2.0D);
-                            final var truePowerTrimUnnecessaryDecimal = (truePower == Math.rint(truePower)) ? Long.toString((long) truePower) : Double.toString(truePower);
+                            final var truePower = power + time / 2.0D;
+                            final var truePowerTrimUnnecessaryDecimal = Utils.compareDoubleExact(truePower, Math.rint(truePower)) ? Long.toString((long) truePower) : Double.toString(truePower);
 
                             DarkAddons.queueUserSentMessageOrCommand("/pc Power: " + truePowerTrimUnnecessaryDecimal + " || Split on all drags!");
                         })
@@ -92,7 +92,7 @@ final class BlessingDisplay extends GuiElement {
                             final var wisdom = BlessingDisplay.getBlessingOrDefault(BlessingDisplay.BlessingType.WISDOM, 0);
                             final var baseDamageBonus = BlessingDisplay.getBaseDamageBonusFromBlessingOfStone();
 
-                            DarkAddons.queueUserSentMessageOrCommand("/pc Detailed Blessings: Power " + power + (0 == time ? "" : " - Time " + time) + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format("%.2f", baseDamageBonus));
+                            DarkAddons.queueUserSentMessageOrCommand("/pc Detailed Blessings: Power " + power + (0 == time ? "" : " - Time " + time) + " - Wisdom " + wisdom + " - Base Weapon Damage Bonus from Stone Blessing: " + String.format(Locale.ROOT, "%.2f", baseDamageBonus));
                         })
                     );
                 }

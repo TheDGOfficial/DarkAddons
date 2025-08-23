@@ -46,7 +46,7 @@ final class McProfilerHelper {
      * pointing to the offending caller (even if the profiler is not enabled).
      * <p>
      * Warning 2: Care must be taken to call {@link McProfilerHelper#endSection()} before the method returns.
-     * Therefore, patterns such as like this one:
+     * Therefore, patterns such as:
      * <pre>
      * {@code
      * McProfilerHelper.startSection("my_section");
@@ -57,7 +57,7 @@ final class McProfilerHelper {
      * McProfilerHelper.endSection();
      * }
      * </pre>
-     * Would cause a leak in the profiler, potentially crashing the game or displaying results that don't make sense
+     * the one above will cause a leak in the profiler, potentially crashing the game or displaying results that don't make sense
      * or recurse infinitely, showing duplicate "root" entries (only when the profiler is enabled).
      * <p>
      * To fix this, you must invert the if statement like this:

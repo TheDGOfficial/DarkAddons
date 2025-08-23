@@ -532,7 +532,7 @@ final class SlayerRNGDisplay extends GuiElement {
             this.min = min;
             this.max = max;
 
-            this.average = (this.min + this.max) >> 1;
+            this.average = this.min + this.max >> 1;
         }
 
         @NotNull

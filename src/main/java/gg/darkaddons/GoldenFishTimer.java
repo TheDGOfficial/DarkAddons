@@ -109,7 +109,7 @@ final class GoldenFishTimer extends SimpleGuiElement {
         if (guaranteed) {
             goldenFishText = "§a§lReady (Guaranteed)";
         } else {
-            goldenFishText = 0L >= timeUntilNextGoldenFish ? "§aReady" : Utils.formatTime(Math.max(1000, timeUntilNextGoldenFish), true);
+            goldenFishText = 0L >= timeUntilNextGoldenFish ? "§aReady" : Utils.formatTime(Math.max(1_000L, timeUntilNextGoldenFish), true);
         }
 
         if (0L == GoldenFishTimer.nextRodThrowThreshold) {

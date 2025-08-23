@@ -1,6 +1,7 @@
 package gg.darkaddons;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.Properties;
 
 import org.jetbrains.annotations.NotNull;
@@ -34,7 +35,13 @@ final class TinyConfig {
     }
 
     private static final void mkdirsAndFile() {
-        new File(TinyConfig.tinyConfigFile.getParent()).mkdirs();
+        final var parent = TinyConfig.tinyConfigFile.toPath().getParent();
+
+        try {
+            Files.createDirectories(parent);
+        } catch (final IOException ioException) {
+            throw new IllegalStateException("Unable to create TinyConfig parent directories", ioException);
+        }
 
         if (!TinyConfig.tinyConfigFile.exists()) {
             try {

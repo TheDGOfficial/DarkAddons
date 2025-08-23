@@ -70,7 +70,7 @@ final class UpgradeChecker {
         private final UpgradeChecker.UpgradeSource source;
         private final UpgradeChecker.UpgradeType type;
         private final UpgradeChecker.Upgrade[] dependencies;
-        boolean found;
+        private boolean found;
 
         private Upgrade(@NotNull final UpgradeChecker.UpgradeSource source, @NotNull final UpgradeChecker.UpgradeType type, @NotNull final UpgradeChecker.Upgrade... dependencies) {
             super();
@@ -78,6 +78,19 @@ final class UpgradeChecker {
             this.source = source;
             this.type = type;
             this.dependencies = dependencies;
+        }
+
+        final boolean checkDependencies() {
+            for (final var dependency : this.dependencies) {
+                if (!dependency.found) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        final void setFound(final boolean newFound) {
+            this.found = newFound;
         }
 
         @Override
@@ -121,8 +134,8 @@ final class UpgradeChecker {
         private final String loreCondition;
         private final Function<ArrayList<String>, String> loreExtractor;
 
-        private Accessory(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @Nullable final String loreCondition, @Nullable final Function<ArrayList<String>, String> loreExtractor, @NotNull final String description, @NotNull final UpgradeChecker.Upgrade... dependencies) {
-            super(UpgradeChecker.UpgradeSource.ACCESSORY_BAG, upgradeType, dependencies);
+        private Accessory(@NotNull final UpgradeChecker.UpgradeType type, @NotNull final String internalName, @Nullable final String loreCondition, @Nullable final Function<ArrayList<String>, String> loreExtractor, @NotNull final String description, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            super(UpgradeChecker.UpgradeSource.ACCESSORY_BAG, type, dependencies);
 
             this.internalName = internalName;
             this.description = description;
@@ -176,8 +189,8 @@ final class UpgradeChecker {
 
         private final String optimalPetItem;
 
-        private Pet(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, @NotNull final UpgradeChecker.Rarity minimumWantedRarity, @NotNull final UpgradeChecker.Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @Nullable final String optimalPetItem, @NotNull final UpgradeChecker.Upgrade... dependencies) {
-            super(UpgradeChecker.UpgradeSource.PETS_MENU, upgradeType, dependencies);
+        private Pet(@NotNull final UpgradeChecker.UpgradeType type, @NotNull final String internalName, @NotNull final UpgradeChecker.Rarity minimumWantedRarity, @NotNull final UpgradeChecker.Rarity maxRarity, final int minimumWantedLevel, final int maxLevel, @Nullable final String optimalPetItem, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            super(UpgradeChecker.UpgradeSource.PETS_MENU, type, dependencies);
 
             this.internalName = internalName;
             this.minimumWantedRarity = minimumWantedRarity;
@@ -236,8 +249,8 @@ final class UpgradeChecker {
 
         private final Function<Integer, String> descriptionAtLevel;
 
-        private EssenceShopPerk(@NotNull final UpgradeChecker.UpgradeType upgradeType, @NotNull final String internalName, final int maxLevel, @NotNull final Function<Integer, String> descriptionAtLevel, @NotNull final UpgradeChecker.Upgrade... dependencies) {
-            super(UpgradeChecker.UpgradeSource.ESSENCE_SHOP, upgradeType, dependencies);
+        private EssenceShopPerk(@NotNull final UpgradeChecker.UpgradeType type, @NotNull final String internalName, final int maxLevel, @NotNull final Function<Integer, String> descriptionAtLevel, @NotNull final UpgradeChecker.Upgrade... dependencies) {
+            super(UpgradeChecker.UpgradeSource.ESSENCE_SHOP, type, dependencies);
 
             this.internalName = internalName;
             this.maxLevel = maxLevel;
@@ -274,17 +287,8 @@ final class UpgradeChecker {
         return false;
     }
 
-    private static final boolean checkDependencies(@NotNull final UpgradeChecker.Upgrade upgrade) {
-        for (final var dependency : upgrade.dependencies) {
-            if (!dependency.found) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private static final void processPet(@NotNull final Consumer<String> outputConsumer, @NotNull final JsonObject pet, @NotNull final UpgradeChecker.Pet registryPet, @NotNull final String internalName) {
-        registryPet.found = true;
+        registryPet.setFound(true);
 
         registryPet.currentRarity = UpgradeChecker.Rarity.valueOf(pet.get("tier").getAsString());
         registryPet.currentLevel = pet.get("level").getAsJsonObject().get("level").getAsInt();
@@ -316,14 +320,14 @@ final class UpgradeChecker {
             final var type = pet.get("type").getAsString();
             for (final var registryPet : UpgradeChecker.Pet.allPets) {
                 final var internalName = registryPet.internalName;
-                if (internalName.equals(type) && UpgradeChecker.checkDependencies(registryPet)) {
+                if (internalName.equals(type) && registryPet.checkDependencies()) {
                     UpgradeChecker.processPet(outputConsumer, pet, registryPet, internalName);
                     currentPets.add(registryPet);
                 }
             }
         }
         for (final var pet : UpgradeChecker.Pet.allPets) {
-            if (!currentPets.contains(pet) && UpgradeChecker.checkDependencies(pet)) {
+            if (!currentPets.contains(pet) && pet.checkDependencies()) {
                 outputConsumer.accept("Missing " + pet.internalName);
             }
         }
@@ -334,7 +338,7 @@ final class UpgradeChecker {
             final var value = perks.get(perk.internalName);
             perk.currentLevel = null == value ? 0 : value.getAsInt();
 
-            if (perk.currentLevel != perk.maxLevel && UpgradeChecker.checkDependencies(perk)) {
+            if (perk.currentLevel != perk.maxLevel && perk.checkDependencies()) {
                 outputConsumer.accept("Missing " + perk.descriptionAtLevel.apply("catacombs_boss_luck".equals(perk.internalName) ? perk.currentLevel : perk.maxLevel - perk.currentLevel) + " from " + perk.internalName);
             }
         }
@@ -377,7 +381,7 @@ final class UpgradeChecker {
         }
         var shouldFindMasterSkullTier = false;
         for (final var accessory : UpgradeChecker.Accessory.allAccessories) {
-            if (!currentAccessories.contains(accessory) && UpgradeChecker.checkDependencies(accessory)) {
+            if (!currentAccessories.contains(accessory) && accessory.checkDependencies()) {
                 if ("MASTER_SKULL_TIER_7".equals(accessory.internalName)) {
                     shouldFindMasterSkullTier = true;
                 } else {
@@ -415,7 +419,7 @@ final class UpgradeChecker {
                 rawAccessories.add(id);
                 for (final var registryAccessory : UpgradeChecker.Accessory.allAccessories) {
                     final var internalName = registryAccessory.internalName;
-                    if (internalName.equals(id) && UpgradeChecker.checkDependencies(registryAccessory)) {
+                    if (internalName.equals(id) && registryAccessory.checkDependencies()) {
                         final var lore = UpgradeChecker.getLore(tag);
                         final var loreCondition = registryAccessory.loreCondition;
                         if (null != loreCondition && !UpgradeChecker.loreContains(lore, loreCondition)) {

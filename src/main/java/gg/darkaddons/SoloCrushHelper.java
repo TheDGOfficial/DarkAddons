@@ -20,13 +20,13 @@ final class SoloCrushHelper {
     @SubscribeEvent
     public final void onChat(@NotNull final ClientChatReceivedEvent event) {
         if (Config.isSoloCrushHelper() && !SoloCrushHelper.done && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type) && Utils.removeControlCodes(event.message.getUnformattedText()).trim().contains("Storm's Giga Lightning hit you for ")) {
-            if (!SoloCrushHelper.firstLightningReceived) {
-                SoloCrushHelper.firstLightningReceived = true;
-            } else {
+            if (SoloCrushHelper.firstLightningReceived) {
                 SoloCrushHelper.firstLightningReceived = false;
                 SoloCrushHelper.done = true;
 
                 ServerTPSCalculator.startListeningTicks(SoloCrushHelper::onServerTick);
+            } else {
+                SoloCrushHelper.firstLightningReceived = true;
             }
         }
     }
@@ -42,30 +42,24 @@ final class SoloCrushHelper {
     }
 
     private static final void onServerTick() {
-        final var passed = ++ticksPassed;
+        final var passed = ++SoloCrushHelper.ticksPassed;
 
-        if (1 == passed) {
-            if (Config.isSoloCrushHelper()) { // If the user turned off the feature before timer is finished (Edge case)
-                GuiManager.createTitle("§53", 20, true, GuiManager.Sound.ORB);
-            }
+        if (1 == passed && Config.isSoloCrushHelper()) { // If the user turned off the feature before the timer is finished (an edge case)
+            GuiManager.createTitle("§53", 20, true, GuiManager.Sound.ORB);
         }
 
-        if (20 == passed) {
-            if (Config.isSoloCrushHelper()) { // If the user turned off the feature before timer is finished (Edge case)
-                GuiManager.createTitle("§52", 20, true, GuiManager.Sound.ORB);
-            }
+        if (20 == passed && Config.isSoloCrushHelper()) { // If the user turned off the feature before the timer is finished (an edge case)
+            GuiManager.createTitle("§52", 20, true, GuiManager.Sound.ORB);
         }
 
-        if (40 == passed) {
-            if (Config.isSoloCrushHelper()) { // If the user turned off the feature before timer is finished (Edge case)
-                GuiManager.createTitle("§51", 20, true, GuiManager.Sound.ORB);
-            }
+        if (40 == passed && Config.isSoloCrushHelper()) { // If the user turned off the feature before the timer is finished (an edge case)
+            GuiManager.createTitle("§51", 20, true, GuiManager.Sound.ORB);
         }
 
         if (60 == passed) {
             ServerTPSCalculator.stopListeningTicks();
 
-            if (Config.isSoloCrushHelper()) { // If the user turned off the feature before timer is finished (Edge case)
+            if (Config.isSoloCrushHelper()) { // If the user turned off the feature before the timer is finished (an edge case)
                 GuiManager.createTitle("§5Crush!", 20, true, GuiManager.Sound.PLING);
             }
         }

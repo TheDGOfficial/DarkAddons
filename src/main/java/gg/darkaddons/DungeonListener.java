@@ -49,13 +49,7 @@ public final class DungeonListener {
     @Nullable
     static final DungeonListener.DungeonClass getSelfDungeonClass() {
         final var self = DungeonListener.getSelfDungeonTeammate();
-        if (null != self) {
-            final var dungeonClass = self.getDungeonClass();
-            if (null != dungeonClass) {
-                return dungeonClass;
-            }
-        }
-        return null;
+        return null != self ? self.getDungeonClass() : null;
     }
 
     @NotNull
@@ -122,7 +116,7 @@ public final class DungeonListener {
 
         @Override
         public final boolean equals(@Nullable final Object obj) {
-            return this == obj || obj instanceof final DungeonTeammate other && Objects.equals(this.player, other.player) && this.dungeonClass == other.dungeonClass && this.classLevel == other.classLevel;
+            return this == obj || obj instanceof final DungeonListener.DungeonTeammate other && Objects.equals(this.player, other.player) && this.dungeonClass == other.dungeonClass && this.classLevel == other.classLevel;
         }
 
         @Override

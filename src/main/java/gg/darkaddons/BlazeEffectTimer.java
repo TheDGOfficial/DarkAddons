@@ -76,7 +76,8 @@ final class BlazeEffectTimer extends SimpleGuiElement {
                 BlazeEffectTimer.bossesDoneSinceSmolderingPolarization = 0;
                 BlazeEffectTimer.syncToDisk();
             }
-            case "BUFF! You splashed yourself with Wisp's Ice-Flavored Water I! Press TAB or type /effects to view your active effects!" -> {
+            case
+                "BUFF! You splashed yourself with Wisp's Ice-Flavored Water I! Press TAB or type /effects to view your active effects!" -> {
                 BlazeEffectTimer.icePotionEnd = System.currentTimeMillis() + BlazeEffectTimer.WISPS_ICE_FLAVORED_SPLASH_POTION_DURATION_MS;
                 BlazeEffectTimer.syncToDisk();
             }
@@ -98,7 +99,7 @@ final class BlazeEffectTimer extends SimpleGuiElement {
 
         if (BlazeEffectTimer.isEnabled.getAsBoolean() && MessageType.STANDARD_TEXT_MESSAGE.matches(event.type)) {
             final var message = event.message;
-            // Check for an existance of a color code that we expect before passing to other method that removes colors and does more expensive equals and starts/ends with checks.
+            // Check for the existence of a color code that we expect before passing to other method that removes colors and does more expensive equals and starts/ends with checks.
             if (message.getFormattedText().contains("§a")) {
                 BlazeEffectTimer.parseMessage(message.getUnformattedText());
             }

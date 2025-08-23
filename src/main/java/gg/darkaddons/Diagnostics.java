@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -602,7 +601,7 @@ final class Diagnostics {
             Diagnostics.gcSamplesCollected.put(0L == Diagnostics.lastGCAt ? 0L : Math.abs(now - Diagnostics.lastGCAt), info.getDuration());
             Diagnostics.lastGCAt = now;
             //noinspection StringConcatenationMissingWhitespace
-            DarkAddons.queueWarning(("GC Event #" + Diagnostics.gcSamplesCollected.size() + " - ") + (detailed ? '[' + Diagnostics.DATE_FORMAT.format(new Date()) + "] " + gcni.getGcName() + " lasted for " + info.getDuration() + "ms. GC cause: " + gcni.getGcCause() + ", GC state: at " + gcni.getGcAction() : gcni.getGcName() + " lasted for " + info.getDuration() + "ms"));
+            DarkAddons.queueWarning("GC Event #" + Diagnostics.gcSamplesCollected.size() + " - " + (detailed ? '[' + Diagnostics.DATE_FORMAT.format(System.currentTimeMillis()) + "] " + gcni.getGcName() + " lasted for " + info.getDuration() + "ms. GC cause: " + gcni.getGcCause() + ", GC state: at " + gcni.getGcAction() : gcni.getGcName() + " lasted for " + info.getDuration() + "ms"));
             if (detailed) {
                 final var before = info.getMemoryUsageBeforeGc();
                 //noinspection StreamToLoop

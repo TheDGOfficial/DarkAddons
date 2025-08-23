@@ -63,9 +63,7 @@ final class ServerTPSCalculator {
                         final var value = ServerTPSCalculator.lastTPS;
 
                         // Run the hook inside client thread for thread safety.
-                        DarkAddons.runOnceInNextTick("tps_update_hook", () -> {
-                            hook.accept(value);
-                        });
+                        DarkAddons.runOnceInNextTick("tps_update_hook", () -> hook.accept(value));
                     }
                 }
             }

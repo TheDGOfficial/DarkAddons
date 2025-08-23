@@ -487,7 +487,7 @@ final class Config extends Vigilant {
 
     /*@Property(
         type = PropertyType.SELECTOR, name = "Hide Wither Skeletons on Maxor Fight",
-        description = "Hides Wither Skeletons on Maxor Fight, with the specified mode. Hide just doesn't render it but keeps it as an entity on the world which will still tick them. Remove will completely remove it from the world as if it didn't exist at all, and disabled will not change anything.",
+        description = "Hides Wither Skeletons on Maxor Fight, with the specified mode. Hide just doesn't render it but keeps it as an entity in the world which will still tick them. Remove will completely remove it from the world as if it didn't exist at all, and disabled will not change anything.",
         category = "Performance", subcategory = "Experimental",
         options = {"Disabled", "Hide", "Remove"}
     )
@@ -794,7 +794,7 @@ final class Config extends Vigilant {
         category = "QOL", subcategory = "General",
         options = {"Instantaneous", "Lerp", "Ease In-Out", "Gradual Mouse Movement"}
     )*/
-    private static int autoFishingRodAFKBypassAlgorithm = 3;
+    private static final int autoFishingRodAFKBypassAlgorithm = 3;
 
     @Property(
         type = PropertyType.NUMBER, name = "Auto Fishing Rod Starting Delay Ticks",

@@ -1,11 +1,8 @@
 package gg.darkaddons;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.ArrayList;
@@ -89,7 +86,7 @@ final class ArmorStandOptimizer {
         DarkAddons.registerTickTask("armor_stand_optimizer_refresh", 1, true, ArmorStandOptimizer::refreshArmorStands);
     }
 
-    static final boolean checkRender(@NotNull final Entity entity) {
+    static final boolean checkRender(@NotNull final EntityArmorStand entity) {
         return !Config.isArmorStandOptimizer() || !AdditionalM7Features.canHideArmorstands() || ArmorStandOptimizer.armorStandRenderSet.contains(entity);
     }
 }

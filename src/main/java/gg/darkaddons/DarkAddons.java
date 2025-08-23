@@ -940,7 +940,7 @@ public final class DarkAddons {
     /**
      * Returns true if never reset cursor is true, false otherwise.
      *
-     * @return True if never reset cursor is enabled in Config.
+     * @return True, if never reset cursor is enabled in Config.
      */
     public static final boolean isNeverResetCursor() {
         return Config.isNeverResetCursor();
@@ -965,14 +965,14 @@ public final class DarkAddons {
     }
 
     /**
-     * Called when the player left clicks with the mouse.
+     * Called when the player left-clicks with the mouse.
      */
     public static final void onLeftClickMouse() {
         CPSCalculator.onLeftClick();
     }
 
     /**
-     * Called when the player right clicks with the mouse.
+     * Called when the player right-clicks with the mouse.
      */
     public static final void onRightClickMouse() {
         CPSCalculator.onRightClick();
@@ -1037,7 +1037,7 @@ public final class DarkAddons {
      * @param shooter The {@link Entity} that shot the arrow.
      * @param entitiesHit The list of {@link Entity Entities} that got hit by the arrow.
      */
-    public static final void onArrowDespawn(@NotNull final EntityArrow arrow, @NotNull final Entity shooter, @NotNull final ArrayList<Entity> entitiesHit) {
+    static final void onArrowDespawn(@NotNull final EntityArrow arrow, @NotNull final Entity shooter, @NotNull final ArrayList<Entity> entitiesHit) {
         M7Features.onArrowDespawn(arrow, shooter, entitiesHit);
     }
 

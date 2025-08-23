@@ -1,10 +1,7 @@
 package gg.darkaddons;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
-import net.minecraft.entity.monster.EntityGuardian;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemBlock;
 
@@ -30,7 +27,7 @@ final class RemoveBlankArmorStands {
         return true;
     }
 
-    static final boolean checkRender(@NotNull final Entity entity) {
+    static final boolean checkRender(@NotNull final EntityArmorStand entity) {
         return !Config.isRemoveBlankArmorStands() || 10 <= entity.ticksExisted || !entity.getCustomNameTag().isEmpty() || !RemoveBlankArmorStands.isInventoryEmpty(entity);
     }
 

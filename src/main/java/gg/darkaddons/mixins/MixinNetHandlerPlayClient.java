@@ -2,6 +2,7 @@ package gg.darkaddons.mixins;
 
 import gg.darkaddons.DarkAddons;
 import gg.darkaddons.annotations.bytecode.Bridge;
+import gg.darkaddons.annotations.bytecode.Name;
 import gg.darkaddons.annotations.bytecode.Synthetic;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
@@ -94,5 +95,14 @@ final class MixinNetHandlerPlayClient {
         if (null != entity) {
             DarkAddons.handleSpawnMob(entity);
         }
+    }
+
+    @Override
+    @Unique
+    @Name("toString$darkaddons")
+    public final String toString() {
+        return "MixinNetHandlerPlayClient{" +
+            "clientWorldController=" + this.clientWorldController +
+            '}';
     }
 }

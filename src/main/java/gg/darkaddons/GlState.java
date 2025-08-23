@@ -80,7 +80,28 @@ final class GlState {
             GlStateManager.disableAlpha();
         }
 
+        if (this.lightingState) {
+            GlStateManager.enableLighting();
+        } else {
+            GlStateManager.disableLighting();
+        }
+
         GlStateManager.tryBlendFuncSeparate(this.blendSrc, this.blendDst, this.blendAlphaSrc, this.blendAlphaDst);
         GlStateManager.color(this.colorState.get(0), this.colorState.get(1), this.colorState.get(2), this.colorState.get(3));
+    }
+
+    @Override
+    public final String toString() {
+        return "GlState{" +
+            "lightingState=" + this.lightingState +
+            ", blendState=" + this.blendState +
+            ", blendSrc=" + this.blendSrc +
+            ", blendDst=" + this.blendDst +
+            ", blendAlphaSrc=" + this.blendAlphaSrc +
+            ", blendAlphaDst=" + this.blendAlphaDst +
+            ", alphaState=" + this.alphaState +
+            ", depthState=" + this.depthState +
+            ", colorState=" + this.colorState +
+            '}';
     }
 }

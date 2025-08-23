@@ -16,12 +16,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -347,11 +345,7 @@ final class Utils {
     @Nullable
     @SafeVarargs
     static final <T> T lastValue(@NotNull final T... elements) {
-        if (0 == elements.length) {
-            return null; // Empty, return null as specified in the JavaDoc
-        }
-
-        return elements[elements.length - 1];
+        return 0 == elements.length ? null : elements[elements.length - 1]; // Empty, return null as specified in the Javadoc
     }
 
     @NotNull

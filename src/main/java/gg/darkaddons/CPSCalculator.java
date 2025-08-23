@@ -49,13 +49,13 @@ final class CPSCalculator {
 
     static final void onLeftClick() {
         if (Config.isCpsDisplay()) {
-            leftClickCount.incrementAndGet();
+            CPSCalculator.leftClickCount.incrementAndGet();
         }
     }
 
     static final void onRightClick() {
         if (Config.isCpsDisplay()) {
-            rightClickCount.incrementAndGet();
+            CPSCalculator.rightClickCount.incrementAndGet();
         }
     }
 }

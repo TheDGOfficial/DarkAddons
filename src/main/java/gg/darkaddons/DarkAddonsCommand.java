@@ -16,7 +16,7 @@ final class DarkAddonsCommand extends ModCommand {
 
     @Override
     @Nullable
-    final List<String> tabComplete(@Nullable final String[] args) {
+    final List<String> tabComplete(@Nullable final String... args) {
         if (DarkAddonsCommand.hasArgs(args)) {
             final var subcommand = args[0];
             if (null != subcommand) {

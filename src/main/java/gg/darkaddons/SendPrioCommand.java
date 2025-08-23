@@ -1,10 +1,5 @@
 package gg.darkaddons;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-
-@SuppressWarnings("ClassNamePrefixedWithPackageName")
 final class SendPrioCommand extends ModCommand {
     SendPrioCommand() {
         super("sendprio");

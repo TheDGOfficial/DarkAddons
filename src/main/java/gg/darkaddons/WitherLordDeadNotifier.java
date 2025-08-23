@@ -3,14 +3,11 @@ package gg.darkaddons;
 import gg.essential.universal.UChat;
 
 import java.util.Map;
-import java.util.HashMap;
 import java.util.WeakHashMap;
-import java.util.function.Predicate;
 
 import com.google.common.collect.MapMaker;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityWither;
 
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -18,10 +15,22 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.jetbrains.annotations.NotNull;
 
 final class WitherLordDeadNotifier {
+    /**
+     * Private constructor since this class only contains static members.
+     * <p>
+     * Always throws {@link UnsupportedOperationException} (for when
+     * constructed via reflection).
+     */
+    private WitherLordDeadNotifier() {
+        super();
+
+        throw Utils.staticClassException();
+    }
+
     @NotNull
     private static final Map<String, EntityWither> witherLords = new MapMaker().weakValues().makeMap();
     @NotNull
-    private static final WeakHashMap<EntityWither, Boolean> states = new WeakHashMap<>();
+    private static final WeakHashMap<EntityWither, Boolean> states = new WeakHashMap<>(Utils.calculateHashMapCapacity(5));
 
     static final void init() {
         DarkAddons.registerTickTask("wither_lord_dead_notifier_tick", 1, true, WitherLordDeadNotifier::tick);
@@ -76,7 +85,7 @@ final class WitherLordDeadNotifier {
             return;
         }
 
-        WitherLordDeadNotifier.witherLords.entrySet().removeIf((entry) -> {
+        WitherLordDeadNotifier.witherLords.entrySet().removeIf(entry -> {
             final var name = entry.getKey();
             final var wither = entry.getValue();
 
@@ -90,11 +99,10 @@ final class WitherLordDeadNotifier {
                 WitherLordDeadNotifier.states.remove(wither);
 
                 return true;
-            } else {
-                WitherLordDeadNotifier.states.put(wither, isDead);
-
-                return false;
             }
+
+            WitherLordDeadNotifier.states.put(wither, isDead);
+            return false;
         });
     }
 

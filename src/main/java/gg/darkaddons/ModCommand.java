@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 
 abstract class ModCommand extends CommandBase {
@@ -37,11 +38,7 @@ abstract class ModCommand extends CommandBase {
     public final List<String> getCommandAliases() {
         final var superAliases = super.getCommandAliases();
 
-        if (superAliases.isEmpty()) {
-            return this.aliases;
-        }
-
-        return ImmutableList.<String>builder()
+        return superAliases.isEmpty() ? this.aliases : ImmutableList.<String>builder()
             .addAll(superAliases)
             .addAll(this.aliases)
             .build();
@@ -68,28 +65,32 @@ abstract class ModCommand extends CommandBase {
     public final List<String> addTabCompletionOptions(@Nullable final ICommandSender sender, @Nullable final String[] args, @Nullable final BlockPos pos) {
         final var completions = this.tabComplete(args);
 
-        if (null != completions && !completions.isEmpty()) {
-            return completions;
-        }
-
-        return super.addTabCompletionOptions(sender, args, pos);
+        return null != completions && !completions.isEmpty() ? completions : super.addTabCompletionOptions(sender, args, pos);
     }
 
     @Override
     public final void processCommand(@Nullable final ICommandSender sender, @Nullable final String... args) {
-        execute(args);
+        this.execute(args);
     }
 
     @Nullable
-    List<String> tabComplete(@Nullable String... args) {
+    List<String> tabComplete(@Nullable final String... args) {
         return null;
     }
 
-    void execute(@Nullable String... args) {
-        execute();
+    void execute(@Nullable final String... args) {
+        this.execute();
     }
 
     void execute() {
         // do nothing by default
+    }
+
+    @Override
+    public final String toString() {
+        return "ModCommand{" +
+            "name='" + this.name + '\'' +
+            ", aliases=" + this.aliases +
+            '}';
     }
 }

@@ -1,7 +1,5 @@
 package gg.darkaddons;
 
-import net.minecraft.network.Packet;
-
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
@@ -33,7 +31,7 @@ final class SBInfo {
     }
 
     @SubscribeEvent
-    public final void onDisconnect(@NotNull final FMLNetworkEvent.ClientDisconnectionFromServerEvent event)  {
+    public final void onDisconnect(@NotNull final FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         SBInfo.mode = null;
         SBInfo.serverType = null;
     }

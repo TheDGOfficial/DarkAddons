@@ -345,9 +345,6 @@ enum WitherKingDragons {
 
     @Nullable
     static final WitherKingDragons from(final int ordinal) {
-        if (-1 == ordinal) {
-            return null;
-        }
-        return WitherKingDragons.ordinalToDrag[ordinal];
+        return -1 == ordinal ? null : WitherKingDragons.ordinalToDrag[ordinal];
     }
 }

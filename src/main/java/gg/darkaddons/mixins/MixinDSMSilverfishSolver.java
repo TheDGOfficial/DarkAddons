@@ -47,8 +47,8 @@ final class MixinDSMSilverfishSolver {
     }
 
     @Redirect(method = "lambda$onTick$0", remap = false, at = @At(value = "INVOKE", target = "Ljava/util/Arrays;deepToString([Ljava/lang/Object;)Ljava/lang/String;", remap = false))
-    private static final String onTickArraysDeepToString$darkaddons(@NotNull final Object[] board) {
-        return ""; // Avoid to string computation since it will not be printed anymore.
+    private static final String onTickArraysDeepToString$darkaddons(@NotNull final Object... board) {
+        return ""; // Avoid toString computation since it will not be printed anymore.
     }
 
     @Redirect(method = "lambda$onTick$0", remap = false, at = @At(value = "INVOKE", target = "Ljava/io/PrintStream;println(Ljava/lang/String;)V", remap = false))

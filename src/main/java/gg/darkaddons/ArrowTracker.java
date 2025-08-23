@@ -10,7 +10,6 @@ import net.minecraft.network.play.server.S1CPacketEntityMetadata;
 import net.minecraft.network.play.server.S13PacketDestroyEntities;
 import net.minecraft.network.play.server.S32PacketConfirmTransaction;
 import net.minecraft.util.Vec3i;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,8 +19,8 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 final class ArrowTracker {
-    private static final @NotNull Map<Vec3i, OwnedData> ownedArrows = new ConcurrentHashMap<>(Utils.calculateHashMapCapacity(500));
-    private static final @NotNull Map<Integer, ArrowData> arrows = new ConcurrentHashMap<>(Utils.calculateHashMapCapacity(500));
+    private static final @NotNull Map<Vec3i, ArrowTracker.OwnedData> ownedArrows = new ConcurrentHashMap<>(Utils.calculateHashMapCapacity(500));
+    private static final @NotNull Map<Integer, ArrowTracker.ArrowData> arrows = new ConcurrentHashMap<>(Utils.calculateHashMapCapacity(500));
     private static long currentTick;
 
     /**
@@ -42,7 +41,7 @@ final class ArrowTracker {
 
     static final void onArrowHit(@NotNull final EntityArrow arrow, @NotNull final Entity entity) {
         if (ArrowTracker.shouldTrack() && !entity.isDead) {
-            final var data = arrows.get(arrow.getEntityId());
+            final var data = ArrowTracker.arrows.get(arrow.getEntityId());
             if (null != data) {
                 data.entitiesHit.add(entity);
             }
@@ -55,7 +54,7 @@ final class ArrowTracker {
         }
 
         final var entityId = pem.getEntityId();
-        final var data = arrows.get(entityId);
+        final var data = ArrowTracker.arrows.get(entityId);
         if (null != data && null == data.arrow) {
             final var world = Minecraft.getMinecraft().theWorld;
             if (null != world) {
@@ -74,17 +73,17 @@ final class ArrowTracker {
         }
 
         if (packet instanceof final S0EPacketSpawnObject spawn && 60 == spawn.getType()) {
-            arrows.put(spawn.getEntityID(), new ArrowData());
+            ArrowTracker.arrows.put(spawn.getEntityID(), new ArrowTracker.ArrowData());
         } else if (packet instanceof final S13PacketDestroyEntities destroy) {
             for (final var id : destroy.getEntityIDs()) {
-                final var data = arrows.remove(id);
+                final var data = ArrowTracker.arrows.remove(id);
                 if (null != data && null != data.arrow && null != data.owner) {
                     DarkAddons.onArrowDespawn(data.arrow, data.owner, data.entitiesHit);
                 }
             }
         } else if (packet instanceof final S32PacketConfirmTransaction pct && 1 > pct.getActionNumber()) {
-            ++currentTick;
-            ArrowTracker.ownedArrows.entrySet().removeIf(e -> currentTick - e.getValue().addedTime > 12);
+            ++ArrowTracker.currentTick;
+            ArrowTracker.ownedArrows.entrySet().removeIf(e -> 12L < ArrowTracker.currentTick - e.getValue().addedTime);
         }
     }
 
@@ -99,7 +98,7 @@ final class ArrowTracker {
         final var arrowPos = new Vec3i(arrow.serverPosX, arrow.serverPosY, arrow.serverPosZ);
 
         if (null != arrow.shootingEntity) {
-            ArrowTracker.ownedArrows.put(arrowPos, new OwnedData(arrow.shootingEntity, currentTick));
+            ArrowTracker.ownedArrows.put(arrowPos, new ArrowTracker.OwnedData(arrow.shootingEntity, ArrowTracker.currentTick));
             return arrow.shootingEntity;
         }
 
@@ -112,7 +111,7 @@ final class ArrowTracker {
         final var offsetPos = new Vec3i(arrowPos.getX(), arrowPos.getY() + 16, arrowPos.getZ());
         final var offset = ArrowTracker.ownedArrows.get(offsetPos);
 
-        return null != offset ? offset.owner : null;
+        return null == offset ? null : offset.owner;
     }
 
     private static final class OwnedData {
@@ -120,28 +119,23 @@ final class ArrowTracker {
         private final long addedTime;
 
         private OwnedData(@NotNull final Entity owner, final long addedTime) {
+            super();
+
             this.owner = owner;
             this.addedTime = addedTime;
         }
 
         @Override
-        public final boolean equals(@Nullable final Object o) {
-            if (this == o) {
-                return true;
-            }
-
-            if (!(o instanceof OwnedData)) {
-                return false;
-            }
-
-            final var ownedData = (OwnedData) o;
-
-            return this.addedTime == ownedData.addedTime && Objects.equals(this.owner, ownedData.owner);
+        public final boolean equals(@Nullable final Object obj) {
+            return this == obj || obj instanceof final ArrowTracker.OwnedData ownedData && this.addedTime == ownedData.addedTime && this.owner.equals(ownedData.owner);
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(this.owner, this.addedTime);
+            var result = this.owner.hashCode();
+            result = 31 * result + Long.hashCode(this.addedTime);
+
+            return result;
         }
 
         @Override
@@ -164,25 +158,19 @@ final class ArrowTracker {
         }
 
         @Override
-        public final boolean equals(@Nullable final Object o) {
-            if (this == o) {
-                return true;
-            }
-
-            if (!(o instanceof ArrowData)) {
-                return false;
-            }
-
-            final var arrowData = (ArrowData) o;
-
-            return Objects.equals(this.owner, arrowData.owner)
-                    && Objects.equals(this.arrow, arrowData.arrow)
-                    && Objects.equals(this.entitiesHit, arrowData.entitiesHit);
+        public final boolean equals(@Nullable final Object obj) {
+            return this == obj || obj instanceof final ArrowTracker.ArrowData arrowData && Objects.equals(this.owner, arrowData.owner)
+                && Objects.equals(this.arrow, arrowData.arrow)
+                && this.entitiesHit.equals(arrowData.entitiesHit);
         }
 
         @Override
         public final int hashCode() {
-            return Objects.hash(this.owner, this.arrow, this.entitiesHit);
+            var result = Objects.hashCode(this.owner);
+            result = 31 * result + Objects.hashCode(this.arrow);
+            result = 31 * result + this.entitiesHit.hashCode();
+
+            return result;
         }
 
         @Override

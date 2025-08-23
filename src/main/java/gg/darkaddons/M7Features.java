@@ -1,9 +1,6 @@
 package gg.darkaddons;
 
-import gg.essential.universal.UChat;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.entity.Entity;
@@ -11,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.boss.EntityDragonPart;
-import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.network.Packet;
@@ -22,8 +18,6 @@ import net.minecraft.network.play.server.S2CPacketSpawnGlobalEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -85,11 +79,13 @@ final class M7Features {
         Utils.fillIntArray(M7Features.reverseDragonMap, -1);
     }
 
-    private static final void showSpawningNotification(@NotNull final WitherKingDragons dragon, @Nullable WitherKingDragons otherDragon) {
+    private static final void showSpawningNotification(@NotNull final WitherKingDragons dragon, @Nullable final WitherKingDragons otherDragon) {
+        final var titleText = dragon.getChatColor() + dragon.getTextColor().toUpperCase(Locale.ROOT) + " IS SPAWNING!";
+
         if (null == otherDragon) {
-            GuiManager.createTitle(dragon.getChatColor() + dragon.getTextColor().toUpperCase(Locale.ROOT) + " IS SPAWNING!", 40, false);
+            GuiManager.createTitle(titleText, 40, false);
         } else {
-            GuiManager.createTitle(dragon.getChatColor() + dragon.getTextColor().toUpperCase(Locale.ROOT) + " IS SPAWNING!", otherDragon.getChatColor() + otherDragon.getTextColor() + " is the other dragon.", 40, 40, false, GuiManager.Sound.NO_SOUND);
+            GuiManager.createTitle(titleText, otherDragon.getChatColor() + otherDragon.getTextColor() + " is the other dragon.", 40, 40, false, GuiManager.Sound.NO_SOUND);
         }
     }
 
@@ -118,7 +114,7 @@ final class M7Features {
                 if (Config.isSpawningNotification()) {
                     if (M7Features.splitDragons.isEmpty()) {
                         M7Features.splitDragons.add(owner);
-                    } else if (M7Features.splitDragons.size() == 1) {
+                    } else if (1 == M7Features.splitDragons.size()) {
                         M7Features.splitDragons.add(owner);
 
                         final var it = M7Features.splitDragons.iterator();
@@ -126,8 +122,8 @@ final class M7Features {
                         final var drag1 = it.next();
                         final var drag2 = it.next();
 
-                        WitherKingDragons archDrag = null;
-                        WitherKingDragons bersDrag = null;
+                        final WitherKingDragons archDrag;
+                        final WitherKingDragons bersDrag;
 
                         if (drag1.getPrio() > drag2.getPrio()) {
                             archDrag = drag1;
@@ -205,19 +201,17 @@ final class M7Features {
 
     private static final void handleS04PacketEntityEquipment(@NotNull final S04PacketEntityEquipment packet) {
         final var stack = packet.getItemStack();
-        if (null != stack) {
-            if (M7Features.PACKED_ICE == stack.getItem()) {
-                final var world = Minecraft.getMinecraft().theWorld;
-                if (null != world) {
-                    final var entity = world.getEntityByID(packet.getEntityID());
-                    if (entity instanceof final EntityArmorStand stand) {
-                        for (final WitherKingDragons drag : WitherKingDragons.getValues()) {
-                            final var dragEntity = drag.getEntity();
-                            if (null != dragEntity && entity.getDistanceToEntity(dragEntity) <= 8) {
-                                drag.setIceSprayed(true);
-                                drag.setIceSprayedInTicks(dragEntity.ticksExisted);
-                                break;
-                            }
+        if (null != stack && M7Features.PACKED_ICE == stack.getItem()) {
+            final var world = Minecraft.getMinecraft().theWorld;
+            if (null != world) {
+                final var entity = world.getEntityByID(packet.getEntityID());
+                if (entity instanceof EntityArmorStand) {
+                    for (final var drag : WitherKingDragons.getValues()) {
+                        final var dragEntity = drag.getEntity();
+                        if (null != dragEntity && 8.0F >= entity.getDistanceToEntity(dragEntity)) {
+                            drag.setIceSprayed(true);
+                            drag.setIceSprayedInTicks(dragEntity.ticksExisted);
+                            break;
                         }
                     }
                 }
@@ -229,7 +223,7 @@ final class M7Features {
         WitherKingDragons dragon = null;
         EntityDragon entity = null;
 
-        for (final WitherKingDragons drag : WitherKingDragons.getValues()) {
+        for (final var drag : WitherKingDragons.getValues()) {
             final var ent = drag.getEntity();
             if (null != ent && ent.getEntityId() == packet.getEntityId()) {
                 dragon = drag;
@@ -238,15 +232,13 @@ final class M7Features {
             }
         }
 
-        if (null != dragon && null != entity) {
+        if (null != dragon) {
             final var watchableObjects = packet.func_149376_c();
             for (final var watchableObject : watchableObjects) {
                 if (6 == watchableObject.getDataValueId()) {
                     final var obj = watchableObject.getObject();
-                    if (obj instanceof final Float fl) {
-                        if (0 >= fl) {
-                            M7Features.handleDeath(entity, dragon);
-                        }
+                    if (obj instanceof final Float fl && 0.0F >= fl) {
+                        M7Features.handleDeath(entity, dragon);
                     }
                     break;
                 }
@@ -286,7 +278,7 @@ final class M7Features {
     }
 
     static final void onMobSpawned(@NotNull final Entity entity) {
-        final var proc = Config.isDragonHud() || Config.isSpawningNotification() || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification() || (Config.isShowStatueBox() && Config.isHideStatueBoxForDestroyedStatues());
+        final var proc = Config.isDragonHud() || Config.isSpawningNotification() || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification() || Config.isShowStatueBox() && Config.isHideStatueBoxForDestroyedStatues();
         if (proc && -1L != DungeonTimer.getPhase4ClearTime() && entity instanceof final EntityDragon dragon && !AdditionalM7Features.isWitherKingDefeated() && AdditionalM7Features.isInM7()) {
             final var id = dragon.getEntityId();
 
@@ -307,20 +299,18 @@ final class M7Features {
             type.setIceSprayedInTicks(-1);
 
             M7Features.dragonMap.put(id, type);
- 
-            if (proc) {
-                M7Features.reverseDragonMap[type.getEnumOrdinal()] = id;
 
-                M7Features.spawningDragons.remove(type);
-                M7Features.killedDragons.remove(type);
-                M7Features.dragonSpawnTimes.remove(type);
-            }
+            M7Features.reverseDragonMap[type.getEnumOrdinal()] = id;
+
+            M7Features.spawningDragons.remove(type);
+            M7Features.killedDragons.remove(type);
+            M7Features.dragonSpawnTimes.remove(type);
         }
     }
 
     private static final void handleDeath(@NotNull final EntityDragon entity, @NotNull final WitherKingDragons type) {
-        final var proc = Config.isDragonHud() || Config.isSpawningNotification() || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification() || (Config.isShowStatueBox() && Config.isHideStatueBoxForDestroyedStatues());
- 
+        final var proc = Config.isDragonHud() || Config.isSpawningNotification() || Config.isStatueDestroyedNotification() || Config.isStatueMissedNotification() || Config.isShowStatueBox() && Config.isHideStatueBoxForDestroyedStatues();
+
         if (!proc) {
             return;
         }
@@ -329,12 +319,10 @@ final class M7Features {
 
         M7Features.dragonMap.remove(entity.getEntityId());
 
-        if (proc) {
-            M7Features.killedDragons.add(type);
-            M7Features.spawningDragons.remove(type);
-            M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
-            M7Features.dragonSpawnTimes.remove(type);
-        }
+        M7Features.killedDragons.add(type);
+        M7Features.spawningDragons.remove(type);
+        M7Features.reverseDragonMap[type.getEnumOrdinal()] = -1;
+        M7Features.dragonSpawnTimes.remove(type);
     }
 
     private static final void handleWorldUnload() {

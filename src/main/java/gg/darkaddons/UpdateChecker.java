@@ -52,10 +52,13 @@ final class UpdateChecker {
         }
 
         final var cmp = UpdateChecker.compareSemVer(currentVersion, latestVersion);
+
         if (0 == cmp) {
             return UpdateChecker.UpdateCheckerResult.UP_TO_DATE;
-        } else if (cmp > 0) {
-            // Current version is higher than latest release
+        }
+
+        if (0 < cmp) {
+            // The current version is higher than the latest release
             DarkAddons.queueWarning("You are running an in-development version of DarkAddons. Please report bugs and provide feedback!");
             return UpdateChecker.UpdateCheckerResult.AHEAD_OF_REMOTE;
         }
@@ -90,10 +93,9 @@ final class UpdateChecker {
     }
 
     private static final int parseIntSafe(@NotNull final String s) {
-        try {
-            return Integer.parseInt(s.replaceAll("[^0-9]", ""));
-        } catch (final NumberFormatException nfe) {
-            return 0;
-        }
+        final var result = Utils.safeParseIntFast(s);
+
+        return -1 == result ? 0 : result;
+
     }
 }

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import org.jetbrains.annotations.NotNull;
 
-@Mixin(value = S1CPacketEntityMetadata.class, priority = 1001)
+@Mixin(value = S1CPacketEntityMetadata.class, priority = 1_001)
 final class MixinS1CPacketEntityMetadata {
     private MixinS1CPacketEntityMetadata() {
         super();

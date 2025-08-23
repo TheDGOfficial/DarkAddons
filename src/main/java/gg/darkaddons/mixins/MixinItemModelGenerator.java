@@ -30,8 +30,8 @@ final class MixinItemModelGenerator {
      */
     @Overwrite
     @NotNull
-    private final List<BlockPart> func_178397_a(@NotNull final TextureAtlasSprite textureAtlasSprite, @NotNull final String string, final int i) {
-        return MixinItemModelGenerator.getBlockParts(textureAtlasSprite, string, i);
+    private final List<BlockPart> func_178397_a(@NotNull final TextureAtlasSprite sprite, @NotNull final String key, final int layer) {
+        return MixinItemModelGenerator.getBlockParts(sprite, key, layer);
     }
 
     @SuppressWarnings("CollectionDeclaredAsConcreteClass")

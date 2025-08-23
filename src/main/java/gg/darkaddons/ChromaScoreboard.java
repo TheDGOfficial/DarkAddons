@@ -37,7 +37,7 @@ final class ChromaScoreboard {
         }
 
         @Override
-        public final void setObjectiveValue(@NotNull final String objectiveValue) {
+        public final void setObjectiveValue(@NotNull final String value) {
             throw new UnsupportedOperationException(this.getClass().getName());
         }
     }

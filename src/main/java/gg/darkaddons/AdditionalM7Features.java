@@ -2,13 +2,7 @@ package gg.darkaddons;
 
 import gg.essential.universal.UChat;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.entity.boss.EntityDragon;
-import net.minecraft.entity.boss.EntityWither;
-
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -18,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 import java.util.HashMap;
-import java.util.function.BooleanSupplier;
 
 final class AdditionalM7Features {
     private static final int TITLE_TICKS = 60;
@@ -97,40 +90,42 @@ final class AdditionalM7Features {
             classes.put(teammate.getPlayer().getName(), teammate.getDungeonClass());
         }
 
-        final int[] lbHitsGuess = {0};
-        final int[] dpsArrows = {0};
+        final var lbHitsGuess = new int[]{0};
+        final var dpsArrows = new int[]{0};
 
         dragon.getArrowsHit().forEach((player, amount) -> {
             final var dungeonClass = classes.get(player);
 
-            if (DungeonListener.DungeonClass.TANK == dungeonClass || DungeonListener.DungeonClass.HEALER == dungeonClass || DungeonListener.DungeonClass.MAGE == dungeonClass) {
-                lbHitsGuess[0] += amount;
-            } else if (DungeonListener.DungeonClass.ARCHER == dungeonClass || DungeonListener.DungeonClass.BERSERK == dungeonClass) {
-                dpsArrows[0] += amount;
+            switch (dungeonClass) {
+                case TANK, HEALER, MAGE -> lbHitsGuess[0] += amount;
+                case ARCHER, BERSERK -> dpsArrows[0] += amount;
+                case null -> {
+                    // could not determine class of player, skip their arrows
+                }
             }
         });
 
         final var lb = lbHitsGuess[0];
-        final var color = lb >= 5 ? "§a" : lb == 4 ? "§2" : lb == 3 ? "§6" : lb == 2 ? "§e" : lb == 1 ? "§c" : "§4";
+        final var color = 5 <= lb ? "§a" : 4 == lb ? "§2" : 3 == lb ? "§6" : 2 == lb ? "§e" : 1 == lb ? "§c" : "§4";
 
         final var dps = dpsArrows[0];
-        final var dpsColor = dps >= 100 ? "§a" : dps >= 60 ? "§2" : dps >= 50 ? "§6" : dps >= 40 ? "§c" : "§4";
+        final var dpsColor = 100 <= dps ? "§a" : 60 <= dps ? "§2" : 50 <= dps ? "§6" : 40 <= dps ? "§c" : "§4";
 
-        return " §b(Spray: " + (sprayed ? "§aYes [" + ticks + "t]" : "§cNo") + "§b, LB: " + color + Integer.toString(lb) + "§b, A+B: " + dpsColor + Integer.toString(dps) + ')';
+        return " §b(Spray: " + (sprayed ? "§aYes [" + ticks + "t]" : "§cNo") + "§b, LB: " + color + lb + "§b, A+B: " + dpsColor + dps + ')';
     }
 
     private static final void echoArrowsHit(@NotNull final WitherKingDragons dragon) {
-        final var builder = new StringBuilder();
-        final boolean[] first = {false};
+        final var builder = new StringBuilder(100);
+        final var first = new boolean[]{false};
 
         dragon.getArrowsHit().forEach((player, amount) -> {
-            if (!first[0]) {
-                first[0] = true;
-            } else {
+            if (first[0]) {
                 builder.append(", ");
+            } else {
+                first[0] = true;
             }
 
-            builder.append(player + " " + amount);
+            builder.append(player).append(' ').append(amount);
         });
 
         final var arrowsHit = builder.toString();
@@ -288,9 +283,9 @@ final class AdditionalM7Features {
     }
 
     private static final void notifyToStartCastingRagnarockIfNecessary() {
-         if (Config.isRagnarockUseNotifier()) {
-             GuiManager.createTitle("§5Cast Ragnarock!", 60, true, GuiManager.Sound.PLING);
-         }
+        if (Config.isRagnarockUseNotifier()) {
+            GuiManager.createTitle("§5Cast Ragnarock!", 60, true, GuiManager.Sound.PLING);
+        }
     }
 
     private static final void handleMessage4(@NotNull final String message) {
@@ -303,9 +298,8 @@ final class AdditionalM7Features {
                 AdditionalM7Features.notSaidFinalDialogue = false;
                 AdditionalM7Features.destroyAllStatues();
             }
-            case "[BOSS] Wither King: I no longer wish to fight, but I know that will not stop you." ->
-                AdditionalM7Features.notifyToStartCastingRagnarockIfNecessary();
-            case "[BOSS] Livid: I can now turn those Spirits into shadows of myself, identical to their creator." ->
+            case "[BOSS] Wither King: I no longer wish to fight, but I know that will not stop you.",
+                 "[BOSS] Livid: I can now turn those Spirits into shadows of myself, identical to their creator." ->
                 AdditionalM7Features.notifyToStartCastingRagnarockIfNecessary();
             case "[BOSS] Livid: I respect you for making it to here, but I'll be your undoing." -> {
                 AdditionalM7Features.lividsSpawned = true;

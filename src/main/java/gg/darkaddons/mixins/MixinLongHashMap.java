@@ -2,6 +2,7 @@ package gg.darkaddons.mixins;
 
 import gg.darkaddons.MinecraftCollection;
 
+import gg.darkaddons.annotations.bytecode.Name;
 import net.minecraft.util.LongHashMap;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -32,7 +33,7 @@ final class MixinLongHashMap implements MinecraftCollection {
     @NotNull
     private final Object[] getHashArray() {
         try {
-            return (Object[]) darkaddons$hashArrayField.get(this);
+            return (Object[]) MixinLongHashMap.darkaddons$hashArrayField.get(this);
         } catch (final Throwable error) {
             throw new RuntimeException("Could not reflect LongHashMap.hashArray", error);
         }
@@ -56,11 +57,13 @@ final class MixinLongHashMap implements MinecraftCollection {
         this.numHashElements = 0;
     }
 
-    @Unique
     @Override
+    @Unique
+    @Name("toString$darkaddons")
     public final String toString() {
         return "MixinLongHashMap{" +
             "hashArray=" + Arrays.toString(this.getHashArray()) +
+            ", numHashElements=" + this.numHashElements +
             '}';
     }
 }
