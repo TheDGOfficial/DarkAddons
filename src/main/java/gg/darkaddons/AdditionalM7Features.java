@@ -99,9 +99,6 @@ final class AdditionalM7Features {
             switch (dungeonClass) {
                 case TANK, HEALER, MAGE -> lbHitsGuess[0] += amount;
                 case ARCHER, BERSERK -> dpsArrows[0] += amount;
-                case null -> {
-                    // could not determine class of player, skip their arrows
-                }
             }
         });
 
