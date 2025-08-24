@@ -49,7 +49,7 @@ public final class DungeonListener {
     @Nullable
     static final DungeonListener.DungeonClass getSelfDungeonClass() {
         final var self = DungeonListener.getSelfDungeonTeammate();
-        return null != self ? self.getDungeonClass() : null;
+        return null == self ? null : self.getDungeonClass();
     }
 
     @NotNull
