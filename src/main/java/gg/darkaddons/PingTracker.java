@@ -74,7 +74,7 @@ final class PingTracker {
     }
 
     static final void onPacketReceived(@NotNull final Packet<?> packet) {
-        if (Config.isPingDisplay() && packet instanceof final S37PacketStatistics stats) {
+        if (Config.isPingDisplay() && packet instanceof S37PacketStatistics) {
             final var sent = PingTracker.lastSentPacket.getAndSet(-1L);
             if (-1L != sent) {
                 PingTracker.lastPingNanos.set(Math.abs(System.nanoTime() - sent));
