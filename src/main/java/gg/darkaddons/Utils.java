@@ -464,8 +464,8 @@ final class Utils {
         }
 
         return "0".equals(text) ? 0 : switch (text) {
-            case "900000000" -> 900_000_000;
-            case "1800000000" -> 1_800_000_000;
+            case "1000000000" -> 1_000_000_000;
+            case "2000000000" -> 2_000_000_000;
             case "100" -> 100;
             default -> {
                 var answer = 0;
