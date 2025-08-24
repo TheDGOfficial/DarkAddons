@@ -96,6 +96,5 @@ final class UpdateChecker {
         final var result = Utils.safeParseIntFast(s);
 
         return -1 == result ? 0 : result;
-
     }
 }
