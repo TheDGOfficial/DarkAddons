@@ -1037,8 +1037,8 @@ public final class DarkAddons {
      * @param shooter The {@link Entity} that shot the arrow.
      * @param entitiesHit The list of {@link Entity Entities} that got hit by the arrow.
      */
-    static final void onArrowDespawn(@NotNull final EntityArrow arrow, @NotNull final Entity shooter, @NotNull final ArrayList<Entity> entitiesHit) {
-        M7Features.onArrowDespawn(arrow, shooter, entitiesHit);
+    static final void onArrowDespawn(@NotNull final Entity shooter, @NotNull final ArrayList<Entity> entitiesHit) {
+        M7Features.onArrowDespawn(shooter, entitiesHit);
     }
 
     /**

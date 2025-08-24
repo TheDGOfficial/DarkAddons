@@ -1,6 +1,5 @@
 package gg.darkaddons;
 
-import com.google.common.base.MoreObjects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -78,7 +77,7 @@ final class ArrowTracker {
             for (final var id : destroy.getEntityIDs()) {
                 final var data = ArrowTracker.arrows.remove(id);
                 if (null != data && null != data.arrow && null != data.owner) {
-                    DarkAddons.onArrowDespawn(data.arrow, data.owner, data.entitiesHit);
+                    DarkAddons.onArrowDespawn(data.owner, data.entitiesHit);
                 }
             }
         } else if (packet instanceof final S32PacketConfirmTransaction pct && 1 > pct.getActionNumber()) {
@@ -141,10 +140,10 @@ final class ArrowTracker {
         @Override
         @NotNull
         public final String toString() {
-            return MoreObjects.toStringHelper(this)
-                    .add("owner", this.owner)
-                    .add("addedTime", this.addedTime)
-                    .toString();
+            return "OwnedData{" +
+            "owner='" + this.owner + '\'' +
+            ", addedTime='" + this.addedTime + '\'' +
+            '}';
         }
     }
 
@@ -176,11 +175,11 @@ final class ArrowTracker {
         @Override
         @NotNull
         public final String toString() {
-            return MoreObjects.toStringHelper(this)
-                    .add("owner", this.owner)
-                    .add("arrow", this.arrow)
-                    .add("entitiesHit", this.entitiesHit)
-                    .toString();
+            return "ArrowData{" +
+            "owner='" + this.owner + '\'' +
+            ", arrow='" + this.arrow + '\'' +
+            ", entitiesHit='" + this.entitiesHit + '\'' +
+            '}';
         }
     }
 }

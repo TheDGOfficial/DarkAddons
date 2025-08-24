@@ -168,7 +168,7 @@ final class M7Features {
         }
     }
 
-    static final void onArrowDespawn(@NotNull final EntityArrow arrow, @NotNull final Entity shooter, @NotNull final ArrayList<Entity> entitiesHit) {
+    static final void onArrowDespawn(@NotNull final Entity shooter, @NotNull final ArrayList<Entity> entitiesHit) {
         for (final var entity : entitiesHit) {
             M7Features.registerArrowHitOnEntity(shooter, entity);
         }
