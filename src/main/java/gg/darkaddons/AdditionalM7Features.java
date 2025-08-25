@@ -85,9 +85,7 @@ final class AdditionalM7Features {
         dragon.setIceSprayedInTicks(-1);
 
         final var team = DungeonListener.getTeam();
-        final var teamSize = team.size();
-
-        final var classes = new HashMap<String, DungeonListener.DungeonClass>(Utils.calculateHashMapCapacity(teamSize));
+        final var classes = new HashMap<String, DungeonListener.DungeonClass>(Utils.calculateHashMapCapacity(team.size()));
 
         for (final var teammate : team) {
             classes.put(teammate.getPlayer().getName(), teammate.getDungeonClass());
