@@ -1,5 +1,7 @@
 package gg.darkaddons;
 
+import gg.darkaddons.mixins.IMixinChunkProviderClient;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -32,34 +34,37 @@ final class ReplaceDiorite {
         }
     }
 
+    // 7448 total block positions
     @NotNull
-    private static final BlockPos[] pillars = new BlockPos[]{new BlockPos(46, 169, 41), new BlockPos(46, 169, 65), new BlockPos(100, 169, 65), new BlockPos(100, 169, 41)};
+    private static final HashMap<BlockPos, Integer> posToColor = new HashMap<>(Utils.calculateHashMapCapacity(7448));
 
-    private static final int @NotNull [] pillarColors = new int[]{5, 4, 10, 14};
-
+    // 4 chunks total
     @NotNull
-    private static final HashSet<BlockPos>[] coordinates = ReplaceDiorite.createPillarSets();
+    private static final HashMap<Long, HashSet<BlockPos>> chunkToPositions = new HashMap<>(Utils.calculateHashMapCapacity(4));
 
-    @NotNull
-    private static final HashSet<BlockPos>[] createPillarSets() {
-        return JavaUtils.createGenericArray(ReplaceDiorite.createPillarSet(0), ReplaceDiorite.createPillarSet(1), ReplaceDiorite.createPillarSet(2), ReplaceDiorite.createPillarSet(3));
+    static {
+        ReplaceDiorite.addPillar(new BlockPos(46, 169, 41), 5);
+        ReplaceDiorite.addPillar(new BlockPos(46, 169, 65), 4);
+        ReplaceDiorite.addPillar(new BlockPos(100, 169, 65), 10);
+        ReplaceDiorite.addPillar(new BlockPos(100, 169, 41), 14);
     }
 
-    @NotNull
-    private static final HashSet<BlockPos> createPillarSet(final int pillarIndex) {
-        final var pillar = ReplaceDiorite.pillars[pillarIndex];
-        final var set = new HashSet<BlockPos>(16);
-        final var pillarX = pillar.getX();
-        final var pillarY = pillar.getY();
-        final var pillarZ = pillar.getZ();
+    private static final void addPillar(@NotNull final BlockPos origin, final int color) {
+        final var pillarX = origin.getX();
+        final var pillarY = origin.getY();
+        final var pillarZ = origin.getZ();
+
         for (var x = pillarX - 3; x <= pillarX + 3; ++x) {
             for (var y = pillarY; y <= pillarY + 37; ++y) {
                 for (var z = pillarZ - 3; z <= pillarZ + 3; ++z) {
-                    set.add(new BlockPos(x, y, z));
+                    final var pos = new BlockPos(x, y, z);
+                    ReplaceDiorite.posToColor.put(pos, color);
+
+                    final long key = ((long) (x >> 4) << 32) | ((long) z >> 4 & 0xFFFFFFFFL);
+                    ReplaceDiorite.chunkToPositions.computeIfAbsent(key, k -> new HashSet<>(1862)).add(pos);
                 }
             }
         }
-        return set;
     }
 
     @SubscribeEvent
@@ -71,31 +76,38 @@ final class ReplaceDiorite {
 
     private static final void replaceDiorite() {
         final var world = Minecraft.getMinecraft().theWorld;
-        if (null != world) {
-            final var chunkProvider = world.getChunkProvider();
-            final var chunks = new HashMap<Long, Chunk>(16);
-            for (final var coordinate : ReplaceDiorite.coordinates) {
-                for (final var pos : coordinate) {
-                    final long chunkX = pos.getX() >> 4L;
-                    final long chunkZ = pos.getZ() >> 4L;
+        if (null == world) {
+            return;
+        }
 
-                    final var chunk = chunks.computeIfAbsent(chunkX << 32L | chunkZ, l -> chunkProvider.provideChunk((int) chunkX, (int) chunkZ));
-                    if (chunk.getBlock(pos) == Blocks.stone) {
-                        ReplaceDiorite.setGlass(world, pos, coordinate);
-                    }
+        final var chunkProvider = world.getChunkProvider();
+        final var blankChunk = ((IMixinChunkProviderClient) chunkProvider).getBlankChunk();
+
+        for (final var entry : ReplaceDiorite.chunkToPositions.entrySet()) {
+            final var key = entry.getKey();
+            final var chunkX = (int) (key >> 32);
+            final var chunkZ = (int) (key & 0xFFFFFFFFL);
+
+            final var chunk = chunkProvider.provideChunk(chunkX, chunkZ);
+
+            if (blankChunk == chunk) {
+                // Skip not loaded chunk
+                continue;
+            }
+
+            for (final var pos : entry.getValue()) {
+                if (Blocks.stone == chunk.getBlock(pos)) {
+                    ReplaceDiorite.setGlass(world, pos);
                 }
             }
         }
     }
 
-    private static final void setGlass(@NotNull final World world, @NotNull final BlockPos pos, @NotNull final HashSet<BlockPos> coordinate) {
-        var index = 0;
-        for (final var coord : ReplaceDiorite.coordinates) {
-            if (coordinate == coord) {
-                break;
-            }
-            ++index;
+    private static final void setGlass(@NotNull final World world, @NotNull final BlockPos pos) {
+        final var color = ReplaceDiorite.posToColor.get(pos);
+        if (null != color) {
+            world.setBlockState(pos, ReplaceDiorite.glassStates[color], 3);
         }
-        world.setBlockState(pos, ReplaceDiorite.glassStates[ReplaceDiorite.pillarColors[index]], 3);
     }
 }
+

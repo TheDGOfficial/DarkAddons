@@ -27,5 +27,11 @@ public interface IMixinChunkProviderClient {
      */
     @Accessor
     List<Chunk> getChunkListing();
+
+    /**
+     * Gets the blank chunk (private field in {@link ChunkProviderClient}).
+     */
+    @Accessor
+    Chunk getBlankChunk();
 }
 
