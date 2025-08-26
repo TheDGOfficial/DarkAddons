@@ -53,7 +53,7 @@ public interface ProfilerResults {
     /**
      * Decompiles the results with the default decompiler and returns the new results.
      *
-     * @return The new remapped results.
+     * @return The new decompiled results.
      */
     @NotNull
     ProfilerResults decompile();
