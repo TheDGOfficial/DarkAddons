@@ -1064,6 +1064,16 @@ public final class DarkAddons {
     }
 
     /**
+     * Hook from MixinScoreCalculation that fixes prince in score calculation.
+     *
+     * @return True or false depending on if prince is killed or not for +1 score.
+     * Will also return false if the config option "Fix Prince" is disabled.
+     */
+    public static final boolean isPrinceKilled() {
+        return ScoreFromScoreboard.isPrinceKilled();
+    }
+
+    /**
      * Handles game loop start.
      */
     public static final void handleGameLoopPre() {

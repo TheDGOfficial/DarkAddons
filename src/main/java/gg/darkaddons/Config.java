@@ -642,6 +642,13 @@ final class Config extends Vigilant {
     private static boolean phase5StartingNotification;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Prince Fix",
+        description = "Fixes Skytils score calculation to increase Bonus Score by +1 when the chat message for Prince bonus score is received.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean princeFix = true;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Send Message on 270 Score",
         description = "Uses score from scoreboard to determine the real score and send the 270 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet. It is recommended to have both Skytils and DarkAddons score messages enabled for best results.",
         category = "Dungeons", subcategory = "Helpers"
@@ -1396,6 +1403,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.goldenFishTimer;
+    }
+
+    static final boolean isPrinceFix() {
+        Config.checkUninit();
+
+        return Config.princeFix;
     }
 
     static final boolean isSendMessageOn270Score() {

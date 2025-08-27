@@ -12,6 +12,11 @@ final class ScoreFromScoreboard {
     private static int previousScore;
     private static boolean hasSaidScoreAtBossEntry;
     private static boolean sentTitleOn301Score;
+    private static boolean princeKilled;
+
+    static final boolean isPrinceKilled() {
+        return Config.isPrinceFix() && ScoreFromScoreboard.princeKilled;
+    }
 
     ScoreFromScoreboard() {
         super();
@@ -40,6 +45,7 @@ final class ScoreFromScoreboard {
         ScoreFromScoreboard.previousScore = 0;
         ScoreFromScoreboard.hasSaidScoreAtBossEntry = false;
         ScoreFromScoreboard.sentTitleOn301Score = false;
+        ScoreFromScoreboard.princeKilled = false;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
@@ -48,6 +54,9 @@ final class ScoreFromScoreboard {
             final var message = Utils.removeControlCodes(event.message.getUnformattedText());
             if (message.contains("Blaze Done")) {
                 ScoreFromScoreboard.blazeDoneReceived = true;
+            }
+            if (Config.isPrinceFix() && "A Prince falls. +1 Bonus Score".equals(message)) {
+                ScoreFromScoreboard.princeKilled = true;
             }
         }
     }
