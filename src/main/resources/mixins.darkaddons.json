@@ -107,7 +107,9 @@
         "IMixinChunkProviderClient",
         "MixinLongHashMap",
         "MixinEntityArrow",
-        "MixinS1CPacketEntityMetadata"
+        "MixinS1CPacketEntityMetadata",
+        "MixinScoreCalculation",
+        "MixinLabyConnect"
     ],
     "server": [
     ],
