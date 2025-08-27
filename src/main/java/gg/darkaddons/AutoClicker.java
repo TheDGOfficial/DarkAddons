@@ -54,7 +54,11 @@ final class AutoClicker {
     }
 
     static final boolean isHoldingTermOrRCM(@NotNull final Minecraft mc) {
-        return AutoClicker.isHoldingTerm(mc) || ItemUtils.isHoldingItemContaining(mc, "Astraea") || AutoClicker.isHoldingHype(mc);
+        return AutoClicker.isHoldingTerm(mc) || AutoClicker.isHoldingRCM(mc);
+    }
+
+    static final boolean isHoldingRCM(@NotNull final Minecraft mc) {
+        return ItemUtils.isHoldingItemContaining(mc, "Astraea") || AutoClicker.isHoldingHype(mc);
     }
 
     static final boolean isHoldingClaymoreMidasOrGS(@NotNull final Minecraft mc) {
@@ -242,7 +246,7 @@ final class AutoClicker {
     }
 
     private static final boolean handleRightClick(@NotNull final Runnable rightClick, @NotNull final KeyBinding right, @NotNull final Minecraft mc) {
-        final var newIsPressed = Config.isRightClickAutoClicker() && right.isKeyDown() && AutoClicker.isHoldingTermOrRCM(mc);
+        final var newIsPressed = Config.isRightClickAutoClicker() && right.isKeyDown() && AutoClicker.isHoldingRCM(mc);
         if (newIsPressed) {
             ++AutoClicker.rightClickTicks;
 

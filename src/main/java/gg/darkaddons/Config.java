@@ -939,7 +939,7 @@ final class Config extends Vigilant {
 
     @Property(
         type = PropertyType.SWITCH, name = "RightClick AutoClicker",
-        description = "Automatically right clicks while you are holding down right click, while holding Hyperion, Astraea or Terminator. This is a cheat. Use at your own risk.",
+        description = "Automatically right clicks while you are holding down right click, while holding Hyperion or Astraea. This is a cheat. Use at your own risk.",
         category = "QOL", subcategory = "General"
     )
     private static boolean rightClickAutoClicker;
