@@ -1260,6 +1260,16 @@ public final class DarkAddons {
     }
 
     /**
+     * Checks if the player is holding a RCM weapon.
+     *
+     * @param mc The Minecraft instance.
+     * @return True if the player is holding a RCM weapon, false otherwise.
+     */
+    public static final boolean isHoldingRCM(@NotNull final Minecraft mc) {
+        return AutoClicker.isHoldingRCM(mc);
+    }
+
+    /**
      * Resets AutoClicker state.
      * <p>
      * Called at the start of each tick.
