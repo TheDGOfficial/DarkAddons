@@ -78,10 +78,10 @@ final class ScoreFromScoreboard {
     private static final void onScoreUpdate(final int score, final int rawScore) {
         if (Config.isSendMessageOn300Score() && 300 <= score && !ScoreCalculation.getHasSaid300()) {
             ScoreCalculation.setHasSaid300(true);
-            DarkAddons.queueUserSentMessageOrCommand("/pc 300 score");
+            DarkAddons.queueUserSentMessageOrCommand("/pc Skytils-SC > " + ScoreCalculation.get300ScoreMessage());
         } else if (Config.isSendMessageOn270Score() && 270 <= score && !ScoreCalculation.getHasSaid270()) {
             ScoreCalculation.setHasSaid270(true);
-            DarkAddons.queueUserSentMessageOrCommand("/pc 270 score");
+            DarkAddons.queueUserSentMessageOrCommand("/pc Skytils-SC > " + ScoreCalculation.get270ScoreMessage());
         }
 
         final var calculatedScore = ScoreCalculation.getTotalScore().get();
