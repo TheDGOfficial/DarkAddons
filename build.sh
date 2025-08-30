@@ -231,6 +231,13 @@ if [ -f "$BUILD_OUTPUT_JAR_PATH" ] && [ "$EXIT_CODE" == "0" ]; then
 
   zip -q -d "$BUILD_OUTPUT_JAR_PATH" "gg/darkaddons/ChromaScoreboard\$Dummy.class"
 
+  tmpdir=$(mktemp -d)
+  unzip -q "$BUILD_OUTPUT_JAR_PATH" -d "$tmpdir"
+  find "$tmpdir" -exec touch -t 198001010000 {} +
+  (cd "$tmpdir" && zip -q -X -r ../clean.jar .)
+  mv $(dirname "$tmpdir")/clean.jar "$BUILD_OUTPUT_JAR_PATH"
+  rm -r "$tmpdir"
+
   if [ "${1:-default}" != "--skip-install" ]; then
     echo Placing JAR in mod folder
     # shellcheck disable=SC2206
