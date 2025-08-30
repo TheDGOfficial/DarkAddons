@@ -238,7 +238,8 @@ final class AdditionalM7Features {
                 AutoClassAbilities.ultReminderToAutoClassAbilitiesHook(false);
                 if (AdditionalM7Features.firstLaserNotDone) {
                     var flag = false;
-                    if (Config.isUltReminder()) {
+                    final var selfDungeonClass = DungeonListener.getSelfDungeonClass();
+                    if (Config.isUltReminder() && (DungeonListener.DungeonClass.TANK == selfDungeonClass || DungeonListener.DungeonClass.HEALER == selfDungeonClass)) {
                         DarkAddons.sendMessage(Utils.chromaIfEnabledOrAqua() + "Maxor is enraged. Use your ultimate ability!");
                         AdditionalM7Features.sendUseUltTitle();
                         flag = true;
