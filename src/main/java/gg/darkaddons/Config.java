@@ -810,7 +810,7 @@ final class Config extends Vigilant {
         min = 0,
         max = 10
     )
-    private static int autoFishingRodStartingDelay = 4;
+    private static int autoFishingRodStartingDelay = 0;
 
     @Property(
         type = PropertyType.NUMBER, name = "Auto Fishing Rod Maximum Delay Ticks",
@@ -819,7 +819,7 @@ final class Config extends Vigilant {
         min = 0,
         max = 10
     )
-    private static int autoFishingRodMaximumDelay = 5;
+    private static int autoFishingRodMaximumDelay = 0;
 
     @Property(
         type = PropertyType.SWITCH, name = "Auto Fishing Rod Slugfish Mode",
