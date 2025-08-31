@@ -235,7 +235,7 @@ if [ -f "$BUILD_OUTPUT_JAR_PATH" ] && [ "$EXIT_CODE" == "0" ]; then
   unzip -q "$BUILD_OUTPUT_JAR_PATH" -d "$tmpdir"
   find "$tmpdir" -exec touch -t 198001010000 {} +
   (cd "$tmpdir" && zip -q -X -r ../clean.jar .)
-  mv $(dirname "$tmpdir")/clean.jar "$BUILD_OUTPUT_JAR_PATH"
+  mv "$(dirname "$tmpdir")"/clean.jar "$BUILD_OUTPUT_JAR_PATH"
   rm -r "$tmpdir"
 
   if [ "${1:-default}" != "--skip-install" ]; then
