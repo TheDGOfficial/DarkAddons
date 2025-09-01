@@ -83,4 +83,11 @@ final class ScoreCalculation {
     static final BasicState<Integer> getDeaths() {
         return gg.skytils.skytilsmod.features.impl.dungeons.ScoreCalculation.INSTANCE.getDeaths();
     }
+
+    @NotNull
+    static final int getCrypts() {
+        final var crypts = gg.skytils.skytilsmod.features.impl.dungeons.ScoreCalculation.INSTANCE.getCrypts().get();
+
+        return Math.min(5, crypts);
+    }
 }

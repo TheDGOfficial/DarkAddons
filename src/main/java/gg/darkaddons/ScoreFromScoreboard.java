@@ -13,6 +13,7 @@ final class ScoreFromScoreboard {
     private static boolean hasSaidScoreAtBossEntry;
     private static boolean sentTitleOn301Score;
     private static boolean princeKilled;
+    private static boolean hasSaidSmartCryptReminder;
 
     static final boolean isPrinceKilled() {
         return Config.isPrinceFix() && ScoreFromScoreboard.princeKilled;
@@ -46,6 +47,7 @@ final class ScoreFromScoreboard {
         ScoreFromScoreboard.hasSaidScoreAtBossEntry = false;
         ScoreFromScoreboard.sentTitleOn301Score = false;
         ScoreFromScoreboard.princeKilled = false;
+        ScoreFromScoreboard.hasSaidSmartCryptReminder = false;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
@@ -75,6 +77,21 @@ final class ScoreFromScoreboard {
         return fixedScore;
     }
 
+    private static final void smartCryptReminder(final int score, final int targetScore) {
+        if (!Config.isSmartCryptReminder() || ScoreFromScoreboard.hasSaidSmartCryptReminder) {
+            return;
+        }
+
+        final var crypts = ScoreCalculation.getCrypts();
+        final var missingCrypts = 5 - crypts;
+
+        if (missingCrypts > 0 && (score < targetScore || score < 300) && (score + missingCrypts >= targetScore || score + missingCrypts >= 300)) { // Getting the missing crypts would make the score good enough to enter the boss
+            ScoreFromScoreboard.hasSaidSmartCryptReminder = true;
+            GuiManager.createTitle("§6Get Crypts [" + crypts + "/5]", "§eMissing " + missingCrypts + ". Score: " + score + "-->" + (score + missingCrypts), 80, 80, true, GuiManager.Sound.PLING);
+            DarkAddons.queueUserSentMessageOrCommand("/pc Get Crypts [" + crypts + "/5] - Missing " + missingCrypts + ". Score: " + score + " - If 5 Crypts: " + (score + missingCrypts));
+        }
+    }
+
     private static final void onScoreUpdate(final int score, final int rawScore) {
         if (Config.isSendMessageOn300Score() && 300 <= score && !ScoreCalculation.getHasSaid300()) {
             ScoreCalculation.setHasSaid300(true);
@@ -92,7 +109,12 @@ final class ScoreFromScoreboard {
         if (Config.isSendMessageOn300Score() && Config.isSendTitleOn301Score() && highestScore >= scoreReq && !ScoreFromScoreboard.sentTitleOn301Score) {
             ScoreFromScoreboard.sentTitleOn301Score = true;
             GuiManager.createTitle("§a✔ " + highestScore + " Score!", "§a§lYou can go in.", 60, 60, true, GuiManager.Sound.LEVEL_UP);
+            if (Config.isSendMessageOnTargetScoreReach() && AdditionalM7Features.isInM7OrF7()) {
+                DarkAddons.queueUserSentMessageOrCommand("/pc " + highestScore + " score");
+            }
         }
+
+        ScoreFromScoreboard.smartCryptReminder(highestScore, scoreReq);
 
         final var diff = rawScore - ScoreFromScoreboard.previousScore;
 

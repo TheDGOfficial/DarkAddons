@@ -607,6 +607,13 @@ final class Config extends Vigilant {
     private static boolean witherLordDeadNotifier = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Smart Crypt Reminder",
+        description = "Shows a notification and sends a message to party chat if getting more crypts (if you don't have 5 already) would get you 301/302 score in F7/M7, or 300 score in other floors. Example: If you have 294 Score and 0 Crypts, it will trigger when you reach 295 Score, telling you to get 5 Crypts to make it 300 Score. This way it won't remind you till crypts are necessary, and won't remind if you already have 5 Crypts by the time of reaching 300/301/302 Score.",
+        category = "Dungeons", subcategory = "Reminders"
+    )
+    private static boolean smartCryptReminder;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Ultimate Reminder",
         description = "Shows a title message on screen after the first laser in Maxor, to remind you about using your ultimate class ability.",
         category = "Dungeons", subcategory = "Reminders"
@@ -675,6 +682,13 @@ final class Config extends Vigilant {
         category = "Dungeons", subcategory = "Helpers"
     )
     private static boolean sendTitleOn301Score = true;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Send Message on Target Score Reach",
+        description = "Sends a message to your party chat when you reach 301/302 Score while in F7/M7 for 1 deaths affordable.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean sendMessageOnTargetScoreReach;
 
     @Property(
         type = PropertyType.SWITCH, name = "Send Message on Melody Terminal",
@@ -1167,6 +1181,7 @@ final class Config extends Vigilant {
         this.addDependency("chromaSkyblock", "chromaToggle");
         this.addDependency("sendMessageForScoreAtBossEntry", "sendMessageOn300Score");
         this.addDependency("sendTitleOn301Score", "sendMessageOn300Score");
+        this.addDependency("sendMessageOnTargetScoreReach", "sendTitleOn301Score");
         this.addDependency("sendEnrageSkipHelperMessage", "maxorHPDisplay");
         this.addDependency("splitMessages", "spawningNotification");
 
@@ -1433,6 +1448,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.sendTitleOn301Score;
+    }
+
+    static final boolean isSendMessageOnTargetScoreReach() {
+        Config.checkUninit();
+
+        return Config.sendMessageOnTargetScoreReach;
     }
 
     static final boolean isSendMessageOnMelodyTerminal() {
@@ -1745,6 +1766,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.witherLordDeadNotifier;
+    }
+
+    static final boolean isSmartCryptReminder() {
+        Config.checkUninit();
+
+        return Config.smartCryptReminder;
     }
 
     static final boolean isUltReminder() {
