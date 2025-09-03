@@ -54,11 +54,16 @@ final class ScoreFromScoreboard {
     public final void onClientChatReceived(@NotNull final ClientChatReceivedEvent event) {
         if (MessageType.STANDARD_TEXT_MESSAGE.matches(event.type)) {
             final var message = Utils.removeControlCodes(event.message.getUnformattedText());
-            if (message.contains("Blaze Done")) {
+            if (!ScoreFromScoreboard.blazeDoneReceived && message.contains("Blaze Done")) {
                 ScoreFromScoreboard.blazeDoneReceived = true;
             }
-            if (Config.isPrinceFix() && "A Prince falls. +1 Bonus Score".equals(message)) {
-                ScoreFromScoreboard.princeKilled = true;
+            if (Config.isPrinceFix() && !ScoreFromScoreboard.princeKilled) {
+                if ("A Prince falls. +1 Bonus Score".equals(message) || message.contains("Prince") || message.contains("prince")) {
+                    ScoreFromScoreboard.princeKilled = true;
+                    if (Config.isSendPrinceMessage()) {
+                        DarkAddons.queueUserSentMessageOrCommand("/pc Prince Killed!");
+                    }
+                }
             }
         }
     }

@@ -656,6 +656,13 @@ final class Config extends Vigilant {
     private static boolean princeFix = true;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Send Prince Message",
+        description = "Sends the Prince message to the party chat.",
+        category = "Dungeons", subcategory = "Helpers"
+    )
+    private static boolean sendPrinceMessage = true;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Send Message on 270 Score",
         description = "Uses score from scoreboard to determine the real score and send the 270 Score message. Doesn't send duplicate messages if Skytils message is enabled. Since this is works with scoreboard score, it will always have the correct mimic and spirit pet scores, and has logic to add score from the Blaze Puzzle if a teammate (or you) sends Blaze Done message and Blaze puzzle is not completed yet. It is recommended to have both Skytils and DarkAddons score messages enabled for best results.",
         category = "Dungeons", subcategory = "Helpers"
@@ -1184,6 +1191,7 @@ final class Config extends Vigilant {
         this.addDependency("sendMessageOnTargetScoreReach", "sendTitleOn301Score");
         this.addDependency("sendEnrageSkipHelperMessage", "maxorHPDisplay");
         this.addDependency("splitMessages", "spawningNotification");
+        this.addDependency("sendPrinceMessage", "princeFix");
 
         this.addDependencies2();
     }
@@ -1424,6 +1432,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.princeFix;
+    }
+
+    static final boolean isSendPrinceMessage() {
+        Config.checkUninit();
+
+        return Config.sendPrinceMessage;
     }
 
     static final boolean isSendMessageOn270Score() {
