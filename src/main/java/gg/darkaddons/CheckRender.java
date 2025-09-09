@@ -25,6 +25,7 @@ final class CheckRender {
     private static final void forwardCheckRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
         if (Config.isArmorStandOptimizer() && entity instanceof final EntityArmorStand stand && (!ArmorStandOptimizer.checkRender(stand) || !RemoveBlankArmorStands.checkRender(stand))) {
             cir.setReturnValue(false);
+            cir.cancel();
         }
     }
 }
