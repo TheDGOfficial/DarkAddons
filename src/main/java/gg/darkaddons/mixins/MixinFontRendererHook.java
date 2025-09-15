@@ -22,7 +22,6 @@ final class MixinFontRendererHook {
     @Inject(method = "renderStringAtPos(Ljava/lang/String;Z)Z", at = @At("HEAD"), cancellable = true)
     public void darkaddons$disablePatcherFontRenderer(@NotNull final String text, final boolean shadow, @NotNull final CallbackInfoReturnable<Boolean> cir) {
         if (DarkAddons.isDisablePatcherFontRenderer()) {
-            cir.cancel();
             cir.setReturnValue(false);
         }
     }
