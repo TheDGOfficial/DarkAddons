@@ -18,7 +18,7 @@ final class MixinWorldAgeDisplay {
 
     @Inject(method = "getToggled", at = @At("RETURN"), remap = false, cancellable = true)
     private final void getToggled$darkaddons(@NotNull final CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValue()) {
+        if (cir.getReturnValueZ()) {
             cir.setReturnValue(!DarkAddons.isInDungeons());
         }
     }

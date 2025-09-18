@@ -23,7 +23,7 @@ final class MixinKeyBinding {
 
     @Inject(method = "isKeyDown", at = @At("RETURN"), cancellable = true)
     private final void isKeyDown$darkaddons(@NotNull final CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValue()) {
+        if (!cir.getReturnValueZ()) {
             final var gameSettings = Minecraft.getMinecraft().gameSettings;
             final var keyCode = this.getKeyCode();
             if (keyCode == gameSettings.keyBindJump.getKeyCode() && MixinUtils.isJumpOverride() && MixinUtils.getJumpOverridePrecondition().getAsBoolean() || keyCode == gameSettings.keyBindSneak.getKeyCode() && MixinUtils.isSneakOverride() && MixinUtils.getSneakOverridePrecondition().getAsBoolean()) {

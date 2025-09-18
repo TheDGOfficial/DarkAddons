@@ -19,7 +19,7 @@ final class MixinScoreCalculation {
 
     @Inject(method = "invoke", remap = false, at = @At(value = "RETURN"), cancellable = true)
     private final void invoke$darkaddons(@NotNull final CallbackInfoReturnable<Integer> cir) {
-        final var ret = cir.getReturnValue();
+        final var ret = cir.getReturnValueI();
 
         if (DarkAddons.isPrinceKilled()) {
             cir.setReturnValue(ret + 1);
