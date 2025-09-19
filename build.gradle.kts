@@ -4,6 +4,7 @@ import dev.architectury.pack200.java.Pack200Adapter
 import net.fabricmc.loom.task.RemapJarTask
 import org.apache.commons.lang3.StringUtils
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.jvm.toolchain.JvmVendorSpec
 //import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 //import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 //import org.jetbrains.kotlin.gradle.tasks.CompileUsingKotlinDaemon
@@ -31,12 +32,14 @@ plugins {
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(24)
+    toolchain.vendor = JvmVendorSpec.AZUL // pick a vendor known to include jmods
 
     withSourcesJar()
 }
 
 tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
     languageVersion = JavaLanguageVersion.of(24)
+    vendor = JvmVendorSpec.AZUL // pick a vendor known to include jmods
 }
 
 private val versionProperties = loadVersionProperties()
@@ -473,6 +476,7 @@ private val proguardJar: TaskProvider<ProguardTask> by tasks.registering(proguar
     jdkModules.add("java.base")
     jdkModules.add("java.desktop")
     jdkModules.add("java.management")
+    jdkModules.add("java.logging")
     jdkModules.add("jdk.management")
     jdkModules.add("jdk.httpserver")
     addLibrary {
