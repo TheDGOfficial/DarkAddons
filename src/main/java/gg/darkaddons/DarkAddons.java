@@ -1047,8 +1047,8 @@ public final class DarkAddons {
      * @param entity The entity.
      * @param cir The {@link CallbackInfoReturnable} to set the return value, since this method returns void.
      */
-    public static final void checkRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        CheckRender.checkRender(entity, cir);
+    public static final boolean checkRender(@NotNull final Entity entity) {
+        return CheckRender.checkRender(entity);
     }
 
     /**

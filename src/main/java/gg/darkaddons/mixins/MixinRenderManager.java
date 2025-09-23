@@ -18,7 +18,9 @@ final class MixinRenderManager {
 
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
     private final void shouldRender$darkaddons(@NotNull final Entity entityIn, @NotNull final ICamera camera, final double camX, final double camY, final double camZ, @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        DarkAddons.checkRender(entityIn, cir);
+        if (!DarkAddons.checkRender(entityIn)) {
+            cir.setReturnValue(false);
+        }
     }
 
     @Inject(method = "doRenderEntity", at = @At("HEAD"))

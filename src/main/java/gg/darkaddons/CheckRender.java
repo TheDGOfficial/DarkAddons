@@ -18,13 +18,11 @@ final class CheckRender {
         throw Utils.staticClassException();
     }
 
-    static final void checkRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        CheckRender.forwardCheckRender(entity, cir);
+    static final boolean checkRender(@NotNull final Entity entity) {
+        return CheckRender.forwardCheckRender(entity);
     }
 
-    private static final void forwardCheckRender(@NotNull final Entity entity, @NotNull final CallbackInfoReturnable<Boolean> cir) {
-        if (Config.isArmorStandOptimizer() && entity instanceof final EntityArmorStand stand && (!ArmorStandOptimizer.checkRender(stand) || !RemoveBlankArmorStands.checkRender(stand))) {
-            cir.setReturnValue(false);
-        }
+    private static final boolean forwardCheckRender(@NotNull final Entity entity) {
+        return !(entity instanceof final EntityArmorStand stand) || (ArmorStandOptimizer.checkRender(stand) && RemoveBlankArmorStands.checkRender(stand));
     }
 }

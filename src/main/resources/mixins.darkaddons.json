@@ -109,7 +109,8 @@
         "MixinEntityArrow",
         "MixinS1CPacketEntityMetadata",
         "MixinScoreCalculation",
-        "MixinLabyConnect"
+        "MixinLabyConnect",
+        "MixinRender"
     ],
     "server": [
     ],
