@@ -21,7 +21,7 @@ plugins {
     id("com.gradleup.shadow") version "9.1.0"
     id("gg.essential.loom") version "1.10.36"
     id("dev.architectury.architectury-pack200") version "0.1.3"
-    id("com.github.ben-manes.versions") version "0.52.0"
+    id("com.github.ben-manes.versions") version "0.53.0"
     java
     idea
     signing
