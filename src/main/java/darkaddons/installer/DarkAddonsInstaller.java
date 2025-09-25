@@ -109,7 +109,11 @@ final class DarkAddonsInstaller extends JFrame implements ActionListener, MouseL
             this.setName("DarkAddonsInstaller");
             this.setTitle("DarkAddons Installer");
             this.setResizable(false);
-            this.setSize(DarkAddonsInstaller.TOTAL_WIDTH, DarkAddonsInstaller.TOTAL_HEIGHT);
+
+            if ("1.8".equals(System.getProperty("java.specification.version"))) {
+                this.setSize(DarkAddonsInstaller.TOTAL_WIDTH, DarkAddonsInstaller.TOTAL_HEIGHT);
+            }
+
             this.setContentPane(this.getPanelContentPane());
 
             this.getButtonFolder().addActionListener(this);
