@@ -109,10 +109,15 @@ final class AutoFishingRod {
 
         final var delay = AutoFishingRod.secureRandom.nextInt(Math.max(1, max - min + 1)) + min;
 
-        DarkAddons.registerTickTask("auto_fishing_rod_right_click", delay, false, () -> {
+        if (0 == delay) {
             AutoFishingRod.hook();
             continuation.run();
-        });
+        } else {
+            DarkAddons.registerTickTask("auto_fishing_rod_right_click", delay, false, () -> {
+                AutoFishingRod.hook();
+                continuation.run();
+            });
+        }
     }
 
     private static final void tryExecMethods(@NotNull final Class<?> clazz, @NotNull final String[] names, @Nullable final Object instance, @Nullable final Object... args) {
