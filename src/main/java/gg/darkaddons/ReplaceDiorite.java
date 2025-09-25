@@ -60,8 +60,8 @@ final class ReplaceDiorite {
                     final var pos = new BlockPos(x, y, z);
                     ReplaceDiorite.posToColor.put(pos, color);
 
-                    final long key = ((long) (x >> 4) << 32) | ((long) z >> 4 & 0xFFFFFFFFL);
-                    ReplaceDiorite.chunkToPositions.computeIfAbsent(key, k -> new HashSet<>(1862)).add(pos);
+                    final var key = (long) (x >> 4) << 32 | (long) z >> 4 & 0xFFFF_FFFFL;
+                    ReplaceDiorite.chunkToPositions.computeIfAbsent(key, k -> new HashSet<>(Utils.calculateHashMapCapacity(1862))).add(pos);
                 }
             }
         }
