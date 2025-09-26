@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value = Render.class, priority = 1_001)
+@Mixin(value = Render.class, priority = 1_002)
 final class MixinRender {
     private MixinRender() {
         super();
