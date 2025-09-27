@@ -40,7 +40,7 @@ jobs:
    - name: Install Java
      uses: actions/setup-java@v5.0.0
      with:
-      distribution: azul
+      distribution: zulu
       java-version: 24
 
    - name: Cache Gradle wrapper
