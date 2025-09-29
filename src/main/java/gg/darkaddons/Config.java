@@ -831,7 +831,7 @@ final class Config extends Vigilant {
         min = 0,
         max = 10
     )
-    private static int autoFishingRodStartingDelay = 0;
+    private static int autoFishingRodStartingDelay = 4;
 
     @Property(
         type = PropertyType.NUMBER, name = "Auto Fishing Rod Maximum Delay Ticks",
@@ -840,7 +840,14 @@ final class Config extends Vigilant {
         min = 0,
         max = 10
     )
-    private static int autoFishingRodMaximumDelay = 0;
+    private static int autoFishingRodMaximumDelay = 5;
+
+    @Property(
+        type = PropertyType.SWITCH, name = "Auto Fishing Rod Work Through Menus",
+        description = "Allows you to still reel and throw the rod even if you have a menu open.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean autoFishingRodWorkThroughMenus;
 
     @Property(
         type = PropertyType.SWITCH, name = "Auto Fishing Rod Slugfish Mode",
@@ -1223,6 +1230,7 @@ final class Config extends Vigilant {
         this.addDependency("autoFishingRodRecast", "autoFishingRod");
         this.addDependency("autoFishingRodStartingDelay", "autoFishingRod");
         this.addDependency("autoFishingRodMaximumDelay", "autoFishingRod");
+        this.addDependency("autoFishingRodWorkThroughMenus", "autoFishingRod");
         this.addDependency("autoFishingRodSlugfishMode", "autoFishingRod");
         this.addDependency("autoFishingRodGoldenFishMode", "autoFishingRod");
         //this.addDependency("autoFishingRodAFKBypassAlgorithm", "autoFishingRod");
@@ -1888,6 +1896,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.autoFishingRodMaximumDelay;
+    }
+
+    static final boolean isAutoFishingRodWorkThroughMenus() {
+        Config.checkUninit();
+
+        return Config.autoFishingRodWorkThroughMenus;
     }
 
     static final boolean isAutoFishingRodSlugfishMode() {
