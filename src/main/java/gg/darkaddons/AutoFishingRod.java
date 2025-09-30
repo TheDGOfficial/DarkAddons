@@ -110,7 +110,7 @@ final class AutoFishingRod {
         final var delay = AutoFishingRod.secureRandom.nextInt(Math.max(1, max - min + 1)) + min;
 
         DarkAddons.registerTickTask("auto_fishing_rod_right_click", delay, false, () -> {
-            if (!Config.isAutoFishingRodWorkThroughMenus() || null == Minecraft.getMinecraft().currentScreen) {
+            if (Config.isAutoFishingRodWorkThroughMenus() || null == Minecraft.getMinecraft().currentScreen) {
                 AutoFishingRod.hook();
                 continuation.run();
             }
