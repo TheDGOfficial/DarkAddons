@@ -31,14 +31,14 @@ plugins {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(24)
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
     toolchain.vendor = JvmVendorSpec.AZUL // pick a vendor known to include jmods
 
     withSourcesJar()
 }
 
 tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
-    languageVersion = JavaLanguageVersion.of(24)
+    languageVersion = JavaLanguageVersion.of(25)
     vendor = JvmVendorSpec.AZUL // pick a vendor known to include jmods
 }
 
@@ -171,10 +171,10 @@ dependencies {
         exclude(module = "kotlin-stdlib")
     }
 
-    proguardClasspath("com.guardsquare:proguard-base:7.7.0") {
+    proguardClasspath("com.guardsquare:proguard-base:7.8.0") {
         exclude(module = "proguard-core")
     }
-    proguardClasspath("com.guardsquare:proguard-core:9.1.11")
+    proguardClasspath("com.guardsquare:proguard-core:9.2.0")
 
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
@@ -190,19 +190,19 @@ dependencies {
                 add(configuration.name, "net.bytebuddy:byte-buddy-parent") {
                     version {
                         strictly("1.17.7")
-                        because("Older version doesn't have Java 24 support")
+                        because("Older version doesn't have Java 25 support")
                     }
                 }
                 add(configuration.name, "net.bytebuddy:byte-buddy") {
                     version {
                         strictly("1.17.7")
-                        because("Older version doesn't have Java 24 support")
+                        because("Older version doesn't have Java 25 support")
                     }
                 }
                 add(configuration.name, "net.bytebuddy:byte-buddy-agent") {
                     version {
                         strictly("1.17.7")
-                        because("Older version doesn't have Java 24 support")
+                        because("Older version doesn't have Java 25 support")
                     }
                 }
             }
@@ -339,7 +339,7 @@ tasks {
 
         //options.deprecation = true
         options.release = 8
-        sourceCompatibility = "24"
+        sourceCompatibility = "25"
 
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
@@ -352,7 +352,7 @@ tasks {
         options.compilerArgs.add("-Xlint:all,-options,-classfile,-processing,-overrides")
     }
     named<JavaCompile>("compileTestJava") {
-        options.release.set(24)
+        options.release.set(25)
     }
     /*withType<KotlinCompilationTask<KotlinJvmCompilerOptions>> {
         compilerOptions {
