@@ -5,6 +5,7 @@ import gg.darkaddons.mixins.IMixinMinecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.init.Items;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.MovingObjectPosition;
 import org.jetbrains.annotations.NotNull;
 
@@ -245,6 +246,26 @@ final class AutoClicker {
         return mc.gameSettings.keyBindUseItem.isKeyDown() && 0 == ((IMixinMinecraft) mc).getRightClickDelayTimer() && !mc.thePlayer.isUsingItem();
     }
 
+    private static final boolean isLookingAtAButton() {
+        final var mc = Minecraft.getMinecraft();
+        if (null != mc.objectMouseOver && MovingObjectPosition.MovingObjectType.BLOCK == mc.objectMouseOver.typeOfHit) {
+            final var pos = mc.objectMouseOver.getBlockPos();
+            final var block = mc.theWorld.getBlockState(pos).getBlock();
+            return block == Blocks.stone_button || block == Blocks.wooden_button;
+        }
+        return false;
+    }
+
+    private static final boolean isLookingAtALever() {
+        final var mc = Minecraft.getMinecraft();
+        if (null != mc.objectMouseOver && MovingObjectPosition.MovingObjectType.BLOCK == mc.objectMouseOver.typeOfHit) {
+            final var pos = mc.objectMouseOver.getBlockPos();
+            final var block = mc.theWorld.getBlockState(pos).getBlock();
+            return block == Blocks.lever;
+        }
+        return false;
+    }
+
     private static final boolean handleRightClick(@NotNull final Runnable rightClick, @NotNull final KeyBinding right, @NotNull final Minecraft mc) {
         final var newIsPressed = Config.isRightClickAutoClicker() && right.isKeyDown() && AutoClicker.isHoldingRCM(mc);
         if (newIsPressed) {
@@ -253,6 +274,14 @@ final class AutoClicker {
             final var limit = AutoClicker.getCpsLimit(false);
             if (20 / limit <= AutoClicker.rightClickTicks) {
                 AutoClicker.rightClickTicks = 0;
+
+                if (AutoClicker.isLookingAtAButton()) {
+                    return false;
+                }
+
+                if (!Config.isRightClickAutoClickerWorkAtLevers() && AutoClicker.isLookingAtALever()) {
+                    return false;
+                }
 
                 final var extraClicks = limit / 20;
                 if (1 < extraClicks) {

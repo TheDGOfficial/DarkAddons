@@ -973,6 +973,13 @@ final class Config extends Vigilant {
     private static boolean rightClickAutoClicker;
 
     @Property(
+        type = PropertyType.SWITCH, name = "RightClick AutoClicker Work At Levers",
+        description = "Makes RightClick AutoClicker work even when looking at a lever. This will cause the lever to flick multiple times. For 2 levers at gate, this is fine. However, lever flick device at Section 2 will be harder to complete with this. Keep it off if you do device at Section 2.",
+        category = "QOL", subcategory = "General"
+    )
+    private static boolean rightClickAutoClickerWorkAtLevers;
+
+    @Property(
         type = PropertyType.SELECTOR, name = "RightClick CPS Limit",
         description = "Limit of CPS in RightClick AutoClicker. This affects only Right clicks. Does not limit CPS of clicks that doesn't originate from auto clicker. This only a upper limit and if your client-side TPS is low, the actual CPS will be lower than this value. Support for above 20 or more customizable CPS values will be added later.",
         category = "QOL", subcategory = "General",
@@ -1209,6 +1216,7 @@ final class Config extends Vigilant {
 
         this.addDependency("leftClickCpsLimit", "leftClickAutoClicker");
         this.addDependency("rightClickCpsLimit", "rightClickAutoClicker");
+        this.addDependency("rightClickAutoClickerWorkAtLevers", "rightClickAutoClicker");
 
         this.addDependency("rogueSwordTimerOutOfDungeons", "rogueSwordTimer");
         this.addDependency("hideRogueSwordTimerOnceZero", "rogueSwordTimer");
@@ -2010,6 +2018,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.rightClickCpsLimit;
+    }
+
+    static final boolean isRightClickAutoClickerWorkAtLevers() {
+        Config.checkUninit();
+
+        return Config.rightClickAutoClickerWorkAtLevers;
     }
 
     /*static final boolean isCatchupAutoClicker() {
