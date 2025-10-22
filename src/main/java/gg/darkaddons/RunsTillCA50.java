@@ -53,8 +53,8 @@ final class RunsTillCA50 {
      */
     private static final double M6_CATA_XP = 168_000.0D;
 
-    private static final double M6_CLASS_XP = 120_000.0D;
-    private static final double M6_SHARED_XP = 30_000.0D;
+    private static final double M6_CLASS_XP = 120_000.0D * 1.2D; // Scarf shard
+    private static final double M6_SHARED_XP = 30_000.0D * 1.2D; // Scarf shard
 
     /**
      * XP gained from M7 with 300 Score and Maxed XP boost perks. Is exactly the * 3 of the M6 values.
@@ -415,7 +415,7 @@ final class RunsTillCA50 {
         DarkAddons.echoEmpty();
         DarkAddons.queueWarning("By the time you get CA50 with these runs, you will have Cata " + String.format(Locale.ROOT, "%.2f", RunsTillCA50.xpToLevel(result.finishCataXp)) + " and " + (currentCompletions + result.totalRuns) + ' ' + (m7 ? "M7" : "M6") + " completions.");
         DarkAddons.echoEmpty();
-        DarkAddons.queueWarning("Note: It is assumed that you use a helmet with Hecatomb 10 for extra experience and that you have at least 25 Completions on the floor plus the Catacombs Expert Ring accessory and Essence Shop Class XP boost perks maxed for the max experience.");
+        DarkAddons.queueWarning("Note: It is assumed that you use a helmet with Hecatomb 10 for extra experience and that you have at least 25 Completions on the floor plus the Catacombs Expert Ring accessory and Essence Shop Class XP boost perks along with the Scarf attribute maxed for the max experience.");
         DarkAddons.echoEmpty();
         DarkAddons.queueWarning("Disclaimer: These runs does not take Daily XP bonus of %40 more XP" + (derpy ? "" : ", or 1.5x XP of Derpy") + " into account. It also assumes you get exactly 300 Score each run because any score above 300 will add some slight bonus XP to your runs. So Paul 317 Score is also more XP than 307 Score without Paul. All combined it will probably take you less runs than what the output says if you take advantage of Daily XP," + (derpy ? "" : " Derpy,") + " Paul and Extra Score.");
     }
