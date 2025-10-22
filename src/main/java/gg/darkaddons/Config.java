@@ -40,13 +40,6 @@ final class Config extends Vigilant {
     private static boolean updateChecker = true;
 
     @Property(
-        type = PropertyType.SWITCH, name = "Safe Pickobulus",
-        description = "Blocks right clicking with a mining tool that would use the Pickobulus ability while on your Private Island or Garden to prevent accidentally destructing your buildings.",
-        category = "Misc", subcategory = "General"
-    )
-    private static boolean safePickobulus = true;
-
-    @Property(
         type = PropertyType.SWITCH, name = "Class Average 50 Display",
         description = "Shows a HUD element with runs needed to get Class Average 50, along with other information. Updated live as you do runs.",
         category = "Dungeons", subcategory = "HUD", triggerActionOnInitialization = false
@@ -1298,12 +1291,6 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.updateChecker;
-    }
-
-    static final boolean isSafePickobulus() {
-        Config.checkUninit();
-
-        return Config.safePickobulus;
     }
 
     static final boolean isClassAverage50Display() {

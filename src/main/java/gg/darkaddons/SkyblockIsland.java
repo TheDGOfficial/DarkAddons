@@ -11,9 +11,7 @@ enum SkyblockIsland {
     ThePark("foraging_1"),
     SpiderDen("combat_1"),
     Hub("hub"),
-    Dungeon("dungeon"),
-    TheGarden("garden"),
-    PrivateIsland("dynamic");
+    Dungeon("dungeon");
 
     @NotNull
     private final String mode;

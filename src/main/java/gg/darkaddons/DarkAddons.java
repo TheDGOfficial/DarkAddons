@@ -1284,7 +1284,7 @@ public final class DarkAddons {
      * @param keyBinding The key binding to check if it is pressed.
      */
     public static final boolean isKeyDownHook(@NotNull final KeyBinding keyBinding) {
-        return CancelItemUses.shouldAllowKeyPress(keyBinding) && SafePickobulus.shouldAllowKeyPress(keyBinding);
+        return CancelItemUses.shouldAllowKeyPress(keyBinding);
     }
 
     /**
@@ -1297,7 +1297,7 @@ public final class DarkAddons {
      * @return True if given {@link KeyBinding#isPressed()} call should succeed in the current tick, false otherwise.
      */
     public static final boolean isPressedStatic(@NotNull final KeyBinding keyBinding, @NotNull final Runnable leftClick, @NotNull final Runnable rightClick) {
-        return AutoClicker.isPressedStatic(keyBinding, leftClick, rightClick) && CancelItemUses.shouldAllowKeyPress(keyBinding) && SafePickobulus.shouldAllowKeyPress(keyBinding);
+        return AutoClicker.isPressedStatic(keyBinding, leftClick, rightClick) && CancelItemUses.shouldAllowKeyPress(keyBinding);
     }
 
     /**
