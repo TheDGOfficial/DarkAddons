@@ -1030,6 +1030,13 @@ final class Config extends Vigilant {
     private static boolean profilerMode;
 
     @Property(
+        type = PropertyType.SWITCH, name = "Disable Cells Alignment",
+        description = "Disables using Cells Alignment ability while holding Gyrokinetic Wand.",
+        category = "Misc", subcategory = "General"
+    )
+    private static boolean disableCellsAlignment;
+
+    @Property(
         type = PropertyType.SWITCH, name = "Extra Luck",
         description = "If you are a regular user of the mod, gives you extra luck (haters will say it's fake). Otherwise, enables some developer-only features.",
         category = "Misc", subcategory = "Developer Options"
@@ -2053,6 +2060,12 @@ final class Config extends Vigilant {
         Config.checkUninit();
 
         return Config.extraLuck;
+    }
+
+    static final boolean isDisableCellsAlignment() {
+        Config.checkUninit();
+
+        return Config.disableCellsAlignment;
     }
 
     static final boolean isDisablePatcherFontRenderer() {
