@@ -73,7 +73,7 @@ jobs:
        ~/.m2
 
    - name: Initialize CodeQL
-     uses: github/codeql-action/init@v4.30.9
+     uses: github/codeql-action/init@v4.31.0
      with:
       languages: ${{ matrix.language }}
       queries: +security-and-quality
@@ -86,14 +86,14 @@ jobs:
       ./build.sh
 
    - name: Upload Artifact
-     uses: actions/upload-artifact@v4.6.2
+     uses: actions/upload-artifact@v5.0.0
      with:
       name: DarkAddons
       path: build/libs/*-opt.jar
       if-no-files-found: error
 
    - name: Perform CodeQL Analysis
-     uses: github/codeql-action/analyze@v4.30.9
+     uses: github/codeql-action/analyze@v4.31.0
      with:
       category: "/language:${{ matrix.language }}"
       upload: failure-only
@@ -124,7 +124,7 @@ jobs:
       output: sarif-results/${{ matrix.language }}.sarif
 
    - name: Upload CodeQL Analysis Results
-     uses: github/codeql-action/upload-sarif@v4.30.9
+     uses: github/codeql-action/upload-sarif@v4.31.0
      with:
       sarif_file: sarif-results/${{ matrix.language }}.sarif
 
