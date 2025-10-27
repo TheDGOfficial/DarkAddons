@@ -171,7 +171,7 @@ dependencies {
         exclude(module = "kotlin-stdlib")
     }
 
-    proguardClasspath("com.guardsquare:proguard-base:7.8.0") {
+    proguardClasspath("com.guardsquare:proguard-base:7.8.1") {
         exclude(module = "proguard-core")
     }
     proguardClasspath("com.guardsquare:proguard-core:9.2.0")
