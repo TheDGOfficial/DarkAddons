@@ -343,11 +343,16 @@ tasks {
 
         options.compilerArgs.add("-g")
         //options.compilerArgs.add("-encoding UTF-8")
-        options.forkOptions.jvmArgs!!.add("-Xmx2G")
+        options.forkOptions.jvmArgs!!.add("-Xms1m")
+        options.forkOptions.jvmArgs!!.add("-Xmx2g")
         options.forkOptions.jvmArgs!!.add("-XX:+UnlockExperimentalVMOptions")
         options.forkOptions.jvmArgs!!.add("-XX:+IgnoreUnrecognizedVMOptions")
         options.forkOptions.jvmArgs!!.add("-XX:+EnableDynamicAgentLoading")
         options.forkOptions.jvmArgs!!.add("--enable-native-access=ALL-UNNAMED")
+        options.forkOptions.jvmArgs!!.add("-XX:SoftMaxHeapSize=1g")
+        options.forkOptions.jvmArgs!!.add("-XX:+UseStringDeduplication")
+        options.forkOptions.jvmArgs!!.add("-XX:+UseZGC")
+        options.forkOptions.jvmArgs!!.add("-XX:+UseCompactObjectHeaders")
         options.compilerArgs.add("-parameters")
         options.compilerArgs.add("-Xlint:all,-options,-classfile,-processing,-overrides")
     }
