@@ -53,8 +53,8 @@ final class RunsTillCA50 {
      */
     private static final double M6_CATA_XP = 168_000.0D;
 
-    private static final double M6_CLASS_XP = 120_000.0D * 1.2D; // Scarf shard
-    private static final double M6_SHARED_XP = 30_000.0D * 1.2D; // Scarf shard
+    private static final double M6_CLASS_XP = 140_000.0D;
+    private static final double M6_SHARED_XP = 35_000.0D;
 
     /**
      * XP gained from M7 with 300 Score and Maxed XP boost perks. Is exactly the * 3 of the M6 values.
