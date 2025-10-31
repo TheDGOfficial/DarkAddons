@@ -162,10 +162,10 @@ dependencies {
 
     compileOnly("org.jetbrains:annotations:$jetbrainsAnnotationsVersion")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:6.0.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.0")
+    testImplementation("org.junit.jupiter:junit-jupiter:6.0.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.1")
 
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.0")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.1")
 
     compileOnly("gg.skytils:skytilsmod:$skytilsVersion") {
         exclude(module = "kotlin-stdlib")
