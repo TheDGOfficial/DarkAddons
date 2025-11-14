@@ -64,21 +64,21 @@ ensure_m2_artifact_exists() {
  HAS_PROCESSOR=${10}
 
  if [ ! -f "$ARTIFACT_PATH" ]; then
-  ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
+  ./mvnw org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION"
  fi
  if [ "$FETCH_SOURCE" = "true" ]; then
   if [ ! -f "$SOURCES_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:sources
+   ./mvnw org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:sources
   fi
  fi
  if [ "$FETCH_JAVADOC" = "true" ]; then
   if [ ! -f "$JAVADOC_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:javadoc
+   ./mvnw org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:javadoc
   fi
  fi
  if [ "$HAS_PROCESSOR" = "true" ]; then
   if [ ! -f "$PROCESSOR_PATH" ]; then
-   ./mvnw -Dmaven.mainClass=org.apache.maven.cling.MavenCling org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:processor
+   ./mvnw org.apache.maven.plugins:maven-dependency-plugin:$MAVEN_DEPENDENCY_PLUGIN_VERSION:get -DremoteRepositories=https://repo.essential.gg/public/,https://repo.spongepowered.org/maven/,https://repo.papermc.io/repository/maven-public/,https://repo.hypixel.net/repository/Hypixel/,https://nexus.velocitypowered.com/repository/maven-public/ -Dtransitive=false -Dartifact="$GROUP":"$ARTIFACT":"$VERSION":jar:processor
   fi
  fi
 }
