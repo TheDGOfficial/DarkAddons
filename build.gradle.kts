@@ -182,7 +182,7 @@ dependencies {
     compileOnly("com.pkware.jabel:jabel-javac-plugin:1.0.1-1")
 
     // This only here so that we are notified of dependency updates, because we are not notified for version updates in the constraints block. If we are overriding the version, we should override it with the latest version.
-    api("net.bytebuddy:byte-buddy:1.18.1")
+    api("net.bytebuddy:byte-buddy:1.18.2")
 
     constraints {
         configurations.forEach { configuration ->
