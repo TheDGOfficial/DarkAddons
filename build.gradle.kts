@@ -189,19 +189,19 @@ dependencies {
             if ((!configuration.isCanBeConsumed() && !configuration.isCanBeResolved()) || configuration.name.equals("annotationProcessor")) {
                 add(configuration.name, "net.bytebuddy:byte-buddy-parent") {
                     version {
-                        strictly("1.18.2")
+                        strictly("1.18.3")
                         because("Older version doesn't have Java 25 support")
                     }
                 }
                 add(configuration.name, "net.bytebuddy:byte-buddy") {
                     version {
-                        strictly("1.18.2")
+                        strictly("1.18.3")
                         because("Older version doesn't have Java 25 support")
                     }
                 }
                 add(configuration.name, "net.bytebuddy:byte-buddy-agent") {
                     version {
-                        strictly("1.18.2")
+                        strictly("1.18.3")
                         because("Older version doesn't have Java 25 support")
                     }
                 }
