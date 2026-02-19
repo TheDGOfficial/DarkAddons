@@ -22,7 +22,7 @@ while IFS='=' read -r key value; do
 done < ../versions.properties
 
 SKYTILS_VERSION=${versionProperties["skytils.version"]}
-
+SKYTILS_VERSION=44d836d
 
 release_commit=""
 

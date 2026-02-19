@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.entity.AbstractClientPlayer;
 
 public final class DungeonListener {
     /**
@@ -77,12 +77,12 @@ public final class DungeonListener {
 
     static final class DungeonTeammate {
         @Nullable
-        private final EntityPlayer player;
+        private final AbstractClientPlayer player;
         @Nullable
         private final DungeonListener.DungeonClass dungeonClass;
         private final int classLevel;
 
-        private DungeonTeammate(@Nullable final EntityPlayer player, @Nullable final DungeonListener.DungeonClass dungeonClass, final int classLevel) {
+        private DungeonTeammate(@Nullable final AbstractClientPlayer player, @Nullable final DungeonListener.DungeonClass dungeonClass, final int classLevel) {
             super();
 
             this.player = player;
@@ -91,7 +91,7 @@ public final class DungeonListener {
         }
 
         @Nullable
-        final EntityPlayer getPlayer() {
+        final AbstractClientPlayer getPlayer() {
             return this.player;
         }
 
