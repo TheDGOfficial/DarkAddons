@@ -174,7 +174,7 @@ dependencies {
     proguardClasspath("com.guardsquare:proguard-base:7.8.2") {
         exclude(module = "proguard-core")
     }
-    proguardClasspath("com.guardsquare:proguard-core:9.3.0")
+    proguardClasspath("com.guardsquare:proguard-core:9.3.1")
 
     compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
