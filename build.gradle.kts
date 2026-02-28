@@ -4,7 +4,6 @@ import dev.architectury.pack200.java.Pack200Adapter
 import net.fabricmc.loom.task.RemapJarTask
 import org.apache.commons.lang3.StringUtils
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.jvm.toolchain.JvmVendorSpec
 //import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 //import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompilerOptions
 //import org.jetbrains.kotlin.gradle.tasks.CompileUsingKotlinDaemon
@@ -28,18 +27,6 @@ plugins {
     `maven-publish`
     id("io.github.sgtsilvio.gradle.proguard") version "0.8.0"
     id("com.autonomousapps.dependency-analysis") version "3.5.1"
-}
-
-java {
-    toolchain.languageVersion = JavaLanguageVersion.of(25)
-    toolchain.vendor = JvmVendorSpec.AZUL // pick a vendor known to include jmods
-
-    withSourcesJar()
-}
-
-tasks.named<UpdateDaemonJvm>("updateDaemonJvm") {
-    languageVersion = JavaLanguageVersion.of(25)
-    vendor = JvmVendorSpec.AZUL // pick a vendor known to include jmods
 }
 
 private val versionProperties = loadVersionProperties()
